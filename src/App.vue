@@ -14,6 +14,9 @@ async function greet() {
 </script>
 
 <template>
+  <div class="m-3 bg-red-600 text-gray-500">
+    <p>This is a test for tailwindcss.</p>
+  </div>
   <main class="container">
     <h1>Welcome to Tauri + Vue</h1>
 

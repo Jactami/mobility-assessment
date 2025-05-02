@@ -15,8 +15,11 @@
     "test:unit": "vitest"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.5",
     "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-opener": "^2.2.6",
+    "tailwind-merge": "^3.2.0",
+    "tailwindcss": "^4.1.5",
     "vue": "^3.5.13"
   },
   "devDependencies": {
@@ -33,6 +36,7 @@
     "jiti": "^2.4.2",
     "jsdom": "^26.1.0",
     "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "typescript": "~5.6.3",
     "vite": "^6.3.4",
     "vite-plugin-vue-devtools": "^7.7.6",
