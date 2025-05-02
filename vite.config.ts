@@ -3,12 +3,13 @@ import vue from '@vitejs/plugin-vue'
 import vueDevtools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'node:url'
+import Icons from 'unplugin-icons/vite'
 
 const host = process.env.TAURI_DEV_HOST
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [vue(), vueDevtools(), tailwindcss()],
+  plugins: [vue(), vueDevtools(), tailwindcss(), Icons({ compiler: 'vue3' })],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
