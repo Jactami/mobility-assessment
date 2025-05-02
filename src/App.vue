@@ -2,8 +2,9 @@
 import { ref } from 'vue'
 import { invoke } from '@tauri-apps/api/core'
 import TestComponent from '@/components/TestComponent.vue'
+import { useI18n } from 'vue-i18n'
 
-console.log('test')
+const { t } = useI18n()
 
 const greetMsg = ref('')
 const name = ref('')
@@ -16,7 +17,7 @@ async function greet() {
 
 <template>
   <div class="m-3 bg-red-600 text-gray-500">
-    <p>This is a test for tailwindcss.</p>
+    <p>{{ t('test.hello') }}</p>
   </div>
   <TestComponent />
   <main class="container">
