@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { invoke } from '@tauri-apps/api/core'
+import TestComponent from '@/components/TestComponent.vue'
 
 console.log('test')
 
@@ -17,6 +18,7 @@ async function greet() {
   <div class="m-3 bg-red-600 text-gray-500">
     <p>This is a test for tailwindcss.</p>
   </div>
+  <TestComponent />
   <main class="container">
     <h1>Welcome to Tauri + Vue</h1>
 
