@@ -50,4 +50,7 @@
 
 body {
   @apply bg-surface text-on-surface;
+  font-family:
+    Open Sans,
+    system-ui;
 }

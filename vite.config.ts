@@ -4,12 +4,23 @@ import vueDevtools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'node:url'
 import Icons from 'unplugin-icons/vite'
+import Unfonts from 'unplugin-fonts/vite'
 
 const host = process.env.TAURI_DEV_HOST
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [vue(), vueDevtools(), tailwindcss(), Icons({ compiler: 'vue3' })],
+  plugins: [
+    vue(),
+    vueDevtools(),
+    tailwindcss(),
+    Icons({ compiler: 'vue3' }),
+    Unfonts({
+      fontsource: {
+        families: ['Open Sans'],
+      },
+    }),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
