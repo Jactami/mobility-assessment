@@ -65,6 +65,14 @@
       </div>
     </div>
   </BaseSection>
+
+  <BaseSection title="Debug Panel">
+    <p>
+      The debug panel is a component that can be used to display the current state of variables. It
+      is defined in the <code>src/components/debug/DebugPanel.vue</code> file.
+    </p>
+    <DebugPanel title="Quiz Data" :value="quiz" class="mt-10" />
+  </BaseSection>
 </template>
 
 <script setup lang="ts">
@@ -73,6 +81,24 @@ import { useLogger } from '@/composables/log'
 import BasePageHeader from '@/components/base/BasePageHeader.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import MaterialSymbolsLogin from '~icons/material-symbols/login'
+import DebugPanel from '@/components/debug/DebugPanel.vue'
 
 useLogger().log('Logger running...')
+
+const quiz = {
+  sport: {
+    q1: {
+      question: 'Which one is correct team name in NBA?',
+      options: ['New York Bulls', 'Los Angeles Kings', 'Golden State Warriros', 'Huston Rocket'],
+      answer: 'Huston Rocket',
+    },
+  },
+  maths: {
+    q1: {
+      question: '5 + 7 = ?',
+      options: [10, 11, 12, 13],
+      answer: 12,
+    },
+  },
+}
 </script>
