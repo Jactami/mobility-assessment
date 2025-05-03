@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import i18n from '@/i18n'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -23,6 +24,14 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: import.meta.env.DEV ? routes : routes.filter((route) => !route.meta?.devOnly),
+})
+
+// set document title
+router.beforeEach((to) => {
+  const title = i18n.global.t('meta.title')
+  const subtitle = i18n.global.t(`meta.${to.name?.toString()}`)
+
+  document.title = subtitle ? `${title} | ${subtitle}` : title
 })
 
 export default router

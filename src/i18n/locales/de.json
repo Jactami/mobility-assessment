@@ -1,5 +1,7 @@
 {
-  "test": {
-    "hello": "Hello World!"
+  "meta": {
+    "title": "Mobility Assessment",
+    "home": "Home",
+    "playground": "Playground"
   }
 }
