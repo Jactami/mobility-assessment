@@ -10,7 +10,7 @@
       <code>assets/main.css</code>file and can be used throughout the application.
     </p>
     <div
-      class="mt-10 flex flex-col items-center justify-center gap-6 text-center md:flex-row [&>div>div]:flex [&>div>div]:size-24 [&>div>div]:items-center [&>div>div]:justify-center"
+      class="mt-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row [&>div>div]:flex [&>div>div]:size-24 [&>div>div]:items-center [&>div>div]:justify-center"
     >
       <div>
         <div class="bg-primary text-on-primary">Primary</div>
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div
-      class="mt-10 flex flex-col items-center justify-center gap-6 text-center md:flex-row [&>div]:flex [&>div]:size-24 [&>div]:items-center [&>div]:justify-center"
+      class="mt-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row [&>div]:flex [&>div]:size-24 [&>div]:items-center [&>div]:justify-center"
     >
       <div class="bg-surface-container-lowest text-on-surface">Container lowest</div>
       <div class="bg-surface-container-low text-on-surface">Container low</div>
@@ -35,12 +35,44 @@
       <div class="bg-surface-container-highest text-on-surface">Container highest</div>
     </div>
   </BaseSection>
+
+  <BaseSection title="Buttons">
+    <p>
+      The buttons can be configur ed with different colors, sizes, and states. The buttons are
+      defined in the <code>src/components/base/BaseButton.vue</code> file and can be used throughout
+      the application.
+    </p>
+    <div
+      class="mt-10 space-y-8 [&>div]:flex [&>div]:flex-col [&>div]:items-center [&>div]:justify-center [&>div]:gap-6 [&>div]:sm:flex-row"
+    >
+      <div>
+        <BaseButton>Primary Button</BaseButton>
+        <BaseButton flavor="secondary">Secondary Button</BaseButton>
+        <BaseButton flavor="tertiary">Tertiary Button</BaseButton>
+      </div>
+      <div>
+        <BaseButton size="small">Small Button</BaseButton>
+        <BaseButton>Normal Button</BaseButton>
+        <BaseButton size="large">Large Button</BaseButton>
+      </div>
+      <div>
+        <BaseButton disabled>Disabled Button</BaseButton>
+      </div>
+      <div>
+        <BaseButton flavor="custom" classes="bg-lime-700 text-white w-full max-w-96 rounded-full">
+          Custom Button <MaterialSymbolsLogin />
+        </BaseButton>
+      </div>
+    </div>
+  </BaseSection>
 </template>
 
 <script setup lang="ts">
 import BaseSection from '@/components/base/BaseSection.vue'
 import { useLogger } from '@/composables/log'
 import BasePageHeader from '@/components/base/BasePageHeader.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import MaterialSymbolsLogin from '~icons/material-symbols/login'
 
 useLogger().log('Logger running...')
 </script>
