@@ -3,7 +3,11 @@
 --
 CREATE TABLE IF NOT EXISTS public.projects (
     id UUID DEFAULT gen_random_uuid() NOT NULL,
-    title TEXT NOT NULL
+    title VARCHAR(100) NOT NULL,
+    zip_code VARCHAR(5) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    street VARCHAR(100) NOT NULL,
+    street_number VARCHAR(10) NOT NULL
 );
 
 ALTER TABLE public.projects OWNER TO postgres;
