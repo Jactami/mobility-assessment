@@ -19,6 +19,11 @@ const routes: RouteRecordRaw[] = [
       devOnly: true,
     },
   },
+  {
+    path: '/project/:projectId',
+    name: 'project',
+    component: () => import('../views/ProjectView.vue'),
+  },
 ]
 
 const router = createRouter({
