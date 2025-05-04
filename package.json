@@ -12,7 +12,8 @@
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write src/",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "db:types": "pnpx supabase gen types --lang=typescript --local > ./src/db/types/supabase.ts --schema public"
   },
   "dependencies": {
     "@fontsource/open-sans": "^5.2.5",
