@@ -4,7 +4,7 @@
     :title="title"
     :class="
       twMerge([
-        'relative inline-flex cursor-pointer items-center justify-center gap-x-2 rounded-md shadow-sm hover:shadow-md hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:brightness-100',
+        'relative inline-flex w-fit cursor-pointer items-center justify-center gap-x-2 rounded-md shadow-sm hover:shadow-md hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:brightness-100',
         colorClasses,
         sizeClasses,
         classes,
