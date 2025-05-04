@@ -1,13 +1,11 @@
 <template>
-  <h1>Home</h1>
-
-  <DebugPanel title="Supabase Project" :value="projects" />
-  <BaseButton classes="mt-4 mx-auto" @click="upsertProject">Update</BaseButton>
+  <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+    <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+  </div>
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
-import DebugPanel from '@/components/debug/DebugPanel.vue'
+import ProjectCard from '@/components/project/ProjectCard.vue'
 import useDB from '@/composables/db'
 import type { Project } from '@/db/types'
 import { onMounted, ref } from 'vue'
@@ -20,11 +18,4 @@ onMounted(async () => {
   const { data } = await db.getProjects()
   projects.value = data
 })
-
-async function upsertProject() {
-  if (!projects.value || projects.value.length <= 0) return
-
-  const { data } = await db.setProject({ ...projects.value[0], title: 'Updated: ' + Date.now() })
-  projects.value = data
-}
 </script>
