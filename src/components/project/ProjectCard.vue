@@ -7,7 +7,7 @@
       <img
         src="/img/placeholder.webp"
         :alt="project.title"
-        class="overflow-hidden transition-transform duration-300 group-hover:scale-110"
+        class="aspect-video object-cover object-center transition-transform duration-300 group-hover:scale-110"
       />
     </div>
     <div class="p-4">
