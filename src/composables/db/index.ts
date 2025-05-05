@@ -74,8 +74,8 @@ export default function useDB() {
    */
   const setProject = (
     project: TablesInsert<'projects'>,
-  ): Promise<PostgrestResponse<Tables<'projects'>>> =>
-    handleDBCall(async () => await supabase.from('projects').upsert(project).select())
+  ): Promise<PostgrestSingleResponse<Tables<'projects'> | null>> =>
+    handleDBCall(async () => await supabase.from('projects').upsert(project).select().maybeSingle())
 
   return {
     getProjects,
