@@ -10,7 +10,7 @@
           >
             <MaterialSymbolsAdd class="text-2xl text-on-surface-variant" aria-hidden="true" />
           </div>
-          <span>Neues Projekt</span>
+          <span>{{ t('project.create') }}</span>
         </div>
       </BaseCard>
     </button>
@@ -22,13 +22,17 @@
 import BaseCard from '@/components/base/BaseCard.vue'
 import ProjectCard from '@/components/project/ProjectCard.vue'
 import useDB from '@/composables/db'
+import { useNotification } from '@/composables/notification'
 import type { Project } from '@/db/types'
 import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import MaterialSymbolsAdd from '~icons/material-symbols/add'
 
 const router = useRouter()
 const db = useDB()
+const notification = useNotification()
+const { t } = useI18n()
 
 const projects = ref<Project[] | null>(null)
 
@@ -38,7 +42,7 @@ onMounted(async () => {
 })
 
 async function createProject() {
-  const { data } = await db.setProject({
+  const { data, error } = await db.setProject({
     title: 'Neues Projekt: ' + new Date(),
     street: 'Musterstraße',
     street_number: '1',
@@ -46,12 +50,15 @@ async function createProject() {
     city: 'Musterstadt',
   })
 
-  if (!data) return
+  if (!data || error) {
+    notification.errorToast(t('project.createError'))
+  } else {
+    router.push({
+      name: 'project',
+      params: { projectId: data.id },
+    })
 
-  console.log(data)
-  router.push({
-    name: 'project',
-    params: { projectId: data.id },
-  })
+    notification.successToast(t('project.createSuccess'))
+  }
 }
 </script>

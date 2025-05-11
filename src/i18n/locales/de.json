@@ -11,5 +11,14 @@
   "common": {
     "error": "Fehler",
     "success": "Erfolg"
+  },
+  "project": {
+    "project": "Projekt",
+    "create": "Projekt erstellen",
+    "createError": "Fehler beim Erstellen des Projekts",
+    "createSuccess": "Projekt erfolgreich erstellt",
+    "delete": "Projekt löschen",
+    "deleteError": "Fehler beim Löschen des Projekts",
+    "deleteSuccess": "Projekt erfolgreich gelöscht"
   }
 }
