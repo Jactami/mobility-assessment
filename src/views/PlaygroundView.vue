@@ -152,6 +152,16 @@
       </BaseButton>
     </div>
   </BaseSection>
+
+  <BaseSection title="Menu">
+    <p>
+      The menu is a component that can be used to display a list of items. It is defined in the
+      <code>src/components/menu/MenuPanel.vue</code> file.
+    </p>
+    <div class="mt-10 flex items-center justify-center gap-6">
+      <MenuPanel :menu="menu" />
+    </div>
+  </BaseSection>
 </template>
 
 <script setup lang="ts">
@@ -162,6 +172,8 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import MaterialSymbolsLogin from '~icons/material-symbols/login'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
 import { useNotification } from '@/composables/notification'
+import type { Menu } from '@/components/menu/types'
+import MenuPanel from '@/components/menu/MenuPanel.vue'
 
 const logger = useLogger()
 const notification = useNotification()
@@ -184,4 +196,23 @@ const quiz = {
     },
   },
 }
+
+const menu: Menu = [
+  {
+    label: 'Link',
+    icon: 'link',
+    link: '/',
+  },
+  {
+    label: 'Action',
+    icon: 'link',
+    action: () => logger.log('Test action'),
+    divider: true,
+  },
+  {
+    label: 'Disabled',
+    icon: 'link',
+    disabled: true,
+  },
+]
 </script>
