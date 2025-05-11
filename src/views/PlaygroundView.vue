@@ -132,6 +132,12 @@
       />
     </FormKit>
   </BaseSection>
+
+  <BaseSection title="Notifications">
+    <div class="flex items-center justify-center gap-6">
+      <BaseButton @click="notify">Show Notification</BaseButton>
+    </div>
+  </BaseSection>
 </template>
 
 <script setup lang="ts">
@@ -141,6 +147,7 @@ import BasePageHeader from '@/components/base/BasePageHeader.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import MaterialSymbolsLogin from '~icons/material-symbols/login'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
+import Swal from 'sweetalert2'
 
 useLogger().log('Logger running...')
 
@@ -159,5 +166,14 @@ const quiz = {
       answer: 12,
     },
   },
+}
+
+function notify() {
+  Swal.fire({
+    title: 'Hello!',
+    text: 'This is a notification.',
+    icon: 'success',
+    confirmButtonText: 'OK',
+  })
 }
 </script>
