@@ -2,7 +2,9 @@
   <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
     <button class="cursor-pointer" title="Neues Projekt" @click="createProject">
       <BaseCard>
-        <div class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container">
+        <div
+          class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container p-2"
+        >
           <div
             class="flex aspect-square w-1/2 items-center justify-center rounded-full border border-outline-variant bg-surface"
           >
