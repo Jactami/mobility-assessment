@@ -7,5 +7,9 @@
     "home": "Home",
     "playground": "Playground",
     "project": "Projekt"
+  },
+  "common": {
+    "error": "Fehler",
+    "success": "Erfolg"
   }
 }

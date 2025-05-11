@@ -75,7 +75,7 @@
   </BaseSection>
 
   <BaseSection title="FormKit Integration">
-    <FormKit type="form" @submit="(data) => useLogger().log('formkit data', data)">
+    <FormKit type="form" @submit="(data) => logger.log('formkit data', data)">
       <FormKit
         type="text"
         name="name"
@@ -134,8 +134,22 @@
   </BaseSection>
 
   <BaseSection title="Notifications">
-    <div class="flex items-center justify-center gap-6">
-      <BaseButton @click="notify">Show Notification</BaseButton>
+    <p>The notifications are based on the SweetAlert2 library.</p>
+    <div class="mt-10 flex items-center justify-center gap-6">
+      <BaseButton
+        flavor="custom"
+        classes="bg-success text-on-success"
+        @click="notification.successToast('Success message...')"
+      >
+        Success
+      </BaseButton>
+      <BaseButton
+        flavor="custom"
+        classes="bg-error text-on-error"
+        @click="notification.errorToast('Error message...')"
+      >
+        Error
+      </BaseButton>
     </div>
   </BaseSection>
 </template>
@@ -147,9 +161,12 @@ import BasePageHeader from '@/components/base/BasePageHeader.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import MaterialSymbolsLogin from '~icons/material-symbols/login'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
-import Swal from 'sweetalert2'
+import { useNotification } from '@/composables/notification'
 
-useLogger().log('Logger running...')
+const logger = useLogger()
+const notification = useNotification()
+
+logger.log('Logger running...')
 
 const quiz = {
   sport: {
@@ -166,14 +183,5 @@ const quiz = {
       answer: 12,
     },
   },
-}
-
-function notify() {
-  Swal.fire({
-    title: 'Hello!',
-    text: 'This is a notification.',
-    icon: 'success',
-    confirmButtonText: 'OK',
-  })
 }
 </script>
