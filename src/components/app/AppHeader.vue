@@ -1,6 +1,6 @@
 <template>
   <header class="bg-primary text-on-primary">
-    <nav class="p-x-4 mx-auto flex items-center justify-between py-6 lg:px-10">
+    <nav class="mx-auto flex items-center justify-between px-4 py-6 lg:px-10">
       <div class="flex lg:flex-1">
         <RouterLink class="flex items-center gap-x-2" to="/">
           <!-- TODO: Replace with real logo -->
