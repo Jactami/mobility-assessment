@@ -1,4 +1,7 @@
 {
+  "app": {
+    "title": "Mobility Assessment"
+  },
   "meta": {
     "title": "Mobility Assessment",
     "home": "Home",
