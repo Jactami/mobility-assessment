@@ -11,7 +11,7 @@
               (item.action || item.link) && !item.disabled,
             'cursor-not-allowed opacity-50': item.disabled,
           }"
-          @click="handleAction(item)"
+          @click.prevent="handleAction(item)"
         >
           <component
             :is="item.link && !item.disabled ? 'RouterLink' : 'div'"

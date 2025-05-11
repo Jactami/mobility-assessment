@@ -3,7 +3,7 @@
     ref="reference"
     class="size-fit cursor-pointer rounded-md border border-outline-variant p-1 hover:bg-surface-container"
     :class="{ 'bg-surface-container': isOpen }"
-    @click="isOpen = !isOpen"
+    @click.prevent="isOpen = !isOpen"
     @keydown.escape="isOpen = false"
   >
     <MaterialSymbolsMoreVert aria-hidden="true" />
@@ -30,7 +30,7 @@ const floating = ref(null)
 
 const { floatingStyles } = useFloating(reference, floating, {
   placement: 'right-start',
-  middleware: [offset(5), flip()],
+  middleware: [offset(2), flip()],
   whileElementsMounted: autoUpdate,
 })
 
