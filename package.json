@@ -16,6 +16,7 @@
     "db:types": "pnpx supabase gen types --lang=typescript --local > ./src/db/types/supabase.ts --schema public"
   },
   "dependencies": {
+    "@floating-ui/vue": "^1.1.6",
     "@fontsource/open-sans": "^5.2.5",
     "@formkit/addons": "^1.6.9",
     "@formkit/core": "^1.6.9",
@@ -25,6 +26,7 @@
     "@tailwindcss/vite": "^4.1.5",
     "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-opener": "^2.2.6",
+    "@vueuse/core": "^13.1.0",
     "sweetalert2": "^11.21.0",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.1.5",

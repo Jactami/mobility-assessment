@@ -156,10 +156,11 @@
   <BaseSection title="Menu">
     <p>
       The menu is a component that can be used to display a list of items. It is defined in the
-      <code>src/components/menu/MenuPanel.vue</code> file.
+      <code>src/components/menu/*.vue</code> files.
     </p>
-    <div class="mt-10 flex items-center justify-center gap-6">
+    <div class="mt-10 flex flex-col items-center space-y-5">
       <MenuPanel :menu="menu" />
+      <MenuPopup :menu="menu" />
     </div>
   </BaseSection>
 </template>
@@ -174,6 +175,7 @@ import DebugPanel from '@/components/debug/DebugPanel.vue'
 import { useNotification } from '@/composables/notification'
 import type { Menu } from '@/components/menu/types'
 import MenuPanel from '@/components/menu/MenuPanel.vue'
+import MenuPopup from '@/components/menu/MenuPopup.vue'
 
 const logger = useLogger()
 const notification = useNotification()
