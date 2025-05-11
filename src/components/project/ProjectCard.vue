@@ -9,10 +9,10 @@
         />
       </div>
       <div class="p-4">
-        <h2 class="text-lg font-medium">{{ project.title }}</h2>
+        <h2 class="line-clamp-2 h-[3rem] text-lg leading-tight font-medium">{{ project.title }}</h2>
         <div class="mt-4 text-on-surface-variant">
-          <div>{{ project.street }} {{ project.street_number }}</div>
-          <div>{{ project.zip_code }} {{ project.city }}</div>
+          <div class="truncate">{{ project.street }} {{ project.street_number }}</div>
+          <div class="truncate">{{ project.zip_code }} {{ project.city }}</div>
         </div>
       </div>
     </BaseCard>
@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import type { Project } from '@/db/types'
-import BaseCard from '../base/BaseCard.vue'
+import BaseCard from '@/components/base/BaseCard.vue'
 
 defineProps<{
   project: Project
