@@ -4,7 +4,7 @@
       <BaseCard>
         <div class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container">
           <div
-            class="flex aspect-square w-1/2 items-center justify-center rounded-full border border-outline bg-surface"
+            class="flex aspect-square w-1/2 items-center justify-center rounded-full border border-outline-variant bg-surface"
           >
             <MaterialSymbolsAdd class="text-2xl text-on-surface-variant" aria-hidden="true" />
           </div>
