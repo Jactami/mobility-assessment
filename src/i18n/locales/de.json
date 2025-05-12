@@ -4,9 +4,15 @@
   },
   "meta": {
     "title": "Mobility Assessment",
+    "login": "Anmelden",
     "home": "Home",
     "playground": "Playground",
     "project": "Projekt"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "email": "E-Mail",
+    "password": "Passwort"
   },
   "common": {
     "error": "Fehler",

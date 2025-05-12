@@ -20,6 +20,11 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/SignInView.vue'),
+  },
+  {
     path: '/project/:projectId',
     name: 'project',
     component: () => import('../views/ProjectView.vue'),
