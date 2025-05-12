@@ -1,6 +1,6 @@
-import type { DefaultConfigOptions } from '@formkit/vue'
 import { createAutoAnimatePlugin } from '@formkit/addons'
 import { de } from '@formkit/i18n'
+import type { DefaultConfigOptions } from '@formkit/vue'
 import { rootClasses } from './theme'
 
 export default {

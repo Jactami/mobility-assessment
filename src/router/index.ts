@@ -1,6 +1,6 @@
+import i18n from '@/i18n'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import i18n from '@/i18n'
 
 const routes: RouteRecordRaw[] = [
   {

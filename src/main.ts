@@ -1,11 +1,11 @@
 import './assets/main.css'
 
+import formkitConfig from '@/config/formkit/config'
+import { defaultConfig, plugin } from '@formkit/vue'
 import { createApp } from 'vue'
 import App from './App.vue'
 import i18n from './i18n'
 import router from './router'
-import { plugin, defaultConfig } from '@formkit/vue'
-import formkitConfig from '@/config/formkit/config'
 
 const app = createApp(App)
 

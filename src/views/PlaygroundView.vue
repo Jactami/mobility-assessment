@@ -166,16 +166,16 @@
 </template>
 
 <script setup lang="ts">
-import BaseSection from '@/components/base/BaseSection.vue'
-import { useLogger } from '@/composables/log'
-import BasePageHeader from '@/components/base/BasePageHeader.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import MaterialSymbolsLogin from '~icons/material-symbols/login'
+import BasePageHeader from '@/components/base/BasePageHeader.vue'
+import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
-import { useNotification } from '@/composables/notification'
-import type { Menu } from '@/components/menu/types'
 import MenuPanel from '@/components/menu/MenuPanel.vue'
 import MenuPopup from '@/components/menu/MenuPopup.vue'
+import type { Menu } from '@/components/menu/types'
+import { useLogger } from '@/composables/log'
+import { useNotification } from '@/composables/notification'
+import MaterialSymbolsLogin from '~icons/material-symbols/login'
 
 const logger = useLogger()
 const notification = useNotification()

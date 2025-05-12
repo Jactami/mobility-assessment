@@ -21,8 +21,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import MaterialSymbolsContentCopyOutlineRounded from '~icons/material-symbols/content-copy-outline-rounded'
 import MaterialSymbolsCheckRounded from '~icons/material-symbols/check-rounded'
+import MaterialSymbolsContentCopyOutlineRounded from '~icons/material-symbols/content-copy-outline-rounded'
 
 const props = defineProps<{
   title?: string

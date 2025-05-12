@@ -32,10 +32,10 @@
 
 <script setup lang="ts">
 import type { FunctionalComponent } from 'vue'
-import type { Menu, MenuItem } from './types'
-import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
 import MaterialSymbolsAddCircleOutline from '~icons/material-symbols/add-circle-outline'
+import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
 import TablerExternalLink from '~icons/tabler/external-link'
+import type { Menu, MenuItem } from './types'
 
 defineProps<{
   menu: Menu

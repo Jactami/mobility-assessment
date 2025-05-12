@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '@/db/types'
 import BaseCard from '@/components/base/BaseCard.vue'
+import type { Project } from '@/db/types'
 
 defineProps<{
   project: Project
