@@ -6,26 +6,32 @@ export type Database = {
       projects: {
         Row: {
           city: string
+          created_at: string
           id: string
           street: string
           street_number: string
           title: string
+          updated_at: string | null
           zip_code: string
         }
         Insert: {
           city: string
+          created_at?: string
           id?: string
           street: string
           street_number: string
           title: string
+          updated_at?: string | null
           zip_code: string
         }
         Update: {
           city?: string
+          created_at?: string
           id?: string
           street?: string
           street_number?: string
           title?: string
+          updated_at?: string | null
           zip_code?: string
         }
         Relationships: []
