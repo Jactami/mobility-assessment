@@ -1,14 +1,24 @@
 <template>
   <button
     ref="reference"
-    class="size-fit cursor-pointer rounded-md border border-outline-variant p-1 hover:bg-surface-container"
+    class="size-fit cursor-pointer rounded-md p-1 hover:bg-surface-container"
     :class="{ 'bg-surface-container': isOpen }"
+    aria-haspopup="menu"
+    :aria-expanded="isOpen ? 'true' : 'false'"
     @click.prevent="isOpen = !isOpen"
     @keydown.escape="isOpen = false"
   >
     <MaterialSymbolsMoreVert aria-hidden="true" />
   </button>
-  <MenuPanel v-if="isOpen" ref="floating" :menu="menu" class="shadow" :style="floatingStyles" />
+  <MenuPanel
+    v-if="isOpen"
+    ref="floating"
+    :menu="menu"
+    class="shadow"
+    :style="floatingStyles"
+    role="menu"
+    tabindex="-1"
+  />
 </template>
 
 <script setup lang="ts">

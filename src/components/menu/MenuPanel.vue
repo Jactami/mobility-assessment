@@ -2,28 +2,28 @@
   <div
     class="w-full max-w-56 rounded-md border border-outline-variant bg-surface p-1 text-on-surface"
   >
-    <ul class="list-none">
+    <ul class="list-none" role="menu">
       <li v-for="item in menu" :key="item.label">
-        <div
-          class="rounded-md"
+        <component
+          :is="item.link && !item.disabled ? 'RouterLink' : 'div'"
+          class="flex items-center gap-x-1 rounded-md px-2 py-1"
+          :to="item.link"
           :class="{
             'cursor-pointer hover:bg-surface-container':
               (item.action || item.link) && !item.disabled,
             'cursor-not-allowed opacity-50': item.disabled,
           }"
+          role="menuitem"
+          :aria-disabled="item.disabled ? 'true' : 'false'"
+          :tabindex="(item.action || item.link) && !item.disabled ? 0 : undefined"
           @click.prevent="handleAction(item)"
+          @keydown.enter.space.capture="handleAction(item)"
         >
-          <component
-            :is="item.link && !item.disabled ? 'RouterLink' : 'div'"
-            class="flex items-center gap-x-1 px-2 py-1"
-            :to="item.link"
-          >
-            <component v-if="iconMap[item.icon]" :is="iconMap[item.icon]" />
-            <span>
-              {{ item.label }}
-            </span>
-          </component>
-        </div>
+          <component v-if="iconMap[item.icon]" :is="iconMap[item.icon]" />
+          <span>
+            {{ item.label }}
+          </span>
+        </component>
         <hr v-if="item.divider" class="my-1 border-outline-variant" />
       </li>
     </ul>
