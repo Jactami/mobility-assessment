@@ -12,7 +12,8 @@
   "auth": {
     "login": "Anmelden",
     "email": "E-Mail",
-    "password": "Passwort"
+    "password": "Passwort",
+    "loginError": "Fehler bei der Anmeldung"
   },
   "common": {
     "error": "Fehler",

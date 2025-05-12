@@ -42,16 +42,35 @@
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useLogger } from '@/composables/log'
+import { useNotification } from '@/composables/notification'
+import { supabase } from '@/db'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MaterialSymbolsVisibilityOffOutlineRounded from '~icons/material-symbols/visibility-off-outline-rounded'
 import MaterialSymbolsVisibilityOutlineRounded from '~icons/material-symbols/visibility-outline-rounded'
 
+interface SignInFormData {
+  email: string
+  password: string
+}
+
 const { t } = useI18n()
+const { errorToast } = useNotification()
 
 const passwordVisible = ref(false)
 
-function handleSignIn(data: unknown) {
-  useLogger().log('TODO: sign in', data)
+async function handleSignIn(form: SignInFormData) {
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: form.email,
+      password: form.password,
+    })
+
+    useLogger().log('signIn', data)
+
+    if (error) throw error
+  } catch {
+    errorToast(t('auth.loginError'))
+  }
 }
 </script>
