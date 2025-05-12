@@ -8,7 +8,10 @@
     @click.prevent="isOpen = !isOpen"
     @keydown.escape="isOpen = false"
   >
-    <MaterialSymbolsMoreVert aria-hidden="true" />
+    <slot name="trigger">
+      <!-- Fallback trigger -->
+      <MaterialSymbolsMoreVert aria-hidden="true" />
+    </slot>
   </button>
   <MenuPanel
     v-if="isOpen"

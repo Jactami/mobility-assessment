@@ -34,6 +34,7 @@
 import type { FunctionalComponent } from 'vue'
 import MaterialSymbolsAddCircleOutline from '~icons/material-symbols/add-circle-outline'
 import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
+import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded'
 import TablerExternalLink from '~icons/tabler/external-link'
 import type { Menu, MenuItem } from './types'
 
@@ -45,6 +46,7 @@ const iconMap: Record<string, FunctionalComponent> = {
   link: TablerExternalLink,
   add: MaterialSymbolsAddCircleOutline,
   delete: MaterialSymbolsDeleteOutlineRounded,
+  signOut: MaterialSymbolsLogoutRounded,
 }
 
 function handleAction(item: MenuItem) {

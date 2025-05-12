@@ -14,13 +14,7 @@
       </div>
 
       <div class="flex flex-1 justify-end">
-        <!-- TODO: create real user menu -->
-        <span
-          v-if="authStore.user"
-          class="rounded-full bg-surface-container p-2 text-sm text-on-surface-variant"
-        >
-          {{ authStore.user.email }}
-        </span>
+        <AuthUserAvatar v-if="authStore.user" />
         <RouterLink v-else to="/login">
           {{ t('auth.login') }}
         </RouterLink>
@@ -30,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import AuthUserAvatar from '@/components/auth/AuthUserAvatar.vue'
 import { useAuthStore } from '@/stores/Auth'
 import { useI18n } from 'vue-i18n'
 
