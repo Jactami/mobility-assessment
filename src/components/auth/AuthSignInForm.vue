@@ -41,9 +41,9 @@
 
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
-import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { supabase } from '@/db'
+import { useAuthStore } from '@/stores/Auth'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MaterialSymbolsVisibilityOffOutlineRounded from '~icons/material-symbols/visibility-off-outline-rounded'
@@ -54,6 +54,7 @@ interface SignInFormData {
   password: string
 }
 
+const authStore = useAuthStore()
 const { t } = useI18n()
 const { errorToast } = useNotification()
 
@@ -65,8 +66,8 @@ async function handleSignIn(form: SignInFormData) {
       email: form.email,
       password: form.password,
     })
-
-    useLogger().log('signIn', data)
+    console.log(data, error)
+    authStore.setUser(data.user)
 
     if (error) throw error
   } catch {

@@ -15,16 +15,24 @@
 
       <div class="flex flex-1 justify-end">
         <!-- TODO: create real user menu -->
-        <span class="rounded-full bg-surface-container p-2 text-sm text-on-surface-variant">
-          CB
+        <span
+          v-if="authStore.user"
+          class="rounded-full bg-surface-container p-2 text-sm text-on-surface-variant"
+        >
+          {{ authStore.user.email }}
         </span>
+        <RouterLink v-else to="/login">
+          {{ t('auth.login') }}
+        </RouterLink>
       </div>
     </nav>
   </header>
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/Auth'
 import { useI18n } from 'vue-i18n'
 
+const authStore = useAuthStore()
 const { t } = useI18n()
 </script>
