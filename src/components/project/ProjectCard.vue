@@ -15,7 +15,10 @@
           <div class="truncate">{{ project.zip_code }} {{ project.city }}</div>
         </div>
       </div>
-      <div class="flex justify-end bg-surface-container-lowest p-1">
+      <div
+        class="relative flex items-center justify-between gap-x-1 bg-surface-container-lowest py-1 pr-1 pl-4 text-on-surface-variant"
+      >
+        <time class="text-xs" :datetime="project.created_at">{{ d(project.created_at) }}</time>
         <MenuPopup :menu="menu" />
       </div>
     </BaseCard>
@@ -34,7 +37,7 @@ const props = defineProps<{
   project: Project
 }>()
 
-const { t } = useI18n()
+const { d, t } = useI18n()
 
 const menu: Menu = [
   {
