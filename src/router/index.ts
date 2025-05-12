@@ -1,4 +1,5 @@
 import i18n from '@/i18n'
+import { useAuthStore } from '@/stores/Auth'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
@@ -16,6 +17,7 @@ const routes: RouteRecordRaw[] = [
     // which is lazy-loaded when the route is visited.
     component: () => import('../views/PlaygroundView.vue'),
     meta: {
+      public: true,
       devOnly: true,
     },
   },
@@ -23,6 +25,9 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     name: 'login',
     component: () => import('../views/SignInView.vue'),
+    meta: {
+      public: true,
+    },
   },
   {
     path: '/project/:projectId',
@@ -34,6 +39,24 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: import.meta.env.DEV ? routes : routes.filter((route) => !route.meta?.devOnly),
+})
+
+// handle navigation with authentication
+router.beforeEach(async (to, _, next) => {
+  // Allow navigation to public routes
+  if (to.meta.public) return next()
+
+  // Wait for authentication
+  const authStore = useAuthStore()
+  await authStore.authInitialized
+
+  if (authStore.user) {
+    // Allow user navigation, if user is authenticated
+    return next()
+  } else {
+    // Redirect to login, if user not authenticated
+    return next(`/login?redirect=${to.path}`)
+  }
 })
 
 // set document title

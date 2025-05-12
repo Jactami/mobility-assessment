@@ -1,28 +1,20 @@
-import { supabase } from '@/db'
-import { useAuthStore } from '@/stores/Auth'
+// https://vueschool.io/articles/vuejs-tutorials/use-supabase-auth-with-vue-js-3/
 
-/**
- * Auth event listener to update and set initial auth data.
- * This will be triggered on page load and when the user logs in or out.
- * It mitigates the need to have a persistent pinia store for auth data.
- */
-supabase.auth.onAuthStateChange((_, session) => {
-  useAuthStore().setUser(session?.user || null)
-})
+import { supabase } from '@/db'
 
 export function useAuthService() {
   /**
-   * Authenticates and logs in a user with the given email and password.
+   * Sign a user in with email and password.
    *
-   * @param {string} email - Email address of the user.
-   * @param {string} password - User's password.
-   * @throws {AuthError} - Throws an error if the sign-in fails.
+   * @param email - The user's email address.
+   * @param password - The user's password.
+   * @throws {Error} If the sign-in fails.
+   * @returns - The sign-in data.
    */
   async function signIn(email: string, password: string) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
-
-    useAuthStore().setUser(data.user)
+    return data
   }
 
   // TODO: Add signOut function

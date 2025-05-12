@@ -9,7 +9,15 @@ export const useAuthStore = defineStore('auth', () => {
 
   function setUser(newUser: User | null) {
     _user.value = newUser
+    authInitializedResolve()
   }
 
-  return { user, setUser }
+  let authInitializedResolve: () => void
+  const authInitialized = ref(
+    new Promise<void>((resolve) => {
+      authInitializedResolve = resolve
+    }),
+  )
+
+  return { user, setUser, authInitialized }
 })
