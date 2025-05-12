@@ -13,7 +13,7 @@
     "success": "Erfolg"
   },
   "project": {
-    "project": "Projekt",
+    "project": "Projekt | Projekte",
     "create": "Projekt erstellen",
     "createError": "Fehler beim Erstellen des Projekts",
     "createSuccess": "Projekt erfolgreich erstellt",
