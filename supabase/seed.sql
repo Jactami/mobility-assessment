@@ -1,4 +1,9 @@
 --
+-- Create users
+--
+SELECT public.create_user(email => 'max@mustermann.de', PASSWORD => 'password');
+
+--
 -- Create projects
 --
 INSERT INTO projects (id, title, zip_code, city, street, street_number) 
