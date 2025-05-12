@@ -8,6 +8,7 @@ export type Database = {
           city: string
           created_at: string
           id: string
+          owner_id: string
           street: string
           street_number: string
           title: string
@@ -18,6 +19,7 @@ export type Database = {
           city: string
           created_at?: string
           id?: string
+          owner_id: string
           street: string
           street_number: string
           title: string
@@ -28,6 +30,7 @@ export type Database = {
           city?: string
           created_at?: string
           id?: string
+          owner_id?: string
           street?: string
           street_number?: string
           title?: string
@@ -41,7 +44,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_user: {
+        Args: { email: string; password?: string }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

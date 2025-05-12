@@ -27,6 +27,7 @@ import ProjectCard from '@/components/project/ProjectCard.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
 import type { Project } from '@/db/types'
+import { useAuthStore } from '@/stores/Auth'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -34,6 +35,7 @@ import MaterialSymbolsAdd from '~icons/material-symbols/add'
 
 const router = useRouter()
 const db = useDB()
+const authStore = useAuthStore()
 const notification = useNotification()
 const { t } = useI18n()
 
@@ -45,12 +47,15 @@ onMounted(async () => {
 })
 
 async function createProject() {
+  if (!authStore.user) return
+
   const { data, error } = await db.setProject({
     title: 'Neues Projekt: ' + new Date(),
     street: 'Musterstraße',
     street_number: '1',
     zip_code: '12345',
     city: 'Musterstadt',
+    owner_id: authStore.user.id,
   })
 
   if (!data || error) {
