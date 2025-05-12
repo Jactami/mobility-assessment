@@ -15,15 +15,32 @@
           <div class="truncate">{{ project.zip_code }} {{ project.city }}</div>
         </div>
       </div>
+      <div class="flex justify-end bg-surface-container-lowest p-1">
+        <MenuPopup :menu="menu" />
+      </div>
     </BaseCard>
   </RouterLink>
 </template>
 
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue'
+import MenuPopup from '@/components/menu/MenuPopup.vue'
+import type { Menu } from '@/components/menu/types'
+import { useLogger } from '@/composables/log'
 import type { Project } from '@/db/types'
+import { useI18n } from 'vue-i18n'
 
-defineProps<{
+const props = defineProps<{
   project: Project
 }>()
+
+const { t } = useI18n()
+
+const menu: Menu = [
+  {
+    label: t('project.delete'),
+    icon: 'delete',
+    action: () => useLogger().log('TODO: delete project', props.project.title),
+  },
+]
 </script>
