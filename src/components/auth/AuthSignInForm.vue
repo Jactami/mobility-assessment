@@ -41,9 +41,8 @@
 
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
+import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
-import { supabase } from '@/db'
-import { useAuthStore } from '@/stores/Auth'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MaterialSymbolsVisibilityOffOutlineRounded from '~icons/material-symbols/visibility-off-outline-rounded'
@@ -54,7 +53,7 @@ interface SignInFormData {
   password: string
 }
 
-const authStore = useAuthStore()
+const authService = useAuthService()
 const { t } = useI18n()
 const { errorToast } = useNotification()
 
@@ -62,14 +61,7 @@ const passwordVisible = ref(false)
 
 async function handleSignIn(form: SignInFormData) {
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: form.email,
-      password: form.password,
-    })
-    console.log(data, error)
-    authStore.setUser(data.user)
-
-    if (error) throw error
+    authService.signIn(form.email, form.password)
   } catch {
     errorToast(t('auth.loginError'))
   }
