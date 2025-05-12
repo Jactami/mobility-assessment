@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full max-w-56 rounded-md border border-outline-variant bg-surface p-1 text-on-surface"
+    class="z-50 w-full max-w-56 rounded-md border border-outline-variant bg-surface p-1 text-on-surface"
   >
     <ul class="list-none" role="menu">
       <li v-for="item in menu" :key="item.label">
