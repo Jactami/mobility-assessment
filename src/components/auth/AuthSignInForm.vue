@@ -45,6 +45,7 @@ import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 import MaterialSymbolsVisibilityOffOutlineRounded from '~icons/material-symbols/visibility-off-outline-rounded'
 import MaterialSymbolsVisibilityOutlineRounded from '~icons/material-symbols/visibility-outline-rounded'
 
@@ -53,6 +54,8 @@ interface SignInFormData {
   password: string
 }
 
+const route = useRoute()
+const router = useRouter()
 const authService = useAuthService()
 const { t } = useI18n()
 const { errorToast } = useNotification()
@@ -61,7 +64,11 @@ const passwordVisible = ref(false)
 
 async function handleSignIn(form: SignInFormData) {
   try {
-    authService.signIn(form.email, form.password)
+    await authService.signIn(form.email, form.password)
+
+    // forward user to redirect url or to home view
+    const redirectPath = route.query.redirect?.toString()
+    router.push(redirectPath ? { path: redirectPath } : { name: 'home' })
   } catch {
     errorToast(t('auth.loginError'))
   }
