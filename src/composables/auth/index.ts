@@ -12,7 +12,6 @@ export function useAuthService() {
   function init() {
     supabase.auth.onAuthStateChange((_, session) => {
       useAuthStore().setUser(session?.user || null)
-      console.log('auth change', _)
     })
   }
 
