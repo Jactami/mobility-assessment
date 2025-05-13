@@ -3,6 +3,8 @@
 import { supabase } from '@/db'
 import { useAuthStore } from '@/stores/Auth'
 
+let initialized = false
+
 export function useAuthService() {
   /**
    * Initialize the auth service.
@@ -10,6 +12,11 @@ export function useAuthService() {
    * It updates the auth store with the current user session.
    */
   function init() {
+    // Prevent multiple initializations
+    if (initialized) return
+
+    initialized = true
+    // Set up an event listener for authentication state changes
     supabase.auth.onAuthStateChange((_, session) => {
       useAuthStore().setUser(session?.user || null)
     })
