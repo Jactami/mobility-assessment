@@ -32,7 +32,7 @@
           </button>
         </template>
       </FormKit>
-      <BaseButton type="submit" classes="w-full" :disabled="!valid">
+      <BaseButton type="submit" classes="w-full" :disabled="!valid || loading">
         {{ t('auth.login') }}
       </BaseButton>
     </FormKit>
@@ -60,10 +60,14 @@ const authService = useAuthService()
 const { t } = useI18n()
 const { errorToast } = useNotification()
 
+const loading = ref(false)
 const passwordVisible = ref(false)
 
 async function handleSignIn(form: SignInFormData) {
   try {
+    loading.value = true
+
+    // login user
     await authService.signIn(form.email, form.password)
 
     // forward user to redirect url or to home view
@@ -71,6 +75,8 @@ async function handleSignIn(form: SignInFormData) {
     router.push(redirectPath ? { path: redirectPath } : { name: 'home' })
   } catch {
     errorToast(t('auth.loginError'))
+  } finally {
+    loading.value = false
   }
 }
 </script>
