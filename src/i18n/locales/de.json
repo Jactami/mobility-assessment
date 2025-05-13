@@ -15,7 +15,8 @@
     "email": "E-Mail",
     "password": "Passwort",
     "loginError": "Fehler bei der Anmeldung",
-    "logoutError": "Fehler bei der Abmeldung"
+    "logoutError": "Fehler bei der Abmeldung",
+    "loggedInAs": "Sie sind angemeldet als {user}."
   },
   "common": {
     "error": "Fehler",

@@ -1,6 +1,12 @@
 <template>
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-    <FormKit #default="{ state: { valid } }" type="form" :actions="false" @submit="handleSignIn">
+    <FormKit
+      v-if="!authStore.user"
+      #default="{ state: { valid } }"
+      type="form"
+      :actions="false"
+      @submit="handleSignIn"
+    >
       <FormKit
         id="email"
         type="email"
@@ -36,6 +42,9 @@
         {{ t('auth.login') }}
       </BaseButton>
     </FormKit>
+    <div v-else class="text-center">
+      <p>{{ t('auth.loggedInAs', { user: authStore.user.email }) }}</p>
+    </div>
   </div>
 </template>
 
@@ -43,6 +52,7 @@
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
+import { useAuthStore } from '@/stores/Auth'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -57,6 +67,7 @@ interface SignInFormData {
 const route = useRoute()
 const router = useRouter()
 const authService = useAuthService()
+const authStore = useAuthStore()
 const { t } = useI18n()
 const { errorToast } = useNotification()
 
