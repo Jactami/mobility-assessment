@@ -1,15 +1,16 @@
 --
 -- Function create_user
 --
-CREATE OR REPLACE FUNCTION public.create_user(email VARCHAR(100), PASSWORD VARCHAR(100) = NULL)
+CREATE OR REPLACE FUNCTION public.create_user(email VARCHAR(100), PASSWORD VARCHAR(100) = NULL, user_id UUID = NULL)
     RETURNS uuid
     AS $$
 DECLARE
-    user_id uuid;
     encrypted_pw VARCHAR(255);
     confirmation timestamp;
 BEGIN
-    user_id := gen_random_uuid();
+    IF user_id IS NULL THEN
+        user_id := gen_random_uuid();
+    END IF;
     encrypted_pw := crypt(PASSWORD, gen_salt('bf'));
     confirmation := now();
    
