@@ -9,4 +9,12 @@
 
 <script setup lang="ts">
 import AppHeader from '@/components/app/AppHeader.vue'
+import { onMounted } from 'vue'
+import { useAuthService } from './composables/auth'
+
+// init auth state listener to sync auth store
+// https://supabase.com/docs/guides/getting-started/tutorials/with-vue-3?queryGroups=database-method&database-method=sql#launch
+onMounted(() => {
+  useAuthService().init()
+})
 </script>

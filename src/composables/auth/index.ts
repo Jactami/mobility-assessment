@@ -1,8 +1,21 @@
 // https://vueschool.io/articles/vuejs-tutorials/use-supabase-auth-with-vue-js-3/
 
 import { supabase } from '@/db'
+import { useAuthStore } from '@/stores/Auth'
 
 export function useAuthService() {
+  /**
+   * Initialize the auth service.
+   * This function sets up an event listener for authentication state changes.
+   * It updates the auth store with the current user session.
+   */
+  function init() {
+    supabase.auth.onAuthStateChange((_, session) => {
+      useAuthStore().setUser(session?.user || null)
+      console.log('auth change', _)
+    })
+  }
+
   /**
    * Sign a user in with email and password.
    *
@@ -27,5 +40,5 @@ export function useAuthService() {
     if (error) throw error
   }
 
-  return { signIn, signOut }
+  return { init, signIn, signOut }
 }
