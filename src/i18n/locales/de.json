@@ -22,6 +22,11 @@
     "error": "Fehler",
     "success": "Erfolg"
   },
+  "map": {
+    "toggleFullscreen": "Vollbildmodus umschalten",
+    "zoomIn": "Ausschnitt vergrößern",
+    "zoomOut": "Ausschnitt verkleinern"
+  },
   "project": {
     "project": "Projekt | Projekte",
     "create": "Projekt erstellen",
