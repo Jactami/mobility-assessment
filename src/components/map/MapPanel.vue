@@ -53,8 +53,7 @@ onUnmounted(() => {
 })
 
 // Watch for geolocation updates and center the map on the user's location
-watch(coords, (newCoords) => {
-  const { latitude, longitude } = newCoords
+watch(coords, ({ latitude, longitude }) => {
   if (latitude && longitude) {
     map.getView().setCenter(fromLonLat([longitude, latitude]))
     map.getView().setZoom(13)
