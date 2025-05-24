@@ -22,7 +22,7 @@ export function useAuthService() {
     supabase.auth.onAuthStateChange(async (_, session) => {
       if (session) {
         // user is signed in
-        loadProfile()
+        loadProfile(session.user.id)
         authStore.setUser(session.user)
       } else {
         // user is signed out
@@ -61,8 +61,8 @@ export function useAuthService() {
    *
    * @throws {Error} - If loading the profile fails.
    */
-  async function loadProfile() {
-    const { data, error } = await supabase.from('profiles').select('*').single()
+  async function loadProfile(userId: string) {
+    const { data, error } = await supabase.from('profiles').select().eq('id', userId).single()
     if (error) throw error
     authStore.setProfile(data)
   }
