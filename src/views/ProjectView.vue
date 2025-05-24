@@ -1,9 +1,14 @@
 <template>
+  <BaseSection>
+    <MapPanel></MapPanel>
+  </BaseSection>
   <DebugPanel title="Project Data" :value="project" />
 </template>
 
 <script setup lang="ts">
+import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
+import MapPanel from '@/components/map/MapPanel.vue'
 import useDB from '@/composables/db'
 import type { Project } from '@/db/types'
 import { onMounted, ref } from 'vue'
