@@ -50,12 +50,21 @@ const { t } = useI18n()
 const loading = ref(false)
 const projects = ref<Project[] | null>(null)
 
-onMounted(async () => {
-  loading.value = true
-  const { data } = await db.getProjects()
-  projects.value = data
-  loading.value = false
-})
+onMounted(loadProjects)
+
+async function loadProjects() {
+  try {
+    loading.value = true
+    const { data, error } = await db.getProjects()
+    if (error) throw error
+
+    projects.value = data
+  } catch {
+    notification.errorToast(t('project.loadError'))
+  } finally {
+    loading.value = false
+  }
+}
 
 async function createProject() {
   if (!authStore.user) return

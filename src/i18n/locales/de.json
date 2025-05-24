@@ -29,6 +29,7 @@
     "createSuccess": "Projekt erfolgreich erstellt",
     "delete": "Projekt löschen",
     "deleteError": "Fehler beim Löschen des Projekts",
-    "deleteSuccess": "Projekt erfolgreich gelöscht"
+    "deleteSuccess": "Projekt erfolgreich gelöscht",
+    "loadError": "Fehler beim Laden der Projekte"
   }
 }
