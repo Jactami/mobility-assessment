@@ -8,8 +8,8 @@
         class="cursor-pointer rounded-md border border-outline p-2 hover:bg-surface-container-low"
         @click="copyToClipboard"
       >
-        <MaterialSymbolsContentCopyOutlineRounded v-if="!isCopied" aria-hidden="true" />
-        <MaterialSymbolsCheckRounded v-else aria-hidden="true" />
+        <IconRenderer v-if="!isCopied" icon="copy" />
+        <IconRenderer v-else icon="check" />
       </button>
     </div>
     <pre
@@ -20,9 +20,8 @@
 </template>
 
 <script setup lang="ts">
+import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { computed, ref } from 'vue'
-import MaterialSymbolsCheckRounded from '~icons/material-symbols/check-rounded'
-import MaterialSymbolsContentCopyOutlineRounded from '~icons/material-symbols/content-copy-outline-rounded'
 
 const props = defineProps<{
   title?: string

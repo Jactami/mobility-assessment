@@ -7,11 +7,10 @@
             <div
               class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container p-2"
             >
-              <div
-                class="flex aspect-square w-1/2 items-center justify-center rounded-full border border-outline-variant bg-surface"
-              >
-                <MaterialSymbolsAdd class="text-2xl text-on-surface-variant" aria-hidden="true" />
-              </div>
+              <IconRenderer
+                class="rounded-full bg-surface text-7xl text-on-surface-variant"
+                icon="add"
+              />
               <span>{{ t('project.create') }}</span>
             </div>
           </BaseCard>
@@ -31,6 +30,7 @@
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseSection from '@/components/base/BaseSection.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
+import IconRenderer from '@/components/icon/IconRenderer.vue'
 import ProjectCard from '@/components/project/ProjectCard.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
@@ -39,7 +39,6 @@ import { useAuthStore } from '@/stores/Auth'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import MaterialSymbolsAdd from '~icons/material-symbols/add'
 
 const router = useRouter()
 const db = useDB()

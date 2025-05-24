@@ -33,8 +33,8 @@
             @mousedown="passwordVisible = true"
             @mouseup="passwordVisible = false"
           >
-            <MaterialSymbolsVisibilityOffOutlineRounded v-if="passwordVisible" aria-hidden="true" />
-            <MaterialSymbolsVisibilityOutlineRounded v-else aria-hidden="true" />
+            <IconRenderer v-if="passwordVisible" icon="hide" />
+            <IconRenderer v-else icon="show" />
           </button>
         </template>
       </FormKit>
@@ -50,14 +50,13 @@
 
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
+import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
 import { useAuthStore } from '@/stores/Auth'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import MaterialSymbolsVisibilityOffOutlineRounded from '~icons/material-symbols/visibility-off-outline-rounded'
-import MaterialSymbolsVisibilityOutlineRounded from '~icons/material-symbols/visibility-outline-rounded'
 
 interface SignInFormData {
   email: string

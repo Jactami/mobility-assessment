@@ -19,7 +19,7 @@
           @click.prevent="handleAction(item)"
           @keydown.enter.space.capture="handleAction(item)"
         >
-          <component v-if="iconMap[item.icon]" :is="iconMap[item.icon]" />
+          <IconRenderer :icon="item.icon" />
           <span>
             {{ item.label }}
           </span>
@@ -31,23 +31,12 @@
 </template>
 
 <script setup lang="ts">
-import type { FunctionalComponent } from 'vue'
-import MaterialSymbolsAddCircleOutline from '~icons/material-symbols/add-circle-outline'
-import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
-import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded'
-import TablerExternalLink from '~icons/tabler/external-link'
+import IconRenderer from '@/components/icon/IconRenderer.vue'
 import type { Menu, MenuItem } from './types'
 
 defineProps<{
   menu: Menu
 }>()
-
-const iconMap: Record<string, FunctionalComponent> = {
-  link: TablerExternalLink,
-  add: MaterialSymbolsAddCircleOutline,
-  delete: MaterialSymbolsDeleteOutlineRounded,
-  signOut: MaterialSymbolsLogoutRounded,
-}
 
 function handleAction(item: MenuItem) {
   if (item.disabled) return

@@ -1,6 +1,8 @@
+import type { Icon } from '@/components/icon/types'
+
 export type MenuItem = {
   label: string
-  icon: string
+  icon: Icon
   link?: string
   action?: () => void
   disabled?: boolean

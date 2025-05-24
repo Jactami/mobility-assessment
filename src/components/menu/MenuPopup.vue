@@ -10,7 +10,7 @@
   >
     <slot name="trigger">
       <!-- Fallback trigger -->
-      <MaterialSymbolsMoreVert aria-hidden="true" />
+      <IconRenderer icon="more" />
     </slot>
   </button>
   <MenuPanel
@@ -25,10 +25,10 @@
 </template>
 
 <script setup lang="ts">
+import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { autoUpdate, flip, offset, useFloating } from '@floating-ui/vue'
 import { onClickOutside } from '@vueuse/core'
 import { ref } from 'vue'
-import MaterialSymbolsMoreVert from '~icons/material-symbols/more-vert'
 import MenuPanel from './MenuPanel.vue'
 import type { Menu } from './types'
 
