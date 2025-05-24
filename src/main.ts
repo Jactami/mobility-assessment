@@ -1,5 +1,4 @@
 import './assets/main.css'
-import './assets/openlayers.css'
 
 import formkitConfig from '@/config/formkit/config'
 import { defaultConfig, plugin } from '@formkit/vue'
