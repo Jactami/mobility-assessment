@@ -14,11 +14,11 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
 
 const mapEl = ref<HTMLDivElement | null>(null)
 
-const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
-
+// OpenLayers map configuration
 const map = new Map({
   layers: [
     new TileLayer({
@@ -45,7 +45,6 @@ const map = new Map({
 
 onMounted(() => {
   if (!mapEl.value) return
-
   map.setTarget(mapEl.value)
 })
 
@@ -53,6 +52,7 @@ onUnmounted(() => {
   map.setTarget(undefined)
 })
 
+// Watch for geolocation updates and center the map on the user's location
 watch(coords, (newCoords) => {
   const { latitude, longitude } = newCoords
   if (latitude && longitude) {
