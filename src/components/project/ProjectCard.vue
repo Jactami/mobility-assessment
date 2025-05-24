@@ -1,10 +1,11 @@
 <template>
   <RouterLink :to="`/project/${project.id}`">
-    <BaseCard>
+    <BaseCard :animation="true">
       <div class="overflow-hidden">
         <img
           src="/img/placeholder.webp"
           :alt="project.title"
+          loading="lazy"
           class="aspect-video object-cover object-center transition-transform duration-300 group-hover:scale-110"
         />
       </div>

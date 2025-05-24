@@ -1,21 +1,28 @@
 <template>
   <BaseSection :title="t('project.project', 2)">
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-      <button class="cursor-pointer" title="Neues Projekt" @click="createProject">
-        <BaseCard>
-          <div
-            class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container p-2"
-          >
+      <template v-if="!loading">
+        <button class="cursor-pointer" title="Neues Projekt" @click="createProject">
+          <BaseCard :animation="true">
             <div
-              class="flex aspect-square w-1/2 items-center justify-center rounded-full border border-outline-variant bg-surface"
+              class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container p-2"
             >
-              <MaterialSymbolsAdd class="text-2xl text-on-surface-variant" aria-hidden="true" />
+              <div
+                class="flex aspect-square w-1/2 items-center justify-center rounded-full border border-outline-variant bg-surface"
+              >
+                <MaterialSymbolsAdd class="text-2xl text-on-surface-variant" aria-hidden="true" />
+              </div>
+              <span>{{ t('project.create') }}</span>
             </div>
-            <span>{{ t('project.create') }}</span>
-          </div>
+          </BaseCard>
+        </button>
+        <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+      </template>
+      <template v-else>
+        <BaseCard v-for="i in 4" :key="i" :animation="false" class="h-64">
+          <BaseSkeleton width="100%" height="100%" />
         </BaseCard>
-      </button>
-      <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+      </template>
     </div>
   </BaseSection>
 </template>
@@ -23,6 +30,7 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseSection from '@/components/base/BaseSection.vue'
+import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
 import ProjectCard from '@/components/project/ProjectCard.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
@@ -39,11 +47,14 @@ const authStore = useAuthStore()
 const notification = useNotification()
 const { t } = useI18n()
 
+const loading = ref(false)
 const projects = ref<Project[] | null>(null)
 
 onMounted(async () => {
+  loading.value = true
   const { data } = await db.getProjects()
   projects.value = data
+  loading.value = false
 })
 
 async function createProject() {
