@@ -1,9 +1,19 @@
 --
 -- Create users
 --
-SELECT public.create_user(user_id => 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', email => 'max@mustermann.de', PASSWORD => 'password');
+SELECT public.create_user(
+    user_id => 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 
+    email => 'max@mustermann.de', 
+    password => 'password', 
+    metadata => '{"first_name": "Max", "last_name": "Mustermann"}'
+);
 
-SELECT public.create_user(user_id => 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', email => 'john@doe.com', PASSWORD => 'password');
+SELECT public.create_user(
+    user_id => 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 
+    email => 'john@doe.com', 
+    password => 'password',
+    metadata => '{"first_name": "John", "last_name": "Doe"}'
+);
 
 --
 -- Create projects

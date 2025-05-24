@@ -6,6 +6,8 @@ import { useAuthStore } from '@/stores/Auth'
 let initialized = false
 
 export function useAuthService() {
+  const authStore = useAuthStore()
+
   /**
    * Initialize the auth service.
    * This function sets up an event listener for authentication state changes.
@@ -17,8 +19,16 @@ export function useAuthService() {
 
     initialized = true
     // Set up an event listener for authentication state changes
-    supabase.auth.onAuthStateChange((_, session) => {
-      useAuthStore().setUser(session?.user || null)
+    supabase.auth.onAuthStateChange(async (_, session) => {
+      if (session) {
+        // user is signed in
+        loadProfile()
+        authStore.setUser(session.user)
+      } else {
+        // user is signed out
+        authStore.setProfile(null)
+        authStore.setUser(null)
+      }
     })
   }
 
@@ -46,5 +56,20 @@ export function useAuthService() {
     if (error) throw error
   }
 
-  return { init, signIn, signOut }
+  /**
+   * Load the user's profile data.
+   *
+   * @throws {Error} - If loading the profile fails.
+   */
+  async function loadProfile() {
+    const { data, error } = await supabase.from('profiles').select('*').single()
+    if (error) throw error
+    authStore.setProfile(data)
+  }
+
+  return {
+    init,
+    signIn,
+    signOut,
+  }
 }

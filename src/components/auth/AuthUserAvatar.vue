@@ -1,8 +1,8 @@
 <template>
-  <MenuPopup v-if="authStore.user" :menu="menu">
+  <MenuPopup v-if="authStore.profile" :menu="menu">
     <template #trigger>
       <div class="rounded-full bg-surface p-1 text-on-surface-variant">
-        {{ authStore.user.email }}
+        {{ initials }}
       </div>
     </template>
   </MenuPopup>
@@ -14,6 +14,7 @@ import type { Menu } from '@/components/menu/types'
 import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
 import { useAuthStore } from '@/stores/Auth'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
@@ -30,6 +31,11 @@ const menu: Menu = [
     action: handleSignOut,
   },
 ]
+
+const initials = computed(
+  () =>
+    `${authStore.profile?.first_name?.charAt(0) || ''}${authStore.profile?.last_name?.charAt(0) || ''}`,
+)
 
 async function handleSignOut() {
   try {

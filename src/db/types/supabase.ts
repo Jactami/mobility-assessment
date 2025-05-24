@@ -3,6 +3,30 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      profiles: {
+        Row: {
+          created_at: string
+          first_name: string
+          id: string
+          last_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          first_name: string
+          id: string
+          last_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
           city: string
@@ -45,7 +69,12 @@ export type Database = {
     }
     Functions: {
       create_user: {
-        Args: { email: string; password?: string }
+        Args: {
+          email: string
+          password: string
+          metadata: Json
+          user_id?: string
+        }
         Returns: string
       }
     }
