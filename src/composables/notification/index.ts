@@ -7,7 +7,7 @@ export function useNotification() {
   const options: SweetAlertOptions = {
     position: 'top-end',
     showConfirmButton: false,
-    timer: 1500,
+    timer: 3000,
     toast: true,
     timerProgressBar: true,
   }
