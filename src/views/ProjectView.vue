@@ -1,5 +1,6 @@
 <template>
   <BaseSection>
+    <MapSearchInput></MapSearchInput>
     <MapPanel></MapPanel>
   </BaseSection>
   <DebugPanel title="Project Data" :value="project" />
@@ -9,6 +10,7 @@
 import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
 import MapPanel from '@/components/map/MapPanel.vue'
+import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import useDB from '@/composables/db'
 import type { Project } from '@/db/types'
 import { onMounted, ref } from 'vue'
