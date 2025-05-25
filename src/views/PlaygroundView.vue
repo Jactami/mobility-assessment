@@ -177,7 +177,7 @@ import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import MaterialSymbolsLogin from '~icons/material-symbols/login'
 
-const logger = useLogger()
+const logger = useLogger('playground')
 const notification = useNotification()
 
 logger.log('Logger running...')
