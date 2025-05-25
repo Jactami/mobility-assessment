@@ -20,6 +20,7 @@
   },
   "common": {
     "error": "Fehler",
+    "errorMessage": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
     "success": "Erfolg"
   },
   "map": {
@@ -35,6 +36,7 @@
     "delete": "Projekt löschen",
     "deleteError": "Fehler beim Löschen des Projekts",
     "deleteSuccess": "Projekt erfolgreich gelöscht",
-    "loadError": "Fehler beim Laden der Projekte"
+    "loadError": "Fehler beim Laden der Projekte",
+    "location": "Standort"
   }
 }
