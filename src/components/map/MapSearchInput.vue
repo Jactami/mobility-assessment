@@ -10,14 +10,18 @@
       inner-class="rounded-r-none"
       role="searchbox"
       autocomplete="off"
-      auto-focus
       :disabled="loading"
       @keydown.enter="search"
     >
       <template #suffixIcon>
-        <button v-if="query" class="cursor-pointer hover:text-primary" @click="query = ''">
+        <button
+          v-if="query && !loading"
+          class="cursor-pointer hover:text-primary"
+          @click="query = ''"
+        >
           <IconRenderer icon="clear" />
         </button>
+        <IconRenderer v-else-if="loading" icon="loading" />
       </template>
     </FormKit>
     <BaseButton

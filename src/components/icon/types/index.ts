@@ -1,3 +1,4 @@
+import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop'
 import MaterialSymbolsAddCircleOutline from '~icons/material-symbols/add-circle-outline'
 import MaterialSymbolsCheckRounded from '~icons/material-symbols/check-rounded'
 import MaterialSymbolsCloseRounded from '~icons/material-symbols/close-rounded'
@@ -22,6 +23,7 @@ export const iconMap = {
   more: MaterialSymbolsMoreVert,
   clear: MaterialSymbolsCloseRounded,
   search: MaterialSymbolsSearchRounded,
+  loading: LineMdLoadingTwotoneLoop,
 }
 
 export type Icon = keyof typeof iconMap
