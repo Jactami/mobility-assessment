@@ -13,10 +13,14 @@ export type SearchResultItem = {
   type: string
   importance: number
   address: {
-    road: string
-    suburb: string
-    city_district: string
-    city: string
+    road?: string
+    house_number?: string
+    suburb?: string
+    city_district?: string
+    borough?: string
+    city?: string
+    town?: string
+    village?: string
     county: string
     state: string
     postcode: string
