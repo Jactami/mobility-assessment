@@ -7,10 +7,12 @@ CREATE TABLE IF NOT EXISTS public.projects (
     updated_at TIMESTAMP WITH TIME ZONE,
     owner_id UUID NOT NULL,
     title VARCHAR(100) NOT NULL,
-    zip_code VARCHAR(5) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    street VARCHAR(100) NOT NULL,
-    street_number VARCHAR(10) NOT NULL
+    latitude DECIMAL(9,6),
+    longitude DECIMAL(9,6),
+    zip_code VARCHAR(5),
+    city VARCHAR(100),
+    street VARCHAR(100),
+    street_number VARCHAR(10)
 );
 
 ALTER TABLE public.projects OWNER TO postgres;

@@ -29,37 +29,43 @@ export type Database = {
       }
       projects: {
         Row: {
-          city: string
+          city: string | null
           created_at: string
           id: string
+          latitude: number | null
+          longitude: number | null
           owner_id: string
-          street: string
-          street_number: string
+          street: string | null
+          street_number: string | null
           title: string
           updated_at: string | null
-          zip_code: string
+          zip_code: string | null
         }
         Insert: {
-          city: string
+          city?: string | null
           created_at?: string
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           owner_id: string
-          street: string
-          street_number: string
+          street?: string | null
+          street_number?: string | null
           title: string
           updated_at?: string | null
-          zip_code: string
+          zip_code?: string | null
         }
         Update: {
-          city?: string
+          city?: string | null
           created_at?: string
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           owner_id?: string
-          street?: string
-          street_number?: string
+          street?: string | null
+          street_number?: string | null
           title?: string
           updated_at?: string | null
-          zip_code?: string
+          zip_code?: string | null
         }
         Relationships: []
       }
