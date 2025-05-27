@@ -12,8 +12,10 @@ import { OSM } from 'ol/source'
 import View from 'ol/View'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useMap } from './composables'
 
 const { t } = useI18n()
+const { drawLocation } = useMap()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
 
 const mapEl = ref<HTMLDivElement | null>(null)
@@ -57,6 +59,7 @@ watch(coords, ({ latitude, longitude }) => {
   if (latitude && longitude) {
     map.getView().setCenter(fromLonLat([longitude, latitude]))
     map.getView().setZoom(13)
+    drawLocation(map, longitude, latitude)
     pause() // Pause geolocation updates after centering the map
   }
 })
