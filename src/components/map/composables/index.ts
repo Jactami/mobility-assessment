@@ -1,6 +1,7 @@
 import Feature from 'ol/Feature'
 import { Point } from 'ol/geom'
 import { Vector } from 'ol/layer'
+import VectorLayer from 'ol/layer/Vector'
 import type Map from 'ol/Map'
 import { fromLonLat } from 'ol/proj'
 import VectorSource from 'ol/source/Vector'
@@ -15,7 +16,17 @@ import Style from 'ol/style/Style'
 export function useMap() {
   return {
     drawLocation,
+    resetLayers,
   }
+}
+
+function resetLayers(map: Map) {
+  const layers = [...map.getLayers().getArray()]
+  layers.forEach((layer) => {
+    if (layer instanceof VectorLayer) {
+      map.removeLayer(layer)
+    }
+  })
 }
 
 function createPointFeature(lon: number, lat: number) {

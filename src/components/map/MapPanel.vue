@@ -3,6 +3,7 @@
 </template>
 
 <script setup lang="ts">
+import { useProjectStore } from '@/stores/Project'
 import { useGeolocation } from '@vueuse/core'
 import { defaults as defaultControls, FullScreen, ScaleLine, Zoom } from 'ol/control'
 import TileLayer from 'ol/layer/Tile'
@@ -15,7 +16,8 @@ import { useI18n } from 'vue-i18n'
 import { useMap } from './composables'
 
 const { t } = useI18n()
-const { drawLocation } = useMap()
+const { drawLocation, resetLayers } = useMap()
+const projectStore = useProjectStore()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
 
 const mapEl = ref<HTMLDivElement | null>(null)
@@ -54,13 +56,37 @@ onUnmounted(() => {
   map.setTarget(undefined)
 })
 
+// Reset the map view to a specific location
+function resetMap(lon: number, lat: number) {
+  resetLayers(map)
+  map.getView().setCenter(fromLonLat([lon, lat]))
+  map.getView().setZoom(13)
+}
+
+// Update and initialize map view when the project location changes
+watch(
+  () => [projectStore.project?.longitude, projectStore.project?.latitude],
+  ([lon, lat]) => {
+    if (lon && lat) {
+      resetMap(lon, lat)
+      drawLocation(map, lon, lat)
+    }
+  },
+  { immediate: true },
+)
+
 // Watch for geolocation updates and center the map on the user's location
 watch(coords, ({ latitude, longitude }) => {
+  // If the project already has a location, pause geolocation updates
+  if (projectStore.project?.longitude && projectStore.project?.latitude) {
+    pause()
+    return
+  }
+
+  // If geolocation coordinates are available, update map view
   if (latitude && longitude) {
-    map.getView().setCenter(fromLonLat([longitude, latitude]))
-    map.getView().setZoom(13)
-    drawLocation(map, longitude, latitude)
-    pause() // Pause geolocation updates after centering the map
+    resetMap(longitude, latitude)
+    pause() // Pause geolocation updates after first use
   }
 })
 </script>
