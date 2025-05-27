@@ -38,15 +38,15 @@
 import BaseButton from '@/components/base/BaseButton.vue'
 import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { useGeoService } from '@/composables/geo'
-import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
+import { useProjectStore } from '@/stores/Project'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const { loading, geocode, error, getGeoCode } = useGeoService()
 const { errorToast } = useNotification()
-const logger = useLogger('map')
+const projectStore = useProjectStore()
 
 const query = ref('')
 
@@ -59,8 +59,25 @@ async function search() {
   if (error.value) errorToast(t('common.errorMessage'))
 
   if (geocode.value && geocode.value.length > 0) {
+    // Parse response into coordinates and address
     const { lat, lon } = geocode.value[0]
-    logger.log(`Latitude: ${lat}, Longitude: ${lon}`)
+    const city =
+      geocode.value[0].address.city ||
+      geocode.value[0].address.town ||
+      geocode.value[0].address.village
+    const zip = geocode.value[0].address.postcode
+    const street = geocode.value[0].address.road || geocode.value[0].address.village // small villages might not have a road
+    const number = geocode.value[0].address.house_number
+
+    // Update store
+    projectStore.update({
+      latitude: parseFloat(lat),
+      longitude: parseFloat(lon),
+      city,
+      zip_code: zip,
+      street,
+      street_number: number,
+    })
   }
 }
 </script>
