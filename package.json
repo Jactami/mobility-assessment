@@ -13,7 +13,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write src/",
     "test:unit": "vitest",
-    "db:types": "pnpx supabase gen types --lang=typescript --local > ./src/db/types/supabase.ts --schema public"
+    "db:types": "pnpx supabase gen types --lang=typescript --local > ./src/db/types/supabase.ts --schema public && prettier --write ./src/db/types/supabase.ts"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.6",
