@@ -36,6 +36,18 @@ function resetLayers(map: Map) {
 }
 
 /**
+ * Helper function to append a feature to the map.
+ *
+ * @param map The OpenLayers map instance
+ * @param feature The feature to append
+ */
+function appendFeatureToMap(map: Map, feature: Feature) {
+  const vectorSource = new VectorSource({ features: [feature] })
+  const vectorLayer = new Vector({ source: vectorSource })
+  map.addLayer(vectorLayer)
+}
+
+/**
  * Create a point feature for the given coordinates.
  *
  * @param lon The longitude of the point
@@ -73,9 +85,7 @@ function drawLocation(map: Map, lon: number, lat: number) {
   const feature = createPointFeature(lon, lat)
 
   // Append point to map
-  const vectorSource = new VectorSource({ features: [feature] })
-  const vectorLayer = new Vector({ source: vectorSource })
-  map.addLayer(vectorLayer)
+  appendFeatureToMap(map, feature)
 }
 
 /**
@@ -87,14 +97,12 @@ function drawLocation(map: Map, lon: number, lat: number) {
  * @param radius The radius of the circle in meters
  */
 function drawCircleAround(map: Map, lon: number, lat: number, radius: number) {
+  // Create a circle around location
   const coordinates = fromLonLat([lon, lat])
-
   const feature = new Feature({
     geometry: new Circle(coordinates, radius),
   })
 
-  // Source and vector layer
-  const vectorSource = new VectorSource({ features: [feature] })
-  const vectorLayer = new Vector({ source: vectorSource })
-  map.addLayer(vectorLayer)
+  // Append circle to map
+  appendFeatureToMap(map, feature)
 }
