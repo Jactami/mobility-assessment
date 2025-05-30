@@ -18,7 +18,7 @@ export function useMap() {
     drawCircleAround,
     drawLocation,
     resetLayers,
-    setCenterAround,
+    setViewAround,
   }
 }
 
@@ -132,12 +132,26 @@ function getCircleRadius(map: Map, radius: number) {
   return circleRadius
 }
 
-function setCenterAround(map: Map, lon: number, lat: number, radius: number, height: number) {
+/**
+ * Sets the map view to center around a specified point with a given radius.
+ *
+ * @param map The OpenLayers map instance
+ * @param lon The longitude of the center point
+ * @param lat The latitude of the center point
+ * @param radius The radius of the view in meters
+ */
+function setViewAround(map: Map, lon: number, lat: number, radius: number) {
+  // Center the map view around the specified coordinates
   const coordinates = fromLonLat([lon, lat])
   map.getView().setCenter(coordinates)
 
-  // calculate required resolution to fit radius inside map view
-  const circleDiameter = getCircleRadius(map, radius * 2)
-  const res = circleDiameter / height
-  map.getView().setResolution(res)
+  // Calculate the minimum size (width or height) of the map view
+  const mapSize = map.getSize()
+  const minSize = mapSize ? Math.min(...mapSize) : 0
+
+  // Set zoom level based on the radius to ensure the circle fits within the view
+  const offset = radius * 0.1
+  const diameter = getCircleRadius(map, radius + offset) * 2
+  const resolution = diameter / minSize
+  map.getView().setResolution(resolution)
 }
