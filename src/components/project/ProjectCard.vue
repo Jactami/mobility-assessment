@@ -1,6 +1,6 @@
 <template>
   <RouterLink :to="`/project/${project.id}`">
-    <BaseCard :animation="true">
+    <BaseCard :animation="true" class="flex flex-col">
       <div class="overflow-hidden">
         <img
           src="/img/placeholder.webp"
@@ -9,7 +9,7 @@
           class="aspect-video object-cover object-center transition-transform duration-300 group-hover:scale-110"
         />
       </div>
-      <div class="p-4">
+      <div class="grow p-4">
         <h2 class="line-clamp-2 h-[3rem] text-lg leading-tight font-medium">{{ project.title }}</h2>
         <div class="mt-4 text-on-surface-variant">
           <div class="truncate">{{ project.street }} {{ project.street_number }}</div>
