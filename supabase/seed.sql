@@ -27,8 +27,8 @@ VALUES (
     'An der Weberei', 
     '5', 
     'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 
-    49.8922661,
-    10.8898866
+    49.9031251,
+    10.8696332
 );
 
 INSERT INTO projects (id, title, zip_code, city, street, street_number, owner_id, latitude, longitude) 
