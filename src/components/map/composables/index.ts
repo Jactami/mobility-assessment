@@ -3,7 +3,7 @@ import { Circle, Point } from 'ol/geom'
 import { Vector } from 'ol/layer'
 import VectorLayer from 'ol/layer/Vector'
 import type Map from 'ol/Map'
-import { fromLonLat } from 'ol/proj'
+import { fromLonLat, getPointResolution, METERS_PER_UNIT } from 'ol/proj'
 import VectorSource from 'ol/source/Vector'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
@@ -100,9 +100,33 @@ function drawCircleAround(map: Map, lon: number, lat: number, radius: number) {
   // Create a circle around location
   const coordinates = fromLonLat([lon, lat])
   const feature = new Feature({
-    geometry: new Circle(coordinates, radius),
+    geometry: new Circle(coordinates, getCircleRadius(map, radius)),
   })
 
   // Append circle to map
   appendFeatureToMap(map, feature)
+}
+
+/**
+ * Get the radius in pixels of a circle on the map.
+ * https://stackoverflow.com/questions/23264721/how-to-draw-circle-with-radius-in-openlayers/28299599#28299599
+ *
+ * @param map The OpenLayers map instance
+ * @param radius The radius in meters
+ * @returns The radius in pixels
+ */
+function getCircleRadius(map: Map, radius: number) {
+  const resolutionAtEquator = map.getView().getResolution()
+  if (resolutionAtEquator === undefined) return 0
+
+  const center = map.getView().getCenter()
+  if (center === undefined) return 0
+
+  const projection = map.getView().getProjection()
+
+  const resolutionAtLocation = getPointResolution(projection, resolutionAtEquator, center)
+  const resolutionFactor = resolutionAtEquator / resolutionAtLocation
+  const circleRadius = (radius / METERS_PER_UNIT.m) * resolutionFactor
+
+  return circleRadius
 }
