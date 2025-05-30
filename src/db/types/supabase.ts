@@ -30,6 +30,7 @@ export type Database = {
       projects: {
         Row: {
           city: string | null
+          country: string | null
           created_at: string
           id: string
           latitude: number | null
@@ -43,6 +44,7 @@ export type Database = {
         }
         Insert: {
           city?: string | null
+          country?: string | null
           created_at?: string
           id?: string
           latitude?: number | null
@@ -56,6 +58,7 @@ export type Database = {
         }
         Update: {
           city?: string | null
+          country?: string | null
           created_at?: string
           id?: string
           latitude?: number | null

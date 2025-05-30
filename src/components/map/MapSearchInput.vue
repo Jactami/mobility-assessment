@@ -61,6 +61,7 @@ async function search() {
   if (geocode.value && geocode.value.length > 0) {
     // Parse response into coordinates and address
     const { lat, lon } = geocode.value[0]
+    const country = geocode.value[0].address.country
     const city =
       geocode.value[0].address.city ||
       geocode.value[0].address.town ||
@@ -73,6 +74,7 @@ async function search() {
     projectStore.update({
       latitude: parseFloat(lat),
       longitude: parseFloat(lon),
+      country,
       city,
       zip_code: zip,
       street,
