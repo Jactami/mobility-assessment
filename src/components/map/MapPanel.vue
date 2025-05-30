@@ -16,7 +16,7 @@ import { useI18n } from 'vue-i18n'
 import { useMap } from './composables'
 
 const { t } = useI18n()
-const { drawLocation, resetLayers } = useMap()
+const { drawCircleAround, drawLocation, resetLayers } = useMap()
 const projectStore = useProjectStore()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
 
@@ -69,6 +69,7 @@ watch(
   ([lon, lat]) => {
     if (lon && lat) {
       resetMap(lon, lat)
+      drawCircleAround(map, lon, lat, 1000)
       drawLocation(map, lon, lat)
     }
   },

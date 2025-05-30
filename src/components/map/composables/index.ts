@@ -1,5 +1,5 @@
 import Feature from 'ol/Feature'
-import { Point } from 'ol/geom'
+import { Circle, Point } from 'ol/geom'
 import { Vector } from 'ol/layer'
 import VectorLayer from 'ol/layer/Vector'
 import type Map from 'ol/Map'
@@ -15,6 +15,7 @@ import Style from 'ol/style/Style'
 
 export function useMap() {
   return {
+    drawCircleAround,
     drawLocation,
     resetLayers,
   }
@@ -72,6 +73,27 @@ function drawLocation(map: Map, lon: number, lat: number) {
   const feature = createPointFeature(lon, lat)
 
   // Append point to map
+  const vectorSource = new VectorSource({ features: [feature] })
+  const vectorLayer = new Vector({ source: vectorSource })
+  map.addLayer(vectorLayer)
+}
+
+/**
+ * Draws a circle around a specified location on the map.
+ *
+ * @param map The OpenLayers map instance
+ * @param lon The longitude of the center point
+ * @param lat The latitude of the center point
+ * @param radius The radius of the circle in meters
+ */
+function drawCircleAround(map: Map, lon: number, lat: number, radius: number) {
+  const coordinates = fromLonLat([lon, lat])
+
+  const feature = new Feature({
+    geometry: new Circle(coordinates, radius),
+  })
+
+  // Source and vector layer
   const vectorSource = new VectorSource({ features: [feature] })
   const vectorLayer = new Vector({ source: vectorSource })
   map.addLayer(vectorLayer)
