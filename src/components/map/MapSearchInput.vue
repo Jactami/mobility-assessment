@@ -88,7 +88,15 @@ watch(
   () => projectStore.project,
   (newProject) => {
     if (newProject) {
-      query.value = `${newProject.street} ${newProject.street_number}, ${newProject.zip_code} ${newProject.city}`
+      let address = ''
+      address += projectStore.project?.street ? projectStore.project.street : ''
+      address += projectStore.project?.street_number ? ' ' + projectStore.project.street_number : ''
+      address += address ? ', ' : ''
+      address += projectStore.project?.zip_code ? projectStore.project.zip_code + ' ' : ''
+      address += projectStore.project?.city ? projectStore.project.city + ', ' : ''
+      address += projectStore.project?.country ? projectStore.project.country : ''
+
+      query.value = address
     }
   },
   { immediate: true },
