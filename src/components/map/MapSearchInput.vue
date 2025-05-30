@@ -17,7 +17,7 @@
         <button
           v-if="query && !loading"
           class="cursor-pointer hover:text-primary"
-          @click="query = ''"
+          @click="resetQuery"
         >
           <IconRenderer icon="clear" />
         </button>
@@ -81,6 +81,17 @@ async function search() {
       street_number: number,
     })
   }
+}
+
+function resetQuery() {
+  // I do not like this, but it is the only way to focus the input element at the moment.
+  // https://github.com/orgs/formkit/discussions/812
+  const input = document.getElementById('map-search-input') as HTMLInputElement
+  if (input) {
+    input.focus()
+    input.select()
+  }
+  query.value = ''
 }
 
 // update and initialize query string with project address
