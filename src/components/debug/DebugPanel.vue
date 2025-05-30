@@ -1,11 +1,11 @@
 <template>
-  <div class="divide-y divide-outline-variant rounded-md border border-outline-variant">
+  <div class="divide-y divide-outline-variant rounded-border border border-outline-variant">
     <div class="flex items-center justify-between gap-x-3 px-4 py-2">
       <span class="font-semibold">{{ title }}</span>
       <button
         type="button"
         :title="isCopied ? 'Copied!' : 'Copy to clipboard'"
-        class="cursor-pointer rounded-md border border-outline p-2 hover:bg-surface-container-low"
+        class="cursor-pointer rounded-border border border-outline p-2 hover:bg-surface-container-low"
         @click="copyToClipboard"
       >
         <IconRenderer v-if="!isCopied" icon="copy" />

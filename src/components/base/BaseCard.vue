@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group size-full rounded border border-outline-variant shadow"
+    class="group size-full overflow-hidden rounded-border border border-outline-variant shadow"
     :class="{ 'transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg': animation }"
   >
     <slot>

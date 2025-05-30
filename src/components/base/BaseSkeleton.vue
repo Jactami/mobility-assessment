@@ -1,5 +1,5 @@
 <template>
-  <div class="animate-pulse rounded-md bg-surface-container-high" :style="style" />
+  <div class="animate-pulse rounded-border bg-surface-container-high" :style="style" />
 </template>
 
 <script setup lang="ts">

@@ -44,4 +44,7 @@
   --color-on-success: var(--color-white);
   --color-success-container: var(--color-green-200);
   --color-on-success-container: var(--color-green-800);
+
+  /* Border radius */
+  --radius-border: var(--radius-md);
 }

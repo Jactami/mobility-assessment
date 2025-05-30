@@ -1,7 +1,7 @@
 <template>
   <button
     ref="reference"
-    class="size-fit cursor-pointer rounded-md p-1 hover:bg-surface-container"
+    class="size-fit cursor-pointer rounded-border p-1 hover:bg-surface-container"
     :class="{ 'bg-surface-container': isOpen }"
     aria-haspopup="menu"
     :aria-expanded="isOpen ? 'true' : 'false'"
