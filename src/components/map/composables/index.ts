@@ -20,6 +20,11 @@ export function useMap() {
   }
 }
 
+/**
+ * Reset all vector layers on the map.
+ *
+ * @param map The OpenLayers map instance
+ */
 function resetLayers(map: Map) {
   const layers = [...map.getLayers().getArray()]
   layers.forEach((layer) => {
@@ -29,6 +34,13 @@ function resetLayers(map: Map) {
   })
 }
 
+/**
+ * Create a point feature for the given coordinates.
+ *
+ * @param lon The longitude of the point
+ * @param lat The latitude of the point
+ * @returns The created point feature
+ */
 function createPointFeature(lon: number, lat: number) {
   const coordinates = fromLonLat([lon, lat])
 
@@ -48,6 +60,13 @@ function createPointFeature(lon: number, lat: number) {
   return feature
 }
 
+/**
+ * Draws a point on the map at the specified location.
+ *
+ * @param map The OpenLayers map instance
+ * @param lon The longitude of the location
+ * @param lat The latitude of the location
+ */
 function drawLocation(map: Map, lon: number, lat: number) {
   // Create a point for the location
   const feature = createPointFeature(lon, lat)
