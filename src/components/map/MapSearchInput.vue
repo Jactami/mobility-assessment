@@ -40,7 +40,7 @@ import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { useGeoService } from '@/composables/geo'
 import { useNotification } from '@/composables/notification'
 import { useProjectStore } from '@/stores/Project'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -80,4 +80,15 @@ async function search() {
     })
   }
 }
+
+// update and initialize query string with project address
+watch(
+  () => projectStore.project,
+  (newProject) => {
+    if (newProject) {
+      query.value = `${newProject.street} ${newProject.street_number}, ${newProject.zip_code} ${newProject.city}`
+    }
+  },
+  { immediate: true },
+)
 </script>
