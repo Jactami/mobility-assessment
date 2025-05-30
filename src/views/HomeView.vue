@@ -70,10 +70,6 @@ async function createProject() {
 
   const { data, error } = await db.setProject({
     title: 'Neues Projekt: ' + new Date(),
-    street: 'Musterstraße',
-    street_number: '1',
-    zip_code: '12345',
-    city: 'Musterstadt',
     owner_id: authStore.user.id,
   })
 
