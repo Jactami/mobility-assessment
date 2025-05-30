@@ -18,6 +18,7 @@ export function useMap() {
     drawCircleAround,
     drawLocation,
     resetLayers,
+    setCenterAround,
   }
 }
 
@@ -129,4 +130,14 @@ function getCircleRadius(map: Map, radius: number) {
   const circleRadius = (radius / METERS_PER_UNIT.m) * resolutionFactor
 
   return circleRadius
+}
+
+function setCenterAround(map: Map, lon: number, lat: number, radius: number, height: number) {
+  const coordinates = fromLonLat([lon, lat])
+  map.getView().setCenter(coordinates)
+
+  // calculate required resolution to fit radius inside map view
+  const circleDiameter = getCircleRadius(map, radius * 2)
+  const res = circleDiameter / height
+  map.getView().setResolution(res)
 }

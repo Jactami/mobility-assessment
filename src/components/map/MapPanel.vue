@@ -1,5 +1,5 @@
 <template>
-  <div ref="mapEl" class="h-[500px] w-full overflow-hidden rounded-border" />
+  <div ref="mapEl" class="w-full overflow-hidden rounded-border" :class="`h-[${MAP_HEIGHT}px]`" />
 </template>
 
 <script setup lang="ts">
@@ -16,11 +16,15 @@ import { useI18n } from 'vue-i18n'
 import { useMap } from './composables'
 
 const { t } = useI18n()
-const { drawCircleAround, drawLocation, resetLayers } = useMap()
+const { setCenterAround, drawCircleAround, drawLocation, resetLayers } = useMap()
 const projectStore = useProjectStore()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
 
 const mapEl = ref<HTMLDivElement | null>(null)
+
+// TODO: make radius configurable and store it in the project
+const RADIUS = 1000
+const MAP_HEIGHT = 500
 
 // OpenLayers map configuration
 const map = new Map({
@@ -59,8 +63,7 @@ onUnmounted(() => {
 // Reset the map view to a specific location
 function resetMap(lon: number, lat: number) {
   resetLayers(map)
-  map.getView().setCenter(fromLonLat([lon, lat]))
-  map.getView().setZoom(13)
+  setCenterAround(map, lon, lat, RADIUS, MAP_HEIGHT)
 }
 
 // Update and initialize map view when the project location changes
@@ -69,7 +72,7 @@ watch(
   ([lon, lat]) => {
     if (lon && lat) {
       resetMap(lon, lat)
-      drawCircleAround(map, lon, lat, 1000)
+      drawCircleAround(map, lon, lat, RADIUS)
       drawLocation(map, lon, lat)
     }
   },
