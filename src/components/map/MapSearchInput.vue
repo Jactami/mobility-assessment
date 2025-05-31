@@ -38,13 +38,14 @@
 import BaseButton from '@/components/base/BaseButton.vue'
 import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { useGeoService } from '@/composables/geo'
+import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { useProjectStore } from '@/stores/Project'
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const { loading, geocode, error, getGeoCode } = useGeoService()
+const { loading, error, geocode, getGeoCode, details, getLocationDetails } = useGeoService()
 const { errorToast } = useNotification()
 const projectStore = useProjectStore()
 
@@ -80,6 +81,27 @@ async function search() {
       street,
       street_number: number,
     })
+
+    // Get details for the location
+    // TODO: Decide where to put this logic, maybe in the store?
+    if (
+      !projectStore.project?.latitude ||
+      !projectStore.project?.longitude ||
+      !projectStore.project?.radius
+    )
+      return
+
+    await getLocationDetails(
+      projectStore.project?.latitude,
+      projectStore.project?.longitude,
+      projectStore.project?.radius,
+    )
+    if (error.value) {
+      errorToast(t('common.errorMessage'))
+    }
+    if (details.value) {
+      useLogger().log('Location details:', details.value)
+    }
   }
 }
 
