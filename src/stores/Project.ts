@@ -9,14 +9,36 @@ import { computed, ref } from 'vue'
  * TODO: Add history tracking to allow undo/redo functionality.
  */
 export const useProjectStore = defineStore('project', () => {
-  const _project = ref<Partial<Project> | null>(null)
+  const _project = ref<Project | null>(null)
 
   const project = computed(() => _project.value)
 
-  function update(newProject: Partial<Project> | null) {
+  /**
+   * Initializes the current project.
+   *
+   * @param newProject - Partial project data to update or initialize the project.
+   */
+  function set(project: Project) {
+    _project.value = project
+  }
+
+  /**
+   * Updates the current project and merges it with the new data.
+   *
+   * @param newProject - Partial project data to update the current project.
+   */
+  function update(newProject: Partial<Project>) {
+    if (!_project.value) {
+      console.warn('Attempted to update a project that has not been set.')
+      return
+    }
+
     _project.value = { ..._project.value, ...newProject }
   }
 
+  /**
+   * Resets the project store, clearing the current project data.
+   */
   function reset() {
     _project.value = null
   }
@@ -25,5 +47,6 @@ export const useProjectStore = defineStore('project', () => {
     project,
     reset,
     update,
+    set,
   }
 })
