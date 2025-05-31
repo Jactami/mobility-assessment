@@ -18,10 +18,11 @@ import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
+import type { Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
-import { onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteLeave, useRoute } from 'vue-router'
 
 const { t } = useI18n()
 const db = useDB()
@@ -29,13 +30,36 @@ const projectStore = useProjectStore()
 const route = useRoute()
 const { errorToast, successToast } = useNotification()
 
+const project = ref<Project>()
+
+// Checks if the project has unsaved changes in a simple way
+const isProjectDirty = computed(
+  () => JSON.stringify(projectStore.project) !== JSON.stringify(project.value),
+)
+
 onMounted(async () => {
   const { data } = await db.getProject(route.params.projectId as string)
-  if (data) projectStore.set(data)
+  if (data) {
+    project.value = data
+    projectStore.set(data)
+  }
 })
 
 onUnmounted(() => {
   projectStore.reset()
+})
+
+// Prompt user if they try to leave the page with unsaved changes
+onBeforeRouteLeave((_, __, next) => {
+  if (isProjectDirty.value) {
+    const confirmLeave = window.confirm(t('project.confirmLeave'))
+    if (confirmLeave) {
+      return next()
+    }
+    return next(false)
+  }
+
+  return next()
 })
 
 async function saveProject() {
@@ -43,8 +67,14 @@ async function saveProject() {
 
   try {
     const { data, error } = await db.setProject(projectStore.project)
-    if (data) projectStore.set(data)
+
+    if (data) {
+      project.value = data
+      projectStore.set(data)
+    }
+
     if (error) throw error
+
     successToast(t('project.saveSuccess'))
   } catch (error) {
     console.error(error)
