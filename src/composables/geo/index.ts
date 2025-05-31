@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ref } from 'vue'
+import { OverpassQueryFactory } from './overpass/OverpassQueryFactory'
 import type { SearchResultItem } from './types'
 
 // TODO: Do not reuse loading and error states for multiple requests
@@ -58,15 +59,7 @@ export function useGeoService() {
       // Fetch location details from Overpass API
       const response = await axios.get('https://overpass-api.de/api/interpreter', {
         params: {
-          data: `
-            [out:json];
-            (
-              node(around:${radius},${lat},${lon});
-              way(around:${radius},${lat},${lon});
-              relation(around:${radius},${lat},${lon});
-            );
-            out geom;
-          `,
+          data: OverpassQueryFactory.createQuery(lat, lon, radius),
         },
       })
 
