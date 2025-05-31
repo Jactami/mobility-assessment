@@ -36,6 +36,7 @@ export type Database = {
           latitude: number | null
           longitude: number | null
           owner_id: string
+          radius: number | null
           street: string | null
           street_number: string | null
           title: string
@@ -50,6 +51,7 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           owner_id: string
+          radius?: number | null
           street?: string | null
           street_number?: string | null
           title: string
@@ -64,6 +66,7 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           owner_id?: string
+          radius?: number | null
           street?: string | null
           street_number?: string | null
           title?: string

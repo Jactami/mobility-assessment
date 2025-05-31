@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS public.projects (
     zip_code VARCHAR(5),
     city VARCHAR(100),
     street VARCHAR(100),
-    street_number VARCHAR(10)
+    street_number VARCHAR(10),
+    radius INTEGER DEFAULT 1000
 );
 
 ALTER TABLE public.projects OWNER TO postgres;

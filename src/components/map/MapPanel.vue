@@ -22,9 +22,6 @@ const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: 
 
 const mapEl = ref<HTMLDivElement | null>(null)
 
-// TODO: make radius configurable and store it in the project
-const RADIUS = 1000
-
 // OpenLayers map configuration
 const map = new Map({
   layers: [
@@ -60,18 +57,22 @@ onUnmounted(() => {
 })
 
 // Reset the map view to a specific location
-function resetMap(lon: number, lat: number) {
+function resetMap(lon: number, lat: number, radius: number) {
   resetLayers(map)
-  setViewAround(map, lon, lat, RADIUS)
+  setViewAround(map, lon, lat, radius)
 }
 
 // Update and initialize map view when the project location changes
 watch(
-  () => [projectStore.project?.longitude, projectStore.project?.latitude],
-  ([lon, lat]) => {
-    if (lon && lat) {
-      resetMap(lon, lat)
-      drawCircleAround(map, lon, lat, RADIUS)
+  () => [
+    projectStore.project?.longitude,
+    projectStore.project?.latitude,
+    projectStore.project?.radius,
+  ],
+  ([lon, lat, radius]) => {
+    if (lon && lat && radius) {
+      resetMap(lon, lat, radius)
+      drawCircleAround(map, lon, lat, radius)
       drawLocation(map, lon, lat)
     }
   },
@@ -88,7 +89,7 @@ watch(coords, ({ latitude, longitude }) => {
 
   // If geolocation coordinates are available, update map view
   if (latitude && longitude) {
-    resetMap(longitude, latitude)
+    resetMap(longitude, latitude, 1000)
     pause() // Pause geolocation updates after first use
   }
 })
