@@ -19,8 +19,11 @@
     "loggedInAs": "Sie sind angemeldet als {user}."
   },
   "common": {
+    "cancel": "Abbrechen",
     "error": "Fehler",
     "errorMessage": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
+    "ok": "OK",
+    "pleaseConfirm": "Bitte bestätigen",
     "success": "Erfolg",
     "save": "Speichern"
   },

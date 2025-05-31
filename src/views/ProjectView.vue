@@ -4,7 +4,9 @@
     <MapPanel />
     <!-- Temporary save button -->
     <div class="mt-10 flex justify-center">
-      <BaseButton @click="saveProject">{{ t('common.save') }}</BaseButton>
+      <BaseButton :disabled="!isProjectDirty" @click="saveProject">
+        {{ t('common.save') }}
+      </BaseButton>
     </div>
   </BaseSection>
   <DebugPanel title="Project Store" :value="projectStore.project" />
@@ -28,7 +30,7 @@ const { t } = useI18n()
 const db = useDB()
 const projectStore = useProjectStore()
 const route = useRoute()
-const { errorToast, successToast } = useNotification()
+const { errorToast, successToast, confirmDialog } = useNotification()
 
 const project = ref<Project>()
 
@@ -50,9 +52,9 @@ onUnmounted(() => {
 })
 
 // Prompt user if they try to leave the page with unsaved changes
-onBeforeRouteLeave((_, __, next) => {
+onBeforeRouteLeave(async (_, __, next) => {
   if (isProjectDirty.value) {
-    const confirmLeave = window.confirm(t('project.confirmLeave'))
+    const confirmLeave = await confirmDialog(t('project.confirmLeave'))
     if (confirmLeave) {
       return next()
     }

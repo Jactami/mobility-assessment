@@ -12,11 +12,11 @@ export function useNotification() {
     timerProgressBar: true,
   }
 
-  const successToast = function (messages: string): void {
+  const successToast = (message: string) => {
     Swal.fire({
       title: t('common.success'),
       icon: 'success',
-      text: messages,
+      text: message,
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-success'),
       customClass: {
@@ -25,11 +25,11 @@ export function useNotification() {
     })
   }
 
-  const errorToast = function (messages: string): void {
+  const errorToast = (message: string) => {
     Swal.fire({
       title: t('common.error'),
       icon: 'error',
-      text: messages,
+      text: message,
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-error'),
       customClass: {
@@ -38,8 +38,25 @@ export function useNotification() {
     })
   }
 
+  const confirmDialog = (message: string) => {
+    return new Promise((resolve) => {
+      let confirmResult = false
+      Swal.fire({
+        title: t('common.pleaseConfirm'),
+        icon: 'question',
+        text: message,
+        confirmButtonText: t('common.ok'),
+        cancelButtonText: t('common.cancel'),
+        showCancelButton: true,
+        showConfirmButton: true,
+        didClose: () => resolve(confirmResult),
+      }).then((result) => (confirmResult = result.value))
+    })
+  }
+
   return {
     successToast,
     errorToast,
+    confirmDialog,
   }
 }
