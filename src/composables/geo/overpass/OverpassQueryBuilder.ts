@@ -19,7 +19,7 @@ export class OverpassQueryBuilder {
   }
 
   build(): string {
-    const result = `[out:json]; (${this.query}); out geom;`
+    const result = `[out:json]; (${this.query}); out geom center;`
     this.reset()
     return result
   }
