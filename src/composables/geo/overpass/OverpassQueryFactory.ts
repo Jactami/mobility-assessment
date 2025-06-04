@@ -11,7 +11,7 @@ export class OverpassQueryFactory {
     return this.builder.build()
   }
 
-  static querySupermarkets(lat: number, lon: number, radius: number) {
+  private static querySupermarkets(lat: number, lon: number, radius: number) {
     this.builder.add('shop=supermarket', lat, lon, radius)
   }
 

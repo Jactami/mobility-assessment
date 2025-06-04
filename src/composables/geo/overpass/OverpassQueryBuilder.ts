@@ -39,23 +39,7 @@ export class OverpassQueryBuilder {
    * @returns The OverpassQueryBuilder instance.
    */
   add(tag: string, lat: number, lon: number, radius: number): this {
-    return this.addNode(tag, lat, lon, radius)
-      .addWay(tag, lat, lon, radius)
-      .addRelation(tag, lat, lon, radius)
-  }
-
-  private addNode(tag: string, lat: number, lon: number, radius: number): this {
-    this.query += `node[${tag}](around:${radius},${lat},${lon});`
-    return this
-  }
-
-  private addWay(tag: string, lat: number, lon: number, radius: number): this {
-    this.query += `way[${tag}](around:${radius},${lat},${lon});`
-    return this
-  }
-
-  private addRelation(tag: string, lat: number, lon: number, radius: number): this {
-    this.query += `relation[${tag}](around:${radius},${lat},${lon});`
+    this.query += `nwr[${tag}](around:${radius},${lat},${lon});`
     return this
   }
 }
