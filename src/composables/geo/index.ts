@@ -1,12 +1,12 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { OverpassQueryFactory } from './overpass/OverpassQueryFactory'
-import type { SearchResultItem } from './types'
+import type { GeocodeJSON, GeocodeJSONFeature } from './types'
 
 // TODO: Do not reuse loading and error states for multiple requests
 // see: https://alexop.dev/posts/best-practices-for-error-handling-in-vue-composables/
 export function useGeoService() {
-  const geocode = ref<SearchResultItem[] | null>(null)
+  const geocode = ref<GeocodeJSONFeature[] | null>(null)
   const details = ref<unknown[] | null>(null) // TODO: Define a proper type for location details
   const loading = ref<boolean>(false)
   const error = ref<Error | null>(null)
@@ -28,20 +28,19 @@ export function useGeoService() {
       error.value = null
 
       // Fetch geocoding data from Nominatim
-      const response = await axios.get<SearchResultItem[]>(
-        'https://nominatim.openstreetmap.org/search',
-        {
-          params: {
-            q: query,
-            format: 'json',
-            addressdetails: 1,
-          },
+      const response = await axios.get<GeocodeJSON>('https://nominatim.openstreetmap.org/search', {
+        params: {
+          q: query,
+          format: 'geocodejson',
+          addressdetails: 1,
+          limit: 5,
+          'accept-language': 'de',
         },
-      )
+      })
 
       if (response.status !== 200) throw new Error(response.statusText)
 
-      geocode.value = response.data
+      geocode.value = response.data.features
     } catch (err) {
       error.value = err instanceof Error ? err : new Error('An unknown error occurred')
     } finally {

@@ -43,6 +43,7 @@
     "deleteSuccess": "Projekt erfolgreich gelöscht",
     "loadError": "Fehler beim Laden der Projekte",
     "location": "Standort",
+    "locationNotFound": "Standort konnte nicht gefunden werden.",
     "saveError": "Fehler beim Speichern des Projekts",
     "saveSuccess": "Projekt erfolgreich gespeichert"
   }

@@ -57,51 +57,59 @@ async function search() {
 
   await getGeoCode(query.value)
 
-  if (error.value) errorToast(t('common.errorMessage'))
+  // If there is an error in the geocode service, show error and reset project store
+  if (error.value) {
+    errorToast(t('common.errorMessage'))
+    projectStore.reset()
+    return
+  }
 
-  if (geocode.value && geocode.value.length > 0) {
-    // Parse response into coordinates and address
-    const { lat, lon } = geocode.value[0]
-    const country = geocode.value[0].address.country
-    const city =
-      geocode.value[0].address.city ||
-      geocode.value[0].address.town ||
-      geocode.value[0].address.village
-    const zip = geocode.value[0].address.postcode
-    const street = geocode.value[0].address.road || geocode.value[0].address.village // small villages might not have a road
-    const number = geocode.value[0].address.house_number
+  // If no geocode results, show error and reset project store
+  if (!geocode.value || geocode.value.length === 0) {
+    errorToast(t('project.locationNotFound'))
+    projectStore.reset()
+    return
+  }
 
-    // Update store
-    projectStore.update({
-      latitude: parseFloat(lat),
-      longitude: parseFloat(lon),
-      country,
-      city,
-      zip_code: zip,
-      street,
-      street_number: number,
-    })
+  // Parse response into coordinates and address
+  const [lon, lat] = geocode.value[0].geometry.coordinates
+  const country = geocode.value[0].properties.geocoding.country
+  const city = geocode.value[0].properties.geocoding.city
+  const zip = geocode.value[0].properties.geocoding.postcode
+  const street =
+    geocode.value[0].properties.geocoding.street || geocode.value[0].properties.geocoding.district // small villages might not have a road
+  const number = geocode.value[0].properties.geocoding.housenumber
 
-    // Get details for the location
-    // TODO: Decide where to put this logic, maybe in the store?
-    if (
-      !projectStore.project?.latitude ||
-      !projectStore.project?.longitude ||
-      !projectStore.project?.radius
-    )
-      return
+  // Update store
+  projectStore.update({
+    latitude: lat,
+    longitude: lon,
+    country,
+    city,
+    zip_code: zip,
+    street,
+    street_number: number,
+  })
 
-    await getLocationDetails(
-      projectStore.project?.latitude,
-      projectStore.project?.longitude,
-      projectStore.project?.radius,
-    )
-    if (error.value) {
-      errorToast(t('common.errorMessage'))
-    }
-    if (details.value) {
-      useLogger().log('Location details:', details.value)
-    }
+  // Get details for the location
+  // TODO: Decide where to put this logic, maybe in the store?
+  if (
+    !projectStore.project?.latitude ||
+    !projectStore.project?.longitude ||
+    !projectStore.project?.radius
+  )
+    return
+
+  await getLocationDetails(
+    projectStore.project?.latitude,
+    projectStore.project?.longitude,
+    projectStore.project?.radius,
+  )
+  if (error.value) {
+    errorToast(t('common.errorMessage'))
+  }
+  if (details.value) {
+    useLogger().log('Location details:', details.value)
   }
 }
 
