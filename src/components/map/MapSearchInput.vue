@@ -57,21 +57,17 @@ async function search() {
 
   await getGeoCode(query.value)
 
-  // If there is an error in the geocode service, show error and reset project store
+  // If there is an error in the geocode service, show error
   if (error.value) {
     errorToast(t('common.errorMessage'))
-    projectStore.reset()
     return
   }
 
-  // If no geocode results, show error and reset project store
+  // If no results are found, show an error message
   if (!geocode.value || geocode.value.length === 0) {
     errorToast(t('project.locationNotFound'))
-    projectStore.reset()
     return
   }
-
-  console.log(geocode.value)
 
   // Parse response into coordinates and address
   const [lon, lat] = geocode.value[0].geometry.coordinates
