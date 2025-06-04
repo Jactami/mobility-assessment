@@ -18,7 +18,7 @@ SELECT public.create_user(
 --
 -- Create projects
 --
-INSERT INTO projects (id, title, country, zip_code, city, street, street_number, owner_id, latitude, longitude, radius)
+INSERT INTO projects (id, title, country, postcode, city, street, housenumber, owner_id, latitude, longitude, radius)
 VALUES (
     '00000000-0000-0000-0000-000000000000',
     'ERBA',
@@ -33,7 +33,7 @@ VALUES (
     1000
 );
 
-INSERT INTO projects (id, title, country, zip_code, city, street, street_number, owner_id, latitude, longitude, radius)
+INSERT INTO projects (id, title, country, postcode, city, street, housenumber, owner_id, latitude, longitude, radius)
 VALUES (
     '11111111-1111-1111-1111-111111111111',
     'Feki',
@@ -48,7 +48,7 @@ VALUES (
     2000
 );   
 
-INSERT INTO projects (id, title, country, zip_code, city, street, street_number, owner_id, latitude, longitude, radius) 
+INSERT INTO projects (id, title, country, postcode, city, street, housenumber, owner_id, latitude, longitude, radius) 
 VALUES (
     '33333333-3333-3333-3333-333333333333', 
     'Austraße', 

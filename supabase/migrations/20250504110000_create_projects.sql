@@ -9,11 +9,11 @@ CREATE TABLE IF NOT EXISTS public.projects (
     title VARCHAR(100) NOT NULL,
     latitude DECIMAL(9,7),
     longitude DECIMAL(9,7),
-    country VARCHAR(100),
-    zip_code VARCHAR(5),
-    city VARCHAR(100),
+    housenumber VARCHAR(10),
     street VARCHAR(100),
-    street_number VARCHAR(10),
+    postcode VARCHAR(5),
+    city VARCHAR(100),
+    country VARCHAR(100),
     radius INTEGER DEFAULT 1000
 );
 

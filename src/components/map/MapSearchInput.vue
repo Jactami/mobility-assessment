@@ -71,24 +71,27 @@ async function search() {
     return
   }
 
+  console.log(geocode.value)
+
   // Parse response into coordinates and address
   const [lon, lat] = geocode.value[0].geometry.coordinates
-  const country = geocode.value[0].properties.geocoding.country
-  const city = geocode.value[0].properties.geocoding.city
-  const zip = geocode.value[0].properties.geocoding.postcode
+  const housenumber = geocode.value[0].properties.geocoding.housenumber
   const street =
-    geocode.value[0].properties.geocoding.street || geocode.value[0].properties.geocoding.district // small villages might not have a road
-  const number = geocode.value[0].properties.geocoding.housenumber
+    // small villages might not have street names, so we use district or name as fallback
+    geocode.value[0].properties.geocoding.street || geocode.value[0].properties.geocoding.district
+  const postcode = geocode.value[0].properties.geocoding.postcode
+  const city = geocode.value[0].properties.geocoding.city
+  const country = geocode.value[0].properties.geocoding.country
 
   // Update store
   projectStore.update({
-    latitude: lat,
-    longitude: lon,
-    country,
-    city,
-    zip_code: zip,
+    latitude: Number(lat.toFixed(7)),
+    longitude: Number(lon.toFixed(7)),
+    housenumber,
     street,
-    street_number: number,
+    postcode,
+    city,
+    country,
   })
 
   // Get details for the location
@@ -131,11 +134,10 @@ watch(
     if (newProject) {
       let address = ''
       address += projectStore.project?.street ? projectStore.project.street : ''
-      address += projectStore.project?.street_number ? ' ' + projectStore.project.street_number : ''
+      address += projectStore.project?.housenumber ? ' ' + projectStore.project.housenumber : ''
       address += address ? ', ' : ''
-      address += projectStore.project?.zip_code ? projectStore.project.zip_code + ' ' : ''
-      address += projectStore.project?.city ? projectStore.project.city + ', ' : ''
-      address += projectStore.project?.country ? projectStore.project.country : ''
+      address += projectStore.project?.postcode ? projectStore.project.postcode + ' ' : ''
+      address += projectStore.project?.city ? projectStore.project.city : ''
 
       query.value = address
     }

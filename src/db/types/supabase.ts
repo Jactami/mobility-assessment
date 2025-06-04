@@ -32,46 +32,46 @@ export type Database = {
           city: string | null
           country: string | null
           created_at: string
+          housenumber: string | null
           id: string
           latitude: number | null
           longitude: number | null
           owner_id: string
+          postcode: string | null
           radius: number | null
           street: string | null
-          street_number: string | null
           title: string
           updated_at: string | null
-          zip_code: string | null
         }
         Insert: {
           city?: string | null
           country?: string | null
           created_at?: string
+          housenumber?: string | null
           id?: string
           latitude?: number | null
           longitude?: number | null
           owner_id: string
+          postcode?: string | null
           radius?: number | null
           street?: string | null
-          street_number?: string | null
           title: string
           updated_at?: string | null
-          zip_code?: string | null
         }
         Update: {
           city?: string | null
           country?: string | null
           created_at?: string
+          housenumber?: string | null
           id?: string
           latitude?: number | null
           longitude?: number | null
           owner_id?: string
+          postcode?: string | null
           radius?: number | null
           street?: string | null
-          street_number?: string | null
           title?: string
           updated_at?: string | null
-          zip_code?: string | null
         }
         Relationships: []
       }
