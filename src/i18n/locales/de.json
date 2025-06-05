@@ -28,6 +28,7 @@
     "save": "Speichern"
   },
   "map": {
+    "resetMap": "Karte zurücksetzen",
     "toggleFullscreen": "Vollbildmodus umschalten",
     "zoomIn": "Ausschnitt vergrößern",
     "zoomOut": "Ausschnitt verkleinern"

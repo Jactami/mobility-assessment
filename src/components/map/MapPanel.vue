@@ -34,6 +34,7 @@
       :zoom-out-tip-label="t('map.zoomOut')"
     />
     <MapControls.OlFullscreenControl :tip-label="t('map.toggleFullscreen')" />
+    <MapControls.OlZoomtoextentControl :extent="extent" label="🞋" :tip-label="t('map.resetMap')" />
     <MapControls.OlScalelineControl units="metric" />
   </Map.OlMap>
 </template>
@@ -41,9 +42,10 @@
 <script setup lang="ts">
 import { useProjectStore } from '@/stores/Project'
 import { useGeolocation } from '@vueuse/core'
+import type { Extent } from 'ol/extent'
 import type OlMap from 'ol/Map'
 import { fromLonLat } from 'ol/proj'
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Layers, Map, MapControls, Sources } from 'vue3-openlayers'
 import { useMapUtils } from './composables'
@@ -63,13 +65,16 @@ const lat = ref(51.1634)
 const lon = ref(10.4477)
 const zoom = ref(5.7)
 
+// Extent for the map view
+const extent = ref<Extent>([])
+
 // Computed center for the map view based on current location
 const center = computed(() => fromLonLat([lon.value, lat.value]))
 
 // Update and initialize map view when the project location changes
 watch(
   () => projectStore.project,
-  (newProject) => {
+  async (newProject) => {
     const { longitude, latitude, radius } = newProject || {}
     if (longitude && latitude && radius && mapRef.value) {
       // Update map center and zoom based on project location
@@ -77,6 +82,10 @@ watch(
       lat.value = latitude
       const offset = radius * 0.1
       zoom.value = zoomFromMeters(mapRef.value.map as OlMap, center.value, (radius + offset) * 2)
+
+      // save extent based on the new project location
+      await nextTick()
+      extent.value = mapRef.value.map.getView().calculateExtent(mapRef.value.map.getSize())
     }
   },
   { immediate: true },
