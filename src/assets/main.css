@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import './theme.css';
-@import './openlayers.css';
 
 body {
   @apply bg-surface text-on-surface;
