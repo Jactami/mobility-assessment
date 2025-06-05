@@ -21,6 +21,9 @@
         :radius="metersToPixels(mapRef.map as OlMap, center, projectStore.project.radius)"
       />
 
+      <!-- Points of Interest Layer -->
+      <MapLayerPois />
+
       <!-- Location Layer -->
       <MapLayerLocation :center="center" />
     </template>
@@ -45,6 +48,7 @@ import { useI18n } from 'vue-i18n'
 import { Layers, Map, MapControls, Sources } from 'vue3-openlayers'
 import { useMapUtils } from './composables'
 import MapLayerLocation from './layer/MapLayerLocation.vue'
+import MapLayerPois from './layer/MapLayerPois.vue'
 import MapLayerRadius from './layer/MapLayerRadius.vue'
 
 const { t } = useI18n()
