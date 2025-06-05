@@ -1,79 +1,78 @@
 <template>
-  <div ref="mapEl" class="h-[500px] w-full overflow-hidden rounded-border" />
+  <Map.OlMap ref="mapRef" class="h-[500px] overflow-hidden rounded-border">
+    <Map.OlView :center="center" :zoom="zoom" />
+
+    <!-- Openstreetmap Layer -->
+    <Layers.OlTileLayer>
+      <Sources.OlSourceOsm />
+    </Layers.OlTileLayer>
+
+    <template
+      v-if="
+        mapRef &&
+        projectStore.project?.longitude &&
+        projectStore.project.latitude &&
+        projectStore.project?.radius
+      "
+    >
+      <!-- Radius Layer -->
+      <MapLayerRadius
+        :center="center"
+        :radius="metersToPixels(mapRef.map as OlMap, center, projectStore.project.radius)"
+      />
+
+      <!-- Location Layer -->
+      <MapLayerLocation :center="center" />
+    </template>
+
+    <!-- Map Control Buttons -->
+    <MapControls.OlZoomControl
+      :zoom-in-tip-label="t('map.zoomIn')"
+      :zoom-out-tip-label="t('map.zoomOut')"
+    />
+    <MapControls.OlFullscreenControl :tip-label="t('map.toggleFullscreen')" />
+    <MapControls.OlScalelineControl units="metric" />
+  </Map.OlMap>
 </template>
 
 <script setup lang="ts">
 import { useProjectStore } from '@/stores/Project'
 import { useGeolocation } from '@vueuse/core'
-import { defaults as defaultControls, FullScreen, ScaleLine, Zoom } from 'ol/control'
-import TileLayer from 'ol/layer/Tile'
-import Map from 'ol/Map'
+import type OlMap from 'ol/Map'
 import { fromLonLat } from 'ol/proj'
-import { OSM } from 'ol/source'
-import View from 'ol/View'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useMap } from './composables'
+import { Layers, Map, MapControls, Sources } from 'vue3-openlayers'
+import { useMapUtils } from './composables'
+import MapLayerLocation from './layer/MapLayerLocation.vue'
+import MapLayerRadius from './layer/MapLayerRadius.vue'
 
 const { t } = useI18n()
-const { setViewAround, drawCircleAround, drawLocation, resetLayers } = useMap()
-const projectStore = useProjectStore()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
+const projectStore = useProjectStore()
+const { metersToPixels, zoomFromMeters } = useMapUtils()
 
-const mapEl = ref<HTMLDivElement | null>(null)
+const mapRef = ref<{ map: OlMap } | null>(null)
 
-// OpenLayers map configuration
-const map = new Map({
-  layers: [
-    new TileLayer({
-      source: new OSM(),
-    }),
-  ],
-  view: new View({
-    center: fromLonLat([10.4477, 51.1634]), // Centered on Germany
-    zoom: 5.5,
-  }),
-  controls: defaultControls().extend([
-    new FullScreen({
-      tipLabel: t('map.toggleFullscreen'),
-    }),
-    new Zoom({
-      zoomInTipLabel: t('map.zoomIn'),
-      zoomOutTipLabel: t('map.zoomOut'),
-    }),
-    new ScaleLine({
-      units: 'metric',
-    }),
-  ]),
-})
+// Default coordinates and zoom level centered on Germany
+const lat = ref(51.1634)
+const lon = ref(10.4477)
+const zoom = ref(5.7)
 
-onMounted(() => {
-  if (!mapEl.value) return
-  map.setTarget(mapEl.value)
-})
-
-onUnmounted(() => {
-  map.setTarget(undefined)
-})
-
-// Reset the map view to a specific location
-function resetMap(lon: number, lat: number, radius: number) {
-  resetLayers(map)
-  setViewAround(map, lon, lat, radius)
-}
+// Computed center for the map view based on current location
+const center = computed(() => fromLonLat([lon.value, lat.value]))
 
 // Update and initialize map view when the project location changes
 watch(
-  () => [
-    projectStore.project?.longitude,
-    projectStore.project?.latitude,
-    projectStore.project?.radius,
-  ],
-  ([lon, lat, radius]) => {
-    if (lon && lat && radius) {
-      resetMap(lon, lat, radius)
-      drawCircleAround(map, lon, lat, radius)
-      drawLocation(map, lon, lat)
+  () => projectStore.project,
+  (newProject) => {
+    const { longitude, latitude, radius } = newProject || {}
+    if (longitude && latitude && radius && mapRef.value) {
+      // Update map center and zoom based on project location
+      lon.value = longitude
+      lat.value = latitude
+      const offset = radius * 0.1
+      zoom.value = zoomFromMeters(mapRef.value.map as OlMap, center.value, (radius + offset) * 2)
     }
   },
   { immediate: true },
@@ -87,9 +86,11 @@ watch(coords, ({ latitude, longitude }) => {
     return
   }
 
-  // If geolocation coordinates are available, update map view
+  // If geolocation coordinates are available, update map center geolocation
   if (latitude && longitude) {
-    resetMap(longitude, latitude, 1000)
+    lat.value = latitude
+    lon.value = longitude
+    zoom.value = 12
     pause() // Pause geolocation updates after first use
   }
 })
