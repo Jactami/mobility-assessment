@@ -49,9 +49,9 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Layers, Map, MapControls, Sources } from 'vue3-openlayers'
 import { useMapUtils } from './composables'
-import MapLayerLocation from './layer/MapLayerLocation.vue'
-import MapLayerPois from './layer/MapLayerPois.vue'
-import MapLayerRadius from './layer/MapLayerRadius.vue'
+import MapLayerLocation from './layers/MapLayerLocation.vue'
+import MapLayerPois from './layers/MapLayerPois.vue'
+import MapLayerRadius from './layers/MapLayerRadius.vue'
 
 const { t } = useI18n()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
