@@ -23,7 +23,7 @@ VALUES (
     '00000000-0000-0000-0000-000000000000',
     'ERBA',
     'Deutschland',
-    '96049',
+    '96047',
     'Bamberg', 
     'An der Weberei', 
     '5', 
