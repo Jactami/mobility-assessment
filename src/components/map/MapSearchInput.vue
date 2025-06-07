@@ -130,7 +130,7 @@ async function search() {
         osm_type: poi.type,
         project_id: projectId,
         label: poi.tags?.name,
-        category: getPoiType(poi),
+        category: getPoiCategory(poi),
         latitude: poi.type === 'node' ? poi.lat : poi.center.lat,
         longitude: poi.type === 'node' ? poi.lon : poi.center.lon,
       })),
@@ -139,15 +139,12 @@ async function search() {
 }
 
 // FIXME: This function should not be here, maybe move this to a utility file or as a post-processing step in fetch composable
-function getPoiType(poi: OverpassElement) {
-  for (const domain of DOMAINS) {
-    for (const category of domain.categories) {
-      if (poi.tags?.[category.tagKey] === category.tagValue) {
-        return category.tagValue
-      }
-    }
-  }
-  return 'unknown'
+function getPoiCategory(poi: OverpassElement) {
+  return (
+    DOMAINS.flatMap((domain) => domain.categories).find(
+      (category) => category.tagValue === poi.tags?.[category.tagKey],
+    )?.tagValue ?? 'unknown'
+  )
 }
 
 function resetQuery() {

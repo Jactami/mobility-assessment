@@ -25,12 +25,8 @@ import { Geometries, Layers, Map, Sources, Styles } from 'vue3-openlayers'
 const projectStore = useProjectStore()
 
 function getColorByCategory(poi: Poi) {
-  for (const domain of DOMAINS) {
-    for (const category of domain.categories) {
-      if (category.name === poi.category) {
-        return category.color
-      }
-    }
-  }
+  return DOMAINS.flatMap((domain) => domain.categories).find(
+    (category) => category.name === poi.category,
+  )?.color
 }
 </script>
