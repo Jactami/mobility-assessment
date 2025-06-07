@@ -1,14 +1,20 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { OverpassQueryFactory } from './overpass/OverpassQueryFactory'
+import type { OverpassElement, OverpassResponse } from './types'
 
-// TODO: Do not reuse loading and error states for multiple requests
-// see: https://alexop.dev/posts/best-practices-for-error-handling-in-vue-composables/
 export function usePoiService() {
-  const data = ref<unknown[] | null>(null) // TODO: Define a proper type for location details
+  const data = ref<OverpassElement[] | null>(null)
   const loading = ref<boolean>(false)
   const error = ref<Error | null>(null)
 
+  /**
+   * Get points of interest (POIs) within a certain radius of a location.
+   *
+   * @param lat Latitude of the location.
+   * @param lon Longitude of the location.
+   * @param radius Radius (in meters) to search for POIs.
+   */
   async function getPois(lat: number, lon: number, radius: number) {
     try {
       // Reset state before making a new request
@@ -17,11 +23,14 @@ export function usePoiService() {
       data.value = null
 
       // Fetch location details from Overpass API
-      const response = await axios.get('https://overpass-api.de/api/interpreter', {
-        params: {
-          data: OverpassQueryFactory.createQuery(lat, lon, radius),
+      const response = await axios.get<OverpassResponse>(
+        'https://overpass-api.de/api/interpreter',
+        {
+          params: {
+            data: OverpassQueryFactory.createQuery(lat, lon, radius),
+          },
         },
-      })
+      )
 
       if (response.status !== 200) throw new Error(response.statusText)
 
