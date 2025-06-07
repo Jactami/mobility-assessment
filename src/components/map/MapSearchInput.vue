@@ -90,7 +90,7 @@ async function search() {
   const country = geocoding.value[0].properties.geocoding.country
 
   // Update store
-  projectStore.update({
+  projectStore.updateProject({
     latitude: Number(lat.toFixed(7)),
     longitude: Number(lon.toFixed(7)),
     housenumber,

@@ -77,9 +77,29 @@ export default function useDB() {
   ): Promise<PostgrestSingleResponse<Tables<'projects'> | null>> =>
     handleDBCall(async () => await supabase.from('projects').upsert(project).select().maybeSingle())
 
+  /**
+   * Fetches the list of Points of Interest (POIs) for a specific project.
+   *
+   * @param {string} projectId - The ID of the project to fetch POIs for.
+   * @returns {Promise<PostgrestResponse<Tables<'pois'>>>} - The list of POIs for the specified project.
+   */
+  const getPois = (projectId: string): Promise<PostgrestResponse<Tables<'pois'>>> =>
+    handleDBCall(async () => await supabase.from('pois').select().eq('project_id', projectId))
+
+  /**
+   * Inserts or updates Points of Interest (POIs) in the database.
+   *
+   * @param {TablesInsert<'pois'>[]} pois - The list of POIs to insert or update.
+   * @returns {Promise<PostgrestResponse<Tables<'pois'>>>} - The inserted or updated POIs.
+   */
+  const setPois = (pois: TablesInsert<'pois'>[]): Promise<PostgrestResponse<Tables<'pois'>>> =>
+    handleDBCall(async () => await supabase.from('pois').upsert(pois).select())
+
   return {
     getProjects,
     getProject,
     setProject,
+    getPois,
+    setPois,
   }
 }

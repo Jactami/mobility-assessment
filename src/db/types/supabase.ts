@@ -3,6 +3,53 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      pois: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          label: string | null
+          latitude: number
+          longitude: number
+          osm_id: number
+          osm_type: Database['public']['Enums']['osm_type']
+          project_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          label?: string | null
+          latitude: number
+          longitude: number
+          osm_id: number
+          osm_type: Database['public']['Enums']['osm_type']
+          project_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          label?: string | null
+          latitude?: number
+          longitude?: number
+          osm_id?: number
+          osm_type?: Database['public']['Enums']['osm_type']
+          project_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'pois_project_id_fkey'
+            columns: ['project_id']
+            isOneToOne: false
+            referencedRelation: 'projects'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -91,7 +138,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      osm_type: 'node' | 'way' | 'relation'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -202,6 +249,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      osm_type: ['node', 'way', 'relation'],
+    },
   },
 } as const

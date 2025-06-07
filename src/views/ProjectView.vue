@@ -9,7 +9,13 @@
       </BaseButton>
     </div>
   </BaseSection>
-  <DebugPanel title="Project Store" :value="projectStore.project" />
+  <DebugPanel
+    title="Project Store"
+    :value="{
+      project: projectStore.project,
+      pois: projectStore.pois,
+    }"
+  />
 </template>
 
 <script setup lang="ts">
@@ -20,7 +26,7 @@ import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
-import type { Project } from '@/db/types'
+import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -33,23 +39,20 @@ const route = useRoute()
 const { errorToast, successToast, confirmDialog } = useNotification()
 
 const project = ref<Project>()
+const pois = ref<Poi[]>()
 
 // Checks if the project has unsaved changes in a simple way
 const isProjectDirty = computed(
-  () => JSON.stringify(projectStore.project) !== JSON.stringify(project.value),
+  () =>
+    JSON.stringify(projectStore.project) !== JSON.stringify(project.value) ||
+    JSON.stringify(projectStore.pois) !== JSON.stringify(pois.value),
 )
 
-onMounted(async () => {
-  const { data } = await db.getProject(route.params.projectId as string)
-  if (data) {
-    project.value = data
-    projectStore.set(data)
-  }
-})
+// Load the project and POIs when the user enters the page
+onMounted(loadProject)
 
-onUnmounted(() => {
-  projectStore.reset()
-})
+// Reset the project state when user leaves the page
+onUnmounted(projectStore.reset)
 
 // Prompt user if they try to leave the page with unsaved changes
 onBeforeRouteLeave(async (_, __, next) => {
@@ -64,23 +67,59 @@ onBeforeRouteLeave(async (_, __, next) => {
   return next()
 })
 
-async function saveProject() {
-  if (!projectStore.project) return
+async function loadProject() {
+  // Fetch the project and POIs from the database
+  const projectId = route.params.projectId as string
+  const [projectResponse, poisResponse] = await Promise.all([
+    db.getProject(projectId),
+    db.getPois(projectId),
+  ])
 
-  try {
-    const { data, error } = await db.setProject(projectStore.project)
-
-    if (data) {
-      project.value = data
-      projectStore.set(data)
-    }
-
-    if (error) throw error
-
-    successToast(t('project.saveSuccess'))
-  } catch (error) {
-    console.error(error)
-    errorToast(t('project.saveError'))
+  // If there is an error in the database, show error
+  if (projectResponse.error || poisResponse.error) {
+    errorToast(t('project.loadError'))
+    return
   }
+
+  // If no project or POIs are found, show error message
+  if (!projectResponse.data || !poisResponse.data) {
+    errorToast(t('project.notFound'))
+    return
+  }
+
+  // Set the project and POIs in the store
+  project.value = projectResponse.data
+  pois.value = poisResponse.data
+  projectStore.set(project.value, pois.value)
+}
+
+async function saveProject() {
+  if (!projectStore.project || !projectStore.pois) return
+
+  // Save the project and POIs to the database
+  const [projectResponse, poisResponse] = await Promise.all([
+    db.setProject(projectStore.project),
+    db.setPois(projectStore.pois),
+  ])
+
+  // If there is an error in the database, show error
+  if (projectResponse.error || poisResponse.error) {
+    errorToast(t('project.saveError'))
+    return
+  }
+
+  // If no project or POIs are found, show error message
+  if (!projectResponse.data || !poisResponse.data) {
+    errorToast(t('project.loadError'))
+    return
+  }
+
+  // Show success message
+  successToast(t('project.saveSuccess'))
+
+  // Update the project and POIs in the store
+  project.value = projectResponse.data
+  pois.value = poisResponse.data
+  projectStore.set(project.value, pois.value)
 }
 </script>

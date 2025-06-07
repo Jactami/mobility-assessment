@@ -1,4 +1,4 @@
-import type { Project } from '@/db/types'
+import type { Poi, Project } from '@/db/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
@@ -10,16 +10,19 @@ import { computed, ref } from 'vue'
  */
 export const useProjectStore = defineStore('project', () => {
   const _project = ref<Project | null>(null)
+  const _pois = ref<Poi[] | null>(null)
 
   const project = computed(() => _project.value)
+  const pois = computed(() => _pois.value)
 
   /**
    * Initializes the current project.
    *
    * @param newProject - Partial project data to update or initialize the project.
    */
-  function set(project: Project) {
+  function set(project: Project, pois: Poi[]) {
     _project.value = project
+    _pois.value = pois
   }
 
   /**
@@ -27,7 +30,7 @@ export const useProjectStore = defineStore('project', () => {
    *
    * @param newProject - Partial project data to update the current project.
    */
-  function update(newProject: Partial<Project>) {
+  function updateProject(newProject: Partial<Project>) {
     if (!_project.value) {
       console.warn('Attempted to update a project that has not been set.')
       return
@@ -37,16 +40,33 @@ export const useProjectStore = defineStore('project', () => {
   }
 
   /**
+   * Updates the current Points of Interest (POIs).
+   *
+   * @param newPois - Array of POIs to update the current POIs.
+   */
+  function updatePois(newPois: Poi[]) {
+    if (!_pois.value) {
+      console.warn('Attempted to update POIs that have not been set.')
+      return
+    }
+
+    _pois.value = newPois
+  }
+
+  /**
    * Resets the project store, clearing the current project data.
    */
   function reset() {
     _project.value = null
+    _pois.value = null
   }
 
   return {
     project,
+    pois,
     reset,
-    update,
+    updateProject,
+    updatePois,
     set,
   }
 })
