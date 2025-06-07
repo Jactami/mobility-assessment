@@ -12,8 +12,8 @@
       <div class="grow p-4">
         <h2 class="line-clamp-2 h-[3rem] text-lg leading-tight font-medium">{{ project.title }}</h2>
         <div class="mt-4 text-on-surface-variant">
-          <div class="truncate">{{ project.street }} {{ project.street_number }}</div>
-          <div class="truncate">{{ project.zip_code }} {{ project.city }}</div>
+          <div class="truncate">{{ project.street }} {{ project.housenumber }}</div>
+          <div class="truncate">{{ project.postcode }} {{ project.city }}</div>
         </div>
       </div>
       <div
