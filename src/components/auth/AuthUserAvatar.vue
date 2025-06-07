@@ -26,6 +26,12 @@ const { t } = useI18n()
 
 const menu: Menu = [
   {
+    label: t('auth.profile'),
+    icon: 'user',
+    action: () => router.push({ name: 'profile' }),
+    divider: true,
+  },
+  {
     label: t('auth.logout'),
     icon: 'signOut',
     action: handleSignOut,

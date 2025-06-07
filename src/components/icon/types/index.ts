@@ -6,6 +6,7 @@ import MaterialSymbolsContentCopyOutlineRounded from '~icons/material-symbols/co
 import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
 import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded'
 import MaterialSymbolsMoreVert from '~icons/material-symbols/more-vert'
+import MaterialSymbolsPerson from '~icons/material-symbols/person'
 import MaterialSymbolsSearchRounded from '~icons/material-symbols/search-rounded'
 import MaterialSymbolsVisibilityOffOutlineRounded from '~icons/material-symbols/visibility-off-outline-rounded'
 import MaterialSymbolsVisibilityOutlineRounded from '~icons/material-symbols/visibility-outline-rounded'
@@ -24,6 +25,7 @@ export const iconMap = {
   clear: MaterialSymbolsCloseRounded,
   search: MaterialSymbolsSearchRounded,
   loading: LineMdLoadingTwotoneLoop,
+  user: MaterialSymbolsPerson,
 }
 
 export type Icon = keyof typeof iconMap

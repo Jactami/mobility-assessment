@@ -7,6 +7,7 @@
     "login": "Anmelden",
     "home": "Home",
     "playground": "Playground",
+    "profile": "Profil",
     "project": "Projekt"
   },
   "auth": {
@@ -17,7 +18,9 @@
     "password": "Passwort",
     "loginError": "Fehler bei der Anmeldung",
     "logoutError": "Fehler bei der Abmeldung",
-    "loggedInAs": "Sie sind angemeldet als {user}."
+    "loggedInAs": "Sie sind angemeldet als {user}.",
+    "profile": "Profil",
+    "resetPassword": "Passwort zurücksetzen"
   },
   "common": {
     "cancel": "Abbrechen",
