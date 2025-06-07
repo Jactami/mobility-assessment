@@ -15,5 +15,6 @@ export interface AreaCategory {
   name: string
   color: string
   icon: string
-  tag: string
+  tagKey: string
+  tagValue: string
 }

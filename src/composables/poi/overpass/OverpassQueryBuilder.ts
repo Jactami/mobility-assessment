@@ -39,8 +39,8 @@ export class OverpassQueryBuilder {
    * @param radius The radius around the center point (in meters).
    * @returns The OverpassQueryBuilder instance.
    */
-  add(tag: string, lat: number, lon: number, radius: number): this {
-    this.query += `nwr[${tag}](around:${radius},${lat},${lon});`
+  add(tagKey: string, tagValue: string, lat: number, lon: number, radius: number): this {
+    this.query += `nwr[${tagKey}=${tagValue}](around:${radius},${lat},${lon});`
     return this
   }
 }
