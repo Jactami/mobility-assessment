@@ -30,12 +30,15 @@
 import BaseCard from '@/components/base/BaseCard.vue'
 import MenuPopup from '@/components/menu/MenuPopup.vue'
 import type { Menu } from '@/components/menu/types'
-import { useLogger } from '@/composables/log'
 import type { Project } from '@/db/types'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
   project: Project
+}>()
+
+const emit = defineEmits<{
+  (e: 'delete', projectId: string): void
 }>()
 
 const { d, t } = useI18n()
@@ -44,7 +47,7 @@ const menu: Menu = [
   {
     label: t('project.delete'),
     icon: 'delete',
-    action: () => useLogger().log('TODO: delete project', props.project.title),
+    action: () => emit('delete', props.project.id),
   },
 ]
 </script>

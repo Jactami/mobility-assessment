@@ -78,6 +78,17 @@ export default function useDB() {
     handleDBCall(async () => await supabase.from('projects').upsert(project).select().maybeSingle())
 
   /**
+   * Deletes a project from the database.
+   *
+   * @param id - The ID of the project to delete.
+   * @returns {Promise<PostgrestSingleResponse<Tables<'projects'> | null>>} - The deleted project.
+   */
+  const deleteProject = (id: string): Promise<PostgrestSingleResponse<Tables<'projects'> | null>> =>
+    handleDBCall(
+      async () => await supabase.from('projects').delete().eq('id', id).select().maybeSingle(),
+    )
+
+  /**
    * Fetches the list of Points of Interest (POIs) for a specific project.
    *
    * @param {string} projectId - The ID of the project to fetch POIs for.
@@ -99,6 +110,7 @@ export default function useDB() {
     getProjects,
     getProject,
     setProject,
+    deleteProject,
     getPois,
     setPois,
   }

@@ -36,7 +36,8 @@
   },
   "project": {
     "project": "Projekt | Projekte",
-    "confirmLeave": "Möchten Sie das Projekt wirklich verlassen? Alle ungespeicherten Änderungen gehen verloren.",
+    "confirmDelete": "Möchten Sie das Projekt wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirmLeave": "Möchten Sie das Projekt wirklich verlassen? Alle nicht gespeicherten Änderungen gehen verloren.",
     "create": "Projekt erstellen",
     "createError": "Fehler beim Erstellen des Projekts",
     "createSuccess": "Projekt erfolgreich erstellt",

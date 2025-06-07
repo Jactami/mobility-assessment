@@ -15,7 +15,12 @@
             </div>
           </BaseCard>
         </button>
-        <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+        <ProjectCard
+          v-for="project in projects"
+          :key="project.id"
+          :project="project"
+          @delete="deleteProject"
+        />
       </template>
       <template v-else>
         <BaseCard v-for="i in 4" :key="i" :animation="false" class="min-h-64">
@@ -43,7 +48,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const db = useDB()
 const authStore = useAuthStore()
-const notification = useNotification()
+const { successToast, errorToast, confirmDialog } = useNotification()
 const { t } = useI18n()
 
 const loading = ref(false)
@@ -57,7 +62,7 @@ async function loadProjects() {
   loading.value = false
 
   if (error) {
-    notification.errorToast(t('project.loadAllError'))
+    errorToast(t('project.loadAllError'))
     return
   }
 
@@ -73,14 +78,30 @@ async function createProject() {
   })
 
   if (!data || error) {
-    notification.errorToast(t('project.createError'))
+    errorToast(t('project.createError'))
   } else {
     router.push({
       name: 'project',
       params: { projectId: data.id },
     })
 
-    notification.successToast(t('project.createSuccess'))
+    successToast(t('project.createSuccess'))
+  }
+}
+
+async function deleteProject(projectId: string) {
+  if (!authStore.user) return
+
+  const confirmLeave = await confirmDialog(t('project.confirmDelete'))
+  if (!confirmLeave) return
+
+  const { data, error } = await db.deleteProject(projectId)
+  console.log(data)
+  if (error) {
+    errorToast(t('project.deleteError'))
+  } else {
+    successToast(t('project.deleteSuccess'))
+    loadProjects()
   }
 }
 </script>
