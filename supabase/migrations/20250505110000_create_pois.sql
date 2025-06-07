@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS public.pois (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT "now"() NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE,
     project_id UUID NOT NULL,
-    osm_id INTEGER NOT NULL,
+    osm_id BIGINT NOT NULL,
     osm_type osm_type NOT NULL,
     label VARCHAR(100),
     category VARCHAR(50) NOT NULL,
