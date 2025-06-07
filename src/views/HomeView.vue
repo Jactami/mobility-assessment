@@ -59,7 +59,7 @@ async function loadProjects() {
 
     projects.value = data
   } catch {
-    notification.errorToast(t('project.loadError'))
+    notification.errorToast(t('project.loadAllError'))
   } finally {
     loading.value = false
   }

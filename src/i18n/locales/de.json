@@ -42,9 +42,11 @@
     "delete": "Projekt löschen",
     "deleteError": "Fehler beim Löschen des Projekts",
     "deleteSuccess": "Projekt erfolgreich gelöscht",
-    "loadError": "Fehler beim Laden der Projekte",
+    "loadAllError": "Fehler beim Laden der Projekte",
+    "loadError": "Fehler beim Laden des Projekts",
     "location": "Standort",
     "locationNotFound": "Standort konnte nicht gefunden werden.",
+    "notFound": "Projekt konnte nicht gefunden werden.",
     "saveError": "Fehler beim Speichern des Projekts",
     "saveSuccess": "Projekt erfolgreich gespeichert"
   }

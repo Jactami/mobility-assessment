@@ -30,16 +30,17 @@ import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 
 const { t } = useI18n()
 const db = useDB()
 const projectStore = useProjectStore()
 const route = useRoute()
+const router = useRouter()
 const { errorToast, successToast, confirmDialog } = useNotification()
 
-const project = ref<Project>()
-const pois = ref<Poi[]>()
+const project = ref<Project | null>(null)
+const pois = ref<Poi[] | null>(null)
 
 // Checks if the project has unsaved changes in a simple way
 const isProjectDirty = computed(
@@ -84,6 +85,10 @@ async function loadProject() {
   // If no project or POIs are found, show error message
   if (!projectResponse.data || !poisResponse.data) {
     errorToast(t('project.notFound'))
+    projectStore.reset()
+    project.value = null
+    pois.value = null
+    router.push('/')
     return
   }
 
