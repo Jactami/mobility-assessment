@@ -1,13 +1,13 @@
 <template>
   <Layers.OlVectorLayer>
     <Sources.OlSourceVector>
-      <Map.OlFeature v-for="(coordinate, index) in coordinates" :key="index">
+      <Map.OlFeature v-for="poi in projectStore.pois" :key="poi.id">
         <!-- TODO: Replace circles with nice looking poi markers -->
-        <Geometries.OlGeomPoint :coordinates="coordinate" />
+        <Geometries.OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
         <Styles.OlStyle>
           <Styles.OlStyleCircle :radius="4">
             <Styles.OlStyleStroke :width="0" />
-            <Styles.OlStyleFill color="blue" />
+            <Styles.OlStyleFill :color="getColorByCategory(poi)" />
           </Styles.OlStyleCircle>
         </Styles.OlStyle>
       </Map.OlFeature>
@@ -16,14 +16,21 @@
 </template>
 
 <script setup lang="ts">
+import { DOMAINS } from '@/constants'
+import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { fromLonLat } from 'ol/proj'
-import { computed } from 'vue'
 import { Geometries, Layers, Map, Sources, Styles } from 'vue3-openlayers'
 
 const projectStore = useProjectStore()
 
-const coordinates = computed(() =>
-  projectStore.pois?.map((poi) => fromLonLat([poi.longitude, poi.latitude])),
-)
+function getColorByCategory(poi: Poi) {
+  for (const domain of DOMAINS) {
+    for (const category of domain.categories) {
+      if (category.name === poi.category) {
+        return category.color
+      }
+    }
+  }
+}
 </script>

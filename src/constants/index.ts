@@ -24,7 +24,7 @@ export const DOMAINS: AreaDomain[] = [
   },
   // Nahverkehr + Mobilität
   {
-    name: 'mobility', // TODO: change transport (?)
+    name: 'mobility', // TODO: change to transport (?)
     color: '',
     icon: '',
     categories: [],
@@ -44,14 +44,14 @@ export const DOMAINS: AreaDomain[] = [
     categories: [
       {
         name: 'supermarket',
-        color: '',
+        color: '#ff0', // TODO: Temporary color
         icon: '',
         tagKey: 'shop',
         tagValue: 'supermarket',
       },
       {
         name: 'bakery',
-        color: '',
+        color: '#f0f', // TODO: Temporary color
         icon: '',
         tagKey: 'shop',
         tagValue: 'bakery',
