@@ -3,7 +3,7 @@
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
       <template v-if="!loading">
         <button class="cursor-pointer" title="Neues Projekt" @click="createProject">
-          <BaseCard :animation="true">
+          <BaseCard :animation="true" class="min-h-64">
             <div
               class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container p-2"
             >
@@ -18,7 +18,7 @@
         <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
       </template>
       <template v-else>
-        <BaseCard v-for="i in 4" :key="i" :animation="false" class="h-64">
+        <BaseCard v-for="i in 4" :key="i" :animation="false" class="min-h-64">
           <BaseSkeleton width="100%" height="100%" />
         </BaseCard>
       </template>
@@ -52,17 +52,16 @@ const projects = ref<Project[] | null>(null)
 onMounted(loadProjects)
 
 async function loadProjects() {
-  try {
-    loading.value = true
-    const { data, error } = await db.getProjects()
-    if (error) throw error
+  loading.value = true
+  const { data, error } = await db.getProjects()
 
-    projects.value = data
-  } catch {
+  if (error) {
     notification.errorToast(t('project.loadAllError'))
-  } finally {
-    loading.value = false
+    return
   }
+
+  projects.value = data
+  loading.value = false
 }
 
 async function createProject() {
