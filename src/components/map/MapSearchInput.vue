@@ -37,47 +37,57 @@
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
 import IconRenderer from '@/components/icon/IconRenderer.vue'
-import { useGeoService } from '@/composables/geo'
+import { useGeocodingService } from '@/composables/geocoding'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
+import { usePoiService } from '@/composables/poi'
 import { useProjectStore } from '@/stores/Project'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const { loading, error, geocode, getGeoCode, details, getLocationDetails } = useGeoService()
+const {
+  data: geocoding,
+  error: geocodingError,
+  loading: geocodingLoading,
+  getGeocoding,
+} = useGeocodingService()
+const { data: pois, error: poisError, loading: poisLoading, getPois } = usePoiService()
 const { errorToast } = useNotification()
 const projectStore = useProjectStore()
 
 const query = ref('')
 
+const loading = computed(() => geocodingLoading.value || poisLoading.value)
+
 async function search() {
   if (loading.value) return
   if (!query.value.trim()) return
 
-  await getGeoCode(query.value)
+  await getGeocoding(query.value)
 
   // If there is an error in the geocode service, show error
-  if (error.value) {
+  if (geocodingError.value) {
     errorToast(t('common.errorMessage'))
     return
   }
 
   // If no results are found, show an error message
-  if (!geocode.value || geocode.value.length === 0) {
+  if (!geocoding.value || geocoding.value.length === 0) {
     errorToast(t('project.locationNotFound'))
     return
   }
 
   // Parse response into coordinates and address
-  const [lon, lat] = geocode.value[0].geometry.coordinates
-  const housenumber = geocode.value[0].properties.geocoding.housenumber
+  const [lon, lat] = geocoding.value[0].geometry.coordinates
+  const housenumber = geocoding.value[0].properties.geocoding.housenumber
   const street =
     // small villages might not have street names, so we use district or name as fallback
-    geocode.value[0].properties.geocoding.street || geocode.value[0].properties.geocoding.district
-  const postcode = geocode.value[0].properties.geocoding.postcode
-  const city = geocode.value[0].properties.geocoding.city
-  const country = geocode.value[0].properties.geocoding.country
+    geocoding.value[0].properties.geocoding.street ||
+    geocoding.value[0].properties.geocoding.district
+  const postcode = geocoding.value[0].properties.geocoding.postcode
+  const city = geocoding.value[0].properties.geocoding.city
+  const country = geocoding.value[0].properties.geocoding.country
 
   // Update store
   projectStore.update({
@@ -99,16 +109,16 @@ async function search() {
   )
     return
 
-  await getLocationDetails(
+  await getPois(
     projectStore.project?.latitude,
     projectStore.project?.longitude,
     projectStore.project?.radius,
   )
-  if (error.value) {
+  if (poisError.value) {
     errorToast(t('common.errorMessage'))
   }
-  if (details.value) {
-    useLogger().log('Location details:', details.value)
+  if (pois.value) {
+    useLogger().log('Location details:', pois.value)
   }
 }
 
