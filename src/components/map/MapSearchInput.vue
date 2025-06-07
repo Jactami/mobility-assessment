@@ -38,7 +38,6 @@
 import BaseButton from '@/components/base/BaseButton.vue'
 import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { useGeocodingService } from '@/composables/geocoding'
-import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { usePoiService } from '@/composables/poi'
 import { useProjectStore } from '@/stores/Project'
@@ -63,6 +62,9 @@ const loading = computed(() => geocodingLoading.value || poisLoading.value)
 async function search() {
   if (loading.value) return
   if (!query.value.trim()) return
+  if (!projectStore.project?.id) return
+
+  const projectId = projectStore.project.id
 
   await getGeocoding(query.value)
 
@@ -114,11 +116,23 @@ async function search() {
     projectStore.project?.longitude,
     projectStore.project?.radius,
   )
+
   if (poisError.value) {
     errorToast(t('common.errorMessage'))
   }
+
   if (pois.value) {
-    useLogger().log('Location details:', pois.value)
+    projectStore.updatePois(
+      pois.value.map((poi) => ({
+        osm_id: poi.id,
+        osm_type: poi.type,
+        project_id: projectId,
+        label: poi.tags?.name,
+        category: 'Lorem ipsum', // TODO: Replace with actual category
+        latitude: poi.type === 'node' ? poi.lat : poi.center.lat,
+        longitude: poi.type === 'node' ? poi.lon : poi.center.lon,
+      })),
+    )
   }
 }
 

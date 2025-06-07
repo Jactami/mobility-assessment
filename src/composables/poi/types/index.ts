@@ -36,7 +36,7 @@ interface OverpassNode extends OverpassElementBase, LatLon {
 interface OverpassWay extends OverpassElementBase {
   type: 'way'
   nodes: number[]
-  center?: LatLon // set 'out center' in the query to get the center point of a way
+  center: LatLon // set 'out center' in the query to get the center point of a way
 }
 
 interface OverpassRelation extends OverpassElementBase {
@@ -46,5 +46,5 @@ interface OverpassRelation extends OverpassElementBase {
     ref: number
     role: string
   }[]
-  center?: LatLon // set 'out center' in the query to get the center point of a relation
+  center: LatLon // set 'out center' in the query to get the center point of a relation
 }
