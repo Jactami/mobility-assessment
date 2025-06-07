@@ -19,7 +19,8 @@
           v-for="project in projects"
           :key="project.id"
           :project="project"
-          @delete="deleteProject"
+          @delete="deleteProject(project)"
+          @copy="copyProject(project)"
         />
       </template>
       <template v-else>
@@ -54,12 +55,15 @@ const { t } = useI18n()
 const loading = ref(false)
 const projects = ref<Project[] | null>(null)
 
-onMounted(loadProjects)
+onMounted(() => {
+  // Load projects when user enters the page
+  loading.value = true
+  loadProjects()
+  loading.value = false
+})
 
 async function loadProjects() {
-  loading.value = true
   const { data, error } = await db.getProjects()
-  loading.value = false
 
   if (error) {
     errorToast(t('project.loadAllError'))
@@ -73,7 +77,7 @@ async function createProject() {
   if (!authStore.user) return
 
   const { data, error } = await db.setProject({
-    title: 'Neues Projekt: ' + new Date(),
+    title: 'Neues Projekt',
     owner_id: authStore.user.id,
   })
 
@@ -89,19 +93,40 @@ async function createProject() {
   }
 }
 
-async function deleteProject(projectId: string) {
+async function deleteProject(project: Project) {
   if (!authStore.user) return
 
   const confirmLeave = await confirmDialog(t('project.confirmDelete'))
   if (!confirmLeave) return
 
-  const { data, error } = await db.deleteProject(projectId)
-  console.log(data)
+  const { error } = await db.deleteProject(project.id)
+
   if (error) {
     errorToast(t('project.deleteError'))
   } else {
     successToast(t('project.deleteSuccess'))
     loadProjects()
+  }
+}
+
+async function copyProject(project: Project) {
+  if (!authStore.user) return
+
+  const { data, error } = await db.setProject({
+    ...project,
+    id: undefined, // Ensure a new ID is generated
+    title: `${project.title} (Kopie)`,
+  })
+
+  if (!data || error) {
+    errorToast(t('project.createError'))
+  } else {
+    router.push({
+      name: 'project',
+      params: { projectId: data.id },
+    })
+
+    successToast(t('project.createSuccess'))
   }
 }
 </script>

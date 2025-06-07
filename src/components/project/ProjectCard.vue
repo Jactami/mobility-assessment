@@ -33,21 +33,28 @@ import type { Menu } from '@/components/menu/types'
 import type { Project } from '@/db/types'
 import { useI18n } from 'vue-i18n'
 
-const props = defineProps<{
+defineProps<{
   project: Project
 }>()
 
 const emit = defineEmits<{
-  (e: 'delete', projectId: string): void
+  (e: 'delete'): void
+  (e: 'copy'): void
 }>()
 
 const { d, t } = useI18n()
 
 const menu: Menu = [
   {
+    label: t('project.copy'),
+    icon: 'copy',
+    action: () => emit('copy'),
+    divider: true,
+  },
+  {
     label: t('project.delete'),
     icon: 'delete',
-    action: () => emit('delete', props.project.id),
+    action: () => emit('delete'),
   },
 ]
 </script>
