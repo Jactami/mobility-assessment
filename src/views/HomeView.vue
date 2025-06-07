@@ -54,6 +54,7 @@ onMounted(loadProjects)
 async function loadProjects() {
   loading.value = true
   const { data, error } = await db.getProjects()
+  loading.value = false
 
   if (error) {
     notification.errorToast(t('project.loadAllError'))
@@ -61,7 +62,6 @@ async function loadProjects() {
   }
 
   projects.value = data
-  loading.value = false
 }
 
 async function createProject() {
