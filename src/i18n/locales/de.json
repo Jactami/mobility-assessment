@@ -11,16 +11,20 @@
     "project": "Projekt"
   },
   "auth": {
+    "changePassword": "Passwort ändern",
+    "changePasswordError": "Fehler beim Ändern des Passworts",
+    "changePasswordSuccess": "Passwort erfolgreich geändert",
     "login": "Anmelden",
     "logout": "Abmelden",
     "email": "E-Mail",
     "invalidCredentials": "Ungültige Anmeldedaten",
     "password": "Passwort",
+    "passwordConfirm": "Passwort bestätigen",
+    "passwordNew": "Neues Passwort",
     "loginError": "Fehler bei der Anmeldung",
     "logoutError": "Fehler bei der Abmeldung",
     "loggedInAs": "Sie sind angemeldet als {user}.",
-    "profile": "Profil",
-    "resetPassword": "Passwort zurücksetzen"
+    "profile": "Profil"
   },
   "common": {
     "cancel": "Abbrechen",

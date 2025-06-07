@@ -56,6 +56,21 @@ export function useAuthService() {
   }
 
   /**
+   * Update the user's email and/or password.
+   *
+   * @param password - The new password for the user (optional).
+   * @param email - The new email for the user (optional).
+   * @returns - The response from the update operation.
+   */
+  async function updateUser(email?: string, password?: string) {
+    const response = await supabase.auth.updateUser({
+      email,
+      password,
+    })
+    return response
+  }
+
+  /**
    * Load the user's profile data.
    *
    * @throws {Error} - If loading the profile fails.
@@ -70,5 +85,6 @@ export function useAuthService() {
     init,
     signIn,
     signOut,
+    updateUser,
   }
 }

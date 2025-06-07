@@ -1,5 +1,6 @@
 <template>
   <BasePageHeader :title="t('auth.profile')" />
+
   <BaseSection>
     <p>
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse at maxime nihil? Nihil, incidunt
@@ -7,12 +8,14 @@
       recusandae unde quo. Et, voluptatem.
     </p>
   </BaseSection>
-  <BaseSection :title="t('auth.resetPassword')">
-    <p>Lorem ipsum</p>
+
+  <BaseSection :title="t('auth.changePassword')">
+    <AuthChangePasswordForm />
   </BaseSection>
 </template>
 
 <script setup lang="ts">
+import AuthChangePasswordForm from '@/components/auth/AuthChangePasswordForm.vue'
 import BasePageHeader from '@/components/base/BasePageHeader.vue'
 import BaseSection from '@/components/base/BaseSection.vue'
 import { useI18n } from 'vue-i18n'
