@@ -38,11 +38,17 @@ const initials = computed(
 )
 
 async function handleSignOut() {
-  try {
-    await authService.signOut()
-    router.push({ name: 'login' })
-  } catch {
+  // sign out user
+  const { error } = await authService.signOut()
+
+  // handle authentication errors
+  if (error) {
     errorToast(t('auth.logoutError'))
+    console.error(error)
+    return
   }
+
+  // redirect user to login page
+  router.push({ name: 'login' })
 }
 </script>

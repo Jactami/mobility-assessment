@@ -41,9 +41,8 @@ export function useAuthService() {
    * @returns - The sign-in data.
    */
   async function signIn(email: string, password: string) {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) throw error
-    return data
+    const response = await supabase.auth.signInWithPassword({ email, password })
+    return response
   }
 
   /**
@@ -52,8 +51,8 @@ export function useAuthService() {
    * @throws {Error} - If the sign-out fails.
    */
   async function signOut() {
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
+    const response = await supabase.auth.signOut()
+    return response
   }
 
   /**
@@ -62,9 +61,9 @@ export function useAuthService() {
    * @throws {Error} - If loading the profile fails.
    */
   async function loadProfile(userId: string) {
-    const { data, error } = await supabase.from('profiles').select().eq('id', userId).single()
-    if (error) throw error
-    authStore.setProfile(data)
+    const response = await supabase.from('profiles').select().eq('id', userId).single()
+    authStore.setProfile(response.data)
+    return response
   }
 
   return {

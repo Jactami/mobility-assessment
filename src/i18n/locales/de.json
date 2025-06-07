@@ -13,6 +13,7 @@
     "login": "Anmelden",
     "logout": "Abmelden",
     "email": "E-Mail",
+    "invalidCredentials": "Ungültige Anmeldedaten",
     "password": "Passwort",
     "loginError": "Fehler bei der Anmeldung",
     "logoutError": "Fehler bei der Abmeldung",

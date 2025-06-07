@@ -74,19 +74,23 @@ const loading = ref(false)
 const passwordVisible = ref(false)
 
 async function handleSignIn(form: SignInFormData) {
-  try {
-    loading.value = true
+  // login user
+  loading.value = true
+  const { error } = await authService.signIn(form.email, form.password)
+  loading.value = false
 
-    // login user
-    await authService.signIn(form.email, form.password)
-
-    // forward user to redirect url or to home view
-    const redirectPath = route.query.redirect?.toString()
-    router.push(redirectPath ? { path: redirectPath } : { name: 'home' })
-  } catch {
-    errorToast(t('auth.loginError'))
-  } finally {
-    loading.value = false
+  // handle authentication errors
+  if (error) {
+    // TODO: handle more error cases
+    const errorMessage =
+      error.code === 'invalid_credentials' ? t('auth.invalidCredentials') : t('auth.loginError')
+    errorToast(errorMessage)
+    console.error(error)
+    return
   }
+
+  // forward user to redirect url or to home view
+  const redirectPath = route.query.redirect?.toString()
+  router.push(redirectPath ? { path: redirectPath } : { name: 'home' })
 }
 </script>
