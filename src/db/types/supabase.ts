@@ -57,6 +57,7 @@ export type Database = {
           id: string
           last_name: string
           updated_at: string | null
+          user_role: Database['public']['Enums']['user_role']
         }
         Insert: {
           created_at?: string
@@ -64,6 +65,7 @@ export type Database = {
           id: string
           last_name: string
           updated_at?: string | null
+          user_role?: Database['public']['Enums']['user_role']
         }
         Update: {
           created_at?: string
@@ -71,6 +73,7 @@ export type Database = {
           id?: string
           last_name?: string
           updated_at?: string | null
+          user_role?: Database['public']['Enums']['user_role']
         }
         Relationships: []
       }
@@ -129,9 +132,11 @@ export type Database = {
     Functions: {
       create_user: {
         Args: {
+          first_name: string
+          last_name: string
           email: string
           password: string
-          metadata: Json
+          user_role?: Database['public']['Enums']['user_role']
           user_id?: string
         }
         Returns: string
@@ -139,6 +144,7 @@ export type Database = {
     }
     Enums: {
       osm_type: 'node' | 'way' | 'relation'
+      user_role: 'admin' | 'user'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -251,6 +257,7 @@ export const Constants = {
   public: {
     Enums: {
       osm_type: ['node', 'way', 'relation'],
+      user_role: ['admin', 'user'],
     },
   },
 } as const
