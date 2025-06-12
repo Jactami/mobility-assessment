@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT "now"() NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE,
     first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL
+    last_name VARCHAR(100) NOT NULL,
+    user_role public.user_role DEFAULT 'user'::public.user_role NOT NULL
 );
 
 ALTER TABLE public.profiles OWNER TO postgres;
@@ -58,8 +59,12 @@ CREATE OR REPLACE FUNCTION public.handle_new_user()
     SECURITY definer SET search_path = ''
     AS $$
 BEGIN
-    INSERT INTO public.profiles (id, first_name, last_name)
-    VALUES (new.id, new.raw_user_meta_data ->> 'first_name', new.raw_user_meta_data ->> 'last_name');
+    INSERT INTO public.profiles (id, first_name, last_name, user_role)
+    VALUES (
+        new.id, new.raw_user_meta_data ->> 'first_name', 
+        new.raw_user_meta_data ->> 'last_name',
+        (new.raw_user_meta_data ->> 'user_role')::public.user_role
+    );
     RETURN new;
 END;
 $$;

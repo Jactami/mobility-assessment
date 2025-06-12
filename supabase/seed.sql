@@ -3,16 +3,18 @@
 --
 SELECT public.create_user(
     user_id => 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 
+    first_name => 'Max',
+    last_name => 'Mustermann',
     email => 'max@mustermann.de', 
-    password => 'password', 
-    metadata => '{"first_name": "Max", "last_name": "Mustermann"}'
+    password => 'password'
 );
 
 SELECT public.create_user(
     user_id => 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 
+    first_name => 'John',
+    last_name => 'Doe',
     email => 'john@doe.com', 
-    password => 'password',
-    metadata => '{"first_name": "John", "last_name": "Doe"}'
+    password => 'password'
 );
 
 --
