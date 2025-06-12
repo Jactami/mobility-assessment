@@ -10,6 +10,7 @@
       inner-class="rounded-r-none"
       role="searchbox"
       autocomplete="off"
+      spellcheck="false"
       :disabled="loading"
       @keydown.enter="search"
     >
