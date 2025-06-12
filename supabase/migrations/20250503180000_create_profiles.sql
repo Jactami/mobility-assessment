@@ -73,3 +73,8 @@ $$;
 CREATE OR REPLACE TRIGGER on_auth_user_created
     AFTER INSERT ON auth.users
     FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+-- Ensure that only one user can have the role 'admin'
+CREATE UNIQUE INDEX only_one_admin
+ON public.profiles ((user_role))
+WHERE user_role = 'admin';
