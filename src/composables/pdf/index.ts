@@ -8,21 +8,17 @@ export function usePdf() {
   const error = ref<Error | null>(null)
   const loading = ref<boolean>(false)
 
-  async function createPdf() {
+  async function createPdf(data: unknown) {
     try {
       loading.value = true
 
       pdf.value = await new PdfReportBuilder(config, fonts)
-        .createText('Hello, World!', {
-          fontSize: 'lg',
-          color: 'primary',
-          alignment: 'center',
-          font: 'bold',
-        })
-        .createText('This is a test PDF document.', { y: 20 })
+        .createPageHeader('Page Title', 'This is a subtitle')
+        .createSectionHeader('Project data', { y: 40 })
+        .printData(data, { y: 50, fontSize: 'sm' })
         .newPage()
-        .createText('This is the second page.', { y: 10 })
-        .createImage(image, { y: 30, width: 100, height: 100 })
+        .createSectionHeader('Image Example')
+        .createImage(image, { y: 20, width: 100, height: 100 })
         .build()
     } catch (err) {
       error.value = err instanceof Error ? err : new Error('An unknown error occurred')
