@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import image from './assets/image'
-import config from './config'
+import { config, fonts } from './config'
 import { PdfReportBuilder } from './report/PdfReportBuilder'
 
 export function usePdf() {
@@ -12,13 +12,14 @@ export function usePdf() {
     try {
       loading.value = true
 
-      pdf.value = await new PdfReportBuilder(config)
+      pdf.value = await new PdfReportBuilder(config, fonts)
         .createText('Hello, World!', {
           x: 10,
           y: 10,
-          fontSize: config.fontSize.lg,
+          fontSize: config.fontSize?.lg,
           color: config.color?.primary,
           alignment: 'center',
+          font: 'bold',
         })
         .createText('This is a test PDF document.', { x: 10, y: 20 })
         .newPage()

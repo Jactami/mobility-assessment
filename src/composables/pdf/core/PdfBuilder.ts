@@ -1,4 +1,4 @@
-import { PDFME_VERSION, type Plugin, type Schema } from '@pdfme/common'
+import { PDFME_VERSION, type Font, type Plugin, type Schema } from '@pdfme/common'
 import { generate } from '@pdfme/generator'
 import { image, text } from '@pdfme/schemas'
 import type { PdfConfig, PdfImageOptions, PdfTextOptions } from '../types'
@@ -15,6 +15,11 @@ export class PdfBuilder {
    * Configuration options for the PDF document, such as format, padding, colors, and font sizes.
    */
   protected _config: PdfConfig
+
+  /**
+   * The fonts used in the PDF document.
+   */
+  protected _fonts?: Font
 
   /**
    * An object containing schema plugins that extend the the types of schemas that can be used.
@@ -46,9 +51,10 @@ export class PdfBuilder {
    * Creates an instance of the PdfBuilder class.
    * @param config - Configuration options for the PDF document, such as format, padding, colors, and font sizes.
    */
-  constructor(config: PdfConfig) {
+  constructor(config: PdfConfig, fonts?: Font) {
     this.reset()
     this._config = config
+    this._fonts = fonts
   }
 
   /**
@@ -56,6 +62,10 @@ export class PdfBuilder {
    * @returns A Promise that resolves to a Blob representing the generated PDF document.
    */
   public async build(): Promise<Blob> {
+    // Load fonts if available
+    const fonts = await this.loadFonts()
+    console.log(fonts)
+
     // Generate pdf
     const pdf = await generate({
       template: {
@@ -69,6 +79,7 @@ export class PdfBuilder {
       },
       inputs: [this._inputs],
       plugins: this._plugins,
+      options: { font: fonts },
     })
 
     // Transform pdf to Blob
@@ -139,6 +150,7 @@ export class PdfBuilder {
       width:
         options.width || this._config.format[0] - this._config.padding[1] - this._config.padding[3],
       height: options.height || 0, // Height is auto-calculated based on the text content
+      fontName: options.font, // falls back to the font with fallback flag set to true, if not provided
       fontColor: options.color || this._config.color?.text || undefined,
       fontSize: options.fontSize || this._config.fontSize?.base,
       alignment: options.alignment,
@@ -182,5 +194,29 @@ export class PdfBuilder {
 
     // Append the image element to the current page
     return this.addToPage(data, schema)
+  }
+
+  /**
+   * Loads the fonts defined in the builder.
+   * @returns A Promise that resolves to an object containing the loaded fonts.
+   */
+  private async loadFonts(): Promise<Font | undefined> {
+    if (!this._fonts) return
+
+    // Iterate over fonts to load and process font files
+    const fonts: Font = {}
+    for (const key of Object.keys(this._fonts)) {
+      const font = this._fonts[key]
+      if (typeof font.data === 'string') {
+        fonts[key] = {
+          data: await fetch(font.data).then(async (res) => await res.arrayBuffer()),
+          fallback: font.fallback || false,
+        }
+      } else {
+        fonts[key] = font
+      }
+    }
+
+    return fonts
   }
 }

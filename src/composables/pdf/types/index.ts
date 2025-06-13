@@ -10,9 +10,11 @@ export interface PdfTextOptions {
   y: number
   width?: number
   height?: number
+  font?: string
   fontSize?: number
   color?: string
   alignment?: 'left' | 'center' | 'right'
+  // TODO: Add more options like opacity, rotation, background color, etc.
 }
 
 export interface PdfImageOptions {
