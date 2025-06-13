@@ -12,7 +12,7 @@ export function usePdf() {
       loading.value = true
 
       pdf.value = await new PdfBuilder()
-        .createText('Hello, World!', { x: 10, y: 10 })
+        .createText('Hello, World!', { x: 10, y: 10, fontSize: 20, color: '#4CAF50' })
         .createText('This is a test PDF document.', { x: 10, y: 20 })
         .newPage()
         .createText('This is the second page.', { x: 10, y: 10 })

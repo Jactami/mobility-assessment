@@ -1,6 +1,7 @@
 import { PDFME_VERSION, type Plugin, type Schema } from '@pdfme/common'
 import { generate } from '@pdfme/generator'
-import { image } from '@pdfme/schemas'
+import { image, text } from '@pdfme/schemas'
+import type { PdfImageOptions, PdfTextOptions } from './types'
 
 /**
  * A class for building PDF documents.
@@ -109,9 +110,9 @@ export class PdfBuilder {
    * @param options - The layout and styling options for the text.
    * @returns The instance itself, allowing for method chaining.
    */
-  public createText(data: string, options: { x: number; y: number }): this {
+  public createText(data: string, options: PdfTextOptions): this {
     // Add text plugin
-    // this._plugins.text = text
+    this._plugins.text = text
 
     // Create schema for the text element
     const schema: Schema = {
@@ -121,8 +122,10 @@ export class PdfBuilder {
         x: options.x,
         y: options.y,
       },
-      width: 190,
-      height: 1, // Height will be auto-calculated
+      width: options.width || 190,
+      height: options.height || 0,
+      fontColor: options.color,
+      fontSize: options.fontSize,
     }
 
     // Append the text element to the current page
@@ -145,10 +148,7 @@ export class PdfBuilder {
    * @param options - The layout and styling options for the image.
    * @returns The instance itself, allowing for method chaining.
    */
-  public createImage(
-    data: string,
-    options: { x: number; y: number; width: number; height: number },
-  ): this {
+  public createImage(data: string, options: PdfImageOptions): this {
     // Add image plugin
     this._plugins.image = image
 
