@@ -1,44 +1,32 @@
-import type { Template } from '@pdfme/common'
-import { generate } from '@pdfme/generator'
+import { ref } from 'vue'
+import { PdfBuilder } from './pdfme/PdfBuilder'
 
 export function usePdf() {
+  const pdf = ref<Blob | null>(null)
+  const error = ref<Error | null>(null)
+  const loading = ref<boolean>(false)
+
   async function createPdf() {
-    const template: Template = {
-      basePdf: { width: 210, height: 297, padding: [10, 10, 10, 10] },
-      schemas: [
-        [
-          {
-            name: 'a',
-            type: 'text',
-            position: { x: 0, y: 0 },
-            width: 10,
-            height: 10,
-          },
-          {
-            name: 'b',
-            type: 'text',
-            position: { x: 10, y: 10 },
-            width: 10,
-            height: 10,
-          },
-          {
-            name: 'c',
-            type: 'text',
-            position: { x: 20, y: 20 },
-            width: 10,
-            height: 10,
-          },
-        ],
-      ],
+    try {
+      loading.value = true
+
+      pdf.value = await new PdfBuilder()
+        .createText('Hello, World!', { x: 10, y: 10 })
+        .createText('This is a test PDF document.', { x: 10, y: 20 })
+        .newPage()
+        .createText('This is the second page.', { x: 10, y: 10 })
+        .build()
+    } catch (err) {
+      error.value = err instanceof Error ? err : new Error('An unknown error occurred')
+    } finally {
+      loading.value = false
     }
-
-    const inputs = [{ a: 'a1', b: 'b1', c: 'c1' }]
-
-    const pdf = await generate({ template, inputs })
-    return pdf
   }
 
   return {
     createPdf,
+    pdf,
+    error,
+    loading,
   }
 }

@@ -9,7 +9,7 @@
       </BaseButton>
     </div>
     <div class="mt-10 flex justify-center">
-      <BaseButton @click="createReport">Report</BaseButton>
+      <BaseButton :disabled="loading" @click="createReport">Report</BaseButton>
     </div>
   </BaseSection>
   <DebugPanel
@@ -42,7 +42,7 @@ const projectStore = useProjectStore()
 const route = useRoute()
 const router = useRouter()
 const { errorToast, successToast, confirmDialog } = useNotification()
-const { createPdf } = usePdf()
+const { pdf, loading, error, createPdf } = usePdf()
 
 const project = ref<Project | null>(null)
 const pois = ref<Poi[] | null>(null)
@@ -134,8 +134,19 @@ async function saveProject() {
 }
 
 async function createReport() {
-  const pdf = await createPdf()
-  const blob = new Blob([pdf.buffer], { type: 'application/pdf' })
-  window.open(URL.createObjectURL(blob))
+  // Create the PDF report
+  await createPdf()
+
+  // If there is an error in creating the PDF, show error
+  if (error.value) {
+    console.error(error.value)
+    errorToast('TODO: error creating PDF')
+    return
+  }
+
+  // If the PDF is created successfully, open it in a new tab
+  if (pdf.value) {
+    window.open(URL.createObjectURL(pdf.value))
+  }
 }
 </script>
