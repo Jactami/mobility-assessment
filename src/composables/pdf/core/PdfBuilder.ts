@@ -128,7 +128,7 @@ export class PdfBuilder {
    * Creates a new page in the PDF document.
    * @returns The instance itself, allowing for method chaining.
    */
-  public newPage(): this {
+  newPage(): this {
     this._page++
     this._schemas.push([])
     return this
@@ -140,23 +140,23 @@ export class PdfBuilder {
    * @param options - The layout and styling options for the text.
    * @returns The instance itself, allowing for method chaining.
    */
-  public createText(data: string, options: PdfTextOptions): this {
+  createText(data: string, options?: PdfTextOptions): this {
     // Add text plugin
     this._plugins.text = text
 
     // Create schema for the text element
-    const x = options.x ?? this._config.padding.left
-    const y = options.y ?? this._config.padding.top
+    const x = options?.x ?? this._config.padding.left
+    const y = options?.y ?? this._config.padding.top
     const schema: Schema = {
       type: 'text',
       name: this._id,
       position: { x, y },
-      width: options.width || this._config.format.width - this._config.padding.right - x,
-      height: options.height || this._config.format.height - this._config.padding.bottom - y,
-      fontName: options.font, // falls back to the font with fallback flag set to true, if not provided
-      fontColor: this._config.color[options.color || 'text'],
-      fontSize: this._config.fontSize[options.fontSize || 'base'],
-      alignment: options.alignment || 'left',
+      width: options?.width || this._config.format.width - this._config.padding.right - x,
+      height: options?.height || this._config.format.height - this._config.padding.bottom - y,
+      fontName: options?.font, // falls back to the font with fallback flag set to true, if not provided
+      fontColor: this._config.color[options?.color || 'text'],
+      fontSize: this._config.fontSize[options?.fontSize || 'base'],
+      alignment: options?.alignment || 'left',
     }
 
     // Append the text element to the current page
@@ -169,7 +169,7 @@ export class PdfBuilder {
    * @param options - The layout and styling options for the text.
    * @returns The instance itself, allowing for method chaining.
    */
-  public printData(data: unknown, options: { x: number; y: number }): this {
+  printData(data: unknown, options: PdfTextOptions): this {
     return this.createText(JSON.stringify(data), options)
   }
 
@@ -179,7 +179,7 @@ export class PdfBuilder {
    * @param options - The layout and styling options for the image.
    * @returns The instance itself, allowing for method chaining.
    */
-  public createImage(data: string, options: PdfImageOptions): this {
+  createImage(data: string, options: PdfImageOptions): this {
     // Add image plugin
     this._plugins.image = image
 
