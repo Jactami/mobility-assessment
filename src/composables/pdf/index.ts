@@ -18,6 +18,7 @@ export function usePdf() {
           y: 10,
           fontSize: config.fontSize.lg,
           color: config.color?.primary,
+          alignment: 'center',
         })
         .createText('This is a test PDF document.', { x: 10, y: 20 })
         .newPage()

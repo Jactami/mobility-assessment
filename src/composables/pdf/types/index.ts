@@ -12,6 +12,7 @@ export interface PdfTextOptions {
   height?: number
   fontSize?: number
   color?: string
+  alignment?: 'left' | 'center' | 'right'
 }
 
 export interface PdfImageOptions {

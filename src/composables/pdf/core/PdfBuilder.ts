@@ -141,6 +141,7 @@ export class PdfBuilder {
       height: options.height || 0, // Height is auto-calculated based on the text content
       fontColor: options.color || this._config.color?.text || undefined,
       fontSize: options.fontSize || this._config.fontSize?.base,
+      alignment: options.alignment,
     }
 
     // Append the text element to the current page
