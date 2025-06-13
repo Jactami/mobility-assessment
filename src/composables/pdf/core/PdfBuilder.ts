@@ -71,9 +71,14 @@ export class PdfBuilder {
       template: {
         schemas: this._schemas,
         basePdf: {
-          width: this._config.format[0],
-          height: this._config.format[1],
-          padding: this._config.padding,
+          width: this._config.format.width,
+          height: this._config.format.height,
+          padding: [
+            this._config.padding.top,
+            this._config.padding.right,
+            this._config.padding.bottom,
+            this._config.padding.left,
+          ],
         },
         pdfmeVersion: PDFME_VERSION,
       },
@@ -140,20 +145,18 @@ export class PdfBuilder {
     this._plugins.text = text
 
     // Create schema for the text element
+    const x = options.x ?? this._config.padding.left
+    const y = options.y ?? this._config.padding.top
     const schema: Schema = {
       type: 'text',
       name: this._id,
-      position: {
-        x: options.x,
-        y: options.y,
-      },
-      width:
-        options.width || this._config.format[0] - this._config.padding[1] - this._config.padding[3],
-      height: options.height || 0, // Height is auto-calculated based on the text content
+      position: { x, y },
+      width: options.width || this._config.format.width - this._config.padding.right - x,
+      height: options.height || this._config.format.height - this._config.padding.bottom - y,
       fontName: options.font, // falls back to the font with fallback flag set to true, if not provided
-      fontColor: options.color || this._config.color?.text || undefined,
-      fontSize: options.fontSize || this._config.fontSize?.base,
-      alignment: options.alignment,
+      fontColor: this._config.color[options.color || 'text'],
+      fontSize: this._config.fontSize[options.fontSize || 'base'],
+      alignment: options.alignment || 'left',
     }
 
     // Append the text element to the current page
@@ -185,8 +188,8 @@ export class PdfBuilder {
       type: 'image',
       name: this._id,
       position: {
-        x: options.x,
-        y: options.y,
+        x: options.x ?? this._config.padding.left,
+        y: options.y ?? this._config.padding.top,
       },
       width: options.width,
       height: options.height,

@@ -14,17 +14,15 @@ export function usePdf() {
 
       pdf.value = await new PdfReportBuilder(config, fonts)
         .createText('Hello, World!', {
-          x: 10,
-          y: 10,
-          fontSize: config.fontSize?.lg,
-          color: config.color?.primary,
+          fontSize: 'lg',
+          color: 'primary',
           alignment: 'center',
           font: 'bold',
         })
-        .createText('This is a test PDF document.', { x: 10, y: 20 })
+        .createText('This is a test PDF document.', { y: 20 })
         .newPage()
-        .createText('This is the second page.', { x: 10, y: 10 })
-        .createImage(image, { x: 10, y: 30, width: 100, height: 100 })
+        .createText('This is the second page.', { y: 10 })
+        .createImage(image, { y: 30, width: 100, height: 100 })
         .build()
     } catch (err) {
       error.value = err instanceof Error ? err : new Error('An unknown error occurred')

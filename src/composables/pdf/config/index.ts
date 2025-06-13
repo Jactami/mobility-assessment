@@ -1,9 +1,17 @@
-import type { Font } from '@pdfme/common'
-import type { PdfConfig } from '../types'
+import type { Fonts, PdfConfig } from '../types'
 
 export const config: PdfConfig = {
-  format: [210, 297], // Din A4
-  padding: [10, 10, 10, 10],
+  format: {
+    // Din A4
+    width: 210,
+    height: 297,
+  },
+  padding: {
+    top: 10,
+    right: 10,
+    bottom: 10,
+    left: 10,
+  },
   color: {
     primary: '#3F51B5',
     text: '#020618',
@@ -15,7 +23,7 @@ export const config: PdfConfig = {
   },
 }
 
-export const fonts: Font = {
+export const fonts: Fonts = {
   regular: {
     data: '/fonts/Roboto-Regular.ttf',
     fallback: true,
