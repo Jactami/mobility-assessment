@@ -1,7 +1,7 @@
 import { PDFME_VERSION, type Plugin, type Schema } from '@pdfme/common'
 import { generate } from '@pdfme/generator'
 import { image, text } from '@pdfme/schemas'
-import type { PdfConfig, PdfImageOptions, PdfTextOptions } from './types'
+import type { PdfConfig, PdfImageOptions, PdfTextOptions } from '../types'
 
 /**
  * A class for building PDF documents.

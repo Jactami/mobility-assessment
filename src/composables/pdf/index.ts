@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import image from './assets/image'
-import { PdfBuilder } from './pdfme/PdfBuilder'
-import config from './pdfme/config'
+import config from './config'
+import { PdfReportBuilder } from './report/PdfReportBuilder'
 
 export function usePdf() {
   const pdf = ref<Blob | null>(null)
@@ -12,7 +12,7 @@ export function usePdf() {
     try {
       loading.value = true
 
-      pdf.value = await new PdfBuilder(config)
+      pdf.value = await new PdfReportBuilder(config)
         .createText('Hello, World!', {
           x: 10,
           y: 10,
