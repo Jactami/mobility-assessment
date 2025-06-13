@@ -1,5 +1,6 @@
-import { PDFME_VERSION, type Schema } from '@pdfme/common'
+import { PDFME_VERSION, type Plugin, type Schema } from '@pdfme/common'
 import { generate } from '@pdfme/generator'
+import { image } from '@pdfme/schemas'
 
 /**
  * A class for building PDF documents.
@@ -9,6 +10,12 @@ import { generate } from '@pdfme/generator'
  *  .build()
  */
 export class PdfBuilder {
+  /**
+   * An object containing schema plugins that extend the the types of schemas that can be used.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected _plugins: Record<string, Plugin<any>> = {}
+
   /**
    * An array of schemas representing the layout and styling of the PDF document.
    */
@@ -46,6 +53,7 @@ export class PdfBuilder {
         pdfmeVersion: PDFME_VERSION,
       },
       inputs: [this._inputs],
+      plugins: this._plugins,
     })
 
     // Transform pdf to Blob
@@ -97,11 +105,14 @@ export class PdfBuilder {
 
   /**
    * Creates a text element in the PDF document.
-   * @param text - The text to be added to the PDF document.
+   * @param data - The text to be added to the PDF document.
    * @param options - The layout and styling options for the text.
    * @returns The instance itself, allowing for method chaining.
    */
-  public createText(text: string, options: { x: number; y: number }): this {
+  public createText(data: string, options: { x: number; y: number }): this {
+    // Add text plugin
+    // this._plugins.text = text
+
     // Create schema for the text element
     const schema: Schema = {
       type: 'text',
@@ -115,7 +126,7 @@ export class PdfBuilder {
     }
 
     // Append the text element to the current page
-    return this.addToPage(text, schema)
+    return this.addToPage(data, schema)
   }
 
   /**
@@ -126,5 +137,34 @@ export class PdfBuilder {
    */
   public printData(data: unknown, options: { x: number; y: number }): this {
     return this.createText(JSON.stringify(data), options)
+  }
+
+  /**
+   * Creates a image element in the PDF document.
+   * @param data - The image data to be added to the PDF document as a base64 string.
+   * @param options - The layout and styling options for the image.
+   * @returns The instance itself, allowing for method chaining.
+   */
+  public createImage(
+    data: string,
+    options: { x: number; y: number; width: number; height: number },
+  ): this {
+    // Add image plugin
+    this._plugins.image = image
+
+    // Create schema for the image element
+    const schema: Schema = {
+      type: 'image',
+      name: this._id,
+      position: {
+        x: options.x,
+        y: options.y,
+      },
+      width: options.width,
+      height: options.height,
+    }
+
+    // Append the image element to the current page
+    return this.addToPage(data, schema)
   }
 }

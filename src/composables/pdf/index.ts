@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import image from './assets/image'
 import { PdfBuilder } from './pdfme/PdfBuilder'
 
 export function usePdf() {
@@ -15,6 +16,7 @@ export function usePdf() {
         .createText('This is a test PDF document.', { x: 10, y: 20 })
         .newPage()
         .createText('This is the second page.', { x: 10, y: 10 })
+        .createImage(image, { x: 10, y: 30, width: 100, height: 100 })
         .build()
     } catch (err) {
       error.value = err instanceof Error ? err : new Error('An unknown error occurred')
