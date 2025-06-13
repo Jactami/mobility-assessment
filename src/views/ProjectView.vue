@@ -8,6 +8,9 @@
         {{ t('common.save') }}
       </BaseButton>
     </div>
+    <div class="mt-10 flex justify-center">
+      <BaseButton @click="createReport">Report</BaseButton>
+    </div>
   </BaseSection>
   <DebugPanel
     title="Project Store"
@@ -26,6 +29,7 @@ import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
+import { usePdf } from '@/composables/pdf'
 import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
@@ -38,6 +42,7 @@ const projectStore = useProjectStore()
 const route = useRoute()
 const router = useRouter()
 const { errorToast, successToast, confirmDialog } = useNotification()
+const { createPdf } = usePdf()
 
 const project = ref<Project | null>(null)
 const pois = ref<Poi[] | null>(null)
@@ -126,5 +131,11 @@ async function saveProject() {
   project.value = projectResponse.data
   pois.value = poisResponse.data
   projectStore.set(project.value, pois.value)
+}
+
+async function createReport() {
+  const pdf = await createPdf()
+  const blob = new Blob([pdf.buffer], { type: 'application/pdf' })
+  window.open(URL.createObjectURL(blob))
 }
 </script>
