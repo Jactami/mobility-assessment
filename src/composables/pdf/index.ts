@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import image from './assets/image'
 import { PdfBuilder } from './pdfme/PdfBuilder'
+import config from './pdfme/config'
 
 export function usePdf() {
   const pdf = ref<Blob | null>(null)
@@ -11,8 +12,13 @@ export function usePdf() {
     try {
       loading.value = true
 
-      pdf.value = await new PdfBuilder()
-        .createText('Hello, World!', { x: 10, y: 10, fontSize: 20, color: '#4CAF50' })
+      pdf.value = await new PdfBuilder(config)
+        .createText('Hello, World!', {
+          x: 10,
+          y: 10,
+          fontSize: config.fontSize.lg,
+          color: config.color?.primary,
+        })
         .createText('This is a test PDF document.', { x: 10, y: 20 })
         .newPage()
         .createText('This is the second page.', { x: 10, y: 10 })

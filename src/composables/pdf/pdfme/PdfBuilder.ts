@@ -1,7 +1,7 @@
 import { PDFME_VERSION, type Plugin, type Schema } from '@pdfme/common'
 import { generate } from '@pdfme/generator'
 import { image, text } from '@pdfme/schemas'
-import type { PdfImageOptions, PdfTextOptions } from './types'
+import type { PdfConfig, PdfImageOptions, PdfTextOptions } from './types'
 
 /**
  * A class for building PDF documents.
@@ -11,6 +11,11 @@ import type { PdfImageOptions, PdfTextOptions } from './types'
  *  .build()
  */
 export class PdfBuilder {
+  /**
+   * Configuration options for the PDF document, such as format, padding, colors, and font sizes.
+   */
+  protected _config: PdfConfig
+
   /**
    * An object containing schema plugins that extend the the types of schemas that can be used.
    */
@@ -38,6 +43,15 @@ export class PdfBuilder {
   protected _page: number = 0
 
   /**
+   * Creates an instance of the PdfBuilder class.
+   * @param config - Configuration options for the PDF document, such as format, padding, colors, and font sizes.
+   */
+  constructor(config: PdfConfig) {
+    this.reset()
+    this._config = config
+  }
+
+  /**
    * Generates a PDF document based on the schemas and inputs provided to the builder.
    * @returns A Promise that resolves to a Blob representing the generated PDF document.
    */
@@ -47,9 +61,9 @@ export class PdfBuilder {
       template: {
         schemas: this._schemas,
         basePdf: {
-          width: 210,
-          height: 297,
-          padding: [10, 10, 10, 10],
+          width: this._config.format[0],
+          height: this._config.format[1],
+          padding: this._config.padding,
         },
         pdfmeVersion: PDFME_VERSION,
       },
@@ -71,7 +85,7 @@ export class PdfBuilder {
    * Resets the builder to its initial state.
    */
   protected reset(): void {
-    this._schemas = []
+    this._schemas = [[]]
     this._inputs = {}
     this._page = 0
     this._id = crypto.randomUUID()
@@ -122,10 +136,11 @@ export class PdfBuilder {
         x: options.x,
         y: options.y,
       },
-      width: options.width || 190,
-      height: options.height || 0,
-      fontColor: options.color,
-      fontSize: options.fontSize,
+      width:
+        options.width || this._config.format[0] - this._config.padding[1] - this._config.padding[3],
+      height: options.height || 0, // Height is auto-calculated based on the text content
+      fontColor: options.color || this._config.color?.text || undefined,
+      fontSize: options.fontSize || this._config.fontSize?.base,
     }
 
     // Append the text element to the current page
