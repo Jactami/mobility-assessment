@@ -32,29 +32,3 @@ CREATE TRIGGER handle_updated_at_pois
     BEFORE UPDATE ON public.pois
     FOR EACH ROW
     EXECUTE FUNCTION moddatetime('updated_at');
-
--- RLS
-ALTER TABLE public.pois ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Authenticated users can read the pois of their own projects." ON public.pois FOR SELECT
-TO authenticated
-USING ((SELECT auth.uid()) = (SELECT owner_id FROM public.projects WHERE id = project_id));
-
-
-CREATE POLICY "Authenticated users can insert pois into their own projects." ON public.pois FOR INSERT
-TO authenticated
-WITH CHECK ((SELECT auth.uid()) = (SELECT owner_id FROM public.projects WHERE id = project_id));
-
-CREATE POLICY "Authenticated users can update pois of their own projects." ON public.pois FOR UPDATE
-TO authenticated
-USING ((SELECT auth.uid()) = (SELECT owner_id FROM public.projects WHERE id = project_id));
-
-CREATE POLICY "Authenticated users can delete pois of their own projects." ON public.pois FOR DELETE
-TO authenticated
-USING ((SELECT auth.uid()) = (SELECT owner_id FROM public.projects WHERE id = project_id));
-
-REVOKE ALL ON TABLE public.pois FROM anon;
-
-GRANT ALL ON TABLE public.pois TO authenticated;
-
-GRANT ALL ON TABLE public.projects TO service_role;
