@@ -20,37 +20,12 @@ ALTER TABLE ONLY public.profiles
 
 ALTER TABLE ONLY public.profiles
     ADD CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
+    
 -- Moddatetime extension
 CREATE TRIGGER handle_updated_at_profiles
     BEFORE UPDATE ON public.profiles
     FOR EACH ROW
     EXECUTE FUNCTION moddatetime('updated_at');
-
--- RLS
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Authenticated users can read their own profiles." ON public.profiles FOR SELECT
-TO authenticated
-USING ((SELECT auth.uid()) = id);
-
-CREATE POLICY "Authenticated users can insert their own profiles." ON public.profiles FOR INSERT
-TO authenticated
-WITH CHECK ((SELECT auth.uid()) = id);
-
-CREATE POLICY "Authenticated users can update their own profiles." ON public.profiles FOR UPDATE
-TO authenticated
-USING ((SELECT auth.uid()) = id);
-
-CREATE POLICY "Authenticated users can delete their own profiles." ON public.profiles FOR DELETE
-TO authenticated
-USING ((SELECT auth.uid()) = id);
-
-REVOKE ALL ON TABLE public.profiles FROM anon;
-
-GRANT ALL ON TABLE public.profiles TO authenticated;
-
-GRANT ALL ON TABLE public.profiles TO service_role;
 
 -- Inserts a row into public.profiles
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -78,3 +53,4 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
 CREATE UNIQUE INDEX only_one_admin
 ON public.profiles ((user_role))
 WHERE user_role = 'admin';
+
