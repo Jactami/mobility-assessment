@@ -20,15 +20,14 @@ export function useAuthService() {
     initialized = true
     // Set up an event listener for authentication state changes
     supabase.auth.onAuthStateChange(async (_, session) => {
-      console.log('Auth state changed:', session?.access_token)
       if (session) {
         // user is signed in
         loadProfile(session.user.id)
-        authStore.setUser(session.user)
+        authStore.setSession(session)
       } else {
         // user is signed out
         authStore.setProfile(null)
-        authStore.setUser(null)
+        authStore.setSession(null)
       }
     })
   }

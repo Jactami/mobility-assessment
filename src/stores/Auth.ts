@@ -1,17 +1,27 @@
-import type { Profile } from '@/db/types'
-import type { User } from '@supabase/supabase-js'
+import type { Profile, UserRole } from '@/db/types'
+import type { Session, User } from '@supabase/supabase-js'
+import { jwtDecode } from 'jwt-decode'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
   const _user = ref<User | null>(null)
   const _profile = ref<null | Profile>(null)
+  const _role = ref<UserRole | null>(null)
 
   const user = computed(() => _user.value)
   const profile = computed(() => _profile.value)
+  const role = computed(() => _role.value)
 
-  function setUser(newUser: User | null) {
-    _user.value = newUser
+  function setSession(session: Session | null) {
+    if (session) {
+      _user.value = session.user
+      const jwt = jwtDecode<{ user_role: UserRole }>(session.access_token)
+      _role.value = jwt.user_role
+    } else {
+      _user.value = null
+      _role.value = null
+    }
     authInitializedResolve()
   }
 
@@ -28,9 +38,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     user,
-    setUser,
+    setSession,
     profile,
     setProfile,
+    role,
     authInitialized,
   }
 })
