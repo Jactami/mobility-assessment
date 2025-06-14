@@ -1,8 +1,9 @@
+import type { UserRole } from '@/db/types'
 import 'vue-router'
 
 declare module 'vue-router' {
   interface RouteMeta {
-    public?: boolean
+    roles?: UserRole[]
     devOnly?: boolean
   }
 }

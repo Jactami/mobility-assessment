@@ -9,6 +9,9 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'home',
     component: HomeView,
+    meta: {
+      roles: ['user'],
+    },
   },
   {
     path: '/playground',
@@ -17,33 +20,35 @@ const routes: RouteRecordRaw[] = [
     // this generates a separate chunk (About.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import('../views/PlaygroundView.vue'),
-    meta: {
-      public: true,
-      devOnly: true,
-    },
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('../views/SignInView.vue'),
-    meta: {
-      public: true,
-    },
   },
   {
     path: '/project/:projectId',
     name: 'project',
     component: () => import('../views/ProjectView.vue'),
+    meta: {
+      roles: ['user'],
+    },
   },
   {
     path: '/profile',
     name: 'profile',
     component: () => import('../views/ProfileView.vue'),
+    meta: {
+      roles: ['admin', 'user'],
+    },
   },
   {
     path: '/admin',
     name: 'admin',
     component: () => import('../views/AdminView.vue'),
+    meta: {
+      roles: ['admin'],
+    },
   },
 ]
 
@@ -56,15 +61,20 @@ const router = createRouter({
 // handle navigation with authentication
 router.beforeEach(async (to, _, next) => {
   // Allow navigation to public routes
-  if (to.meta.public) return next()
+  if (!to.meta.roles) return next()
 
   // Wait for authentication
   const authStore = useAuthStore()
   await authStore.authInitialized
 
-  if (authStore.user) {
-    // Allow user navigation, if user is authenticated
-    return next()
+  if (authStore.user && authStore.role) {
+    if (to.meta.roles.includes(authStore.role)) {
+      // Allow navigation, if user is authenticated and has the required role
+      return next()
+    } else {
+      // Redirect to home or admin, if user is authenticated but does not have the required role
+      return next(authStore.role === 'admin' ? '/admin' : '/')
+    }
   } else {
     // Redirect to login, if user not authenticated
     return next(`/login?redirect=${to.path}`)
