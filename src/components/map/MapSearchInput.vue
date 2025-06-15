@@ -79,30 +79,13 @@ async function search() {
     return
   }
 
-  // Parse response into coordinates and address
-  const [lon, lat] = geocoding.value[0].geometry.coordinates
-  const housenumber = geocoding.value[0].properties.geocoding.housenumber
-  const street =
-    // small villages might not have street names, so we use district or name as fallback
-    geocoding.value[0].properties.geocoding.street ||
-    geocoding.value[0].properties.geocoding.district
-  const postcode = geocoding.value[0].properties.geocoding.postcode
-  const city = geocoding.value[0].properties.geocoding.city
-  const country = geocoding.value[0].properties.geocoding.country
+  // TODO: Implement autocomplete to select a location from the results
+  // For now, we just take the first result
+  const location = geocoding.value[0]
 
-  // Update store
-  projectStore.updateProject({
-    latitude: Number(lat.toFixed(7)),
-    longitude: Number(lon.toFixed(7)),
-    housenumber,
-    street,
-    postcode,
-    city,
-    country,
-  })
+  // Update project store
+  projectStore.updateProject({ ...location })
 
-  // Get details for the location
-  // TODO: Decide where to put this logic, maybe in the store?
   if (
     !projectStore.project?.latitude ||
     !projectStore.project?.longitude ||
@@ -110,6 +93,7 @@ async function search() {
   )
     return
 
+  // Get POIs for the selected project location
   await getPois(
     projectStore.project?.latitude,
     projectStore.project?.longitude,
@@ -117,10 +101,12 @@ async function search() {
     projectStore.project.id,
   )
 
+  // If there is an error in the POI service, show error
   if (poisError.value) {
     errorToast(t('common.errorMessage'))
   }
 
+  // Update project store with POIs
   if (pois.value) {
     projectStore.updatePois(pois.value)
   }

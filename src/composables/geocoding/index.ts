@@ -1,16 +1,28 @@
 import axios from 'axios'
 import { ref } from 'vue'
-import type { GeocodeJSON, GeocodeJSONFeature } from './types'
+import type { Address, GeocodeJSON, GeocodeJSONFeature } from './types'
 
 /**
  * Composable function to interact with geocoding services.
  */
 export function useGeocodingService() {
-  const data = ref<GeocodeJSONFeature[] | null>(null)
+  const data = ref<Address[] | null>(null)
 
   // see: https://alexop.dev/posts/best-practices-for-error-handling-in-vue-composables/
   const loading = ref<boolean>(false)
   const error = ref<Error | null>(null)
+
+  async function getGeocoding(search: string) {
+    // Fetch geocoding data from Nominatim
+    const geocoding = await fetchGeocoding(search)
+
+    if (geocoding) {
+      // Transform the geocoding data into a structured address format
+      data.value = transformGeocodingToAddress(geocoding)
+    } else {
+      data.value = null
+    }
+  }
 
   /**
    * Get geocoding information from OpenStreetMap's Nominatim service.
@@ -18,7 +30,7 @@ export function useGeocodingService() {
    * @param search Search query for geocoding
    * @returns An array of geocoding results.
    */
-  async function getGeocoding(search: string) {
+  async function fetchGeocoding(search: string) {
     // Remove extra whitespace and replace spaces with plus signs
     const query = search.trim().replace(/ /g, '+')
 
@@ -41,12 +53,31 @@ export function useGeocodingService() {
 
       if (response.status !== 200) throw new Error(response.statusText)
 
-      data.value = response.data.features
+      return response.data.features
     } catch (err) {
       error.value = err instanceof Error ? err : new Error('An unknown error occurred')
     } finally {
       loading.value = false
     }
+  }
+
+  /**
+   * Transforms an array of geocoding features from Nominatim into a structured address format.
+   * @param features Array of geocoding features from Nominatim
+   * @returns Array of structured address objects
+   */
+  function transformGeocodingToAddress(features: GeocodeJSONFeature[]): Address[] {
+    return features.map((feature) => {
+      return {
+        longitude: Number(feature.geometry.coordinates[0].toFixed(7)), // Ensure lon + lat has 7 decimal places
+        latitude: Number(feature.geometry.coordinates[1].toFixed(7)),
+        housenumber: feature.properties.geocoding.housenumber,
+        street: feature.properties.geocoding.street,
+        postcode: feature.properties.geocoding.postcode,
+        city: feature.properties.geocoding.city,
+        country: feature.properties.geocoding.country,
+      }
+    })
   }
 
   return {

@@ -52,3 +52,17 @@ export interface GeocodeJSONProperties {
   // Optional administrative hierarchy
   admin?: Record<string, string>
 }
+
+/**
+ * Represents a structured address object.
+ * It is used to process and transform geocodes from Nominatim into a more manageable format.
+ */
+export interface Address {
+  latitude: number
+  longitude: number
+  housenumber?: string
+  street?: string
+  postcode?: string
+  city?: string
+  country?: string
+}
