@@ -1,16 +1,32 @@
 <template>
   <Layers.OlVectorLayer>
     <Sources.OlSourceVector>
-      <Map.OlFeature v-for="poi in projectStore.pois" :key="poi.id">
-        <!-- TODO: Replace circles with nice looking poi markers -->
-        <Geometries.OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
-        <Styles.OlStyle>
-          <Styles.OlStyleCircle :radius="4">
-            <Styles.OlStyleStroke :width="0" />
-            <Styles.OlStyleFill :color="getColorByCategory(poi)" />
-          </Styles.OlStyleCircle>
-        </Styles.OlStyle>
-      </Map.OlFeature>
+      <template v-for="poi in projectStore.pois" :key="poi.id">
+        <!-- Marker -->
+        <Map.OlFeature>
+          <Geometries.OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
+          <Styles.OlStyle>
+            <Styles.OlStyleIcon
+              src="/img/map/marker.svg"
+              :anchor="[0.5, 0.9]"
+              :color="getColorByCategory(poi)"
+            />
+          </Styles.OlStyle>
+        </Map.OlFeature>
+
+        <!-- Icon; TODO: Add white background -->
+        <Map.OlFeature>
+          <Geometries.OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
+          <Styles.OlStyle>
+            <Styles.OlStyleIcon
+              :src="`/img/map/${poi.category}.svg`"
+              :scale="0.5"
+              color="#000"
+              :anchor="[0.5, 1.4]"
+            />
+          </Styles.OlStyle>
+        </Map.OlFeature>
+      </template>
     </Sources.OlSourceVector>
   </Layers.OlVectorLayer>
 </template>
