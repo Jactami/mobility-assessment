@@ -41,8 +41,6 @@ import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { useGeocodingService } from '@/composables/geocoding'
 import { useNotification } from '@/composables/notification'
 import { usePoiService } from '@/composables/poi'
-import type { OverpassElement } from '@/composables/poi/types'
-import { DOMAINS } from '@/constants'
 import { useProjectStore } from '@/stores/Project'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -66,8 +64,6 @@ async function search() {
   if (loading.value) return
   if (!query.value.trim()) return
   if (!projectStore.project?.id) return
-
-  const projectId = projectStore.project.id
 
   await getGeocoding(query.value)
 
@@ -118,6 +114,7 @@ async function search() {
     projectStore.project?.latitude,
     projectStore.project?.longitude,
     projectStore.project?.radius,
+    projectStore.project.id,
   )
 
   if (poisError.value) {
@@ -125,27 +122,8 @@ async function search() {
   }
 
   if (pois.value) {
-    projectStore.updatePois(
-      pois.value.map((poi) => ({
-        osm_id: poi.id,
-        osm_type: poi.type,
-        project_id: projectId,
-        label: poi.tags?.name,
-        category: getPoiCategory(poi),
-        latitude: poi.type === 'node' ? poi.lat : poi.center.lat,
-        longitude: poi.type === 'node' ? poi.lon : poi.center.lon,
-      })),
-    )
+    projectStore.updatePois(pois.value)
   }
-}
-
-// FIXME: This function should not be here, maybe move this to a utility file or as a post-processing step in fetch composable
-function getPoiCategory(poi: OverpassElement) {
-  return (
-    DOMAINS.flatMap((domain) => domain.categories).find(
-      (category) => category.tagValue === poi.tags?.[category.tagKey],
-    )?.tagValue ?? 'unknown'
-  )
 }
 
 function resetQuery() {
