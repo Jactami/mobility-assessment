@@ -7,6 +7,7 @@ export type Database = {
         Row: {
           category: string
           created_at: string
+          distance: number
           id: string
           label: string | null
           latitude: number
@@ -19,6 +20,7 @@ export type Database = {
         Insert: {
           category: string
           created_at?: string
+          distance: number
           id?: string
           label?: string | null
           latitude: number
@@ -31,6 +33,7 @@ export type Database = {
         Update: {
           category?: string
           created_at?: string
+          distance?: number
           id?: string
           label?: string | null
           latitude?: number
@@ -130,6 +133,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      authorize: {
+        Args: { requested_role: Database['public']['Enums']['user_role'] }
+        Returns: boolean
+      }
       create_user: {
         Args: {
           first_name: string
@@ -140,6 +147,10 @@ export type Database = {
           user_id?: string
         }
         Returns: string
+      }
+      custom_access_token_hook: {
+        Args: { event: Json }
+        Returns: Json
       }
     }
     Enums: {

@@ -1,6 +1,7 @@
 import { DOMAINS } from '@/constants'
 import type { Poi } from '@/db/types'
 import axios from 'axios'
+import { getDistance } from 'ol/sphere'
 import { ref } from 'vue'
 import { OverpassQueryFactory } from './overpass/OverpassQueryFactory'
 import type { OverpassElement, OverpassResponse } from './types'
@@ -21,11 +22,15 @@ export function usePoiService() {
     // Fetch Overpass elements
     const elements = await fetchOverpassElements(lat, lon, radius)
 
-    // Process and transform Overpass response into POIs
     if (!elements) {
       data.value = null
     } else {
-      data.value = transformOverpassElementsToPois(elements, projectId)
+      // Process and transform Overpass response into POIs
+      let pois = transformOverpassElementsToPois(elements, projectId)
+      // Calculate distances for each POI
+      pois = calculateDistances(lat, lon, pois)
+      // assign the processed POIs to the data ref
+      data.value = pois
     }
   }
 
@@ -77,6 +82,7 @@ export function usePoiService() {
       category: getPoiCategory(element),
       latitude: element.type === 'node' ? element.lat : element.center.lat,
       longitude: element.type === 'node' ? element.lon : element.center.lon,
+      distance: Infinity, // Placeholder for distance, to be calculated later
     }))
   }
 
@@ -91,6 +97,21 @@ export function usePoiService() {
         (category) => category.tagValue === element.tags?.[category.tagKey],
       )?.tagValue ?? 'unknown'
     )
+  }
+
+  /**
+   * Calculates the distance between two geographical points.
+   * @param lat Latitude of the reference point.
+   * @param lon Longitude of the reference point.
+   * @param pois Array of POIs to calculate distances for.
+   * @returns An array of POIs with calculated distances.
+   */
+  function calculateDistances(lat: number, lon: number, pois: Poi[]) {
+    return pois.map((poi) => {
+      const distance = getDistance([lon, lat], [poi.longitude, poi.latitude])
+      poi.distance = Math.round(distance * 100) / 100 // Round to two decimal places
+      return poi
+    })
   }
 
   return {

@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS public.pois (
     label VARCHAR(100),
     category VARCHAR(50) NOT NULL,
     latitude DECIMAL(9,7) NOT NULL,
-    longitude DECIMAL(9,7) NOT NULL
+    longitude DECIMAL(9,7) NOT NULL,
+    distance DECIMAL(10,2) NOT NULL
     -- TODO: Decide whether to store geometry as well
 );
 
