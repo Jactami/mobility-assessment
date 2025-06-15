@@ -9,7 +9,7 @@
             <Styles.OlStyleIcon
               src="/img/map/marker.svg"
               :anchor="[0.5, 0.9]"
-              :color="getColorByCategory(poi)"
+              :color="getColorByDomain(poi)"
             />
           </Styles.OlStyle>
         </Map.OlFeature>
@@ -40,9 +40,9 @@ import { Geometries, Layers, Map, Sources, Styles } from 'vue3-openlayers'
 
 const projectStore = useProjectStore()
 
-function getColorByCategory(poi: Poi) {
-  return DOMAINS.flatMap((domain) => domain.categories).find(
-    (category) => category.name === poi.category,
+function getColorByDomain(poi: Poi) {
+  return DOMAINS.find((domain) =>
+    domain.categories.some((category) => category.name === poi.category),
   )?.color
 }
 </script>

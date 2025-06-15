@@ -4,7 +4,7 @@ export const DOMAINS: AreaDomain[] = [
   // Bildung + Erziehung
   {
     name: 'education',
-    color: '',
+    color: '#f0f', // TODO: Temporary color
     icon: '',
     categories: [],
   },
@@ -39,20 +39,16 @@ export const DOMAINS: AreaDomain[] = [
   // Nahversorgung + Dienstleistungen
   {
     name: 'daily needs',
-    color: '',
+    color: '#ff0', // TODO: Temporary color
     icon: '',
     categories: [
       {
         name: 'supermarket',
-        color: '#ff0', // TODO: Temporary color
-        icon: '',
         tagKey: 'shop',
         tagValue: 'supermarket',
       },
       {
         name: 'bakery',
-        color: '#f0f', // TODO: Temporary color
-        icon: '',
         tagKey: 'shop',
         tagValue: 'bakery',
       },
