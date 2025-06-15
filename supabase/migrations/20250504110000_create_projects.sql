@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
     title VARCHAR(100) NOT NULL,
     latitude DECIMAL(9,7),
     longitude DECIMAL(9,7),
+    name VARCHAR(100),
     housenumber VARCHAR(10),
     street VARCHAR(100),
     postcode VARCHAR(5),

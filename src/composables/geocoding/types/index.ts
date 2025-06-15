@@ -60,6 +60,7 @@ export interface GeocodeJSONProperties {
 export interface Address {
   latitude: number
   longitude: number
+  name?: string
   housenumber?: string
   street?: string
   postcode?: string

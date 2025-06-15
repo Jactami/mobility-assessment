@@ -68,14 +68,26 @@ export function useGeocodingService() {
    */
   function transformGeocodingToAddress(features: GeocodeJSONFeature[]): Address[] {
     return features.map((feature) => {
+      // Parse Nominatim response
+      const longitude = Number(feature.geometry.coordinates[0].toFixed(7)), // Ensure lon + lat has 7 decimal places
+        latitude = Number(feature.geometry.coordinates[1].toFixed(7)),
+        name = feature.properties.geocoding.name,
+        housenumber = feature.properties.geocoding.housenumber,
+        // // Use district as fallback if street is not available (i.e., small villages)
+        street = feature.properties.geocoding.street || feature.properties.geocoding.district,
+        postcode = feature.properties.geocoding.postcode,
+        city = feature.properties.geocoding.city,
+        country = feature.properties.geocoding.country
+
       return {
-        longitude: Number(feature.geometry.coordinates[0].toFixed(7)), // Ensure lon + lat has 7 decimal places
-        latitude: Number(feature.geometry.coordinates[1].toFixed(7)),
-        housenumber: feature.properties.geocoding.housenumber,
-        street: feature.properties.geocoding.street,
-        postcode: feature.properties.geocoding.postcode,
-        city: feature.properties.geocoding.city,
-        country: feature.properties.geocoding.country,
+        longitude,
+        latitude,
+        name: housenumber && street ? undefined : name, // If housenumber and street are present, we do not need the name
+        housenumber,
+        street: housenumber ? street : undefined, // If no housenumber is present, we do not need the street
+        postcode,
+        city,
+        country,
       }
     })
   }

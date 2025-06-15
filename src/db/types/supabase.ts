@@ -89,6 +89,7 @@ export type Database = {
           id: string
           latitude: number | null
           longitude: number | null
+          name: string | null
           owner_id: string
           postcode: string | null
           radius: number | null
@@ -104,6 +105,7 @@ export type Database = {
           id?: string
           latitude?: number | null
           longitude?: number | null
+          name?: string | null
           owner_id: string
           postcode?: string | null
           radius?: number | null
@@ -119,6 +121,7 @@ export type Database = {
           id?: string
           latitude?: number | null
           longitude?: number | null
+          name?: string | null
           owner_id?: string
           postcode?: string | null
           radius?: number | null

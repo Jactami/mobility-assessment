@@ -82,6 +82,7 @@ async function search() {
   // TODO: Implement autocomplete to select a location from the results
   // For now, we just take the first result
   const location = geocoding.value[0]
+  console.log(location)
 
   // Update project store
   projectStore.updateProject({ ...location })
@@ -129,9 +130,11 @@ watch(
   (newProject) => {
     if (newProject) {
       let address = ''
+      address += projectStore.project?.name ? projectStore.project.name + ', ' : ''
       address += projectStore.project?.street ? projectStore.project.street : ''
-      address += projectStore.project?.housenumber ? ' ' + projectStore.project.housenumber : ''
-      address += address ? ', ' : ''
+      address += projectStore.project?.housenumber
+        ? ' ' + projectStore.project.housenumber + ', '
+        : ''
       address += projectStore.project?.postcode ? projectStore.project.postcode + ' ' : ''
       address += projectStore.project?.city ? projectStore.project.city : ''
 
