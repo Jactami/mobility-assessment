@@ -6,7 +6,28 @@ export const DOMAINS: AreaDomain[] = [
     name: 'education',
     color: '#f0f', // TODO: Temporary color
     icon: '',
-    categories: [],
+    categories: [
+      {
+        name: 'school',
+        tagKey: 'amenity',
+        tagValue: 'school',
+      },
+      {
+        name: 'university',
+        tagKey: 'amenity',
+        tagValue: 'university',
+      },
+      {
+        name: 'kindergarten',
+        tagKey: 'amenity',
+        tagValue: 'kindergarten',
+      },
+      {
+        name: 'library',
+        tagKey: 'amenity',
+        tagValue: 'library',
+      },
+    ],
   },
   // Freizeit + Unterhaltung
   {
