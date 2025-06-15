@@ -82,7 +82,6 @@ async function search() {
   // TODO: Implement autocomplete to select a location from the results
   // For now, we just take the first result
   const location = geocoding.value[0]
-  console.log(location)
 
   // Update project store
   projectStore.updateProject({ ...location })
