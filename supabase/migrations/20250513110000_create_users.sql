@@ -33,12 +33,7 @@ BEGIN
     VALUES (
         '00000000-0000-0000-0000-000000000000', user_id, 'authenticated', 'authenticated', 
         email, encrypted_pw, confirmation, confirmation, confirmation, confirmation,
-        '{}', jsonb_build_object(
-            'first_name', first_name,
-            'last_name', last_name,
-            'user_role', user_role
-        ),
-        now(), now(), '', '', '', ''
+        '{}', '{}', now(), now(), '', '', '', ''
     );
 
     -- Insert into auth.identities
