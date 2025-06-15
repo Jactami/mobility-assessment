@@ -2,13 +2,9 @@
   <Layers.OlVectorLayer>
     <Sources.OlSourceVector>
       <Map.OlFeature>
-        <!-- TODO: Replace circle with nice looking location marker -->
         <Geometries.OlGeomPoint :coordinates="center" />
         <Styles.OlStyle>
-          <Styles.OlStyleCircle :radius="10">
-            <Styles.OlStyleStroke :width="0" />
-            <Styles.OlStyleFill color="red" />
-          </Styles.OlStyleCircle>
+          <Styles.OlStyleIcon src="/img/map/marker.svg" :anchor="[0.5, 0.9]" color="#ea4335" />
         </Styles.OlStyle>
       </Map.OlFeature>
     </Sources.OlSourceVector>
