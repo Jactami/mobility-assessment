@@ -30,6 +30,9 @@
 
       <!-- Location Layer -->
       <MapLayerLocation :center="center" />
+
+      <!-- Overlay Layer -->
+      <MapLayerOverlay />
     </template>
 
     <!-- Map Control Buttons -->
@@ -59,6 +62,7 @@ import { useI18n } from 'vue-i18n'
 import { Layers, Map, MapControls, Sources } from 'vue3-openlayers'
 import { useMapUtils } from './composables'
 import MapLayerLocation from './layers/MapLayerLocation.vue'
+import MapLayerOverlay from './layers/MapLayerOverlay.vue'
 import MapLayerPois from './layers/MapLayerPois.vue'
 import MapLayerRadius from './layers/MapLayerRadius.vue'
 
