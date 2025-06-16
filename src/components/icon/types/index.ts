@@ -26,6 +26,7 @@ export const iconMap = {
   search: MaterialSymbolsSearchRounded,
   loading: LineMdLoadingTwotoneLoop,
   user: MaterialSymbolsPerson,
+  close: MaterialSymbolsCloseRounded,
 }
 
 export type Icon = keyof typeof iconMap
