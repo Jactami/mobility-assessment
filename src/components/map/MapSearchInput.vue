@@ -15,13 +15,7 @@
       @keydown.enter="search"
     >
       <template #suffixIcon>
-        <button
-          v-if="query && !loading"
-          class="cursor-pointer hover:text-primary"
-          @click="resetQuery"
-        >
-          <IconRenderer icon="clear" />
-        </button>
+        <IconButton v-if="query && !loading" icon="close" @click="resetQuery" />
         <IconRenderer v-else-if="loading" icon="loading" />
       </template>
     </FormKit>
@@ -44,6 +38,7 @@ import { usePoiService } from '@/composables/poi'
 import { useProjectStore } from '@/stores/Project'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import IconButton from '../icon/IconButton.vue'
 
 const { t } = useI18n()
 const {
