@@ -4,7 +4,7 @@
       <Map.OlFeature>
         <Geometries.OlGeomPoint :coordinates="center" />
         <Styles.OlStyle>
-          <Styles.OlStyleIcon src="/img/map/marker.svg" :anchor="[0.5, 0.9]" color="#ea4335" />
+          <Styles.OlStyleIcon src="/img/map/center.svg" :anchor="[0.5, 0.9]" color="#be0030" />
         </Styles.OlStyle>
       </Map.OlFeature>
     </Sources.OlSourceVector>

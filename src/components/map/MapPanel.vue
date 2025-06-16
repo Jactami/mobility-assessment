@@ -34,7 +34,12 @@
       :zoom-out-tip-label="t('map.zoomOut')"
     />
     <MapControls.OlFullscreenControl :tip-label="t('map.toggleFullscreen')" />
-    <MapControls.OlZoomtoextentControl :extent="extent" label="🞋" :tip-label="t('map.resetMap')" />
+    <MapControls.OlZoomtoextentControl
+      :extent="extent"
+      label="🞋"
+      :tip-label="t('map.resetMap')"
+      class-name="ol-zoom-extent [&>button]:!text-[#be0030]"
+    />
     <MapControls.OlScalelineControl units="metric" />
   </Map.OlMap>
 </template>
