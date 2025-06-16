@@ -1,6 +1,10 @@
 <template>
   <Map.OlMap ref="mapRef" class="h-[500px] overflow-hidden rounded-border">
-    <Map.OlView :center="center" :zoom="zoom" />
+    <Map.OlView
+      :center="center"
+      :zoom="zoom"
+      @change:resolution="(e) => (zoom = e.target.getZoom())"
+    />
 
     <!-- Openstreetmap Layer -->
     <Layers.OlTileLayer>
