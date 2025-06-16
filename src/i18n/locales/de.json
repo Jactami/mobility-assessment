@@ -60,5 +60,23 @@
     "notFound": "Projekt konnte nicht gefunden werden.",
     "saveError": "Fehler beim Speichern des Projekts",
     "saveSuccess": "Projekt erfolgreich gespeichert"
+  },
+  "category": {
+    "school": "Schule",
+    "kindergarten": "Kindergarten",
+    "university": "Universität",
+    "library": "Bibliothek",
+    "supermarket": "Supermarkt",
+    "drugstore": "Drogerie",
+    "bakery": "Bäckerei",
+    "butcher": "Metzgerei",
+    "hairdresser": "Friseur",
+    "bank": "Bank",
+    "restaurant": "Restaurant",
+    "cafe": "Café",
+    "bar": "Bar",
+    "theater": "Theater",
+    "cinema": "Kino",
+    "clothing": "Bekleidungsgeschäft"
   }
 }
