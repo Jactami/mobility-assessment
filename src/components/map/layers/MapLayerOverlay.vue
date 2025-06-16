@@ -22,8 +22,8 @@
     positioning="bottom-center"
     :offset="[0, -28]"
   >
-    <BaseCard class="relative w-full min-w-64 bg-surface p-2">
-      <div class="flex justify-between gap-x-10">
+    <BaseCard class="relative max-w-96 min-w-64 bg-surface p-2">
+      <div class="flex items-start justify-between gap-x-10">
         <strong>{{ selectedPoi.label }}</strong>
         <IconButton icon="close" @click="selectedPoi = null" />
       </div>
