@@ -58,10 +58,18 @@ const { n, t } = useI18n()
 const selectedPoi = ref<Poi | null>(null)
 
 function handleSelect(event: SelectEvent) {
-  selectedPoi.value = event.selected[0].getProperties().poi
+  // Reset selectedPoi if click outside of any feature
+  if (event.selected.length === 0) {
+    selectedPoi.value = null
+    return
+  }
+
+  // Otherwise, set the selected POI from the first selected feature
+  selectedPoi.value = event.selected[0].getProperties()?.poi
 }
 
 function selectInteractionFilter(feature: Feature) {
+  // Only select features that have a 'poi' property
   return feature.get('poi') !== undefined
 }
 </script>
