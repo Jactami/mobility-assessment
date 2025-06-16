@@ -113,6 +113,11 @@ export const DOMAINS: AreaDomain[] = [
         tagValue: 'chemist',
       },
       {
+        name: 'clothing',
+        tagKey: 'shop',
+        tagValue: 'clothes',
+      },
+      {
         name: 'hairdresser',
         tagKey: 'shop',
         tagValue: 'hairdresser',
