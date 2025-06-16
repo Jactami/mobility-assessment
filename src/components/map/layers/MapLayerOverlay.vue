@@ -22,12 +22,10 @@
     positioning="bottom-center"
     :offset="[0, -28]"
   >
-    <BaseCard class="relative w-full min-w-64 bg-white p-2">
+    <BaseCard class="relative w-full min-w-64 bg-surface p-2">
       <div class="flex justify-between gap-x-10">
         <strong>{{ selectedPoi.label }}</strong>
-        <button @click="selectedPoi = null">
-          <IconRenderer icon="close" />
-        </button>
+        <IconButton icon="close" @click="selectedPoi = null" />
       </div>
       <div class="mt-3 flex justify-between gap-x-10 text-sm text-on-surface-variant">
         <div class="flex items-center gap-x-1">
@@ -46,7 +44,7 @@
 
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue'
-import IconRenderer from '@/components/icon/IconRenderer.vue'
+import IconButton from '@/components/icon/IconButton.vue'
 import type { Poi } from '@/db/types'
 import type { Feature } from 'ol'
 import type { SelectEvent } from 'ol/interaction/Select'
