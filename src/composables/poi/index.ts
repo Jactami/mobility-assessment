@@ -95,7 +95,7 @@ export function usePoiService() {
     return (
       DOMAINS.flatMap((domain) => domain.categories).find(
         (category) => category.tagValue === element.tags?.[category.tagKey],
-      )?.tagValue ?? 'unknown'
+      )?.name ?? 'unknown'
     )
   }
 
