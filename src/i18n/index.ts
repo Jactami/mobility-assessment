@@ -6,4 +6,15 @@ export default createI18n({
   locale: 'de',
   availableLocales: ['de'],
   messages: { de },
+  numberFormats: {
+    de: {
+      meter: {
+        style: 'unit',
+        unit: 'meter',
+        unitDisplay: 'short',
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      },
+    },
+  },
 })
