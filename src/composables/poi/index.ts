@@ -27,8 +27,15 @@ export function usePoiService() {
     } else {
       // Process and transform Overpass response into POIs
       let pois = transformOverpassElementsToPois(elements, projectId)
+
       // Calculate distances for each POI
       pois = calculateDistances(lat, lon, pois)
+
+      // Filter POIs by radius
+      // Nodes of a way or relation might lay inside the radius, but the centroid is not.
+      // TODO: Decide if these POIs should be filtered out or just marked and let user decide.
+      pois = filterPoisByDistance(pois, radius)
+
       // assign the processed POIs to the data ref
       data.value = pois
     }
@@ -112,6 +119,16 @@ export function usePoiService() {
       poi.distance = Math.round(distance * 100) / 100 // Round to two decimal places
       return poi
     })
+  }
+
+  /**
+   * Filters POIs by distance based on a specified threshold.
+   * @param pois Array of POIs to filter.
+   * @param threshold Distance threshold.
+   * @returns Filtered array of POIs.
+   */
+  function filterPoisByDistance(pois: Poi[], threshold: number): Poi[] {
+    return pois.filter((poi) => poi.distance <= threshold)
   }
 
   return {
