@@ -56,8 +56,7 @@
     <MapControls.OlScalelineControl units="metric" />
 
     <!-- Map Interactions -->
-    <Interactions.OlInteractionMouseWheelZoom :condition="() => !disabled" />
-    <Interactions.OlInteractionPointer :condition="() => !disabled" />
+    <Interactions.OlInteractionPointer :handle-event="() => !disabled" />
   </Map.OlMap>
 </template>
 
