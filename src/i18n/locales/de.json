@@ -62,6 +62,7 @@
     "saveSuccess": "Projekt erfolgreich gespeichert"
   },
   "category": {
+    "atm": "Geldautomat",
     "bakery": "Bäckerei",
     "bank": "Bank",
     "bar": "Bar",
@@ -69,6 +70,7 @@
     "butcher": "Metzgerei",
     "cafe": "Café",
     "car": "Car Sharing",
+    "care": "Pflegeeinrichtung",
     "cinema": "Kino",
     "clothing": "Bekleidungsgeschäft",
     "dentist": "Zahnarztpraxis",
@@ -81,12 +83,15 @@
     "kindergarten": "Kindergarten",
     "library": "Bibliothek",
     "park": "Park",
-    "playground": "Spielplatz",
     "pharmacy": "Apotheke",
-    "publicTransport": "Öffentlicher Nahverkehr",
+    "pitch": "Sportplatz",
+    "playground": "Spielplatz",
+    "post": "Post- und Paketstelle",
+    "publicTransport": "Haltestelle Öffentlicher Verkehr",
     "restaurant": "Restaurant",
     "school": "Schule",
     "supermarket": "Supermarkt",
+    "swimming": "Badestätte",
     "taxi": "Taxistand",
     "theater": "Theater",
     "university": "Universität"

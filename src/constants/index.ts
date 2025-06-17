@@ -21,6 +21,7 @@ export const DOMAINS: AreaDomain[] = [
         tagValue: 'university',
       },
       {
+        // TODO: Decide if also include amenity=childcare
         name: 'kindergarten',
         tagKey: 'amenity',
         tagValue: 'kindergarten',
@@ -68,6 +69,18 @@ export const DOMAINS: AreaDomain[] = [
         tagKey: 'leisure',
         tagValue: 'fitness_centre',
       },
+      {
+        // TODO: handle different types of pitches (e.g. football, basketball)
+        name: 'pitch',
+        tagKey: 'leisure',
+        tagValue: 'pitch',
+      },
+      {
+        // TODO: also handle leisure=bathing_place, amenity=public_bath, leisure=water_park
+        name: 'swimming',
+        tagKey: 'leisure',
+        tagValue: 'swimming_area',
+      },
     ],
   },
   // Gesundheit + Medizin
@@ -95,6 +108,12 @@ export const DOMAINS: AreaDomain[] = [
         name: 'dentist',
         tagKey: 'amenity',
         tagValue: 'dentist',
+      },
+      {
+        // TODO: add social_facility=assisted_living, social_facility=day_care
+        name: 'care',
+        tagKey: 'amenity',
+        tagValue: 'nursing_home',
       },
     ],
   },
@@ -191,6 +210,17 @@ export const DOMAINS: AreaDomain[] = [
         name: 'bank',
         tagKey: 'amenity',
         tagValue: 'bank',
+      },
+      {
+        name: 'atm',
+        tagKey: 'amenity',
+        tagValue: 'atm',
+      },
+      {
+        // TODO: also add amenity=parcel_locker, post_office=post_partner
+        name: 'post',
+        tagKey: 'amenity',
+        tagValue: 'post_office',
       },
     ],
   },
