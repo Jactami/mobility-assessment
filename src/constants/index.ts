@@ -63,6 +63,11 @@ export const DOMAINS: AreaDomain[] = [
         tagKey: 'amenity',
         tagValue: 'theatre',
       },
+      {
+        name: 'gym',
+        tagKey: 'leisure',
+        tagValue: 'fitness_centre',
+      },
     ],
   },
   // Gesundheit + Medizin
@@ -70,21 +75,81 @@ export const DOMAINS: AreaDomain[] = [
     name: 'healthcare',
     color: '#7570b3',
     icon: '',
-    categories: [],
+    categories: [
+      {
+        name: 'hospital',
+        tagKey: 'amenity',
+        tagValue: 'hospital',
+      },
+      {
+        name: 'doctor',
+        tagKey: 'amenity',
+        tagValue: 'doctors',
+      },
+      {
+        name: 'pharmacy',
+        tagKey: 'amenity',
+        tagValue: 'pharmacy',
+      },
+      {
+        name: 'dentist',
+        tagKey: 'amenity',
+        tagValue: 'dentist',
+      },
+    ],
   },
   // Nahverkehr + Mobilität
   {
     name: 'mobility', // TODO: change to transport (?)
     color: '#e7298a',
     icon: '',
-    categories: [],
+    categories: [
+      {
+        // TODO: add: railway and tram
+        name: 'publicTransport',
+        tagKey: 'highway',
+        tagValue: 'bus_stop', // TODO: also bus_station?
+      },
+      {
+        name: 'bicycle',
+        tagKey: 'amenity',
+        tagValue: 'bicycle_rental',
+      },
+      {
+        name: 'car',
+        tagKey: 'amenity',
+        tagValue: 'car_rental',
+      },
+      {
+        name: 'taxi',
+        tagKey: 'amenity',
+        tagValue: 'taxi',
+      },
+    ],
   },
   // Naherholung + Natur
   {
     name: 'nature',
     color: '#66a61e',
     icon: '',
-    categories: [],
+    categories: [
+      {
+        name: 'park',
+        tagKey: 'leisure',
+        tagValue: 'park',
+      },
+      {
+        name: 'playground',
+        tagKey: 'leisure',
+        tagValue: 'playground',
+      },
+      {
+        // TODO: natural=wood might also be fitting here
+        name: 'forest',
+        tagKey: 'landuse',
+        tagValue: 'forest',
+      },
+    ],
   },
   // Nahversorgung + Dienstleistungen
   {
