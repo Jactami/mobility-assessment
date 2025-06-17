@@ -1,5 +1,5 @@
 <template>
-  <Layers.OlVectorLayer>
+  <Layers.OlVectorLayer :min-zoom="10">
     <Sources.OlSourceVector>
       <template v-for="poi in projectStore.pois" :key="poi.id">
         <!-- Marker: Append poi to properties for selection -->
