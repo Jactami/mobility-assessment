@@ -21,7 +21,8 @@
         mapRef &&
         projectStore.project?.longitude &&
         projectStore.project.latitude &&
-        projectStore.project?.radius
+        projectStore.project?.radius &&
+        !disabled
       "
     >
       <!-- Radius Layer -->
