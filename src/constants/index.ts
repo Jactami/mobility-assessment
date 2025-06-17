@@ -85,7 +85,7 @@ export const DOMAINS: AreaDomain[] = [
   },
   // Gesundheit + Medizin
   {
-    name: 'healthcare',
+    name: 'health',
     color: '#7570b3',
     icon: '',
     categories: [
@@ -148,7 +148,7 @@ export const DOMAINS: AreaDomain[] = [
   },
   // Naherholung + Natur
   {
-    name: 'nature',
+    name: 'recreation',
     color: '#66a61e',
     icon: '',
     categories: [
@@ -172,7 +172,7 @@ export const DOMAINS: AreaDomain[] = [
   },
   // Nahversorgung + Dienstleistungen
   {
-    name: 'daily needs',
+    name: 'supply',
     color: '#e6ab02',
     icon: '',
     categories: [

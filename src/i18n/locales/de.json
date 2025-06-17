@@ -61,6 +61,14 @@
     "saveError": "Fehler beim Speichern des Projekts",
     "saveSuccess": "Projekt erfolgreich gespeichert"
   },
+  "domain": {
+    "education": "Bildung",
+    "health": "Gesundheit",
+    "leisure": "Freizeit",
+    "mobility": "Mobilität",
+    "recreation": "Erholung",
+    "supply": "Nahversorgung"
+  },
   "category": {
     "atm": "Geldautomat",
     "bakery": "Bäckerei",
