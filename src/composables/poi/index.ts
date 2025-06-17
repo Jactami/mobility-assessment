@@ -128,7 +128,7 @@ export function usePoiService() {
    * @returns Filtered array of POIs.
    */
   function filterPoisByDistance(pois: Poi[], threshold: number): Poi[] {
-    return pois.filter((poi) => poi.distance < threshold)
+    return pois.filter((poi) => poi.distance <= threshold)
   }
 
   return {
