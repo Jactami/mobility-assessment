@@ -2,7 +2,7 @@
   <Layers.OlVectorLayer>
     <Sources.OlSourceVector>
       <Map.OlFeature>
-        <Geometries.OlGeomCircle :center="center" :radius="radius" />
+        <Geometries.OlGeomCircle :center="location" :radius="radius" />
         <Styles.OlStyle>
           <Styles.OlStyleStroke color="rgb(0,153,255)" :width="1" />
           <Styles.OlStyleFill color="rgba(255,255,255,0.30)" />
@@ -17,7 +17,7 @@ import type { Coordinate } from 'ol/coordinate'
 import { Geometries, Layers, Map, Sources, Styles } from 'vue3-openlayers'
 
 defineProps<{
-  center: Coordinate
+  location: Coordinate
   radius: number
 }>()
 </script>

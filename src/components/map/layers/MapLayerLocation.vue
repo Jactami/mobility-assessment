@@ -2,7 +2,7 @@
   <Layers.OlVectorLayer>
     <Sources.OlSourceVector>
       <Map.OlFeature>
-        <Geometries.OlGeomPoint :coordinates="center" />
+        <Geometries.OlGeomPoint :coordinates="location" />
         <Styles.OlStyle>
           <Styles.OlStyleIcon src="/img/map/center.svg" :anchor="[0.5, 0.9]" color="#be0030" />
         </Styles.OlStyle>
@@ -16,6 +16,6 @@ import type { Coordinate } from 'ol/coordinate'
 import { Geometries, Layers, Map, Sources, Styles } from 'vue3-openlayers'
 
 defineProps<{
-  center: Coordinate
+  location: Coordinate
 }>()
 </script>

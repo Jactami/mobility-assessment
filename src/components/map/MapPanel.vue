@@ -8,6 +8,7 @@
       :center="center"
       :zoom="zoom"
       @change:resolution="(e) => (zoom = e.target.getZoom())"
+      @change:center="(e) => (center = e.target.getCenter())"
     />
 
     <!-- Openstreetmap Layer -->
@@ -25,15 +26,15 @@
     >
       <!-- Radius Layer -->
       <MapLayerRadius
-        :center="center"
-        :radius="metersToPixels(mapRef.map as OlMap, center, projectStore.project.radius)"
+        :location="location"
+        :radius="metersToPixels(mapRef.map as OlMap, location, projectStore.project.radius)"
       />
 
       <!-- Points of Interest Layer -->
       <MapLayerPois />
 
       <!-- Location Layer -->
-      <MapLayerLocation :center="center" />
+      <MapLayerLocation :location="location" />
 
       <!-- Overlay Layer -->
       <MapLayerOverlay />
@@ -56,6 +57,7 @@
     <MapControls.OlScalelineControl units="metric" />
 
     <!-- Map Interactions -->
+    <Interactions.OlInteractionMouseWheelZoom :use-anchor="true" />
     <Interactions.OlInteractionPointer :handle-event="() => !disabled" />
   </Map.OlMap>
 </template>
@@ -89,13 +91,15 @@ const mapRef = ref<{ map: OlMap } | null>(null)
 // Default coordinates and zoom level centered on Germany
 const lat = ref(51.1634)
 const lon = ref(10.4477)
+
+const center = ref(fromLonLat([lon.value, lat.value]))
 const zoom = ref(5.7)
 
 // Extent for the map view
 const extent = ref<Extent>([])
 
-// Computed center for the map view based on current location
-const center = computed(() => fromLonLat([lon.value, lat.value]))
+// Computed location center for the map view based on current location
+const location = computed(() => fromLonLat([lon.value, lat.value]))
 
 // Update and initialize map view when the project location changes
 watch(
@@ -106,8 +110,9 @@ watch(
       // Update map center and zoom based on project location
       lon.value = longitude
       lat.value = latitude
+      center.value = fromLonLat([longitude, latitude])
       const offset = radius * 0.1
-      zoom.value = zoomFromMeters(mapRef.value.map as OlMap, center.value, (radius + offset) * 2)
+      zoom.value = zoomFromMeters(mapRef.value.map as OlMap, location.value, (radius + offset) * 2)
 
       // save extent based on the new project location
       await nextTick()
