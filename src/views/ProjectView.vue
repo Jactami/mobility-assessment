@@ -1,10 +1,13 @@
 <template>
   <BaseSection>
-    <MapSearchInput @search-initiated="mapLoading = true" @search-completed="mapLoading = false" />
-    <MapPanel :disabled="mapLoading" />
+    <MapSearchInput
+      @search-initiated="geodataLoading = true"
+      @search-completed="geodataLoading = false"
+    />
+    <MapPanel :disabled="geodataLoading" />
     <!-- Temporary save button -->
     <div class="mt-10 flex justify-center">
-      <BaseButton :disabled="!isProjectDirty" @click="saveProject">
+      <BaseButton :disabled="!isProjectDirty || geodataLoading" @click="saveProject">
         {{ t('common.save') }}
       </BaseButton>
     </div>
@@ -47,7 +50,8 @@ const { pdf, loading, error, createPdf } = usePdf()
 const project = ref<Project | null>(null)
 const pois = ref<Poi[] | null>(null)
 
-const mapLoading = ref(false)
+// a loading flag to indicate if geodata is being fetched
+const geodataLoading = ref(false)
 
 // Checks if the project has unsaved changes in a simple way
 const isProjectDirty = computed(
