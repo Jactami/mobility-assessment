@@ -40,6 +40,11 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import IconButton from '../icon/IconButton.vue'
 
+const emit = defineEmits<{
+  (e: 'search-initiated'): void
+  (e: 'search-completed'): void
+}>()
+
 const { t } = useI18n()
 const {
   data: geocoding,
@@ -137,4 +142,13 @@ watch(
   },
   { immediate: true },
 )
+
+// Inform parent component about search status changes
+watch(loading, (isLoading) => {
+  if (isLoading) {
+    emit('search-initiated')
+  } else {
+    emit('search-completed')
+  }
+})
 </script>

@@ -1,5 +1,9 @@
 <template>
-  <Map.OlMap ref="mapRef" class="h-[500px] overflow-hidden rounded-border">
+  <Map.OlMap
+    ref="mapRef"
+    class="h-[500px] overflow-hidden rounded-border"
+    :class="{ 'opacity-60': disabled }"
+  >
     <Map.OlView
       :center="center"
       :zoom="zoom"
@@ -36,18 +40,24 @@
     </template>
 
     <!-- Map Control Buttons -->
-    <MapControls.OlZoomControl
-      :zoom-in-tip-label="t('map.zoomIn')"
-      :zoom-out-tip-label="t('map.zoomOut')"
-    />
-    <MapControls.OlFullscreenControl :tip-label="t('map.toggleFullscreen')" />
-    <MapControls.OlZoomtoextentControl
-      :extent="extent"
-      label="🞋"
-      :tip-label="t('map.resetMap')"
-      class-name="ol-zoom-extent [&>button]:!text-[#be0030]"
-    />
+    <template v-if="!disabled">
+      <MapControls.OlZoomControl
+        :zoom-in-tip-label="t('map.zoomIn')"
+        :zoom-out-tip-label="t('map.zoomOut')"
+      />
+      <MapControls.OlFullscreenControl :tip-label="t('map.toggleFullscreen')" />
+      <MapControls.OlZoomtoextentControl
+        :extent="extent"
+        label="🞋"
+        :tip-label="t('map.resetMap')"
+        class-name="ol-zoom-extent [&>button]:!text-[#be0030]"
+      />
+    </template>
     <MapControls.OlScalelineControl units="metric" />
+
+    <!-- Map Interactions -->
+    <Interactions.OlInteractionMouseWheelZoom :condition="() => !disabled" />
+    <Interactions.OlInteractionPointer :condition="() => !disabled" />
   </Map.OlMap>
 </template>
 
@@ -59,12 +69,16 @@ import type OlMap from 'ol/Map'
 import { fromLonLat } from 'ol/proj'
 import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Layers, Map, MapControls, Sources } from 'vue3-openlayers'
+import { Interactions, Layers, Map, MapControls, Sources } from 'vue3-openlayers'
 import { useMapUtils } from './composables'
 import MapLayerLocation from './layers/MapLayerLocation.vue'
 import MapLayerOverlay from './layers/MapLayerOverlay.vue'
 import MapLayerPois from './layers/MapLayerPois.vue'
 import MapLayerRadius from './layers/MapLayerRadius.vue'
+
+defineProps<{
+  disabled?: boolean
+}>()
 
 const { t } = useI18n()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })

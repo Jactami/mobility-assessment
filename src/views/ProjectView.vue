@@ -1,7 +1,7 @@
 <template>
   <BaseSection>
-    <MapSearchInput />
-    <MapPanel />
+    <MapSearchInput @search-initiated="mapLoading = true" @search-completed="mapLoading = false" />
+    <MapPanel :disabled="mapLoading" />
     <!-- Temporary save button -->
     <div class="mt-10 flex justify-center">
       <BaseButton :disabled="!isProjectDirty" @click="saveProject">
@@ -46,6 +46,8 @@ const { pdf, loading, error, createPdf } = usePdf()
 
 const project = ref<Project | null>(null)
 const pois = ref<Poi[] | null>(null)
+
+const mapLoading = ref(false)
 
 // Checks if the project has unsaved changes in a simple way
 const isProjectDirty = computed(
