@@ -12,24 +12,20 @@ export const DOMAINS: AreaDomain[] = [
     categories: [
       {
         name: 'school',
-        tagKey: 'amenity',
-        tagValue: 'school',
+        tags: [{ key: 'amenity', value: 'school' }],
       },
       {
         name: 'university',
-        tagKey: 'amenity',
-        tagValue: 'university',
+        tags: [{ key: 'amenity', value: 'university' }],
       },
       {
         // TODO: Decide if also include amenity=childcare
         name: 'kindergarten',
-        tagKey: 'amenity',
-        tagValue: 'kindergarten',
+        tags: [{ key: 'amenity', value: 'kindergarten' }],
       },
       {
         name: 'library',
-        tagKey: 'amenity',
-        tagValue: 'library',
+        tags: [{ key: 'amenity', value: 'library' }],
       },
     ],
   },
@@ -41,45 +37,37 @@ export const DOMAINS: AreaDomain[] = [
     categories: [
       {
         name: 'restaurant',
-        tagKey: 'amenity',
-        tagValue: 'restaurant',
+        tags: [{ key: 'amenity', value: 'restaurant' }],
       },
       {
         name: 'cafe',
-        tagKey: 'amenity',
-        tagValue: 'cafe',
+        tags: [{ key: 'amenity', value: 'cafe' }],
       },
       {
         name: 'bar',
-        tagKey: 'amenity',
-        tagValue: 'bar',
+        tags: [{ key: 'amenity', value: 'bar' }],
       },
       {
         name: 'cinema',
-        tagKey: 'amenity',
-        tagValue: 'cinema',
+        tags: [{ key: 'amenity', value: 'cinema' }],
       },
       {
         name: 'theatre',
-        tagKey: 'amenity',
-        tagValue: 'theatre',
+        tags: [{ key: 'amenity', value: 'theatre' }],
       },
       {
         name: 'gym',
-        tagKey: 'leisure',
-        tagValue: 'fitness_centre',
+        tags: [{ key: 'leisure', value: 'fitness_centre' }],
       },
       {
         // TODO: handle different types of pitches (e.g. football, basketball)
         name: 'pitch',
-        tagKey: 'leisure',
-        tagValue: 'pitch',
+        tags: [{ key: 'leisure', value: 'pitch' }],
       },
       {
         // TODO: also handle leisure=bathing_place, amenity=public_bath, leisure=water_park
         name: 'swimming',
-        tagKey: 'leisure',
-        tagValue: 'swimming_area',
+        tags: [{ key: 'leisure', value: 'swimming_area' }],
       },
     ],
   },
@@ -91,29 +79,24 @@ export const DOMAINS: AreaDomain[] = [
     categories: [
       {
         name: 'hospital',
-        tagKey: 'amenity',
-        tagValue: 'hospital',
+        tags: [{ key: 'amenity', value: 'hospital' }],
       },
       {
         name: 'doctor',
-        tagKey: 'amenity',
-        tagValue: 'doctors',
+        tags: [{ key: 'amenity', value: 'doctors' }],
       },
       {
         name: 'pharmacy',
-        tagKey: 'amenity',
-        tagValue: 'pharmacy',
+        tags: [{ key: 'amenity', value: 'pharmacy' }],
       },
       {
         name: 'dentist',
-        tagKey: 'amenity',
-        tagValue: 'dentist',
+        tags: [{ key: 'amenity', value: 'dentist' }],
       },
       {
         // TODO: add social_facility=assisted_living, social_facility=day_care
         name: 'care',
-        tagKey: 'amenity',
-        tagValue: 'nursing_home',
+        tags: [{ key: 'amenity', value: 'nursing_home' }],
       },
     ],
   },
@@ -126,23 +109,19 @@ export const DOMAINS: AreaDomain[] = [
       {
         // TODO: add: railway and tram
         name: 'publicTransport',
-        tagKey: 'highway',
-        tagValue: 'bus_stop', // TODO: also bus_station?
+        tags: [{ key: 'highway', value: 'bus_stop' }], // TODO: also bus_station?
       },
       {
         name: 'bicycle',
-        tagKey: 'amenity',
-        tagValue: 'bicycle_rental',
+        tags: [{ key: 'amenity', value: 'bicycle_rental' }],
       },
       {
         name: 'car',
-        tagKey: 'amenity',
-        tagValue: 'car_rental',
+        tags: [{ key: 'amenity', value: 'car_rental' }],
       },
       {
         name: 'taxi',
-        tagKey: 'amenity',
-        tagValue: 'taxi',
+        tags: [{ key: 'amenity', value: 'taxi' }],
       },
     ],
   },
@@ -154,19 +133,16 @@ export const DOMAINS: AreaDomain[] = [
     categories: [
       {
         name: 'park',
-        tagKey: 'leisure',
-        tagValue: 'park',
+        tags: [{ key: 'leisure', value: 'park' }],
       },
       {
         name: 'playground',
-        tagKey: 'leisure',
-        tagValue: 'playground',
+        tags: [{ key: 'leisure', value: 'playground' }],
       },
       {
         // TODO: natural=wood might also be fitting here
         name: 'forest',
-        tagKey: 'landuse',
-        tagValue: 'forest',
+        tags: [{ key: 'landuse', value: 'forest' }],
       },
     ],
   },
@@ -178,49 +154,40 @@ export const DOMAINS: AreaDomain[] = [
     categories: [
       {
         name: 'supermarket',
-        tagKey: 'shop',
-        tagValue: 'supermarket',
+        tags: [{ key: 'shop', value: 'supermarket' }],
       },
       {
         name: 'bakery',
-        tagKey: 'shop',
-        tagValue: 'bakery',
+        tags: [{ key: 'shop', value: 'bakery' }],
       },
       {
         name: 'butcher',
-        tagKey: 'shop',
-        tagValue: 'butcher',
+        tags: [{ key: 'shop', value: 'butcher' }],
       },
       {
         name: 'drugstore',
-        tagKey: 'shop',
-        tagValue: 'chemist',
+        tags: [{ key: 'shop', value: 'chemist' }],
       },
       {
         name: 'clothing',
-        tagKey: 'shop',
-        tagValue: 'clothes',
+        tags: [{ key: 'shop', value: 'clothes' }],
       },
       {
         name: 'hairdresser',
-        tagKey: 'shop',
-        tagValue: 'hairdresser',
+        tags: [{ key: 'shop', value: 'hairdresser' }],
       },
       {
         name: 'bank',
-        tagKey: 'amenity',
-        tagValue: 'bank',
+        tags: [{ key: 'amenity', value: 'bank' }],
       },
       {
         name: 'atm',
-        tagKey: 'amenity',
-        tagValue: 'atm',
+        tags: [{ key: 'amenity', value: 'atm' }],
       },
       {
         // TODO: also add amenity=parcel_locker, post_office=post_partner
         name: 'post',
-        tagKey: 'amenity',
-        tagValue: 'post_office',
+        tags: [{ key: 'amenity', value: 'post_office' }],
       },
     ],
   },

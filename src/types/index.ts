@@ -13,6 +13,8 @@ export interface AreaDomain {
  */
 export interface AreaCategory {
   name: string
-  tagKey: string
-  tagValue: string
+  tags: {
+    key: string
+    value: string
+  }[]
 }

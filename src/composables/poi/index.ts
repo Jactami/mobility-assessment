@@ -100,8 +100,8 @@ export function usePoiService() {
    */
   function getPoiCategory(element: OverpassElement) {
     return (
-      DOMAINS.flatMap((domain) => domain.categories).find(
-        (category) => category.tagValue === element.tags?.[category.tagKey],
+      DOMAINS.flatMap((domain) => domain.categories).find((category) =>
+        category.tags.some((tag) => tag.value === element.tags?.[category.tags[0].key]),
       )?.name ?? 'unknown'
     )
   }

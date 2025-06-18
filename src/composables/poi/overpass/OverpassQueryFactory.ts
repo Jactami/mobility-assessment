@@ -47,6 +47,8 @@ export class OverpassQueryFactory {
    * @param radius The radius around the center point (in meters).
    */
   private static queryCategory(category: AreaCategory, lat: number, lon: number, radius: number) {
-    this.builder.add(category.tagKey, category.tagValue, lat, lon, radius)
+    category.tags.forEach((tag) => {
+      this.builder.add(tag.key, tag.value, lat, lon, radius)
+    })
   }
 }
