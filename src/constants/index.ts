@@ -19,9 +19,12 @@ export const DOMAINS: AreaDomain[] = [
         tags: [{ key: 'amenity', value: 'university' }],
       },
       {
-        // TODO: Decide if also include amenity=childcare
         name: 'kindergarten',
-        tags: [{ key: 'amenity', value: 'kindergarten' }],
+        tags: [
+          { key: 'amenity', value: 'kindergarten' },
+          { key: 'amenity', value: 'childcare' },
+          { key: 'amenity', value: 'preschool' }, // Deprecated, but still might be used
+        ],
       },
       {
         name: 'library',
@@ -65,9 +68,13 @@ export const DOMAINS: AreaDomain[] = [
         tags: [{ key: 'leisure', value: 'pitch' }],
       },
       {
-        // TODO: also handle leisure=bathing_place, amenity=public_bath, leisure=water_park
         name: 'swimming',
-        tags: [{ key: 'leisure', value: 'swimming_area' }],
+        tags: [
+          { key: 'leisure', value: 'swimming_area' },
+          { key: 'leisure', value: 'water_park' },
+          { key: 'leisure', value: 'bathing_place' },
+          { key: 'amenity', value: 'public_bath' },
+        ],
       },
     ],
   },
@@ -83,7 +90,10 @@ export const DOMAINS: AreaDomain[] = [
       },
       {
         name: 'doctor',
-        tags: [{ key: 'amenity', value: 'doctors' }],
+        tags: [
+          { key: 'amenity', value: 'doctors' },
+          { key: 'amenity', value: 'clinic' }, // multiple doctors in one place
+        ],
       },
       {
         name: 'pharmacy',
@@ -94,22 +104,31 @@ export const DOMAINS: AreaDomain[] = [
         tags: [{ key: 'amenity', value: 'dentist' }],
       },
       {
-        // TODO: add social_facility=assisted_living, social_facility=day_care
         name: 'care',
-        tags: [{ key: 'amenity', value: 'nursing_home' }],
+        tags: [
+          { key: 'amenity', value: 'nursing_home' },
+          { key: 'social_facility', value: 'assisted_living' },
+          { key: 'social_facility', value: 'day_care' },
+        ],
       },
     ],
   },
-  // Nahverkehr + Mobilität
+  // Verkehr + Mobilität
   {
-    name: 'mobility', // TODO: change to transport (?)
+    name: 'mobility',
     color: '#e7298a',
     icon: '',
     categories: [
       {
         // TODO: add: railway and tram
         name: 'publicTransport',
-        tags: [{ key: 'highway', value: 'bus_stop' }], // TODO: also bus_station?
+        tags: [
+          { key: 'highway', value: 'bus_stop' },
+          { key: 'amenity', value: 'bus_station' }, // larger bus stops (ZOB)
+          { key: 'railway', value: 'station' },
+          { key: 'railway', value: 'halt' },
+          { key: 'railway', value: 'tram_stop' },
+        ],
       },
       {
         name: 'bicycle',
@@ -140,9 +159,11 @@ export const DOMAINS: AreaDomain[] = [
         tags: [{ key: 'leisure', value: 'playground' }],
       },
       {
-        // TODO: natural=wood might also be fitting here
         name: 'forest',
-        tags: [{ key: 'landuse', value: 'forest' }],
+        tags: [
+          { key: 'landuse', value: 'forest' },
+          { key: 'natural', value: 'wood' },
+        ],
       },
     ],
   },
@@ -185,11 +206,14 @@ export const DOMAINS: AreaDomain[] = [
         tags: [{ key: 'amenity', value: 'atm' }],
       },
       {
-        // TODO: also add amenity=parcel_locker, post_office=post_partner
         name: 'post',
-        tags: [{ key: 'amenity', value: 'post_office' }],
+        tags: [
+          { key: 'amenity', value: 'post_office' },
+          { key: 'amenity', value: 'parcel_locker' },
+          { key: 'post_office', value: 'post_partner' },
+          // TODO: add post_boxes (?)
+        ],
       },
     ],
   },
-  // TODO: maybe add a grouping for 'work'?
 ]
