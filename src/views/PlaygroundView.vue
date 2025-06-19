@@ -163,6 +163,16 @@
       <MenuPopup :menu="menu" />
     </div>
   </BaseSection>
+
+  <BaseSection title="Data Table">
+    <p>
+      The data table is a component that can be used to display a list of items. It is defined in
+      the <code>src/components/table/DataTable.vue</code> file.
+    </p>
+    <div class="mt-10">
+      <DataTable />
+    </div>
+  </BaseSection>
 </template>
 
 <script setup lang="ts">
@@ -173,6 +183,7 @@ import DebugPanel from '@/components/debug/DebugPanel.vue'
 import MenuPanel from '@/components/menu/MenuPanel.vue'
 import MenuPopup from '@/components/menu/MenuPopup.vue'
 import type { Menu } from '@/components/menu/types'
+import DataTable from '@/components/table/DataTable.vue'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import MaterialSymbolsLogin from '~icons/material-symbols/login'
