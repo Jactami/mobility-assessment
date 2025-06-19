@@ -1,62 +1,215 @@
 <template>
-  <Vue3EasyDataTable :headers="headers" :items="items" />
+  <div>
+    <!-- Global Search -->
+    <div v-if="config.searchable" class="mb-4 w-full max-w-sm">
+      <FormKit
+        v-model="globalFilter"
+        type="text"
+        name="search"
+        :label="t('table.search')"
+        :placeholder="t('table.searchPlaceholder')"
+        autocomplete="off"
+        :spellcheck="false"
+        label-class="sr-only"
+      >
+        <template #prefixIcon>
+          <IconRenderer icon="search" class="mr-2 text-on-surface-variant" />
+        </template>
+      </FormKit>
+    </div>
+
+    <!-- Data Table -->
+    <div class="overflow-hidden rounded-border border border-outline">
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <!-- Table Head -->
+          <thead class="border-b border-outline">
+            <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+              <th
+                v-for="header in headerGroup.headers"
+                :key="header.id"
+                :colSpan="header.colSpan"
+                class="p-2 text-left"
+                :class="header.column.getCanSort() ? 'cursor-pointer select-none' : ''"
+                @click="header.column.getToggleSortingHandler()?.($event)"
+              >
+                <div v-if="!header.isPlaceholder" class="flex items-center gap-1">
+                  <FlexRender
+                    v-if="!header.isPlaceholder"
+                    :render="header.column.columnDef.header"
+                    :props="header.getContext()"
+                  />
+                  <span v-if="header.column.getCanSort()" class="text-lg">
+                    <IconRenderer
+                      icon="up"
+                      class="-mb-3.5"
+                      :class="header.column.getIsSorted() === 'asc' ? 'opacity-100' : 'opacity-40'"
+                    />
+                    <IconRenderer
+                      icon="down"
+                      :class="header.column.getIsSorted() === 'desc' ? 'opacity-100' : 'opacity-40'"
+                    />
+                  </span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <!-- Table Body -->
+          <tbody>
+            <template v-if="table.getRowModel().rows.length === 0">
+              <tr>
+                <td
+                  :colspan="columns.length"
+                  class="p-4 text-center text-sm text-on-surface-variant italic"
+                >
+                  {{ t('table.noData') }}
+                </td>
+              </tr>
+            </template>
+
+            <template v-else>
+              <tr
+                v-for="row in table.getRowModel().rows"
+                :key="row.id"
+                class="odd:bg-surface-container-low hover:bg-surface-container"
+              >
+                <td v-for="cell in row.getVisibleCells()" :key="cell.id" class="p-2 text-left">
+                  <slot :name="`item-${cell.column.id}`" :value="cell.getValue()">
+                    <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+                  </slot>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div v-if="table.getPageCount() > 1" class="mt-4 flex items-center justify-center gap-x-4">
+      <IconButton
+        icon="first"
+        :disabled="!table.getCanPreviousPage()"
+        :title="t('table.pagination.first')"
+        @click="table.setPageIndex(0)"
+      />
+      <IconButton
+        icon="previous"
+        :disabled="!table.getCanPreviousPage()"
+        :title="t('table.pagination.previous')"
+        @click="table.previousPage()"
+      />
+      <span>
+        {{ t('table.pagination.page') }} {{ table.getState().pagination.pageIndex + 1 }} /
+        {{ table.getPageCount() }}
+      </span>
+      <IconButton
+        icon="next"
+        :disabled="!table.getCanNextPage()"
+        :title="t('table.pagination.next')"
+        @click="table.nextPage()"
+      />
+      <IconButton
+        icon="last"
+        :disabled="!table.getCanNextPage()"
+        :title="t('table.pagination.last')"
+        @click="table.setPageIndex(table.getPageCount() - 1)"
+      />
+    </div>
+  </div>
 </template>
+<script setup lang="ts" generic="T">
+import IconButton from '@/components/icon/IconButton.vue'
+import IconRenderer from '@/components/icon/IconRenderer.vue'
+import {
+  createColumnHelper,
+  FlexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useVueTable,
+  type PaginationState,
+  type SortingState,
+} from '@tanstack/vue-table'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import type TableConfig from './types'
 
-<script setup lang="ts">
-import type { Header, Item } from 'vue3-easy-data-table'
-// @ts-expect-error: https://github.com/HC200ok/vue3-easy-data-table/issues/382
-import Vue3EasyDataTable from 'vue3-easy-data-table'
+/**
+ * Props:
+ * - config: Table setup (columns, sorting, pagination)
+ * - data: Array of rows to render
+ */
+const props = defineProps<{
+  /** Table setup (columns, sorting, pagination) */
+  config: TableConfig<T>
+  /** Array of rows to render in the table */
+  data: T[]
+}>()
 
-// TODO: Move css to assets
-import 'vue3-easy-data-table/dist/style.css'
+const { t } = useI18n()
 
-const headers: Header[] = [
-  { text: 'PLAYER', value: 'player' },
-  { text: 'TEAM', value: 'team' },
-  { text: 'NUMBER', value: 'number' },
-  { text: 'POSITION', value: 'position' },
-  { text: 'HEIGHT', value: 'indicator.height' },
-  { text: 'WEIGHT (lbs)', value: 'indicator.weight', sortable: true },
-  { text: 'LAST ATTENDED', value: 'lastAttended', width: 200 },
-  { text: 'COUNTRY', value: 'country' },
-]
+/** Current sorting state for the table */
+const sorting = ref<SortingState>(
+  props.config.presort
+    ? [{ id: props.config.presort.key, desc: props.config.presort.order === 'desc' }]
+    : [],
+)
 
-const items: Item[] = [
-  {
-    player: 'Stephen Curry',
-    team: 'GSW',
-    number: 30,
-    position: 'G',
-    indicator: { height: '6-2', weight: 185 },
-    lastAttended: 'Davidson',
-    country: 'USA',
+/** Pagination state, if enabled via config */
+const pagination = ref<PaginationState | undefined>(
+  props.config.pagination ? { pageIndex: 0, pageSize: 25 } : undefined,
+)
+
+/** Global filter string for search input */
+const globalFilter = ref('')
+
+const columnHelper = createColumnHelper<T>()
+
+/** Transforms the column config into tanstack table column definitions */
+const columns = computed(() => {
+  return props.config.columns.map((col) => {
+    return columnHelper.accessor((row: T) => row[col.key], {
+      id: col.key,
+      header: col.label,
+      cell: (props) =>
+        col.formatter ? col.formatter(props.getValue(), props.cell.row.original) : props.getValue(),
+      enableSorting: !!col.sortable,
+    })
+  })
+})
+
+/** Initializes the TanStack table instance with reactive state */
+const table = useVueTable({
+  get data() {
+    return props.data
   },
-  {
-    player: 'Lebron James',
-    team: 'LAL',
-    number: 6,
-    position: 'F',
-    indicator: { height: '6-9', weight: 250 },
-    lastAttended: 'St. Vincent-St. Mary HS (OH)',
-    country: 'USA',
+  columns: columns.value,
+  state: {
+    get sorting() {
+      return sorting.value
+    },
+    get globalFilter() {
+      return globalFilter.value
+    },
+    get pagination() {
+      return pagination.value
+    },
   },
-  {
-    player: 'Kevin Durant',
-    team: 'BKN',
-    number: 7,
-    position: 'F',
-    indicator: { height: '6-10', weight: 240 },
-    lastAttended: 'Texas-Austin',
-    country: 'USA',
+  onSortingChange: (updater) => {
+    sorting.value = typeof updater === 'function' ? updater(sorting.value) : updater
   },
-  {
-    player: 'Giannis Antetokounmpo',
-    team: 'MIL',
-    number: 34,
-    position: 'F',
-    indicator: { height: '6-11', weight: 242 },
-    lastAttended: 'Filathlitikos',
-    country: 'Greece',
+  onGlobalFilterChange: (updater) => {
+    globalFilter.value = typeof updater === 'function' ? updater(globalFilter.value) : updater
   },
-]
+  onPaginationChange: (updater) => {
+    if (!pagination.value) return
+    pagination.value = typeof updater === 'function' ? updater(pagination.value) : updater
+  },
+  getCoreRowModel: getCoreRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+  getFilteredRowModel: getFilteredRowModel(),
+  getPaginationRowModel: getPaginationRowModel(),
+})
 </script>

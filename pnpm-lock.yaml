@@ -41,6 +41,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.8
         version: 4.1.8(vite@6.3.5(@types/node@24.0.0)(jiti@2.4.2)(lightningcss@1.30.1))
+      '@tanstack/vue-table':
+        specifier: ^8.21.3
+        version: 8.21.3(vue@3.5.16(typescript@5.6.3))
       '@tauri-apps/api':
         specifier: ^2.5.0
         version: 2.5.0
@@ -89,9 +92,6 @@ importers:
       vue-router:
         specifier: ^4.5.1
         version: 4.5.1(vue@3.5.16(typescript@5.6.3))
-      vue3-easy-data-table:
-        specifier: ^1.5.47
-        version: 1.5.47(typescript@5.6.3)
       vue3-openlayers:
         specifier: ^11.6.2
         version: 11.6.2(ol-contextmenu@5.5.0(ol@10.5.0))(ol-ext@4.0.32(ol@10.5.0))(ol@10.5.0)(vue@3.5.16(typescript@5.6.3))
@@ -1054,6 +1054,16 @@ packages:
     resolution: {integrity: sha512-CQ+I8yxNV5/6uGaJjiuymgw0kEQiNKRinYbZXPdx1fk5WgiyReG0VaUx/Xq6aVNSUNJFzxm6o8FNKS5aMaim5A==}
     peerDependencies:
       vite: ^5.2.0 || ^6
+
+  '@tanstack/table-core@8.21.3':
+    resolution: {integrity: sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg==}
+    engines: {node: '>=12'}
+
+  '@tanstack/vue-table@8.21.3':
+    resolution: {integrity: sha512-rusRyd77c5tDPloPskctMyPLFEQUeBzxdQ+2Eow4F7gDPlPOB1UnnhzfpdvqZ8ZyX2rRNGmqNnQWm87OI2OQPw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      vue: '>=3.2'
 
   '@tauri-apps/api@2.5.0':
     resolution: {integrity: sha512-Ldux4ip+HGAcPUmuLT8EIkk6yafl5vK0P0c0byzAKzxJh7vxelVtdPONjfgTm96PbN24yjZNESY8CKo8qniluA==}
@@ -3460,9 +3470,6 @@ packages:
     peerDependencies:
       typescript: '>=5.0.0'
 
-  vue3-easy-data-table@1.5.47:
-    resolution: {integrity: sha512-q0bZBlWIwQ3FIhB+F98ylFPfBJWiS3Xv7QqBe3xS5MbRNZP96RFjaQn7C0Pi0J/aaucNW8gFWxPyh9NESS1ehw==}
-
   vue3-openlayers@11.6.2:
     resolution: {integrity: sha512-Wml8Hijlpq5ihFoboEKSvoQziIH5oTkAUbMz5NpGd1nbXIJk1zz5QXmd53xmLyXe4s/cItfr4rjb24jSalCc5w==}
     engines: {node: '>=18.0.0'}
@@ -4499,6 +4506,13 @@ snapshots:
       '@tailwindcss/oxide': 4.1.8
       tailwindcss: 4.1.8
       vite: 6.3.5(@types/node@24.0.0)(jiti@2.4.2)(lightningcss@1.30.1)
+
+  '@tanstack/table-core@8.21.3': {}
+
+  '@tanstack/vue-table@8.21.3(vue@3.5.16(typescript@5.6.3))':
+    dependencies:
+      '@tanstack/table-core': 8.21.3
+      vue: 3.5.16(typescript@5.6.3)
 
   '@tauri-apps/api@2.5.0': {}
 
@@ -7097,12 +7111,6 @@ snapshots:
       '@volar/typescript': 2.4.14
       '@vue/language-core': 2.2.10(typescript@5.6.3)
       typescript: 5.6.3
-
-  vue3-easy-data-table@1.5.47(typescript@5.6.3):
-    dependencies:
-      vue: 3.5.16(typescript@5.6.3)
-    transitivePeerDependencies:
-      - typescript
 
   vue3-openlayers@11.6.2(ol-contextmenu@5.5.0(ol@10.5.0))(ol-ext@4.0.32(ol@10.5.0))(ol@10.5.0)(vue@3.5.16(typescript@5.6.3)):
     dependencies:

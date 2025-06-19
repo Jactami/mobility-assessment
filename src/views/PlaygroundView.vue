@@ -166,11 +166,15 @@
 
   <BaseSection title="Data Table">
     <p>
-      The data table is a component that can be used to display a list of items. It is defined in
-      the <code>src/components/table/DataTable.vue</code> file.
+      The data table is a component that can be used to display a list of generic items. It is
+      defined in the <code>src/components/table/DataTable.vue</code> file.
     </p>
     <div class="mt-10">
-      <DataTable />
+      <DataTable :config="tableConfig" :data="data">
+        <template #item-status="{ value }">
+          <span class="font-semibold">{{ value }}</span>
+        </template>
+      </DataTable>
     </div>
   </BaseSection>
 </template>
@@ -184,6 +188,7 @@ import MenuPanel from '@/components/menu/MenuPanel.vue'
 import MenuPopup from '@/components/menu/MenuPopup.vue'
 import type { Menu } from '@/components/menu/types'
 import DataTable from '@/components/table/DataTable.vue'
+import type TableConfig from '@/components/table/types'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import MaterialSymbolsLogin from '~icons/material-symbols/login'
@@ -226,6 +231,83 @@ const menu: Menu = [
     label: 'Disabled',
     icon: 'link',
     disabled: true,
+  },
+]
+
+type Person = {
+  firstName: string
+  lastName: string
+  age: number
+  visits: number
+  status: string
+  progress: number
+}
+
+const tableConfig: TableConfig<Person> = {
+  columns: [
+    {
+      key: 'firstName',
+      label: 'First Name',
+      sortable: true,
+    },
+    {
+      key: 'lastName',
+      label: 'Last Name',
+      sortable: true,
+    },
+    {
+      key: 'age',
+      label: 'Age',
+      sortable: true,
+    },
+    {
+      key: 'visits',
+      label: 'Visits',
+      sortable: true,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+    },
+    {
+      key: 'progress',
+      label: 'Progress',
+      sortable: true,
+      formatter: (value) => `${value}%`,
+    },
+  ],
+  searchable: true,
+  pagination: true,
+  presort: {
+    key: 'firstName',
+    order: 'asc',
+  },
+}
+
+const data: Person[] = [
+  {
+    firstName: 'Tanner',
+    lastName: 'Linsley',
+    age: 24,
+    visits: 100,
+    status: 'Relationship',
+    progress: 50,
+  },
+  {
+    firstName: 'Tandy',
+    lastName: 'Miller',
+    age: 40,
+    visits: 40,
+    status: 'Single',
+    progress: 80,
+  },
+  {
+    firstName: 'Joe',
+    lastName: 'Dirte',
+    age: 45,
+    visits: 20,
+    status: 'Complicated',
+    progress: 10,
   },
 ]
 </script>

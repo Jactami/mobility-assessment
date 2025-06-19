@@ -1,6 +1,10 @@
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop'
 import MaterialSymbolsAddCircleOutline from '~icons/material-symbols/add-circle-outline'
+import MaterialSymbolsArrowDropDownRounded from '~icons/material-symbols/arrow-drop-down-rounded'
+import MaterialSymbolsArrowDropUpRounded from '~icons/material-symbols/arrow-drop-up-rounded'
 import MaterialSymbolsCheckRounded from '~icons/material-symbols/check-rounded'
+import MaterialSymbolsChevronLeft from '~icons/material-symbols/chevron-left-rounded'
+import MaterialSymbolsChevronRight from '~icons/material-symbols/chevron-right'
 import MaterialSymbolsCloseRounded from '~icons/material-symbols/close-rounded'
 import MaterialSymbolsContentCopyOutlineRounded from '~icons/material-symbols/content-copy-outline-rounded'
 import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
@@ -10,6 +14,8 @@ import MaterialSymbolsPerson from '~icons/material-symbols/person'
 import MaterialSymbolsSearchRounded from '~icons/material-symbols/search-rounded'
 import MaterialSymbolsVisibilityOffOutlineRounded from '~icons/material-symbols/visibility-off-outline-rounded'
 import MaterialSymbolsVisibilityOutlineRounded from '~icons/material-symbols/visibility-outline-rounded'
+import MdiChevronDoubleLeft from '~icons/mdi/chevron-double-left'
+import MdiChevronDoubleRight from '~icons/mdi/chevron-double-right'
 import TablerExternalLink from '~icons/tabler/external-link'
 
 export const iconMap = {
@@ -27,6 +33,12 @@ export const iconMap = {
   loading: LineMdLoadingTwotoneLoop,
   user: MaterialSymbolsPerson,
   close: MaterialSymbolsCloseRounded,
+  up: MaterialSymbolsArrowDropUpRounded,
+  down: MaterialSymbolsArrowDropDownRounded,
+  next: MaterialSymbolsChevronRight,
+  previous: MaterialSymbolsChevronLeft,
+  first: MdiChevronDoubleLeft,
+  last: MdiChevronDoubleRight,
 }
 
 export type Icon = keyof typeof iconMap

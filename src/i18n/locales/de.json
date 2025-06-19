@@ -34,7 +34,8 @@
     "ok": "OK",
     "pleaseConfirm": "Bitte bestätigen",
     "success": "Erfolg",
-    "save": "Speichern"
+    "save": "Speichern",
+    "search": "Suche"
   },
   "map": {
     "resetMap": "Karte zurücksetzen",
@@ -103,5 +104,17 @@
     "taxi": "Taxistand",
     "theatre": "Theater",
     "university": "Universität"
+  },
+  "table": {
+    "noData": "Keine Daten verfügbar",
+    "pagination": {
+      "page": "Seite",
+      "next": "Nächste",
+      "previous": "Vorherige",
+      "first": "Erste",
+      "last": "Letzte"
+    },
+    "search": "Suche",
+    "searchPlaceholder": "Suche..."
   }
 }
