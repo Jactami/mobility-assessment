@@ -62,6 +62,11 @@
     "saveError": "Fehler beim Speichern des Projekts",
     "saveSuccess": "Projekt erfolgreich gespeichert"
   },
+  "poi": {
+    "label": "Bezeichnung",
+    "category": "Kategorie",
+    "distance": "Entfernung"
+  },
   "domain": {
     "education": "Bildung",
     "health": "Gesundheit",

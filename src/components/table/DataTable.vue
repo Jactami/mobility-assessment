@@ -15,13 +15,16 @@
         <template #prefixIcon>
           <IconRenderer icon="search" class="mr-2 text-on-surface-variant" />
         </template>
+        <template #suffixIcon>
+          <IconButton v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
+        </template>
       </FormKit>
     </div>
 
     <!-- Data Table -->
     <div class="overflow-hidden rounded-border border border-outline">
       <div class="overflow-x-auto">
-        <table class="w-full border-collapse">
+        <table class="w-full table-fixed border-collapse">
           <!-- Table Head -->
           <thead class="border-b border-outline">
             <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -159,6 +162,7 @@ const sorting = ref<SortingState>(
 
 /** Pagination state, if enabled via config */
 const pagination = ref<PaginationState | undefined>(
+  // TODO: Decide if page size should be configurable
   props.config.pagination ? { pageIndex: 0, pageSize: 25 } : undefined,
 )
 
@@ -210,6 +214,6 @@ const table = useVueTable({
   getCoreRowModel: getCoreRowModel(),
   getSortedRowModel: getSortedRowModel(),
   getFilteredRowModel: getFilteredRowModel(),
-  getPaginationRowModel: getPaginationRowModel(),
+  getPaginationRowModel: pagination.value ? getPaginationRowModel() : undefined,
 })
 </script>

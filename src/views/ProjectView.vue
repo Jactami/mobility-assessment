@@ -5,6 +5,7 @@
       @search-completed="geodataLoading = false"
     />
     <MapPanel :disabled="geodataLoading" />
+
     <!-- Temporary save button -->
     <div class="mt-10 flex justify-center">
       <BaseButton :disabled="!isProjectDirty || geodataLoading" @click="saveProject">
@@ -15,13 +16,19 @@
       <BaseButton :disabled="loading" @click="createReport">Report</BaseButton>
     </div>
   </BaseSection>
-  <DebugPanel
-    title="Project Store"
-    :value="{
-      project: projectStore.project,
-      pois: projectStore.pois,
-    }"
-  />
+
+  <BaseSection v-if="projectStore.pois && projectStore.pois.length > 0">
+    <DataTable :config="tableConfig" :data="projectStore.pois">
+      <template #item-category="{ value }">
+        <div class="flex items-center gap-2">
+          <img :src="`/img/map/${value}.svg`" :alt="t(`category.${value}`)" class="h-4" />
+          <span>{{ t(`category.${value}`) }}</span>
+        </div>
+      </template>
+    </DataTable>
+  </BaseSection>
+
+  <DebugPanel title="Project Store" :value="projectStore.project" />
 </template>
 
 <script setup lang="ts">
@@ -30,6 +37,8 @@ import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
 import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
+import DataTable from '@/components/table/DataTable.vue'
+import type TableConfig from '@/components/table/types'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
 import { usePdf } from '@/composables/pdf'
@@ -39,7 +48,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 
-const { t } = useI18n()
+const { n, t } = useI18n()
 const db = useDB()
 const projectStore = useProjectStore()
 const route = useRoute()
@@ -59,6 +68,34 @@ const isProjectDirty = computed(
     JSON.stringify(projectStore.project) !== JSON.stringify(project.value) ||
     JSON.stringify(projectStore.pois) !== JSON.stringify(pois.value),
 )
+
+const tableConfig: TableConfig<Poi> = {
+  columns: [
+    {
+      key: 'label',
+      label: t('poi.label'),
+      sortable: true,
+    },
+    {
+      key: 'category',
+      label: t('poi.category'),
+      sortable: true,
+      formatter: (category) => t(`category.${category}`),
+    },
+    {
+      key: 'distance',
+      label: t('poi.distance'),
+      sortable: true,
+      formatter: (distance) => n(Number(distance), 'meter'),
+    },
+  ],
+  searchable: false, // TODO: search not working properly yet
+  pagination: true,
+  presort: {
+    key: 'distance',
+    order: 'asc',
+  },
+}
 
 // Load the project and POIs when the user enters the page
 onMounted(loadProject)
