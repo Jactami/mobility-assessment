@@ -24,7 +24,7 @@
     <!-- Data Table -->
     <div class="overflow-hidden rounded-border border border-outline">
       <div class="overflow-x-auto">
-        <table class="w-full table-fixed border-collapse">
+        <table class="w-full border-collapse">
           <!-- Table Head -->
           <thead class="border-b border-outline">
             <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -55,6 +55,9 @@
                   </span>
                 </div>
               </th>
+              <th v-if="config.actions" class="p-2 text-right">
+                <span class="sr-only">{{ t('table.actions') }}</span>
+              </th>
             </tr>
           </thead>
           <!-- Table Body -->
@@ -80,6 +83,15 @@
                   <slot :name="`item-${cell.column.id}`" :value="cell.getValue()">
                     <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
                   </slot>
+                </td>
+                <td v-if="config.actions" class="w-min space-x-1 p-2 text-right">
+                  <IconButton
+                    v-for="(action, i) in config.actions"
+                    :key="i"
+                    :icon="action.icon"
+                    :title="action.label"
+                    @click="action.handler(row.original)"
+                  />
                 </td>
               </tr>
             </template>

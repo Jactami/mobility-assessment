@@ -8,6 +8,7 @@ import MaterialSymbolsChevronRight from '~icons/material-symbols/chevron-right'
 import MaterialSymbolsCloseRounded from '~icons/material-symbols/close-rounded'
 import MaterialSymbolsContentCopyOutlineRounded from '~icons/material-symbols/content-copy-outline-rounded'
 import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
+import MaterialSymbolsEditRounded from '~icons/material-symbols/edit-rounded'
 import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded'
 import MaterialSymbolsMoreVert from '~icons/material-symbols/more-vert'
 import MaterialSymbolsPerson from '~icons/material-symbols/person'
@@ -39,6 +40,7 @@ export const iconMap = {
   previous: MaterialSymbolsChevronLeft,
   first: MdiChevronDoubleLeft,
   last: MdiChevronDoubleRight,
+  edit: MaterialSymbolsEditRounded,
 }
 
 export type Icon = keyof typeof iconMap

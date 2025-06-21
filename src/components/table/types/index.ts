@@ -1,3 +1,5 @@
+import type { Icon } from '@/components/icon/types'
+
 /**
  * Defines the structure of a column in a generic table component.
  * @template T - The type of the data of the table.
@@ -37,4 +39,11 @@ export default interface TableConfig<T> {
     key: Extract<keyof T, string>
     order: 'asc' | 'desc'
   }
+
+  /** Optional actions that can be performed on each row of the table. */
+  actions?: {
+    handler: (item: T) => unknown
+    label: string
+    icon: Icon
+  }[]
 }

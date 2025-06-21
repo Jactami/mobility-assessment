@@ -65,7 +65,9 @@
   "poi": {
     "label": "Bezeichnung",
     "category": "Kategorie",
-    "distance": "Entfernung"
+    "delete": "POI löschen",
+    "distance": "Entfernung",
+    "viewOnMap": "Auf Karte anzeigen"
   },
   "domain": {
     "education": "Bildung",
@@ -111,6 +113,7 @@
     "university": "Universität"
   },
   "table": {
+    "actions": "Aktionen",
     "noData": "Keine Daten verfügbar",
     "pagination": {
       "page": "Seite",

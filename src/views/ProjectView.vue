@@ -40,6 +40,7 @@ import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import DataTable from '@/components/table/DataTable.vue'
 import type TableConfig from '@/components/table/types'
 import useDB from '@/composables/db'
+import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { usePdf } from '@/composables/pdf'
 import type { Poi, Project } from '@/db/types'
@@ -95,6 +96,18 @@ const tableConfig: TableConfig<Poi> = {
     key: 'distance',
     order: 'asc',
   },
+  actions: [
+    {
+      label: t('poi.edit'),
+      icon: 'edit',
+      handler: (poi) => useLogger().log('Edit action for', poi),
+    },
+    {
+      label: t('poi.delete'),
+      icon: 'delete',
+      handler: (poi) => useLogger().log('Delete action for', poi),
+    },
+  ],
 }
 
 // Load the project and POIs when the user enters the page
