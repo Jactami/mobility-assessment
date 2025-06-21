@@ -15,19 +15,18 @@
         :label="t('auth.passwordNew')"
         name="password"
         :placeholder="t('auth.passwordNew')"
+        inner-class="relative"
         validation="required"
       >
         <template #suffix>
-          <button
-            type="button"
-            tabindex="-1"
-            class="cursor-pointer p-0.5 hover:text-primary"
-            @mousedown="passwordVisible = true"
-            @mouseup="passwordVisible = false"
-          >
-            <IconRenderer v-if="passwordVisible" icon="hide" />
-            <IconRenderer v-else icon="show" />
-          </button>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+            <IconButton
+              tabindex="-1"
+              :icon="passwordVisible ? 'hide' : 'show'"
+              @mousedown="passwordVisible = true"
+              @mouseup="passwordVisible = false"
+            />
+          </div>
         </template>
       </FormKit>
       <FormKit
@@ -48,7 +47,7 @@
 
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
-import IconRenderer from '@/components/icon/IconRenderer.vue'
+import IconButton from '@/components/icon/IconButton.vue'
 import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
 import { useAuthStore } from '@/stores/Auth'
