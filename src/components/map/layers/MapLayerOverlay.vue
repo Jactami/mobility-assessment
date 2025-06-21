@@ -30,7 +30,7 @@
       :style="`border-color: ${color};`"
     >
       <div class="flex items-start justify-between gap-x-10">
-        <strong>{{ selectedPoi.label }}</strong>
+        <strong>{{ selectedPoi.label || t(`category.${selectedPoi.category}`) }}</strong>
         <IconButton icon="close" @click="featureCollection.clear()" />
       </div>
       <div class="mt-3 flex justify-between gap-x-10 text-sm text-on-surface-variant">
