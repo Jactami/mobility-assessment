@@ -3,6 +3,7 @@
   <Layers.OlVectorLayer>
     <Sources.OlSourceVector>
       <Interactions.OlInteractionSelect
+        :features="featureCollection as Collection<Feature>"
         :filter="selectInteractionFilter"
         :style="null"
         @select="handleSelect"
@@ -30,7 +31,7 @@
     >
       <div class="flex items-start justify-between gap-x-10">
         <strong>{{ selectedPoi.label }}</strong>
-        <IconButton icon="close" @click="selectedPoi = null" />
+        <IconButton icon="close" @click="featureCollection.clear()" />
       </div>
       <div class="mt-3 flex justify-between gap-x-10 text-sm text-on-surface-variant">
         <div class="flex items-center gap-x-1">
@@ -56,7 +57,7 @@
 import IconButton from '@/components/icon/IconButton.vue'
 import { DOMAINS } from '@/constants'
 import type { Poi } from '@/db/types'
-import type { Feature } from 'ol'
+import { Collection, type Feature } from 'ol'
 import type { SelectEvent } from 'ol/interaction/Select'
 import { fromLonLat } from 'ol/proj'
 import { computed, ref } from 'vue'
@@ -65,24 +66,27 @@ import { Interactions, Layers, Map, Sources } from 'vue3-openlayers'
 
 const { n, t } = useI18n()
 
-const selectedPoi = ref<Poi | null>(null)
+const featureCollection = ref(new Collection<Feature>())
+
+const selectedPoi = computed<Poi | undefined>(
+  () => featureCollection.value.getArray()[0]?.getProperties()?.poi,
+)
 
 const color = computed(() => (selectedPoi.value ? getColorByDomain(selectedPoi.value) : '#000'))
 
 function handleSelect(event: SelectEvent) {
-  // Reset selectedPoi if click outside of any feature
-  if (event.selected.length === 0) {
-    selectedPoi.value = null
-    return
-  }
+  featureCollection.value.clear()
 
-  // Otherwise, set the selected POI from the first selected feature
-  selectedPoi.value = event.selected[0].getProperties()?.poi
+  // Reset collection if click outside of any feature
+  if (event.selected.length === 0) return
+
+  // Add the selected feature to the collection
+  featureCollection.value.push(event.selected[0])
 }
 
 function selectInteractionFilter(feature: Feature) {
-  // Only select features that have a 'poi' property
-  return feature.get('poi') !== undefined
+  // Only select features that have a poi property
+  return !!feature.getProperties().poi
 }
 
 // TODO: This is a duplicate of the one in MapLayerPois.vue -> refactor to a shared utility
