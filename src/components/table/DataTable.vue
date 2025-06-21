@@ -16,7 +16,9 @@
           <IconRenderer icon="search" class="mr-2 text-on-surface-variant" />
         </template>
         <template #suffixIcon>
-          <IconButton v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+            <IconButton v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
+          </div>
         </template>
       </FormKit>
     </div>
@@ -32,7 +34,7 @@
                 v-for="header in headerGroup.headers"
                 :key="header.id"
                 :colSpan="header.colSpan"
-                class="p-2 text-left"
+                class="px-3 py-2.5 text-left"
                 :class="header.column.getCanSort() ? 'cursor-pointer select-none' : ''"
                 @click="header.column.getToggleSortingHandler()?.($event)"
               >
@@ -55,7 +57,7 @@
                   </span>
                 </div>
               </th>
-              <th v-if="config.actions" class="p-2 text-right">
+              <th v-if="config.actions" class="px-3 py-2.5 text-right">
                 <span class="sr-only">{{ t('table.actions') }}</span>
               </th>
             </tr>
@@ -79,12 +81,16 @@
                 :key="row.id"
                 class="odd:bg-surface-container-low hover:bg-surface-container"
               >
-                <td v-for="cell in row.getVisibleCells()" :key="cell.id" class="p-2 text-left">
+                <td
+                  v-for="cell in row.getVisibleCells()"
+                  :key="cell.id"
+                  class="px-3 py-2.5 text-left"
+                >
                   <slot :name="`item-${cell.column.id}`" :value="cell.getValue()">
                     <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
                   </slot>
                 </td>
-                <td v-if="config.actions" class="w-min space-x-1 p-2 text-right">
+                <td v-if="config.actions" class="w-min space-x-0.5 px-2 text-right">
                   <IconButton
                     v-for="(action, i) in config.actions"
                     :key="i"

@@ -15,8 +15,10 @@
       @keydown.enter="search"
     >
       <template #suffixIcon>
-        <IconButton v-if="query && !loading" icon="close" @click="resetQuery" />
-        <IconRenderer v-else-if="loading" icon="loading" />
+        <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+          <IconButton v-if="query && !loading" icon="close" @click="resetQuery" />
+          <IconRenderer v-else-if="loading" icon="loading" />
+        </div>
       </template>
     </FormKit>
     <BaseButton
