@@ -75,7 +75,13 @@ export default function useDB() {
   const setProject = (
     project: TablesInsert<'projects'>,
   ): Promise<PostgrestSingleResponse<Tables<'projects'> | null>> =>
-    handleDBCall(async () => await supabase.from('projects').upsert(project).select().maybeSingle())
+    handleDBCall(async () => {
+      // delete all POIs if the project is being updated
+      if (project.id) await supabase.from('pois').delete().eq('project_id', project.id)
+
+      // upsert the POI data
+      return await supabase.from('projects').upsert(project).select().maybeSingle()
+    })
 
   /**
    * Deletes a project from the database.
