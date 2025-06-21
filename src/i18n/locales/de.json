@@ -66,6 +66,7 @@
     "label": "Bezeichnung",
     "category": "Kategorie",
     "delete": "POI löschen",
+    "edit": "POI bearbeiten",
     "distance": "Entfernung",
     "viewOnMap": "Auf Karte anzeigen"
   },
@@ -103,7 +104,7 @@
     "pitch": "Sportplatz",
     "playground": "Spielplatz",
     "post": "Post- und Paketstelle",
-    "publicTransport": "Haltestelle Öffentlicher Verkehr",
+    "station": "Haltestelle",
     "restaurant": "Restaurant",
     "school": "Schule",
     "supermarket": "Supermarkt",

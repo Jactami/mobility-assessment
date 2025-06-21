@@ -66,6 +66,53 @@ export const DOMAINS: AreaDomain[] = [
         // TODO: handle different types of pitches (e.g. football, basketball)
         name: 'pitch',
         tags: [{ key: 'leisure', value: 'pitch' }],
+        labelRules: [
+          {
+            matches: [{ key: 'sport', value: 'soccer' }],
+            label: 'Fußballplatz',
+          },
+          {
+            matches: [{ key: 'sport', value: 'basketball' }],
+            label: 'Basketballplatz',
+          },
+          {
+            matches: [{ key: 'sport', value: 'tennis' }],
+            label: 'Tennisplatz',
+          },
+          {
+            matches: [{ key: 'sport', value: 'table_tennis' }],
+            label: 'Tischtennisplatte',
+          },
+          {
+            matches: [{ key: 'sport', value: 'volleyball' }],
+            label: 'Volleyballplatz',
+          },
+          {
+            matches: [{ key: 'sport', value: 'beachvolleyball' }],
+            label: 'Beachvolleyballplatz',
+          },
+          {
+            matches: [{ key: 'sport', value: 'baseball' }],
+            label: 'Baseballplatz',
+          },
+          {
+            matches: [{ key: 'sport', value: 'climbing_adventure' }],
+            label: 'Kletterpark',
+          },
+          {
+            matches: [{ key: 'sport', value: 'golf' }],
+            label: 'Golfplatz',
+          },
+          {
+            matches: [{ key: 'sport', value: 'skateboard' }],
+            label: 'Skatepark',
+          },
+          {
+            matches: [{ key: 'sport', value: 'multi' }],
+            label: 'Mehrzweckplatz',
+          },
+          // TODO: To be continued...
+        ],
       },
       {
         name: 'swimming',
@@ -121,13 +168,39 @@ export const DOMAINS: AreaDomain[] = [
     categories: [
       {
         // TODO: add: railway and tram
-        name: 'publicTransport',
+        name: 'station',
         tags: [
           { key: 'highway', value: 'bus_stop' },
           { key: 'amenity', value: 'bus_station' }, // larger bus stops (ZOB)
           { key: 'railway', value: 'station' },
           { key: 'railway', value: 'halt' },
           { key: 'railway', value: 'tram_stop' },
+        ],
+        labelRules: [
+          {
+            matches: [{ key: 'highway', value: 'bus_stop' }],
+            prefix: 'Bushaltestelle',
+          },
+          {
+            matches: [{ key: 'amenity', value: 'bus_station' }],
+            prefix: 'Busbahnhof',
+          },
+          {
+            matches: [{ key: 'station', value: 'subway' }],
+            label: 'U-Bahn-Station',
+          },
+          {
+            matches: [
+              { key: 'railway', value: 'station' },
+              { key: 'railway', value: 'halt' },
+            ],
+
+            label: 'Bahnhof',
+          },
+          {
+            matches: [{ key: 'railway', value: 'tram_stop' }],
+            label: 'Straßenbahnhaltestelle',
+          },
         ],
       },
       {

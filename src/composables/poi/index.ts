@@ -85,7 +85,7 @@ export function usePoiService() {
       osm_id: element.id,
       osm_type: element.type,
       project_id: projectId,
-      label: element.tags?.name,
+      label: getPoiLabel(element),
       category: getPoiCategory(element),
       latitude: element.type === 'node' ? element.lat : element.center.lat,
       longitude: element.type === 'node' ? element.lon : element.center.lon,
@@ -104,6 +104,48 @@ export function usePoiService() {
         category.tags.some((tag) => tag.value === element.tags?.[tag.key]),
       )?.name ?? 'unknown'
     )
+  }
+
+  /**
+   * Gets the label for a POI based on its tags and predefined rules.
+   * @param element - The Overpass element to get the label for.
+   * @returns The label for the POI, or null if no label can be determined.
+   */
+  function getPoiLabel(element: OverpassElement): string | null {
+    for (const domain of DOMAINS) {
+      for (const category of domain.categories) {
+        const matchesTag = category.tags.some((tag) => element.tags?.[tag.key] === tag.value)
+
+        if (!matchesTag) continue
+
+        // Check labelRules, if any
+        if (category.labelRules) {
+          for (const rule of category.labelRules) {
+            const ruleMatches = rule.matches.every(
+              (match) => element.tags?.[match.key] === match.value,
+            )
+
+            if (ruleMatches) {
+              // Full label
+              if (rule.label) return rule.label
+
+              // Prefix only (with optional name or operator fallback)
+              if (rule.prefix) {
+                if (element.tags?.name) return `${rule.prefix} ${element.tags.name}`
+                if (element.tags?.operator) return `${rule.prefix} ${element.tags.operator}`
+                return rule.prefix
+              }
+            }
+          }
+        }
+
+        // No label rule matched, fallback to name, then operator
+        if (element.tags?.name) return element.tags.name
+        if (element.tags?.operator) return element.tags.operator
+      }
+    }
+
+    return null
   }
 
   /**

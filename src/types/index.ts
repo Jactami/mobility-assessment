@@ -17,4 +17,14 @@ export interface AreaCategory {
     key: string
     value: string
   }[]
+  labelRules?: {
+    matches: {
+      key: string
+      value: string
+    }[]
+    label?: string
+    prefix?: string
+    // An alternative and more flexible approach could be a label with placeholders
+    // e.g. "Bushaltestell {name}" where {name} is replaced with the actual name
+  }[]
 }
