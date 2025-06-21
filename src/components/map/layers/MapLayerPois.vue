@@ -6,11 +6,15 @@
         <Map.OlFeature :properties="{ poi }">
           <Geometries.OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
           <Styles.OlStyle>
-            <Styles.OlStyleIcon
+            <!-- <Styles.OlStyleIcon
               src="/img/map/marker.svg"
               :anchor="[0.5, 0.9]"
               :color="getColorByDomain(poi)"
-            />
+            /> -->
+            <Styles.OlStyleCircle :radius="10">
+              <Styles.OlStyleFill color="#fff" />
+              <Styles.OlStyleStroke :color="getColorByDomain(poi)" :width="2" />
+            </Styles.OlStyleCircle>
           </Styles.OlStyle>
         </Map.OlFeature>
 
@@ -20,9 +24,8 @@
           <Styles.OlStyle>
             <Styles.OlStyleIcon
               :src="`/img/map/${poi.category}.svg`"
-              :scale="0.5"
-              color="#000"
-              :anchor="[0.5, 1.4]"
+              :scale="0.45"
+              :color="getColorByDomain(poi)"
             />
           </Styles.OlStyle>
         </Map.OlFeature>
