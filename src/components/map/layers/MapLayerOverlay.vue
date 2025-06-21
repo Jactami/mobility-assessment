@@ -23,7 +23,8 @@
     :offset="[0, -20]"
   >
     <div
-      class="relative max-w-96 min-w-64 rounded-border border border-outline bg-surface p-2 shadow-md"
+      class="relative max-w-96 min-w-64 rounded-border border-2 border-outline bg-surface p-2 shadow-md"
+      :style="`border-color: ${color};`"
     >
       <div class="flex items-start justify-between gap-x-10">
         <strong>{{ selectedPoi.label }}</strong>
@@ -42,25 +43,29 @@
       </div>
       <!-- Bottom Triangle -->
       <div
-        class="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-t-8 border-r-8 border-l-8 border-t-surface border-r-transparent border-l-transparent"
-      ></div>
+        class="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-t-8 border-r-8 border-l-8 border-r-transparent border-l-transparent"
+        :style="`border-top-color: ${color};`"
+      />
     </div>
   </Map.OlOverlay>
 </template>
 
 <script setup lang="ts">
 import IconButton from '@/components/icon/IconButton.vue'
+import { DOMAINS } from '@/constants'
 import type { Poi } from '@/db/types'
 import type { Feature } from 'ol'
 import type { SelectEvent } from 'ol/interaction/Select'
 import { fromLonLat } from 'ol/proj'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Interactions, Layers, Map, Sources, Styles } from 'vue3-openlayers'
 
 const { n, t } = useI18n()
 
 const selectedPoi = ref<Poi | null>(null)
+
+const color = computed(() => (selectedPoi.value ? getColorByDomain(selectedPoi.value) : '#000'))
 
 function handleSelect(event: SelectEvent) {
   // Reset selectedPoi if click outside of any feature
@@ -76,5 +81,12 @@ function handleSelect(event: SelectEvent) {
 function selectInteractionFilter(feature: Feature) {
   // Only select features that have a 'poi' property
   return feature.get('poi') !== undefined
+}
+
+// TODO: This is a duplicate of the one in MapLayerPois.vue -> refactor to a shared utility
+function getColorByDomain(poi: Poi) {
+  return DOMAINS.find((domain) =>
+    domain.categories.some((category) => category.name === poi.category),
+  )?.color
 }
 </script>
