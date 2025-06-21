@@ -2,10 +2,12 @@
   <!-- Selection Layer -->
   <Layers.OlVectorLayer>
     <Sources.OlSourceVector>
-      <Interactions.OlInteractionSelect :filter="selectInteractionFilter" @select="handleSelect">
-        <Styles.OlStyle>
-          <!-- Leave empty to prevent default selection style -->
-        </Styles.OlStyle>
+      <Interactions.OlInteractionSelect
+        :filter="selectInteractionFilter"
+        :style="null"
+        @select="handleSelect"
+      >
+        <!-- With style=null, no styling is applied to the selected feature -->
       </Interactions.OlInteractionSelect>
     </Sources.OlSourceVector>
   </Layers.OlVectorLayer>
@@ -20,7 +22,7 @@
       },
     }"
     positioning="bottom-center"
-    :offset="[0, -20]"
+    :offset="[0, -18]"
   >
     <div
       class="relative max-w-96 min-w-64 rounded-border border-2 border-outline bg-surface p-2 shadow-md"
@@ -59,7 +61,7 @@ import type { SelectEvent } from 'ol/interaction/Select'
 import { fromLonLat } from 'ol/proj'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Interactions, Layers, Map, Sources, Styles } from 'vue3-openlayers'
+import { Interactions, Layers, Map, Sources } from 'vue3-openlayers'
 
 const { n, t } = useI18n()
 
