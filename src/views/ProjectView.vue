@@ -76,6 +76,7 @@ const tableConfig: TableConfig<Poi> = {
       key: 'label',
       label: t('poi.label'),
       sortable: true,
+      formatter: (label, poi) => label || t(`category.${poi.category}`),
     },
     {
       key: 'category',
