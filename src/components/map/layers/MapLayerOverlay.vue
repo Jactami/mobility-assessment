@@ -20,9 +20,11 @@
       },
     }"
     positioning="bottom-center"
-    :offset="[0, -28]"
+    :offset="[0, -20]"
   >
-    <BaseCard class="relative max-w-96 min-w-64 bg-surface p-2">
+    <div
+      class="relative max-w-96 min-w-64 rounded-border border border-outline bg-surface p-2 shadow-md"
+    >
       <div class="flex items-start justify-between gap-x-10">
         <strong>{{ selectedPoi.label }}</strong>
         <IconButton icon="close" @click="selectedPoi = null" />
@@ -38,12 +40,15 @@
         </div>
         <span>{{ n(selectedPoi.distance, 'meter') }}</span>
       </div>
-    </BaseCard>
+      <!-- Bottom Triangle -->
+      <div
+        class="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-t-8 border-r-8 border-l-8 border-t-surface border-r-transparent border-l-transparent"
+      ></div>
+    </div>
   </Map.OlOverlay>
 </template>
 
 <script setup lang="ts">
-import BaseCard from '@/components/base/BaseCard.vue'
 import IconButton from '@/components/icon/IconButton.vue'
 import type { Poi } from '@/db/types'
 import type { Feature } from 'ol'
