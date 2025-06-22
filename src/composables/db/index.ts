@@ -112,6 +112,13 @@ export default function useDB() {
   const setPois = (pois: TablesInsert<'pois'>[]): Promise<PostgrestResponse<Tables<'pois'>>> =>
     handleDBCall(async () => await supabase.from('pois').upsert(pois).select())
 
+  /**
+   * Fetches the list of user profiles from the database.
+   * @returns {Promise<PostgrestResponse<Tables<'profiles'>>>} - The list of user profiles.
+   */
+  const getProfiles = (): Promise<PostgrestResponse<Tables<'profiles'>>> =>
+    handleDBCall(async () => await supabase.from('profiles').select().neq('user_role', 'admin'))
+
   return {
     getProjects,
     getProject,
@@ -119,5 +126,6 @@ export default function useDB() {
     deleteProject,
     getPois,
     setPois,
+    getProfiles,
   }
 }
