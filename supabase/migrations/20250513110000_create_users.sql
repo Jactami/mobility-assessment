@@ -10,6 +10,7 @@ CREATE OR REPLACE FUNCTION public.create_user(
     user_id UUID DEFAULT NULL
 )
 RETURNS uuid
+SECURITY DEFINER
 AS $$
 DECLARE
     encrypted_pw VARCHAR(255);
