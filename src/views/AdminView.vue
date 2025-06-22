@@ -23,7 +23,7 @@ import type { Profile } from '@/db/types'
 import { onMounted, ref } from 'vue'
 
 const db = useDB()
-const { errorToast } = useNotification()
+const { errorToast, confirmDialog } = useNotification()
 
 const profiles = ref<Profile[]>()
 
@@ -62,9 +62,7 @@ const tableConfig: TableConfig<Profile> = {
     {
       icon: 'delete',
       label: 'Delete',
-      handler: (profile) => {
-        useLogger().log('Delete profile:', profile)
-      },
+      handler: (profile) => deleteUser(profile),
     },
   ],
 }
@@ -80,6 +78,20 @@ async function fetchProfiles() {
     console.error(error)
     errorToast('Fehler beim Laden der Profile') // TODO: i18n
     profiles.value = []
+  } else {
+    profiles.value = data
+  }
+}
+
+async function deleteUser(profile: Profile) {
+  const confirmed = await confirmDialog('TODO: Delete user?')
+  if (!confirmed) return
+
+  const { data, error } = await db.deleteUser(profile.id)
+
+  if (error) {
+    console.error(error)
+    errorToast('Fehler beim Löschen des Nutzers') // TODO: i18n
   } else {
     profiles.value = data
   }

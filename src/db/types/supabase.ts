@@ -155,6 +155,10 @@ export type Database = {
         Args: { event: Json }
         Returns: Json
       }
+      delete_user: {
+        Args: { target_user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       osm_type: 'node' | 'way' | 'relation'

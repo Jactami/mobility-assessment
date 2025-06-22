@@ -119,6 +119,19 @@ export default function useDB() {
   const getProfiles = (): Promise<PostgrestResponse<Tables<'profiles'>>> =>
     handleDBCall(async () => await supabase.from('profiles').select().neq('user_role', 'admin'))
 
+  /**
+   * Deletes a user profile from the database.
+   * @param id - The ID of the user to delete.
+   * @returns {Promise<PostgrestResponse<Tables<'profiles'>>>} - The updated list of profiles after deletion.
+   */
+  const deleteUser = (id: string): Promise<PostgrestResponse<Tables<'profiles'>>> =>
+    handleDBCall(async () => {
+      // Call the stored procedure to delete the user
+      await supabase.rpc('delete_user', { target_user_id: id })
+      // Return the updated list of profiles
+      return getProfiles()
+    })
+
   return {
     getProjects,
     getProject,
@@ -127,5 +140,6 @@ export default function useDB() {
     getPois,
     setPois,
     getProfiles,
+    deleteUser,
   }
 }
