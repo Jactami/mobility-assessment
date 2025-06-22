@@ -214,6 +214,7 @@ const columns = computed(() => {
               return String(aVal).localeCompare(String(bVal))
             }
           : undefined,
+      enableGlobalFilter: props.config.searchable,
     })
   })
 })
@@ -224,6 +225,7 @@ const table = useVueTable({
     return props.data
   },
   columns: columns.value,
+  enableGlobalFilter: props.config.searchable,
   state: {
     get sorting() {
       return sorting.value
@@ -249,5 +251,11 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
   getFilteredRowModel: getFilteredRowModel(),
   getPaginationRowModel: pagination.value ? getPaginationRowModel() : undefined,
+  globalFilterFn: (row, columnId, filterValue) => {
+    const raw = row.getValue(columnId)
+    const colDef = props.config.columns.find((c) => c.key === columnId)
+    const formatted = colDef?.formatter ? colDef.formatter(raw, row.original) : raw
+    return String(formatted).toLowerCase().includes(filterValue.toLowerCase())
+  },
 })
 </script>
