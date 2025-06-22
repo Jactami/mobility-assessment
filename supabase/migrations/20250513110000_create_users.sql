@@ -50,10 +50,10 @@ BEGIN
 
     -- Insert directly into public.profiles
     INSERT INTO public.profiles(
-        id, first_name, last_name, user_role
+        id, first_name, last_name, email, user_role
     )
     VALUES (
-        user_id, first_name, last_name, user_role
+        user_id, first_name, last_name, email, user_role
     );
 
     RETURN user_id;

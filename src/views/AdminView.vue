@@ -40,13 +40,12 @@ const tableConfig: TableConfig<Profile> = {
       sortable: true,
       formatter: (firstName) => firstName,
     },
-    // TODO: Add email column to profile table
-    // {
-    //   key: 'email',
-    //   label: 'Email',
-    //   sortable: true,
-    //   formatter: (email) => email,
-    // },
+    {
+      key: 'email',
+      label: 'Email',
+      sortable: true,
+      formatter: (email) => email,
+    },
   ],
   presort: { key: 'last_name', order: 'asc' },
   pagination: true,

@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     updated_at TIMESTAMP WITH TIME ZONE,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL, -- email is technically redundant, but useful for queries without a explicit view
     user_role public.user_role DEFAULT 'user'::public.user_role NOT NULL
 );
 
