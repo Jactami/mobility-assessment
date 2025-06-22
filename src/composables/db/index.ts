@@ -120,6 +120,33 @@ export default function useDB() {
     handleDBCall(async () => await supabase.from('profiles').select().neq('user_role', 'admin'))
 
   /**
+   * Creates a new user profile in the database.
+   * @param firstName - The first name of the user.
+   * @param lastName - The last name of the user.
+   * @param email - The email address of the user.
+   * @param password - The password for the user.
+   * @returns {Promise<PostgrestResponse<Tables<'profiles'>>>} - The updated list of profiles after creation.
+   */
+  const createUser = (user: {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+  }): Promise<PostgrestResponse<Tables<'profiles'>>> =>
+    handleDBCall(async () => {
+      // Call the stored procedure to create the user
+      await supabase.rpc('create_user', {
+        first_name: user.firstName,
+        last_name: user.lastName,
+        email: user.email,
+        password: user.password,
+      })
+
+      // Return the updated list of profiles
+      return getProfiles()
+    })
+
+  /**
    * Deletes a user profile from the database.
    * @param id - The ID of the user to delete.
    * @returns {Promise<PostgrestResponse<Tables<'profiles'>>>} - The updated list of profiles after deletion.
@@ -140,6 +167,7 @@ export default function useDB() {
     getPois,
     setPois,
     getProfiles,
+    createUser,
     deleteUser,
   }
 }

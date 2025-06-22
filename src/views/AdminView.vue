@@ -18,12 +18,11 @@ import type TableConfig from '@/components/table/types'
 import useDB from '@/composables/db'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
-import { supabase } from '@/db'
 import type { Profile } from '@/db/types'
 import { onMounted, ref } from 'vue'
 
 const db = useDB()
-const { errorToast, confirmDialog } = useNotification()
+const { errorToast, successToast, confirmDialog } = useNotification()
 
 const profiles = ref<Profile[]>()
 
@@ -94,21 +93,24 @@ async function deleteUser(profile: Profile) {
     errorToast('Fehler beim Löschen des Nutzers') // TODO: i18n
   } else {
     profiles.value = data
+    successToast('Nutzer erfolgreich gelöscht') // TODO: i18n
   }
 }
 
 async function addUser() {
-  const { data, error } = await supabase.rpc('create_user', {
-    first_name: 'Test',
-    last_name: 'BGW',
+  const { data, error } = await db.createUser({
+    firstName: 'New',
+    lastName: 'User',
     email: 'test@bgw24.de',
-    password: 'test', // make sure to change this later!
+    password: 'password123',
   })
 
   if (error) {
-    console.error('Error creating user:', error)
+    console.error(error)
+    errorToast('Fehler beim Erstellen des Nutzers') // TODO: i18n
   } else {
-    console.log('User created with ID:', data)
+    profiles.value = data
+    successToast('Nutzer erfolgreich erstellt') // TODO: i18n
   }
 }
 </script>
