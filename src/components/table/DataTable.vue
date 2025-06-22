@@ -198,6 +198,22 @@ const columns = computed(() => {
       cell: (props) =>
         col.formatter ? col.formatter(props.getValue(), props.cell.row.original) : props.getValue(),
       enableSorting: !!col.sortable,
+      sortingFn:
+        // Custom sorting function if formatter is provided
+        col.sortable && col.formatter
+          ? (a, b) => {
+              const aVal = col.formatter?.(a.getValue(col.key), a.original)
+              const bVal = col.formatter?.(b.getValue(col.key), b.original)
+
+              if (typeof aVal === 'number' && typeof bVal === 'number') {
+                return aVal - bVal
+              } else if (aVal instanceof Date && bVal instanceof Date) {
+                return aVal.getTime() - bVal.getTime()
+              }
+
+              return String(aVal).localeCompare(String(bVal))
+            }
+          : undefined,
     })
   })
 })
