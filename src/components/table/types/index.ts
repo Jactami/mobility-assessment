@@ -18,6 +18,9 @@ export interface TableColumn<T> {
 
   /** Optional formatter function to customize the cell value. */
   formatter?: (value: unknown, item: T) => unknown
+
+  /** Optional width for the column. */
+  width?: number
 }
 
 /**

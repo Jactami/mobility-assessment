@@ -85,19 +85,22 @@
                   v-for="cell in row.getVisibleCells()"
                   :key="cell.id"
                   class="px-3 py-2.5 text-left"
+                  :style="`width: ${cell.column.columnDef.size}%`"
                 >
                   <slot :name="`item-${cell.column.id}`" :value="cell.getValue()">
                     <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
                   </slot>
                 </td>
-                <td v-if="config.actions" class="w-min space-x-0.5 px-2 text-right">
-                  <IconButton
-                    v-for="(action, i) in config.actions"
-                    :key="i"
-                    :icon="action.icon"
-                    :title="action.label"
-                    @click="action.handler(row.original)"
-                  />
+                <td v-if="config.actions" class="px-2 text-right">
+                  <div class="flex items-center gap-x-1">
+                    <IconButton
+                      v-for="(action, i) in config.actions"
+                      :key="i"
+                      :icon="action.icon"
+                      :title="action.label"
+                      @click="action.handler(row.original)"
+                    />
+                  </div>
                 </td>
               </tr>
             </template>
@@ -215,6 +218,7 @@ const columns = computed(() => {
             }
           : 'alphanumeric',
       enableGlobalFilter: props.config.searchable,
+      size: col.width || 150, // Default width if not specified
     })
   })
 })
