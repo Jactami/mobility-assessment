@@ -1,7 +1,9 @@
 <template>
   <MenuPopup v-if="authStore.profile" :menu="menu">
     <template #trigger>
-      <div class="rounded-full bg-surface p-1 text-on-surface-variant">
+      <div
+        class="flex aspect-square items-center justify-center rounded-full bg-surface p-1 font-medium text-on-surface-variant"
+      >
         {{ initials }}
       </div>
     </template>
