@@ -15,7 +15,13 @@ export function usePdf() {
     try {
       loading.value = true
 
-      pdf.value = await new PdfReportBuilder(config, fonts)
+      const meta = {
+        title: `Standortbewertung - ${projectStore.project?.title}`,
+        author: 'Bayerische Gesellschaft für Wohneigentum',
+        date: new Date().toLocaleDateString(),
+      }
+
+      pdf.value = await new PdfReportBuilder(config, meta, fonts)
         .createPageHeader('Page Title', 'This is a subtitle')
         .createSectionHeader('Project data', { y: 40 })
         .printData(data, { y: 50, fontSize: 'sm' })

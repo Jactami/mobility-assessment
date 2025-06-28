@@ -1,4 +1,10 @@
-import { PDFME_VERSION, type Font, type Plugin, type Schema } from '@pdfme/common'
+import {
+  PDFME_VERSION,
+  type Font,
+  type GeneratorOptions,
+  type Plugin,
+  type Schema,
+} from '@pdfme/common'
 import { generate } from '@pdfme/generator'
 import { image, table, text } from '@pdfme/schemas'
 import type { PdfConfig, PdfImageOptions, PdfTableOptions, PdfTextOptions } from '../types'
@@ -20,6 +26,11 @@ export class PdfBuilder {
    * The fonts used in the PDF document.
    */
   protected _fonts?: Font
+
+  /**
+   * Metadata for the PDF document, such as title, author, and subject.
+   */
+  protected _meta: GeneratorOptions = {}
 
   /**
    * An object containing schema plugins that extend the the types of schemas that can be used.
@@ -51,9 +62,10 @@ export class PdfBuilder {
    * Creates an instance of the PdfBuilder class.
    * @param config - Configuration options for the PDF document, such as format, padding, colors, and font sizes.
    */
-  constructor(config: PdfConfig, fonts?: Font) {
+  constructor(config: PdfConfig, meta: GeneratorOptions = {}, fonts?: Font) {
     this.reset()
     this._config = config
+    this._meta = meta
     this._fonts = fonts
   }
 
@@ -83,7 +95,7 @@ export class PdfBuilder {
       },
       inputs: [this._inputs],
       plugins: this._plugins,
-      options: { font: fonts },
+      options: { ...this._meta, font: fonts },
     })
 
     // Transform pdf to Blob
