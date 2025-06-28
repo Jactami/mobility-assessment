@@ -91,7 +91,7 @@ const tableConfig: TableConfig<Poi> = {
       formatter: (distance) => n(Number(distance), 'meter'),
     },
   ],
-  searchable: false, // TODO: search not working properly yet
+  searchable: true,
   pagination: true,
   presort: {
     key: 'distance',

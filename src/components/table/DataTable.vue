@@ -213,7 +213,7 @@ const columns = computed(() => {
 
               return String(aVal).localeCompare(String(bVal))
             }
-          : undefined,
+          : 'alphanumeric',
       enableGlobalFilter: props.config.searchable,
     })
   })
@@ -251,6 +251,7 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
   getFilteredRowModel: getFilteredRowModel(),
   getPaginationRowModel: pagination.value ? getPaginationRowModel() : undefined,
+  getColumnCanGlobalFilter: () => !!props.config.searchable,
   globalFilterFn: (row, columnId, filterValue) => {
     const raw = row.getValue(columnId)
     const colDef = props.config.columns.find((c) => c.key === columnId)
