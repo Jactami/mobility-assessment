@@ -187,19 +187,18 @@ export const DOMAINS: AreaDomain[] = [
           },
           {
             matches: [{ key: 'station', value: 'subway' }],
-            label: 'U-Bahn-Station',
+            prefix: 'U-Bahn-Station',
           },
           {
             matches: [
               { key: 'railway', value: 'station' },
               { key: 'railway', value: 'halt' },
             ],
-
-            label: 'Bahnhof',
+            prefix: 'Bahnhof',
           },
           {
             matches: [{ key: 'railway', value: 'tram_stop' }],
-            label: 'Straßenbahnhaltestelle',
+            prefix: 'Straßenbahnhaltestelle',
           },
         ],
       },
@@ -210,6 +209,12 @@ export const DOMAINS: AreaDomain[] = [
       {
         name: 'car',
         tags: [{ key: 'amenity', value: 'car_rental' }],
+        labelRules: [
+          {
+            matches: [{ key: 'amenity', value: 'car_rental' }],
+            fallback: 'operator',
+          },
+        ],
       },
       {
         name: 'taxi',

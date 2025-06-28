@@ -129,19 +129,23 @@ export function usePoiService() {
               // Full label
               if (rule.label) return rule.label
 
+              // Fallback tag
+              const name = rule.fallback ? element.tags?.[rule.fallback] : element.tags?.name
+
               // Prefix only (with optional name or operator fallback)
               if (rule.prefix) {
-                if (element.tags?.name) return `${rule.prefix} ${element.tags.name}`
-                if (element.tags?.operator) return `${rule.prefix} ${element.tags.operator}`
+                if (name) return `${rule.prefix} ${name}`
                 return rule.prefix
               }
+
+              // Just return the name if available
+              return name
             }
           }
         }
 
         // No label rule matched, fallback to name, then operator
         if (element.tags?.name) return element.tags.name
-        if (element.tags?.operator) return element.tags.operator
       }
     }
 

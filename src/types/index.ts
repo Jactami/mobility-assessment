@@ -22,6 +22,7 @@ export interface AreaCategory {
       key: string
       value: string
     }[]
+    fallback?: string // Fallback tag to use if no name tag is found
     label?: string
     prefix?: string
     // An alternative and more flexible approach could be a label with placeholders
