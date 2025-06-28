@@ -206,6 +206,8 @@ export class PdfBuilder {
    * @returns The instance itself, allowing for method chaining.
    */
   createTable(head: string[], data: unknown[][], options?: PdfTableOptions): this {
+    // TODO: Validate head and data lengths and column widths
+
     // Add table plugin
     this._plugins.table = table
 
