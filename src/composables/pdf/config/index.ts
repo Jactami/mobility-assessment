@@ -17,6 +17,7 @@ export const config: PdfConfig = {
     text: '#020618',
   },
   fontSize: {
+    xs: 8,
     sm: 10,
     base: 14,
     lg: 18,

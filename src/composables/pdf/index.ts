@@ -19,6 +19,23 @@ export function usePdf() {
         .newPage()
         .createSectionHeader('Image Example')
         .createImage(image, { y: 20, width: 100, height: 100 })
+        .newPage()
+        .createSectionHeader('Table Example')
+        .createTable(
+          ['Name', 'City', 'Description'],
+          [
+            ['Alice', 'New York', 'Alice is a freelance web designer and developer'],
+            ['Bob', 'Paris', 'Bob is a freelance illustrator and graphic designer'],
+            ['Charlie', 'London', 'Charlie is a freelance photographer'],
+          ],
+          {
+            y: 20,
+            border: true,
+            padding: 2,
+            head: { font: 'bold', fontSize: 'sm', color: 'primary' },
+            body: { fontSize: 'xs' },
+          },
+        )
         .build()
     } catch (err) {
       error.value = err instanceof Error ? err : new Error('An unknown error occurred')

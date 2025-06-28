@@ -1,7 +1,7 @@
 import { PDFME_VERSION, type Font, type Plugin, type Schema } from '@pdfme/common'
 import { generate } from '@pdfme/generator'
-import { image, text } from '@pdfme/schemas'
-import type { PdfConfig, PdfImageOptions, PdfTextOptions } from '../types'
+import { image, table, text } from '@pdfme/schemas'
+import type { PdfConfig, PdfImageOptions, PdfTableOptions, PdfTextOptions } from '../types'
 
 /**
  * A class for building PDF documents.
@@ -64,7 +64,6 @@ export class PdfBuilder {
   public async build(): Promise<Blob> {
     // Load fonts if available
     const fonts = await this.loadFonts()
-    console.log(fonts)
 
     // Generate pdf
     const pdf = await generate({
@@ -197,6 +196,85 @@ export class PdfBuilder {
 
     // Append the image element to the current page
     return this.addToPage(data, schema)
+  }
+
+  /**
+   * Creates a table element in the PDF document.
+   * @param head - The table header cells.
+   * @param data - The table body rows.
+   * @param options - The layout and styling options for the table.
+   * @returns The instance itself, allowing for method chaining.
+   */
+  createTable(head: string[], data: unknown[][], options?: PdfTableOptions): this {
+    // Add table plugin
+    this._plugins.table = table
+
+    // Create schema for the table element
+    const x = options?.x ?? this._config.padding.left
+    const y = options?.y ?? this._config.padding.top
+    const borderWidth = options?.border ? 0.1 : 0
+
+    const schema: Schema = {
+      type: 'table',
+      name: this._id,
+      position: { x, y },
+      width: options?.width || this._config.format.width - this._config.padding.right - x,
+      height: options?.height || this._config.format.height - this._config.padding.bottom - y,
+      showHead: options?.showHead ?? true,
+      head,
+      headWidthPercentages: options?.columnWidths || head.map(() => 100 / head.length), // Default to equal widths
+      tableStyles: { borderWidth: 0.1, borderColor: '#000' },
+      headStyles: {
+        fontName: options?.head?.font,
+        fontSize: this._config.fontSize[options?.head?.fontSize || 'base'],
+        characterSpacing: 0, // Explicitly set to 0 to avoid extraneous spacing
+        lineHeight: 1,
+        alignment: 'left',
+        verticalAlignment: 'middle',
+        fontColor: this._config.color[options?.head?.color || 'text'],
+        borderColor: '#000',
+        backgroundColor: '',
+        borderWidth: {
+          top: borderWidth,
+          right: borderWidth,
+          bottom: borderWidth,
+          left: borderWidth,
+        },
+        padding: {
+          top: options?.padding || 0,
+          right: options?.padding || 0,
+          bottom: options?.padding || 0,
+          left: options?.padding || 0,
+        },
+      },
+      bodyStyles: {
+        fontName: options?.body?.font,
+        fontSize: this._config.fontSize[options?.body?.fontSize || 'base'],
+        characterSpacing: 0,
+        lineHeight: 1,
+        alignment: 'left',
+        verticalAlignment: 'middle',
+        fontColor: this._config.color[options?.body?.color || 'text'],
+        borderColor: '#000',
+        backgroundColor: '',
+        alternateBackgroundColor: options?.stripedColor,
+        borderWidth: {
+          top: borderWidth,
+          right: borderWidth,
+          bottom: borderWidth,
+          left: borderWidth,
+        },
+        padding: {
+          top: options?.padding || 0,
+          right: options?.padding || 0,
+          bottom: options?.padding || 0,
+          left: options?.padding || 0,
+        },
+      },
+      columnStyles: {},
+    }
+
+    return this.addToPage(JSON.stringify(data), schema)
   }
 
   /**

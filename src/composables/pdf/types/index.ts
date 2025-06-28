@@ -17,6 +17,7 @@ export interface PdfConfig {
     // TODO: Add more colors if needed
   }
   fontSize: {
+    xs?: number
     sm?: number
     base?: number
     lg?: number
@@ -48,4 +49,24 @@ export interface PdfImageOptions {
   y?: number
   width: number
   height: number
+}
+
+export interface PdfTableOptions {
+  x?: number
+  y?: number
+  width?: number
+  height?: number
+  columnWidths?: number[]
+  showHead?: boolean
+  padding?: number // in mm
+  border?: boolean // whether to show borders
+  stripedColor?: string // set to a color to enable striped rows
+  head?: PdfTableStyleOptions
+  body?: PdfTableStyleOptions
+}
+
+interface PdfTableStyleOptions {
+  font?: FontKeys
+  fontSize?: keyof PdfConfig['fontSize']
+  color?: keyof PdfConfig['color']
 }
