@@ -39,6 +39,33 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   /**
+   * Creates a separator page in the PDF document.
+   * @param title - The title for the separator page.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createSeparatorPage(title: string): this {
+    const y = this._config.format.height * 0.25
+    const h = 25
+
+    return this.newPage()
+      .createRect({
+        x: 0,
+        y,
+        width: this._config.format.width * 0.75,
+        height: h,
+        color: 'primary',
+      })
+      .createText(title, {
+        y,
+        height: h,
+        fontSize: 'xl',
+        color: 'neutral',
+        alignment: 'left',
+        verticalAlignment: 'middle',
+      })
+  }
+
+  /**
    * Creates domain tables for the PDF document.
    *
    * TODO: Decide if the POIs should be processed in the composable or here.

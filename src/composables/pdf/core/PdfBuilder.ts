@@ -6,8 +6,14 @@ import {
   type Schema,
 } from '@pdfme/common'
 import { generate } from '@pdfme/generator'
-import { image, table, text } from '@pdfme/schemas'
-import type { PdfConfig, PdfImageOptions, PdfTableOptions, PdfTextOptions } from '../types'
+import { image, rectangle, table, text } from '@pdfme/schemas'
+import type {
+  PdfConfig,
+  PdfImageOptions,
+  PdfRectOptions,
+  PdfTableOptions,
+  PdfTextOptions,
+} from '../types'
 
 /**
  * A class for building PDF documents.
@@ -167,7 +173,8 @@ export class PdfBuilder {
       fontName: options?.font, // falls back to the font with fallback flag set to true, if not provided
       fontColor: this._config.color[options?.color || 'text'],
       fontSize: this._config.fontSize[options?.fontSize || 'base'],
-      alignment: options?.alignment || 'left',
+      alignment: options?.alignment,
+      verticalAlignment: options?.verticalAlignment,
     }
 
     // Append the text element to the current page
@@ -208,6 +215,26 @@ export class PdfBuilder {
 
     // Append the image element to the current page
     return this.addToPage(data, schema)
+  }
+
+  createRect(options: PdfRectOptions): this {
+    // Add rectangle plugin
+    this._plugins.rectangle = rectangle
+
+    // Create schema for the rectangle element
+    const schema: Schema = {
+      type: 'rectangle',
+      name: this._id,
+      position: {
+        x: options.x,
+        y: options.y,
+      },
+      width: options.width,
+      height: options.height,
+      color: options?.color ? this._config.color[options.color] : undefined,
+    }
+
+    return this.addToPage('', schema)
   }
 
   /**

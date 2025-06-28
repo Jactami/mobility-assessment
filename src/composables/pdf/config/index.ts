@@ -16,12 +16,14 @@ export const config: PdfConfig = {
     primary: '#3F51B5',
     text: '#020618',
     light: '#F5F5F5',
+    neutral: '#FFF',
   },
   fontSize: {
     xs: 8,
     sm: 10,
     base: 14,
     lg: 18,
+    xl: 24,
   },
 }
 

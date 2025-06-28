@@ -28,6 +28,7 @@ export function usePdf() {
         .newPage()
         .createSectionHeader('Image Example')
         .createImage(image, { y: 20, width: 100, height: 100 })
+        .createSeparatorPage('Anhang')
         .createDomainTables(projectStore.pois || [])
         .build()
     } catch (err) {

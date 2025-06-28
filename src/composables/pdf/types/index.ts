@@ -15,6 +15,7 @@ export interface PdfConfig {
     primary: string
     text: string
     light?: string
+    neutral?: string
     // TODO: Add more colors if needed
   }
   fontSize: {
@@ -22,6 +23,7 @@ export interface PdfConfig {
     sm?: number
     base?: number
     lg?: number
+    xl?: number
     // TODO: Add more sizes if needed
   }
 }
@@ -42,6 +44,7 @@ export interface PdfTextOptions {
   fontSize?: keyof PdfConfig['fontSize']
   color?: keyof PdfConfig['color']
   alignment?: 'left' | 'center' | 'right'
+  verticalAlignment?: 'top' | 'middle' | 'bottom'
   // TODO: Add more options like opacity, rotation, background color, etc.
 }
 
@@ -50,6 +53,14 @@ export interface PdfImageOptions {
   y?: number
   width: number
   height: number
+}
+
+export interface PdfRectOptions {
+  x: number
+  y: number
+  width: number
+  height: number
+  color?: keyof PdfConfig['color']
 }
 
 export interface PdfTableOptions {
