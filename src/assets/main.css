@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import './theme.css';
 
+/* Initialize Dark Mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
   @apply bg-surface text-on-surface;
   font-family:

@@ -48,3 +48,38 @@
   /* Border radius */
   --radius-border: var(--radius-md);
 }
+
+/* Dark theme overrides */
+@layer theme {
+  * {
+    @variant dark {
+      /* Neutral colors */
+      --color-surface: var(--color-gray-900);
+      --color-surface-inverse: var(--color-white);
+
+      --color-surface-container-lowest: var(--color-gray-950);
+      --color-surface-container-low: var(--color-gray-800);
+      --color-surface-container: var(--color-gray-700);
+      --color-surface-container-high: var(--color-gray-600);
+      --color-surface-container-highest: var(--color-gray-500);
+
+      --color-on-surface: var(--color-gray-100);
+      --color-on-surface-variant: var(--color-gray-400);
+      --color-on-surface-inverse: var(--color-gray-900);
+
+      --color-outline: var(--color-gray-600);
+      --color-outline-variant: var(--color-gray-700);
+
+      /* Status colors */
+      --color-error: var(--color-red-400);
+      --color-on-error: var(--color-red-900);
+      --color-error-container: var(--color-red-700);
+      --color-on-error-container: var(--color-red-100);
+
+      --color-success: var(--color-green-400);
+      --color-on-success: var(--color-green-900);
+      --color-success-container: var(--color-green-700);
+      --color-on-success-container: var(--color-green-100);
+    }
+  }
+}

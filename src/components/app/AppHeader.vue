@@ -13,7 +13,8 @@
         </RouterLink>
       </div>
 
-      <div class="flex flex-1 justify-end">
+      <div class="flex flex-1 justify-end gap-x-2">
+        <AppDarkModeButton />
         <AuthUserAvatar v-if="authStore.user" />
         <RouterLink v-else to="/login">
           {{ t('auth.login') }}
@@ -27,6 +28,7 @@
 import AuthUserAvatar from '@/components/auth/AuthUserAvatar.vue'
 import { useAuthStore } from '@/stores/Auth'
 import { useI18n } from 'vue-i18n'
+import AppDarkModeButton from './AppDarkModeButton.vue'
 
 const authStore = useAuthStore()
 const { t } = useI18n()
