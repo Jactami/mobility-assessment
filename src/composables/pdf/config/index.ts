@@ -7,10 +7,10 @@ export const config: PdfConfig = {
     height: 297,
   },
   padding: {
-    top: 10,
-    right: 10,
-    bottom: 10,
-    left: 10,
+    top: 25,
+    right: 20,
+    bottom: 25,
+    left: 20,
   },
   color: {
     primary: '#3F51B5',

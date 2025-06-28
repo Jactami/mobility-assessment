@@ -72,7 +72,7 @@ export class PdfReportBuilder extends PdfBuilder {
             i18n.global.n(poi.distance, 'meter'),
           ]),
           {
-            y: 20,
+            y: this._config.padding.top + 10,
             border: false,
             padding: 2,
             columnWidths: [50, 30, 20],
