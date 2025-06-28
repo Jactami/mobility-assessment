@@ -9,8 +9,14 @@
     </p>
   </BaseSection>
 
-  <BaseSection :title="t('auth.changePassword')">
+  <BaseSection :title="t('auth.changePassword')" class="grow">
     <AuthChangePasswordForm />
+  </BaseSection>
+
+  <hr />
+
+  <BaseSection>
+    <p class="text-sm">v{{ version }} ({{ new Date(buildDate).toISOString() }})</p>
   </BaseSection>
 </template>
 
@@ -21,4 +27,8 @@ import BaseSection from '@/components/base/BaseSection.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+
+// Defined in vite.config.ts
+const version = __APP_VERSION__
+const buildDate = __APP_BUILD_DATE__
 </script>
