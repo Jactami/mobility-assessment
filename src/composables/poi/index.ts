@@ -139,7 +139,7 @@ export function usePoiService() {
               }
 
               // Just return the name if available
-              return name
+              return name || null
             }
           }
         }
