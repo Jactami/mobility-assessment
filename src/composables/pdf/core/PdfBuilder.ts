@@ -225,7 +225,7 @@ export class PdfBuilder {
       showHead: options?.showHead ?? true,
       head,
       headWidthPercentages: options?.columnWidths || head.map(() => 100 / head.length), // Default to equal widths
-      tableStyles: { borderWidth: 0.1, borderColor: '#000' },
+      tableStyles: { borderWidth: borderWidth, borderColor: '#000' },
       headStyles: {
         fontName: options?.head?.font,
         fontSize: this._config.fontSize[options?.head?.fontSize || 'base'],

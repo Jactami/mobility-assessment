@@ -14,6 +14,7 @@ export interface PdfConfig {
   color: {
     primary: string
     text: string
+    light?: string
     // TODO: Add more colors if needed
   }
   fontSize: {

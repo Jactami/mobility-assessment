@@ -1,3 +1,6 @@
+import { DOMAINS } from '@/constants'
+import type { Poi } from '@/db/types'
+import i18n from '@/i18n'
 import { PdfBuilder } from '../core/PdfBuilder'
 import type { PdfTextOptions } from '../types'
 
@@ -33,5 +36,53 @@ export class PdfReportBuilder extends PdfBuilder {
    */
   createSectionHeader(header: string, options?: PdfTextOptions): this {
     return this.createText(header, { font: 'bold', ...options })
+  }
+
+  /**
+   * Creates domain tables for the PDF document.
+   *
+   * TODO: Decide if the POIs should be processed in the composable or here.
+   *
+   * @param pois - The list of Points of Interest (POIs) to be categorized and displayed in domain tables.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createDomainTables(pois: Poi[]): this {
+    DOMAINS.forEach((domain) => {
+      // Filter POIs that belong to the current domain's categories
+      const domainCategories = domain.categories.map((category) => category.name)
+      const domainPois = pois.filter(
+        (poi) => poi.category && domainCategories.includes(poi.category),
+      )
+
+      // Sort the POIs by distance
+      domainPois.sort((a, b) => (a.distance || 0) - (b.distance || 0))
+
+      // Create a new page for each domain
+      this.newPage()
+        .createSectionHeader(i18n.global.t(`domain.${domain.name}`))
+        .createTable(
+          [
+            i18n.global.t('poi.label'),
+            i18n.global.t('poi.category'),
+            i18n.global.t('poi.distance'),
+          ],
+          domainPois.map((poi) => [
+            poi.label || i18n.global.t(`category.${poi.category}`),
+            i18n.global.t(`category.${poi.category}`),
+            i18n.global.n(poi.distance, 'meter'),
+          ]),
+          {
+            y: 20,
+            border: false,
+            padding: 2,
+            columnWidths: [50, 30, 20],
+            head: { font: 'bold', fontSize: 'sm' },
+            body: { fontSize: 'xs' },
+            stripedColor: this._config.color.light,
+          },
+        )
+    })
+
+    return this
   }
 }
