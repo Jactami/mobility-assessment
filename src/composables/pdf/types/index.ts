@@ -14,6 +14,7 @@ export interface PdfConfig {
   color: {
     primary: string
     text: string
+    muted?: string
     light?: string
     neutral?: string
     // TODO: Add more colors if needed
@@ -35,11 +36,15 @@ export type Fonts = {
   [K in FontKeys]?: Font[K]
 }
 
-export interface PdfTextOptions {
+export interface PdfElementOptions {
   x?: number
   y?: number
   width?: number
   height?: number
+  static?: boolean // whether the element is static (not affected by dynamic input)
+}
+
+export interface PdfTextOptions extends PdfElementOptions {
   font?: FontKeys
   fontSize?: keyof PdfConfig['fontSize']
   color?: keyof PdfConfig['color']
@@ -48,14 +53,12 @@ export interface PdfTextOptions {
   // TODO: Add more options like opacity, rotation, background color, etc.
 }
 
-export interface PdfImageOptions {
-  x?: number
-  y?: number
+export interface PdfImageOptions extends PdfElementOptions {
   width: number
   height: number
 }
 
-export interface PdfRectOptions {
+export interface PdfRectOptions extends PdfElementOptions {
   x: number
   y: number
   width: number
@@ -63,11 +66,7 @@ export interface PdfRectOptions {
   color?: keyof PdfConfig['color']
 }
 
-export interface PdfTableOptions {
-  x?: number
-  y?: number
-  width?: number
-  height?: number
+export interface PdfTableOptions extends PdfElementOptions {
   columnWidths?: number[]
   showHead?: boolean
   padding?: number // in mm

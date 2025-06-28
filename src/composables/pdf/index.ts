@@ -22,6 +22,8 @@ export function usePdf() {
       }
 
       pdf.value = await new PdfReportBuilder(config, meta, fonts)
+        .createHeader(`Standortbewertung - ${projectStore.project?.title}`)
+        .createFooter('Bayerische Gesellschaft für Wohneigentum')
         .createPageHeader('Page Title', 'This is a subtitle')
         .createSectionHeader('Project data', { y: 40 })
         .printData(data, { y: 50, fontSize: 'sm' })

@@ -50,6 +50,13 @@ export class PdfBuilder {
   protected _schemas: Schema[][] = [[]]
 
   /**
+   * An array of static schemas that are not affected by the dynamic input.
+   * These schemas are used for elements that should remain constant across all pages, such as headers and footers.
+   * @example
+   */
+  protected _staticSchema: Schema[] = []
+
+  /**
    * An object mapping unique IDs to input strings for the PDF document.
    */
   protected _inputs: Record<number, string> = {}
@@ -96,6 +103,7 @@ export class PdfBuilder {
             this._config.padding.bottom,
             this._config.padding.left,
           ],
+          staticSchema: this._staticSchema,
         },
         pdfmeVersion: PDFME_VERSION,
       },
@@ -119,6 +127,7 @@ export class PdfBuilder {
    */
   protected reset(): void {
     this._schemas = [[]]
+    this._staticSchema = []
     this._inputs = {}
     this._page = 0
     this._id = crypto.randomUUID()
@@ -128,12 +137,22 @@ export class PdfBuilder {
    * Adds a new schema and input to the current page.
    * @param input - The input string to be added to the current page.
    * @param schema - The schema object defining the layout and styling of the content.
+   * @param isStatic - Whether the schema is static (not affected by dynamic input).
    * @returns The instance itself, allowing for method chaining.
    */
-  private addToPage(input: string, schema: Schema): this {
-    // Assign the schema and input to the current page
-    this._schemas[this._page].push(schema)
-    this._inputs = { ...this._inputs, [this._id]: input }
+  private addToPage(input: string, schema: Schema, isStatic = false): this {
+    if (isStatic) {
+      // If the schema is static, add it to the static schemas array
+      this._staticSchema.push({
+        ...schema,
+        content: input, // static inputs must be defined in the schema!
+        readOnly: true, // Set to true to enable expression evaluation, i.e. {currentPage}
+      })
+    } else {
+      // Assign the schema and input to the current page
+      this._schemas[this._page].push(schema)
+      this._inputs = { ...this._inputs, [this._id]: input }
+    }
 
     // Generate a unique ID for the next schema and input
     this._id = crypto.randomUUID()
@@ -178,7 +197,7 @@ export class PdfBuilder {
     }
 
     // Append the text element to the current page
-    return this.addToPage(data, schema)
+    return this.addToPage(data, schema, options?.static)
   }
 
   /**
@@ -214,7 +233,7 @@ export class PdfBuilder {
     }
 
     // Append the image element to the current page
-    return this.addToPage(data, schema)
+    return this.addToPage(data, schema, options?.static)
   }
 
   createRect(options: PdfRectOptions): this {
@@ -234,7 +253,7 @@ export class PdfBuilder {
       color: options?.color ? this._config.color[options.color] : undefined,
     }
 
-    return this.addToPage('', schema)
+    return this.addToPage('', schema, options?.static)
   }
 
   /**
@@ -315,7 +334,7 @@ export class PdfBuilder {
       columnStyles: {},
     }
 
-    return this.addToPage(JSON.stringify(data), schema)
+    return this.addToPage(JSON.stringify(data), schema, options?.static)
   }
 
   /**

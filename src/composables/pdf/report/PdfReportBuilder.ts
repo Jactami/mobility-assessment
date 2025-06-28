@@ -6,6 +6,42 @@ import type { PdfTextOptions } from '../types'
 
 export class PdfReportBuilder extends PdfBuilder {
   /**
+   * Creates a header for the page.
+   * @param header - The header text.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createHeader(header: string): this {
+    return this.createText(header, {
+      y: this._config.padding.top - 10,
+      fontSize: 'sm',
+      color: 'muted',
+      alignment: 'left',
+      static: true,
+    })
+  }
+
+  /**
+   * Creates a footer for the page.
+   * @param footer - The footer text.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createFooter(footer: string): this {
+    return this.createText(footer, {
+      y: this._config.format.height - this._config.padding.bottom + 10,
+      fontSize: 'sm',
+      color: 'muted',
+      alignment: 'left',
+      static: true,
+    }).createText('{currentPage}', {
+      y: this._config.format.height - this._config.padding.bottom + 10,
+      fontSize: 'sm',
+      color: 'muted',
+      alignment: 'right',
+      static: true,
+    })
+  }
+
+  /**
    * Creates a header for the page, which includes a main header and an optional subheader.
    * @param header - The main header for the page.
    * @param subheader - The subheader for the page (optional).

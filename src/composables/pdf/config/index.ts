@@ -15,6 +15,7 @@ export const config: PdfConfig = {
   color: {
     primary: '#3F51B5',
     text: '#020618',
+    muted: '#6B7280',
     light: '#F5F5F5',
     neutral: '#FFF',
   },
