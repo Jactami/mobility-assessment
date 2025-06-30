@@ -34,3 +34,27 @@ CREATE TRIGGER handle_updated_at_projects
     BEFORE UPDATE ON public.projects
     FOR EACH ROW
     EXECUTE FUNCTION moddatetime('updated_at');
+
+-- Set project limit
+CREATE OR REPLACE FUNCTION enforce_project_limit()
+RETURNS TRIGGER AS $$
+DECLARE
+    project_count INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO project_count
+    FROM public.projects
+    WHERE owner_id = NEW.owner_id;
+
+    IF project_count >= 50 THEN
+        RAISE EXCEPTION 'project limit exceeded'
+            USING ERRCODE = 'P0001'; -- Custom user defined error code 
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_project_limit
+BEFORE INSERT ON public.projects
+FOR EACH ROW
+EXECUTE FUNCTION enforce_project_limit();

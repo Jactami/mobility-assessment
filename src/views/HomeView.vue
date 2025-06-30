@@ -100,7 +100,14 @@ async function createProject() {
   })
 
   if (!data || error) {
-    errorToast(t('project.createError'))
+    // Check if the error is due to project limit
+    // TODO
+    if (error?.code === 'P0001') {
+      errorToast(t('project.limitReached'))
+    } else {
+      // General error handling
+      errorToast(t('project.createError'))
+    }
   } else {
     router.push({
       name: 'project',
