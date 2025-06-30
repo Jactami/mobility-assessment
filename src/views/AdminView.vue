@@ -33,20 +33,17 @@ const tableConfig: TableConfig<Profile> = {
     {
       key: 'last_name',
       label: 'Last Name',
-      sortable: true,
-      formatter: (lastName) => lastName,
+      sort: 'raw',
     },
     {
       key: 'first_name',
       label: 'First Name',
-      sortable: true,
-      formatter: (firstName) => firstName,
+      sort: 'raw',
     },
     {
       key: 'email',
       label: 'Email',
-      sortable: true,
-      formatter: (email) => email,
+      sort: 'raw',
     },
   ],
   presort: { key: 'last_name', order: 'asc' },
@@ -62,7 +59,7 @@ const tableConfig: TableConfig<Profile> = {
     {
       icon: 'delete',
       label: 'Delete',
-      handler: (profile) => deleteUser(profile),
+      handler: deleteUser,
     },
   ],
 }

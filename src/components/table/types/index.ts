@@ -13,8 +13,8 @@ export interface TableColumn<T> {
   /** Label for the column header. */
   label: string
 
-  /** If true, enables sorting for this column.*/
-  sortable?: boolean
+  /** Optional sorting configuration for the column. If not provided, the column will not be sortable. */
+  sort?: 'formatted' | 'raw'
 
   /** Optional formatter function to customize the cell value. */
   formatter?: (value: unknown, item: T) => unknown

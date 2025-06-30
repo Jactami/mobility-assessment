@@ -200,20 +200,24 @@ const columns = computed(() => {
       header: col.label,
       cell: (props) =>
         col.formatter ? col.formatter(props.getValue(), props.cell.row.original) : props.getValue(),
-      enableSorting: !!col.sortable,
+      enableSorting: !!col.sort,
       sortingFn:
-        // Custom sorting function if formatter is provided
-        col.sortable && col.formatter
+        col.sort && col.formatter
           ? (a, b) => {
-              const aVal = col.formatter?.(a.getValue(col.key), a.original)
-              const bVal = col.formatter?.(b.getValue(col.key), b.original)
+              const rawA = a.getValue(col.key)
+              const rawB = b.getValue(col.key)
 
-              if (typeof aVal === 'number' && typeof bVal === 'number') {
-                return aVal - bVal
-              } else if (aVal instanceof Date && bVal instanceof Date) {
+              const aVal = col.sort === 'formatted' ? col.formatter?.(rawA, a.original) : rawA
+              const bVal = col.sort === 'formatted' ? col.formatter?.(rawB, b.original) : rawB
+
+              // Sort numbers
+              if (typeof aVal === 'number' && typeof bVal === 'number') return aVal - bVal
+
+              // Sort dates
+              if (aVal instanceof Date && bVal instanceof Date)
                 return aVal.getTime() - bVal.getTime()
-              }
 
+              // Default alphanumeric sort
               return String(aVal).localeCompare(String(bVal))
             }
           : 'alphanumeric',
