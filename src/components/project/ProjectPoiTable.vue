@@ -12,12 +12,14 @@
 <script setup lang="ts">
 import DataTable from '@/components/table/DataTable.vue'
 import { useLogger } from '@/composables/log'
+import { useNotification } from '@/composables/notification'
 import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { useI18n } from 'vue-i18n'
 import type TableConfig from '../table/types'
 
 const { n, t } = useI18n()
+const { confirmDialog } = useNotification()
 const projectStore = useProjectStore()
 
 const config: TableConfig<Poi> = {
@@ -59,7 +61,17 @@ const config: TableConfig<Poi> = {
     {
       label: t('poi.delete'),
       icon: 'delete',
-      handler: (poi) => useLogger().log('Delete action for', poi),
+      handler: async (poi) => {
+        if (!projectStore.pois) return
+
+        // Confirm deletion
+        const confirmation = await confirmDialog('Soll der Eintrag wirklich gelöscht werden?')
+        if (!confirmation) return
+
+        // Remove the POI from the store
+        const newPois = projectStore.pois.filter((p) => p !== poi)
+        projectStore.updatePois(newPois)
+      },
     },
   ],
 }
