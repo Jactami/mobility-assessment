@@ -35,8 +35,8 @@
     "pleaseConfirm": "Bitte bestätigen",
     "success": "Erfolg",
     "save": "Speichern",
-    "search": "Suche",
-    "searchPlaceholder": "Suche..."
+    "search": "Suchen",
+    "searchPlaceholder": "Durchsuchen..."
   },
   "map": {
     "resetMap": "Karte zurücksetzen",
@@ -132,8 +132,8 @@
       "first": "Erste",
       "last": "Letzte"
     },
-    "search": "Suche",
-    "searchPlaceholder": "Suche..."
+    "search": "Suchen",
+    "searchPlaceholder": "Durchsuchen..."
   },
   "settings": {
     "appInfo": "App-Informationen",

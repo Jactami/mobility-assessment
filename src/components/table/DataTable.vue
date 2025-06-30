@@ -10,7 +10,6 @@
         :placeholder="t('table.searchPlaceholder')"
         autocomplete="off"
         :spellcheck="false"
-        label-class="sr-only"
       >
         <template #prefixIcon>
           <IconRenderer icon="search" class="mr-2 text-on-surface-variant" />
