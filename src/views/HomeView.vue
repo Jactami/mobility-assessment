@@ -1,5 +1,18 @@
 <template>
-  <BaseSection :title="t('project.project', 2)">
+  <BaseSection v-if="favoriteProjects && favoriteProjects.length" :title="t('project.favorites')">
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <ProjectCard
+        v-for="project in favoriteProjects"
+        :key="project.id"
+        :project="project"
+        @delete="deleteProject(project)"
+        @copy="copyProject(project)"
+        @favorite="toggleFavorite(project)"
+      />
+    </div>
+  </BaseSection>
+
+  <BaseSection :title="t('project.myProjects')">
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
       <template v-if="!loading">
         <button class="cursor-pointer" title="Neues Projekt" @click="createProject">
@@ -21,6 +34,7 @@
           :project="project"
           @delete="deleteProject(project)"
           @copy="copyProject(project)"
+          @favorite="toggleFavorite(project)"
         />
       </template>
       <template v-else>
@@ -42,7 +56,7 @@ import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
 import type { Project } from '@/db/types'
 import { useAuthStore } from '@/stores/Auth'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
@@ -54,6 +68,10 @@ const { t } = useI18n()
 
 const loading = ref(false)
 const projects = ref<Project[] | null>(null)
+
+const favoriteProjects = computed(() => {
+  return projects.value?.filter((project) => project.favorite)
+})
 
 onMounted(() => {
   // Load projects when user enters the page
@@ -115,7 +133,7 @@ async function copyProject(project: Project) {
   const { data, error } = await db.setProject({
     ...project,
     id: undefined, // Ensure a new ID is generated
-    title: `${project.title} (Kopie)`,
+    title: `${project.title} (${t('project.projectCopy')})`,
   })
 
   if (!data || error) {
@@ -128,5 +146,16 @@ async function copyProject(project: Project) {
 
     successToast(t('project.createSuccess'))
   }
+}
+
+async function toggleFavorite(project: Project) {
+  if (!authStore.user) return
+
+  await db.setProject({
+    ...project,
+    favorite: !project.favorite, // Toggle favorite status
+  })
+
+  loadProjects()
 }
 </script>

@@ -20,10 +20,11 @@ SELECT public.create_user(
 --
 -- Create projects
 --
-INSERT INTO projects (id, title, country, postcode, city, street, housenumber, owner_id, latitude, longitude, radius)
+INSERT INTO projects (id, title, favorite, country, postcode, city, street, housenumber, owner_id, latitude, longitude, radius)
 VALUES (
     '00000000-0000-0000-0000-000000000000',
     'ERBA',
+    TRUE,
     'Deutschland',
     '96047',
     'Bamberg', 

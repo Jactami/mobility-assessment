@@ -14,6 +14,8 @@ import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded
 import MaterialSymbolsMoreVert from '~icons/material-symbols/more-vert'
 import MaterialSymbolsPerson from '~icons/material-symbols/person'
 import MaterialSymbolsSearchRounded from '~icons/material-symbols/search-rounded'
+import MaterialSymbolsStarOutlineRounded from '~icons/material-symbols/star-outline-rounded'
+import MaterialSymbolsStarRounded from '~icons/material-symbols/star-rounded'
 import MaterialSymbolsSunnyRounded from '~icons/material-symbols/sunny-rounded'
 import MaterialSymbolsVisibilityOffOutlineRounded from '~icons/material-symbols/visibility-off-outline-rounded'
 import MaterialSymbolsVisibilityOutlineRounded from '~icons/material-symbols/visibility-outline-rounded'
@@ -45,6 +47,8 @@ export const iconMap = {
   edit: MaterialSymbolsEditRounded,
   light: MaterialSymbolsSunnyRounded,
   dark: MaterialSymbolsDarkModeRounded,
+  favorite: MaterialSymbolsStarRounded,
+  noFavorite: MaterialSymbolsStarOutlineRounded,
 }
 
 export type Icon = keyof typeof iconMap

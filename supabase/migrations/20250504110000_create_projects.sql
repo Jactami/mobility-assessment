@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
     updated_at TIMESTAMP WITH TIME ZONE,
     owner_id UUID NOT NULL,
     title VARCHAR(100) NOT NULL,
+    favorite BOOLEAN DEFAULT FALSE,
     latitude DECIMAL(9,7),
     longitude DECIMAL(9,7),
     name VARCHAR(100),

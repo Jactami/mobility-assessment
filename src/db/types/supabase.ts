@@ -88,6 +88,7 @@ export type Database = {
           city: string | null
           country: string | null
           created_at: string
+          favorite: boolean | null
           housenumber: string | null
           id: string
           latitude: number | null
@@ -104,6 +105,7 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          favorite?: boolean | null
           housenumber?: string | null
           id?: string
           latitude?: number | null
@@ -120,6 +122,7 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          favorite?: boolean | null
           housenumber?: string | null
           id?: string
           latitude?: number | null
