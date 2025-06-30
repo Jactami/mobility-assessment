@@ -35,7 +35,8 @@
     "pleaseConfirm": "Bitte bestätigen",
     "success": "Erfolg",
     "save": "Speichern",
-    "search": "Suche"
+    "search": "Suche",
+    "searchPlaceholder": "Suche..."
   },
   "map": {
     "resetMap": "Karte zurücksetzen",

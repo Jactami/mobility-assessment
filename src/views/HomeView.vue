@@ -1,4 +1,28 @@
 <template>
+  <!-- Action Bar -->
+  <div class="max-w-sm">
+    <FormKit
+      v-model="searchQuery"
+      type="text"
+      name="search"
+      :label="t('common.search')"
+      :placeholder="t('common.searchPlaceholder')"
+      autocomplete="off"
+      :spellcheck="false"
+      label-class="sr-only"
+    >
+      <template #prefixIcon>
+        <IconRenderer icon="search" class="mr-2 text-on-surface-variant" />
+      </template>
+      <template #suffixIcon>
+        <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+          <IconButton v-if="searchQuery" icon="clear" @click="searchQuery = ''" />
+        </div>
+      </template>
+    </FormKit>
+  </div>
+
+  <!-- Favorites -->
   <BaseSection v-if="favoriteProjects && favoriteProjects.length" :title="t('project.favorites')">
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
       <ProjectCard
@@ -12,6 +36,7 @@
     </div>
   </BaseSection>
 
+  <!-- All Projects -->
   <BaseSection :title="t('project.myProjects')">
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
       <template v-if="!loading">
@@ -29,7 +54,7 @@
           </BaseCard>
         </button>
         <ProjectCard
-          v-for="project in projects"
+          v-for="project in filteredProjects"
           :key="project.id"
           :project="project"
           @delete="deleteProject(project)"
@@ -50,6 +75,7 @@
 import BaseCard from '@/components/base/BaseCard.vue'
 import BaseSection from '@/components/base/BaseSection.vue'
 import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
+import IconButton from '@/components/icon/IconButton.vue'
 import IconRenderer from '@/components/icon/IconRenderer.vue'
 import ProjectCard from '@/components/project/ProjectCard.vue'
 import useDB from '@/composables/db'
@@ -66,11 +92,26 @@ const authStore = useAuthStore()
 const { successToast, errorToast, confirmDialog } = useNotification()
 const { t } = useI18n()
 
+const searchQuery = ref('')
+
 const loading = ref(false)
 const projects = ref<Project[] | null>(null)
 
+/** Filter projects based on the search query. */
+const filteredProjects = computed(() => {
+  const query = searchQuery.value.trim().toLowerCase()
+  // TODO: Decide whether to filter by more fields or even allow composite queries (e.g. full address)
+  return projects.value?.filter(
+    (project) =>
+      project.title.toLowerCase().includes(query) ||
+      project.city?.toLowerCase().includes(query) ||
+      project.street?.toLowerCase().includes(query),
+  )
+})
+
+/** Projects marked as favorites within the filtered projects. */
 const favoriteProjects = computed(() => {
-  return projects.value?.filter((project) => project.favorite)
+  return filteredProjects.value?.filter((project) => project.favorite)
 })
 
 onMounted(() => {
