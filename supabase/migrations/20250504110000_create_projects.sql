@@ -39,20 +39,32 @@ CREATE TRIGGER handle_updated_at_projects
 CREATE OR REPLACE FUNCTION enforce_project_limit()
 RETURNS TRIGGER AS $$
 DECLARE
-    project_count INTEGER;
+    existing_project projects%ROWTYPE;
 BEGIN
-    SELECT COUNT(*) INTO project_count
-    FROM public.projects
-    WHERE owner_id = NEW.owner_id;
+    -- Check if project with the same ID already exists
+    SELECT * INTO existing_project
+    FROM projects
+    WHERE id = NEW.id;
 
-    IF project_count >= 50 THEN
-        RAISE EXCEPTION 'project limit exceeded'
+    -- If it exists, this is an update — allow it
+    IF FOUND THEN
+        RETURN NEW;
+    END IF;
+
+    -- If it's a true insert, check if the user has hit the project limit
+    IF (
+        SELECT COUNT(*)
+        FROM projects
+        WHERE owner_id = NEW.owner_id
+    ) >= 50 THEN
+        RAISE EXCEPTION 'Project limit exceeded.'
             USING ERRCODE = 'P0001'; -- Custom user defined error code 
     END IF;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE TRIGGER check_project_limit
 BEFORE INSERT ON public.projects
