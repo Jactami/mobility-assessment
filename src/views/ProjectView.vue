@@ -17,15 +17,8 @@
     </div>
   </BaseSection>
 
-  <BaseSection v-if="projectStore.pois && projectStore.pois.length > 0">
-    <DataTable :config="tableConfig" :data="projectStore.pois">
-      <template #item-category="{ value }">
-        <div class="flex items-center gap-2">
-          <img :src="`/img/map/${value}.svg`" :alt="t(`category.${value}`)" class="h-4" />
-          <span>{{ t(`category.${value}`) }}</span>
-        </div>
-      </template>
-    </DataTable>
+  <BaseSection>
+    <ProjectPoiTable />
   </BaseSection>
 
   <DebugPanel title="Project Store" :value="projectStore.project" />
@@ -37,10 +30,8 @@ import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
 import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
-import DataTable from '@/components/table/DataTable.vue'
-import type TableConfig from '@/components/table/types'
+import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
 import useDB from '@/composables/db'
-import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { usePdf } from '@/composables/pdf'
 import type { Poi, Project } from '@/db/types'
@@ -49,7 +40,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 
-const { n, t } = useI18n()
+const { t } = useI18n()
 const db = useDB()
 const projectStore = useProjectStore()
 const route = useRoute()
@@ -69,50 +60,6 @@ const isProjectDirty = computed(
     JSON.stringify(projectStore.project) !== JSON.stringify(project.value) ||
     JSON.stringify(projectStore.pois) !== JSON.stringify(pois.value),
 )
-
-const tableConfig: TableConfig<Poi> = {
-  columns: [
-    {
-      key: 'label',
-      label: t('poi.label'),
-      sortable: true,
-      formatter: (label, poi) => label || t(`category.${poi.category}`),
-      width: 60,
-    },
-    {
-      key: 'category',
-      label: t('poi.category'),
-      sortable: true,
-      formatter: (category) => t(`category.${category}`),
-      width: 30,
-    },
-    {
-      key: 'distance',
-      label: t('poi.distance'),
-      sortable: true,
-      formatter: (distance) => n(Number(distance), 'meter'),
-      width: 10,
-    },
-  ],
-  searchable: true,
-  pagination: true,
-  presort: {
-    key: 'distance',
-    order: 'asc',
-  },
-  actions: [
-    {
-      label: t('poi.edit'),
-      icon: 'edit',
-      handler: (poi) => useLogger().log('Edit action for', poi),
-    },
-    {
-      label: t('poi.delete'),
-      icon: 'delete',
-      handler: (poi) => useLogger().log('Delete action for', poi),
-    },
-  ],
-}
 
 // Load the project and POIs when the user enters the page
 onMounted(loadProject)
