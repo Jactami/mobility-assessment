@@ -61,18 +61,22 @@ const config: TableConfig<Poi> = {
     {
       label: t('poi.delete'),
       icon: 'delete',
-      handler: async (poi) => {
-        if (!projectStore.pois) return
-
-        // Confirm deletion
-        const confirmation = await confirmDialog('Soll der Eintrag wirklich gelöscht werden?')
-        if (!confirmation) return
-
-        // Remove the POI from the store
-        const newPois = projectStore.pois.filter((p) => p !== poi)
-        projectStore.updatePois(newPois)
-      },
+      handler: deletePoi,
     },
   ],
+}
+
+async function deletePoi(poi: Poi) {
+  if (!projectStore.pois) return
+
+  // Confirm deletion
+  const confirmation = await confirmDialog(
+    t('table.confirmDelete', { object: poi.label || t(`category.${poi.category}`) }),
+  )
+  if (!confirmation) return
+
+  // Remove the POI from the store
+  const newPois = projectStore.pois.filter((p) => p !== poi)
+  projectStore.updatePois(newPois)
 }
 </script>
