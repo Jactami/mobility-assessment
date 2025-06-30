@@ -57,7 +57,7 @@ export default function useDB() {
    * @returns {Promise<PostgrestResponse<any>>} - Array of projects.
    */
   const getProjects = (): Promise<PostgrestResponse<Tables<'projects'>>> =>
-    handleDBCall(async () => await supabase.from('projects').select())
+    handleDBCall(async () => await supabase.from('projects').select().order('created_at'))
 
   /**
    * Fetches a project from the database.
@@ -101,7 +101,10 @@ export default function useDB() {
    * @returns {Promise<PostgrestResponse<Tables<'pois'>>>} - The list of POIs for the specified project.
    */
   const getPois = (projectId: string): Promise<PostgrestResponse<Tables<'pois'>>> =>
-    handleDBCall(async () => await supabase.from('pois').select().eq('project_id', projectId))
+    handleDBCall(
+      async () =>
+        await supabase.from('pois').select().eq('project_id', projectId).order('distance'),
+    )
 
   /**
    * Inserts or updates Points of Interest (POIs) in the database.
@@ -117,7 +120,10 @@ export default function useDB() {
    * @returns {Promise<PostgrestResponse<Tables<'profiles'>>>} - The list of user profiles.
    */
   const getProfiles = (): Promise<PostgrestResponse<Tables<'profiles'>>> =>
-    handleDBCall(async () => await supabase.from('profiles').select().neq('user_role', 'admin'))
+    handleDBCall(
+      async () =>
+        await supabase.from('profiles').select().neq('user_role', 'admin').order('last_name'),
+    )
 
   /**
    * Creates a new user profile in the database.
