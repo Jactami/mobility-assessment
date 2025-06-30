@@ -134,5 +134,9 @@
     },
     "search": "Suche",
     "searchPlaceholder": "Suche..."
+  },
+  "settings": {
+    "appInfo": "App-Informationen",
+    "title": "Einstellungen"
   }
 }

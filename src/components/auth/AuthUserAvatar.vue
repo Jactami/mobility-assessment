@@ -28,9 +28,9 @@ const { t } = useI18n()
 
 const menu: Menu = [
   {
-    label: t('auth.profile'),
-    icon: 'user',
-    action: () => router.push({ name: 'profile' }),
+    label: t('settings.title'),
+    icon: 'settings',
+    action: () => router.push({ name: 'settings' }),
     divider: true,
   },
   {

@@ -1,21 +1,11 @@
 <template>
-  <BasePageHeader :title="t('auth.profile')" />
-
-  <BaseSection>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse at maxime nihil? Nihil, incidunt
-      libero iste blanditiis repudiandae nulla, cumque tempore quae, assumenda sequi deleniti
-      recusandae unde quo. Et, voluptatem.
-    </p>
-  </BaseSection>
+  <BasePageHeader :title="t('settings.title')" />
 
   <BaseSection :title="t('auth.changePassword')" class="grow">
     <AuthChangePasswordForm />
   </BaseSection>
 
-  <hr />
-
-  <BaseSection>
+  <BaseSection :title="t('settings.appInfo')">
     <p class="text-sm">v{{ version }} ({{ new Date(buildDate).toISOString() }})</p>
   </BaseSection>
 </template>

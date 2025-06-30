@@ -35,9 +35,9 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('../views/ProfileView.vue'),
+    path: '/settings',
+    name: 'settings',
+    component: () => import('../views/SettingsView.vue'),
     meta: {
       roles: ['admin', 'user'],
     },
