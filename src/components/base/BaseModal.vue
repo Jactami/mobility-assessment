@@ -6,11 +6,13 @@
     <!-- Full-screen container to center the panel -->
     <div class="fixed inset-0 flex w-screen items-center justify-center p-4">
       <!-- The actual dialog panel -->
-      <DialogPanel class="relative w-full max-w-5xl rounded-border bg-surface p-6 shadow-md">
-        <div class="absolute top-4 right-4">
+      <DialogPanel
+        class="relative w-full max-w-5xl rounded-border border border-outline bg-surface p-6 shadow-md"
+      >
+        <div class="absolute top-4 right-4 z-9999">
           <IconButton icon="close" @click="isOpen = false" />
         </div>
-        <DialogTitle v-if="title" class="mb-4 text-xl font-bold">{{ title }}</DialogTitle>
+        <DialogTitle v-if="title" class="mb-6 text-xl font-bold">{{ title }}</DialogTitle>
         <div>
           <slot>
             <!-- Modal content goes here. -->
