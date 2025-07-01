@@ -17,6 +17,19 @@
     </div>
   </BaseSection>
 
+  <BaseSection v-if="projectStore.pois">
+    <div class="flex flex-wrap justify-center gap-2">
+      <template v-for="domain in DOMAINS" :key="domain.name">
+        <ProjectCategoryPill
+          v-for="category in domain.categories"
+          :key="category.name"
+          :category="category.name"
+          :count="projectStore.pois.filter((poi) => poi.category === category.name).length"
+        />
+      </template>
+    </div>
+  </BaseSection>
+
   <BaseSection>
     <ProjectPoiTable />
   </BaseSection>
@@ -30,10 +43,12 @@ import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
 import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
+import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
 import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
 import { usePdf } from '@/composables/pdf'
+import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
