@@ -135,7 +135,7 @@ export default function useDB() {
     firstName: string
     lastName: string
     email: string
-    password: string
+    password?: string
   }): Promise<PostgrestResponse<Tables<'profiles'>>> =>
     handleDBCall(async () => {
       if (user.id) {
@@ -148,7 +148,7 @@ export default function useDB() {
           new_password: user.password,
         })
         if (response.error) return response
-      } else {
+      } else if (user.password) {
         // Create new user
         const response = await supabase.rpc('create_user', {
           first_name: user.firstName,

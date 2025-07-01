@@ -92,8 +92,8 @@ const editProfile = ref({
   first_name: '',
   last_name: '',
   email: '',
-  password: '',
-  password_confirm: '',
+  password: undefined as string | undefined, // password might be optional for existing users
+  password_confirm: undefined as string | undefined,
 })
 
 const tableConfig: TableConfig<Profile> = {
@@ -131,8 +131,8 @@ const tableConfig: TableConfig<Profile> = {
           first_name: profile.first_name,
           last_name: profile.last_name,
           email: profile.email,
-          password: '', // Password should not be pre-filled
-          password_confirm: '',
+          password: undefined, // Password should not be pre-filled
+          password_confirm: undefined,
         }
       },
     },
@@ -185,8 +185,8 @@ async function addUser() {
     first_name: '',
     last_name: '',
     email: '',
-    password: '',
-    password_confirm: '',
+    password: undefined,
+    password_confirm: undefined,
   }
 }
 
