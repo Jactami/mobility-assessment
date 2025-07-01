@@ -13,7 +13,13 @@
 
     <!-- Openstreetmap Layer -->
     <Layers.OlTileLayer>
-      <Sources.OlSourceOsm />
+      <Sources.OlSourceOsm
+        :attributions="[
+          `© ${new Date().getFullYear()} by BGW Digital`,
+          '© OpenStreetMap contributors/',
+          'Lizenz: ODbL',
+        ]"
+      />
     </Layers.OlTileLayer>
 
     <template
