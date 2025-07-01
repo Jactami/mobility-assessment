@@ -15,7 +15,7 @@
           <IconRenderer icon="search" class="mr-2 text-on-surface-variant" />
         </template>
         <template #suffixIcon>
-          <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+          <div class="absolute right-0 bottom-1 flex items-center pr-2">
             <IconButton v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
           </div>
         </template>
