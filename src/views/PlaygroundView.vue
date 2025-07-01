@@ -248,22 +248,22 @@ const tableConfig: TableConfig<Person> = {
     {
       key: 'firstName',
       label: 'First Name',
-      sortable: true,
+      sort: 'raw',
     },
     {
       key: 'lastName',
       label: 'Last Name',
-      sortable: true,
+      sort: 'raw',
     },
     {
       key: 'age',
       label: 'Age',
-      sortable: true,
+      sort: 'raw',
     },
     {
       key: 'visits',
       label: 'Visits',
-      sortable: true,
+      sort: 'raw',
     },
     {
       key: 'status',
@@ -272,7 +272,7 @@ const tableConfig: TableConfig<Person> = {
     {
       key: 'progress',
       label: 'Progress',
-      sortable: true,
+      sort: 'raw',
       formatter: (value) => `${value}%`,
     },
   ],
