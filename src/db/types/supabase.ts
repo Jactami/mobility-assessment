@@ -165,6 +165,16 @@ export type Database = {
         Args: { target_user_id: string }
         Returns: undefined
       }
+      update_user: {
+        Args: {
+          target_user_id: string
+          new_first_name?: string
+          new_last_name?: string
+          new_email?: string
+          new_password?: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       osm_type: 'node' | 'way' | 'relation'

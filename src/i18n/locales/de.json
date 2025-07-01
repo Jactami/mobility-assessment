@@ -12,12 +12,20 @@
     "project": "Projekt"
   },
   "auth": {
+    "addUser": "Nutzer hinzufügen",
     "changePassword": "Passwort ändern",
     "changePasswordError": "Fehler beim Ändern des Passworts",
     "changePasswordSuccess": "Passwort erfolgreich geändert",
+    "editUser": "Nutzer bearbeiten",
+    "deleteSuccess": "Nutzer erfolgreich gelöscht",
+    "deleteError": "Fehler beim Löschen des Nutzers",
     "login": "Anmelden",
     "logout": "Abmelden",
+    "loadError": "Fehler beim Laden der Nutzerdaten",
     "email": "E-Mail",
+    "emailExists": "E-Mail-Adresse ist bereits vergeben.",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
     "invalidCredentials": "Ungültige Anmeldedaten",
     "password": "Passwort",
     "passwordConfirm": "Passwort bestätigen",
@@ -25,18 +33,24 @@
     "loginError": "Fehler bei der Anmeldung",
     "logoutError": "Fehler bei der Abmeldung",
     "loggedInAs": "Sie sind angemeldet als {user}.",
-    "profile": "Profil"
+    "profile": "Profil",
+    "upsertError": "Fehler beim Aktualisieren des Nutzers",
+    "upsertSuccess": "Nutzer erfolgreich aktualisiert"
   },
   "common": {
     "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
     "error": "Fehler",
     "errorMessage": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
     "ok": "OK",
+    "optional": "Optional",
     "pleaseConfirm": "Bitte bestätigen",
     "success": "Erfolg",
     "save": "Speichern",
     "search": "Suchen",
-    "searchPlaceholder": "Durchsuchen..."
+    "searchPlaceholder": "Durchsuchen...",
+    "submit": "Absenden"
   },
   "map": {
     "resetMap": "Karte zurücksetzen",

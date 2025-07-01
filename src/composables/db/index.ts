@@ -126,27 +126,36 @@ export default function useDB() {
     )
 
   /**
-   * Creates a new user profile in the database.
-   * @param firstName - The first name of the user.
-   * @param lastName - The last name of the user.
-   * @param email - The email address of the user.
-   * @param password - The password for the user.
+   * Creates a new user profile in the database or updates an existing one.
+   * @param user - The user object containing the user's details.
    * @returns {Promise<PostgrestResponse<Tables<'profiles'>>>} - The updated list of profiles after creation.
    */
-  const createUser = (user: {
+  const setUser = (user: {
+    id?: string
     firstName: string
     lastName: string
     email: string
     password: string
   }): Promise<PostgrestResponse<Tables<'profiles'>>> =>
     handleDBCall(async () => {
-      // Call the stored procedure to create the user
-      await supabase.rpc('create_user', {
-        first_name: user.firstName,
-        last_name: user.lastName,
-        email: user.email,
-        password: user.password,
-      })
+      if (user.id) {
+        // Update existing user
+        await supabase.rpc('update_user', {
+          target_user_id: user.id,
+          new_first_name: user.firstName,
+          new_last_name: user.lastName,
+          new_email: user.email,
+          new_password: user.password,
+        })
+      } else {
+        // Create new user
+        await supabase.rpc('create_user', {
+          first_name: user.firstName,
+          last_name: user.lastName,
+          email: user.email,
+          password: user.password,
+        })
+      }
 
       // Return the updated list of profiles
       return getProfiles()
@@ -173,7 +182,7 @@ export default function useDB() {
     getPois,
     setPois,
     getProfiles,
-    createUser,
+    setUser,
     deleteUser,
   }
 }
