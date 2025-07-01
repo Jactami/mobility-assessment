@@ -13,7 +13,7 @@
         </RouterLink>
       </div>
 
-      <div class="flex flex-1 justify-end gap-x-2">
+      <div class="flex flex-1 items-center justify-end gap-x-2">
         <AppDarkModeButton />
         <AuthUserAvatar v-if="authStore.user" />
         <RouterLink v-else to="/login">
