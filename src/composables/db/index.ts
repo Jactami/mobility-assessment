@@ -140,21 +140,23 @@ export default function useDB() {
     handleDBCall(async () => {
       if (user.id) {
         // Update existing user
-        await supabase.rpc('update_user', {
+        const response = await supabase.rpc('update_user', {
           target_user_id: user.id,
           new_first_name: user.firstName,
           new_last_name: user.lastName,
           new_email: user.email,
           new_password: user.password,
         })
+        if (response.error) return response
       } else {
         // Create new user
-        await supabase.rpc('create_user', {
+        const response = await supabase.rpc('create_user', {
           first_name: user.firstName,
           last_name: user.lastName,
           email: user.email,
           password: user.password,
         })
+        if (response.error) return response
       }
 
       // Return the updated list of profiles
@@ -169,7 +171,9 @@ export default function useDB() {
   const deleteUser = (id: string): Promise<PostgrestResponse<Tables<'profiles'>>> =>
     handleDBCall(async () => {
       // Call the stored procedure to delete the user
-      await supabase.rpc('delete_user', { target_user_id: id })
+      const response = await supabase.rpc('delete_user', { target_user_id: id })
+      if (response.error) return response
+
       // Return the updated list of profiles
       return getProfiles()
     })
