@@ -177,10 +177,26 @@
       </DataTable>
     </div>
   </BaseSection>
+
+  <BaseSection title="Modal">
+    <p>
+      The modal is a component that can be used to display a dialog. It is defined in the
+      <code>src/components/base/BaseModal.vue</code> file.
+    </p>
+    <div class="mt-4 flex justify-center">
+      <BaseButton @click="modalOpen = true">Open Modal</BaseButton>
+    </div>
+    <BaseModal v-model="modalOpen" title="My Modal">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum rem, ex assumenda, eligendi
+      voluptate provident sint non doloremque perferendis accusamus, unde quisquam ullam? Tempore
+      delectus ipsum voluptatem temporibus velit laboriosam.
+    </BaseModal>
+  </BaseSection>
 </template>
 
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseModal from '@/components/base/BaseModal.vue'
 import BasePageHeader from '@/components/base/BasePageHeader.vue'
 import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
@@ -191,12 +207,15 @@ import DataTable from '@/components/table/DataTable.vue'
 import type TableConfig from '@/components/table/types'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
+import { ref } from 'vue'
 import MaterialSymbolsLogin from '~icons/material-symbols/login'
 
 const logger = useLogger('playground')
 const notification = useNotification()
 
 logger.log('Logger running...')
+
+const modalOpen = ref(false)
 
 const quiz = {
   sport: {

@@ -26,6 +26,9 @@ importers:
       '@formkit/vue':
         specifier: ^1.6.9
         version: 1.6.9(tailwindcss@4.1.11)(vue@3.5.17(typescript@5.6.3))
+      '@headlessui/vue':
+        specifier: ^1.7.23
+        version: 1.7.23(vue@3.5.17(typescript@5.6.3))
       '@pdfme/common':
         specifier: ^5.4.0
         version: 5.4.0(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.3(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))
@@ -662,6 +665,12 @@ packages:
     peerDependencies:
       vue: ^3.4.0
 
+  '@headlessui/vue@1.7.23':
+    resolution: {integrity: sha512-JzdCNqurrtuu0YW6QaDtR2PIYCKPUWq28csDyMvN4zmGccmE7lz40Is6hc3LA4HFeCI7sekZ/PQMTNmn9I/4Wg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      vue: ^3.2.0
+
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
     engines: {node: '>=18.18.0'}
@@ -1063,11 +1072,19 @@ packages:
     resolution: {integrity: sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg==}
     engines: {node: '>=12'}
 
+  '@tanstack/virtual-core@3.13.12':
+    resolution: {integrity: sha512-1YBOJfRHV4sXUmWsFSf5rQor4Ss82G8dQWLRbnk3GA4jeP8hQt1hxXh0tmflpC0dz3VgEv/1+qwPyLeWkQuPFA==}
+
   '@tanstack/vue-table@8.21.3':
     resolution: {integrity: sha512-rusRyd77c5tDPloPskctMyPLFEQUeBzxdQ+2Eow4F7gDPlPOB1UnnhzfpdvqZ8ZyX2rRNGmqNnQWm87OI2OQPw==}
     engines: {node: '>=12'}
     peerDependencies:
       vue: '>=3.2'
+
+  '@tanstack/vue-virtual@3.13.12':
+    resolution: {integrity: sha512-vhF7kEU9EXWXh+HdAwKJ2m3xaOnTTmgcdXcF2pim8g4GvI7eRrk2YRuV5nUlZnd/NbCIX4/Ja2OZu5EjJL06Ww==}
+    peerDependencies:
+      vue: ^2.7.0 || ^3.0.0
 
   '@tauri-apps/api@2.6.0':
     resolution: {integrity: sha512-hRNcdercfgpzgFrMXWwNDBN0B7vNzOzRepy6ZAmhxi5mDLVPNrTpo9MGg2tN/F7JRugj4d2aF7E1rtPXAHaetg==}
@@ -4130,6 +4147,11 @@ snapshots:
       - unocss
       - windicss
 
+  '@headlessui/vue@1.7.23(vue@3.5.17(typescript@5.6.3))':
+    dependencies:
+      '@tanstack/vue-virtual': 3.13.12(vue@3.5.17(typescript@5.6.3))
+      vue: 3.5.17(typescript@5.6.3)
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.6':
@@ -4517,9 +4539,16 @@ snapshots:
 
   '@tanstack/table-core@8.21.3': {}
 
+  '@tanstack/virtual-core@3.13.12': {}
+
   '@tanstack/vue-table@8.21.3(vue@3.5.17(typescript@5.6.3))':
     dependencies:
       '@tanstack/table-core': 8.21.3
+      vue: 3.5.17(typescript@5.6.3)
+
+  '@tanstack/vue-virtual@3.13.12(vue@3.5.17(typescript@5.6.3))':
+    dependencies:
+      '@tanstack/virtual-core': 3.13.12
       vue: 3.5.17(typescript@5.6.3)
 
   '@tauri-apps/api@2.6.0': {}

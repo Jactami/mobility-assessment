@@ -22,6 +22,7 @@
     "@formkit/core": "^1.6.9",
     "@formkit/i18n": "^1.6.9",
     "@formkit/vue": "^1.6.9",
+    "@headlessui/vue": "^1.7.23",
     "@pdfme/common": "^5.4.0",
     "@pdfme/generator": "^5.4.0",
     "@pdfme/schemas": "^5.4.0",
