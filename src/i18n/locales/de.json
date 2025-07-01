@@ -85,11 +85,14 @@
     "saveSuccess": "Projekt erfolgreich gespeichert"
   },
   "poi": {
+    "add": "POI hinzufügen",
     "label": "Bezeichnung",
     "category": "Kategorie",
     "delete": "POI löschen",
     "edit": "POI bearbeiten",
     "distance": "Entfernung",
+    "latitude": "Breitengrad",
+    "longitude": "Längengrad",
     "viewOnMap": "Auf Karte anzeigen"
   },
   "domain": {

@@ -17,7 +17,7 @@
     </div>
   </BaseSection>
 
-  <BaseSection v-if="projectStore.pois">
+  <BaseSection v-if="projectStore.pois && projectStore.pois.length">
     <div class="flex flex-wrap justify-center gap-2">
       <template v-for="domain in DOMAINS" :key="domain.name">
         <ProjectCategoryPill

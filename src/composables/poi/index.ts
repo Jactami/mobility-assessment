@@ -161,10 +161,22 @@ export function usePoiService() {
    */
   function calculateDistances(lat: number, lon: number, pois: Poi[]) {
     return pois.map((poi) => {
-      const distance = getDistance([lon, lat], [poi.longitude, poi.latitude])
-      poi.distance = Math.round(distance * 100) / 100 // Round to two decimal places
+      poi.distance = calculateDistance(lat, lon, poi.latitude, poi.longitude)
       return poi
     })
+  }
+
+  /**
+   * Calculates the distance between two geographical points.
+   * @param lat1 Latitude of the first point.
+   * @param lon1 Longitude of the first point.
+   * @param lat2 Latitude of the second point.
+   * @param lon2 Longitude of the second point.
+   * @returns The distance between the two points.
+   */
+  function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const distance = getDistance([lon1, lat1], [lon2, lat2])
+    return Math.round(distance * 100) / 100 // Round to two decimal places
   }
 
   /**
@@ -182,5 +194,6 @@ export function usePoiService() {
     loading,
     error,
     getPois,
+    calculateDistance,
   }
 }
