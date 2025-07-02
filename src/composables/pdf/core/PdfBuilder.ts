@@ -52,7 +52,6 @@ export class PdfBuilder {
   /**
    * An array of static schemas that are not affected by the dynamic input.
    * These schemas are used for elements that should remain constant across all pages, such as headers and footers.
-   * @example
    */
   protected _staticSchema: Schema[] = []
 
