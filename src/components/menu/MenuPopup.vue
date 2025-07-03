@@ -38,7 +38,7 @@
                     'cursor-not-allowed opacity-50': item.disabled,
                   },
                 ]"
-                @click.prevent="handleAction(item)"
+                @click="handleAction(item)"
               >
                 <IconRenderer v-if="item.icon" :icon="item.icon" />
                 <div class="flex-1">{{ item.label }}</div>
