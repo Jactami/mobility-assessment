@@ -10,6 +10,7 @@ import MaterialSymbolsContentCopyOutlineRounded from '~icons/material-symbols/co
 import MaterialSymbolsDarkModeRounded from '~icons/material-symbols/dark-mode-rounded'
 import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
 import MaterialSymbolsEditRounded from '~icons/material-symbols/edit-rounded'
+import MaterialSymbolsHome from '~icons/material-symbols/home'
 import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded'
 import MaterialSymbolsMoreVert from '~icons/material-symbols/more-vert'
 import MaterialSymbolsPerson from '~icons/material-symbols/person'
@@ -51,6 +52,7 @@ export const iconMap = {
   favorite: MaterialSymbolsStarRounded,
   noFavorite: MaterialSymbolsStarOutlineRounded,
   settings: MaterialSymbolsSettings,
+  home: MaterialSymbolsHome,
 }
 
 export type Icon = keyof typeof iconMap
