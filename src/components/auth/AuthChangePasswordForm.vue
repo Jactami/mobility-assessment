@@ -8,7 +8,6 @@
       :actions="false"
       @submit="handlePasswordReset"
     >
-      <!-- TODO: Add password restrictions -->
       <FormKit
         id="old-password"
         :type="oldPasswordVisible ? 'text' : 'password'"
@@ -36,7 +35,8 @@
         name="new_password"
         :placeholder="t('auth.passwordNew')"
         inner-class="relative"
-        validation="required"
+        validation="required|contains_alpha|contains_numeric|contains_symbol|contains_uppercase|length:8,64"
+        :help="t('auth.passwordHelp')"
       >
         <template #suffix>
           <div class="absolute inset-y-0 right-0 flex items-center pr-2">
