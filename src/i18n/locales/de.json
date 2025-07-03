@@ -8,7 +8,7 @@
     "login": "Anmelden",
     "home": "Home",
     "playground": "Playground",
-    "profile": "Profil",
+    "settings": "Einstellungen",
     "project": "Projekt"
   },
   "auth": {
@@ -30,6 +30,8 @@
     "password": "Passwort",
     "passwordConfirm": "Passwort bestätigen",
     "passwordNew": "Neues Passwort",
+    "passwordOld": "Altes Passwort",
+    "passwordOldInvalid": "Altes Passwort ist ungültig.",
     "loginError": "Fehler bei der Anmeldung",
     "logoutError": "Fehler bei der Abmeldung",
     "loggedInAs": "Sie sind angemeldet als {user}.",
