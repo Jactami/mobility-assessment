@@ -13,37 +13,46 @@
       <IconRenderer icon="more" />
     </slot>
   </button>
-  <MenuPanel
-    v-if="isOpen"
-    ref="floating"
-    :menu="menu"
-    class="shadow"
-    :style="floatingStyles"
-    role="menu"
-    tabindex="-1"
-  />
+  <Teleport to="body">
+    <MenuPanel
+      v-if="isOpen"
+      ref="floating"
+      :menu="menu"
+      class="absolute shadow"
+      :style="floatingStyles"
+      role="menu"
+      tabindex="-1"
+    />
+  </Teleport>
 </template>
 
 <script setup lang="ts">
+/**
+ * TODO: Decide if we want to use the `Menu` component from `@headlessui/vue` instead.
+ */
 import IconRenderer from '@/components/icon/IconRenderer.vue'
-import { autoUpdate, flip, offset, useFloating } from '@floating-ui/vue'
+import { autoUpdate, flip, offset, useFloating, type Placement } from '@floating-ui/vue'
 import { onClickOutside } from '@vueuse/core'
 import { ref } from 'vue'
 import MenuPanel from './MenuPanel.vue'
 import type { Menu } from './types'
 
-defineProps<{
+interface Props {
   menu: Menu
-}>()
+  placement?: Placement
+}
 
+const props = withDefaults(defineProps<Props>(), {
+  placement: 'right-start',
+})
 const isOpen = ref(false)
 
 const reference = ref(null)
 const floating = ref(null)
 
 const { floatingStyles } = useFloating(reference, floating, {
-  placement: 'right-start',
-  middleware: [offset(2), flip()],
+  placement: props.placement,
+  middleware: [offset(4), flip()],
   whileElementsMounted: autoUpdate,
 })
 
