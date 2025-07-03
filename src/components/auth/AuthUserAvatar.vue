@@ -1,5 +1,5 @@
 <template>
-  <MenuPopup v-if="authStore.profile" :menu="menu">
+  <MenuPopup v-if="authStore.profile" :menu="menu" placement="bottom-end">
     <template #trigger>
       <div
         class="flex aspect-square items-center justify-center rounded-full bg-surface p-1 font-medium text-on-surface-variant"
