@@ -37,7 +37,7 @@
           </div>
         </template>
       </FormKit>
-      <BaseButton type="submit" classes="w-full" :disabled="!valid || loading">
+      <BaseButton type="submit" class="w-full" :disabled="!valid || loading">
         {{ t('auth.login') }}
       </BaseButton>
     </FormKit>

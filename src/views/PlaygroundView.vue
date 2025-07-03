@@ -59,7 +59,7 @@
         <BaseButton disabled>Disabled Button</BaseButton>
       </div>
       <div>
-        <BaseButton flavor="custom" classes="bg-lime-700 text-white w-full max-w-96 rounded-full">
+        <BaseButton flavor="custom" class="w-full max-w-96 rounded-full bg-lime-700 text-white">
           Custom Button <MaterialSymbolsLogin />
         </BaseButton>
       </div>
@@ -138,14 +138,14 @@
     <div class="mt-10 flex items-center justify-center gap-6">
       <BaseButton
         flavor="custom"
-        classes="bg-success text-on-success"
+        class="bg-success text-on-success"
         @click="notification.successToast('Success message...')"
       >
         Success
       </BaseButton>
       <BaseButton
         flavor="custom"
-        classes="bg-error text-on-error"
+        class="bg-error text-on-error"
         @click="notification.errorToast('Error message...')"
       >
         Error

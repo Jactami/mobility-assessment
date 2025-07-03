@@ -22,7 +22,7 @@
       </template>
     </FormKit>
     <BaseButton
-      classes="text-lg rounded-l-none"
+      class="rounded-l-none text-lg"
       :disabled="loading || query.trim() === ''"
       @click="search"
     >
