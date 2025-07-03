@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-primary text-on-primary">
+  <header class="border-b border-outline-variant text-on-surface shadow-sm">
     <nav class="mx-auto flex h-16 items-center justify-between px-4 lg:px-10">
       <div class="flex lg:flex-1">
         <RouterLink class="flex items-center gap-x-2" to="/">
@@ -9,7 +9,7 @@
             class="aspect-square h-8 w-auto rounded-full object-cover object-center"
             :alt="t('app.title')"
           />
-          <span class="hidden text-lg sm:block sm:text-2xl">{{ t('app.title') }}</span>
+          <span class="hidden text-lg font-medium sm:block sm:text-2xl">{{ t('app.title') }}</span>
         </RouterLink>
       </div>
 

@@ -2,7 +2,7 @@
   <MenuPopup v-if="authStore.profile" :items="menu" placement="bottom-end">
     <template #trigger>
       <BaseButton
-        class="flex aspect-square items-center justify-center rounded-full bg-surface p-1 font-medium text-on-surface-variant hover:text-on-surface hover:outline-2 hover:outline-offset-1 hover:outline-primary"
+        class="flex aspect-square items-center justify-center rounded-full bg-primary p-1.5 font-medium text-on-primary shadow-none hover:outline-2 hover:outline-primary/50"
       >
         {{ initials }}
       </BaseButton>
