@@ -1,6 +1,6 @@
 import type { Icon } from '@/components/icon/types'
 
-export type MenuItem = {
+export type MenuActionItem = {
   label: string
   icon: Icon
   link?: string
@@ -8,5 +8,3 @@ export type MenuItem = {
   disabled?: boolean
   divider?: boolean
 }
-
-export type Menu = MenuItem[]

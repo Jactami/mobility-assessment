@@ -33,7 +33,7 @@
         class="relative flex items-center justify-between gap-x-1 bg-surface-container-lowest py-1 pr-1 pl-4 text-on-surface-variant"
       >
         <time class="text-xs" :datetime="project.created_at">{{ d(project.created_at) }}</time>
-        <MenuPopup :menu="menu" />
+        <MenuPopup :items="menu" />
       </div>
     </BaseCard>
   </RouterLink>
@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import BaseCard from '@/components/base/BaseCard.vue'
 import MenuPopup from '@/components/menu/MenuPopup.vue'
-import type { Menu } from '@/components/menu/types'
+import type { MenuActionItem } from '@/components/menu/types'
 import type { Project } from '@/db/types'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -60,7 +60,7 @@ const emit = defineEmits<{
 
 const { d, t } = useI18n()
 
-const menu = computed<Menu>(() => [
+const menu = computed<MenuActionItem[]>(() => [
   {
     label: props.project.favorite ? t('project.removeFavorite') : t('project.addFavorite'),
     icon: props.project.favorite ? 'noFavorite' : 'favorite',

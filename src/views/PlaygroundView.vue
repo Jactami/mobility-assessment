@@ -156,11 +156,10 @@
   <BaseSection title="Menu">
     <p>
       The menu is a component that can be used to display a list of items. It is defined in the
-      <code>src/components/menu/*.vue</code> files.
+      <code>src/components/menu/MenuPopup.vue</code> file.
     </p>
-    <div class="mt-10 flex flex-col items-center space-y-5">
-      <MenuPanel :menu="menu" />
-      <MenuPopup :menu="menu" />
+    <div class="text-center">
+      <MenuPopup :items="menu" placement="bottom-start" />
     </div>
   </BaseSection>
 
@@ -200,9 +199,8 @@ import BaseModal from '@/components/base/BaseModal.vue'
 import BasePageHeader from '@/components/base/BasePageHeader.vue'
 import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
-import MenuPanel from '@/components/menu/MenuPanel.vue'
 import MenuPopup from '@/components/menu/MenuPopup.vue'
-import type { Menu } from '@/components/menu/types'
+import type { MenuActionItem } from '@/components/menu/types'
 import DataTable from '@/components/table/DataTable.vue'
 import type TableConfig from '@/components/table/types'
 import { useLogger } from '@/composables/log'
@@ -234,7 +232,7 @@ const quiz = {
   },
 }
 
-const menu: Menu = [
+const menu: MenuActionItem[] = [
   {
     label: 'Link',
     icon: 'link',

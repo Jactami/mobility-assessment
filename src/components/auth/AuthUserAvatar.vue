@@ -1,14 +1,14 @@
 <template>
-  <MenuPopup v-if="authStore.profile" :menu="menu" placement="bottom-end">
+  <MenuPopup v-if="authStore.profile" :items="menu" placement="bottom-end">
     <template #trigger>
-      <div
-        class="flex aspect-square items-center justify-center rounded-full bg-surface p-1 font-medium text-on-surface-variant"
+      <BaseButton
+        classes="flex aspect-square items-center justify-center rounded-full bg-surface p-1 font-medium text-on-surface-variant hover:text-on-surface hover:outline-2 hover:outline-offset-1 hover:outline-primary"
       >
         {{ initials }}
-      </div>
+      </BaseButton>
     </template>
     <template #start>
-      <div class="mb-2 p-2">
+      <div>
         <div class="text-lg font-semibold">
           {{ authStore.profile?.first_name }} {{ authStore.profile?.last_name }}
         </div>
@@ -19,8 +19,9 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/base/BaseButton.vue'
 import MenuPopup from '@/components/menu/MenuPopup.vue'
-import type { Menu } from '@/components/menu/types'
+import type { MenuActionItem } from '@/components/menu/types'
 import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
 import { useAuthStore } from '@/stores/Auth'
@@ -34,7 +35,7 @@ const authService = useAuthService()
 const { errorToast } = useNotification()
 const { t } = useI18n()
 
-const menu: Menu = [
+const menu: MenuActionItem[] = [
   {
     label: t('settings.title'),
     icon: 'settings',

@@ -1,71 +1,96 @@
 <template>
-  <button
-    ref="reference"
-    class="size-fit cursor-pointer rounded-border p-1 hover:bg-surface-container"
-    :class="{ 'bg-surface-container': isOpen }"
-    aria-haspopup="menu"
-    :aria-expanded="isOpen ? 'true' : 'false'"
-    @click.prevent="isOpen = !isOpen"
-    @keydown.escape="isOpen = false"
-  >
-    <slot name="trigger">
-      <!-- Fallback trigger -->
-      <IconRenderer icon="more" />
-    </slot>
-  </button>
-  <Teleport to="body">
-    <MenuPanel
-      v-if="isOpen"
-      ref="floating"
-      :menu="menu"
-      class="absolute shadow"
-      :style="floatingStyles"
-      role="menu"
-      tabindex="-1"
-    >
-      <template #start>
-        <slot name="start">
-          <!-- Content before the menu items goes here. -->
-        </slot>
-      </template>
-      <template #end>
-        <slot name="end">
-          <!-- Content after the menu items goes here. -->
-        </slot>
-      </template>
-    </MenuPanel>
-  </Teleport>
+  <Menu as="div" class="relative inline-block">
+    <!-- Trigger -->
+    <MenuButton ref="reference" as="div" @click.prevent>
+      <slot name="trigger">
+        <!-- Fallback trigger -->
+        <IconButton icon="more" />
+      </slot>
+    </MenuButton>
+
+    <!-- Popup -->
+    <Teleport to="body">
+      <MenuItems
+        ref="floating"
+        class="max-w-md min-w-56 origin-top-right divide-y divide-outline-variant rounded-border bg-surface p-1 text-on-surface shadow-md ring ring-outline-variant focus:outline-none"
+        :style="floatingStyles"
+      >
+        <!-- Menu Header -->
+        <template v-if="$slots.start">
+          <div class="p-2">
+            <slot name="start">
+              <!-- Content before the menu items goes here. -->
+            </slot>
+          </div>
+        </template>
+
+        <!-- Menu Items -->
+        <div>
+          <template v-for="item in items" :key="item.label">
+            <MenuItem v-slot="{ active }" :disabled="item.disabled">
+              <component
+                :is="item.link && !item.disabled ? 'RouterLink' : 'div'"
+                :to="item.link"
+                class="flex w-full items-center gap-x-1.5 rounded-border p-2"
+                :class="[
+                  {
+                    'cursor-pointer bg-surface-container': active && !item.disabled,
+                    'cursor-not-allowed opacity-50': item.disabled,
+                  },
+                ]"
+                @click.prevent="handleAction(item)"
+              >
+                <IconRenderer v-if="item.icon" :icon="item.icon" />
+                <div class="flex-1">{{ item.label }}</div>
+              </component>
+            </MenuItem>
+            <hr v-if="item.divider" class="my-1 border-outline-variant" />
+          </template>
+        </div>
+
+        <!-- Menu Footer -->
+        <template v-if="$slots.end">
+          <div class="p-2">
+            <slot name="end">
+              <!-- Content after the menu items goes here. -->
+            </slot>
+          </div>
+        </template>
+      </MenuItems>
+    </Teleport>
+  </Menu>
 </template>
 
 <script setup lang="ts">
-/**
- * TODO: Decide if we want to use the `Menu` component from `@headlessui/vue` instead.
- */
+import IconButton from '@/components/icon/IconButton.vue'
 import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { autoUpdate, flip, offset, useFloating, type Placement } from '@floating-ui/vue'
-import { onClickOutside } from '@vueuse/core'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ref } from 'vue'
-import MenuPanel from './MenuPanel.vue'
-import type { Menu } from './types'
+import type { MenuActionItem } from './types'
 
 interface Props {
-  menu: Menu
+  items: MenuActionItem[]
   placement?: Placement
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  placement: 'right-start',
+  placement: 'top-start',
 })
-const isOpen = ref(false)
 
 const reference = ref(null)
 const floating = ref(null)
 
 const { floatingStyles } = useFloating(reference, floating, {
   placement: props.placement,
-  middleware: [offset(4), flip()],
+  middleware: [offset(5), flip()],
   whileElementsMounted: autoUpdate,
 })
 
-onClickOutside(reference, () => (isOpen.value = false))
+function handleAction(item: MenuActionItem) {
+  if (item.disabled) return
+  if (!item.action) return
+
+  item.action()
+}
 </script>
