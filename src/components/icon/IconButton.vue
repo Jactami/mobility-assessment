@@ -2,7 +2,7 @@
   <!-- TODO: Decide if IconButton should extend BaseButton or made from scratch. -->
   <BaseButton
     flavor="custom"
-    class="aspect-square rounded-full p-1.5 shadow-none hover:bg-surface-container-highest hover:shadow-none hover:brightness-100 disabled:bg-surface-container-lowest disabled:bg-transparent disabled:shadow-none"
+    class="aspect-square rounded-full p-1.5 shadow-none hover:bg-surface-container-highest hover:shadow-none hover:brightness-100 disabled:bg-transparent disabled:shadow-none"
     :disabled="disabled"
     :title="title"
   >
