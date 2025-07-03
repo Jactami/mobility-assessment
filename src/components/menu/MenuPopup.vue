@@ -22,7 +22,18 @@
       :style="floatingStyles"
       role="menu"
       tabindex="-1"
-    />
+    >
+      <template #start>
+        <slot name="start">
+          <!-- Content before the menu items goes here. -->
+        </slot>
+      </template>
+      <template #end>
+        <slot name="end">
+          <!-- Content after the menu items goes here. -->
+        </slot>
+      </template>
+    </MenuPanel>
   </Teleport>
 </template>
 

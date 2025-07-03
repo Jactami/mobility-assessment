@@ -1,7 +1,10 @@
 <template>
   <div
-    class="z-50 w-full max-w-64 rounded-border border border-outline-variant bg-surface p-1 text-on-surface"
+    class="z-50 w-min max-w-md min-w-64 rounded-border border border-outline-variant bg-surface p-1 text-on-surface"
   >
+    <slot name="start">
+      <!-- Content before the menu items goes here. -->
+    </slot>
     <ul class="list-none" role="menu">
       <li v-for="item in menu" :key="item.label">
         <component
@@ -27,6 +30,9 @@
         <hr v-if="item.divider" class="my-1 border-outline-variant" />
       </li>
     </ul>
+    <slot name="end">
+      <!-- Content after the menu items goes here. -->
+    </slot>
   </div>
 </template>
 

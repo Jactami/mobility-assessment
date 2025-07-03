@@ -7,6 +7,14 @@
         {{ initials }}
       </div>
     </template>
+    <template #start>
+      <div class="mb-2 p-2">
+        <div class="text-lg font-semibold">
+          {{ authStore.profile?.first_name }} {{ authStore.profile?.last_name }}
+        </div>
+        <div class="text-sm text-on-surface-variant">{{ authStore.profile?.email }}</div>
+      </div>
+    </template>
   </MenuPopup>
 </template>
 
