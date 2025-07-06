@@ -24,8 +24,6 @@ import { computed, ref } from 'vue'
 import { Radar, type ChartComponentRef } from 'vue-chartjs'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
-
 // register Chart.js components once
 ChartJS.register(Title, Tooltip, Legend, RadialLinearScale, PointElement, LineElement, Filler)
 
@@ -37,6 +35,8 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: 'export', image: string): void
 }>()
+
+const { t } = useI18n()
 
 const chartContainer = ref<HTMLDivElement | null>(null)
 const chartRef = ref<ChartComponentRef | null>(null)
@@ -90,6 +90,11 @@ const chartOptions: ChartOptions<'radar'> = {
     },
     legend: {
       display: false,
+    },
+    tooltip: {
+      callbacks: {
+        label: (context) => `${context.formattedValue}%`,
+      },
     },
   },
   animation: {
