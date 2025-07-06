@@ -46,8 +46,6 @@
     </BaseSection>
 
     <DebugPanel title="Project Store" :value="projectStore.project" />
-
-    <DebugPanel title="Project Scores" :value="scores" />
   </template>
 </template>
 
