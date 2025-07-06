@@ -1,5 +1,5 @@
 <template>
-  <Radar :data="chartData" :options="chartOptions" />
+  <Radar ref="chartRef" :data="chartData" :options="chartOptions" />
 </template>
 
 <script setup lang="ts">
@@ -17,8 +17,8 @@ import {
   type ChartData,
   type ChartOptions,
 } from 'chart.js'
-import { computed } from 'vue'
-import { Radar } from 'vue-chartjs'
+import { computed, ref } from 'vue'
+import { Radar, type ChartComponentRef } from 'vue-chartjs'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -30,6 +30,12 @@ ChartJS.register(Title, Tooltip, Legend, RadialLinearScale, PointElement, LineEl
 const props = defineProps<{
   scores: EvaluationScores
 }>()
+
+const emits = defineEmits<{
+  (e: 'export', image: string): void
+}>()
+
+const chartRef = ref<ChartComponentRef | null>(null)
 
 const borderColor = 'rgba(51, 51, 51, 0.5)'
 
@@ -77,5 +83,35 @@ const chartOptions: ChartOptions<'radar'> = {
       display: false,
     },
   },
+  animation: {
+    onComplete: async () => {
+      const img = exportChart()
+      if (img) emits('export', img)
+    },
+  },
+}
+
+function exportChart() {
+  const chart = chartRef.value?.chart
+
+  if (!chart) return
+
+  // Save original chart config
+  const originalDim = [chart.width, chart.height]
+  const isResponsive = chart.options.responsive
+  chart.options.animation = false // Disable animation for export
+
+  // Set chart to fixed size for export
+  chart.options.responsive = false
+  chart.resize(500, 500) // Set fixed size for export
+
+  // Export chart as base64 string
+  const img = chart.toBase64Image()
+
+  // Restore original chart config
+  chart.options.responsive = isResponsive
+  chart.resize(originalDim[0], originalDim[1])
+
+  return img
 }
 </script>
