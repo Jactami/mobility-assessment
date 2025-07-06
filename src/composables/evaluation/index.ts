@@ -22,8 +22,20 @@ const SATURATION_THRESHOLD = 3
  * @returns The calculated score for the POI.
  */
 function calcScorePoi(poi: Poi, radius: number) {
-  const ratio = Math.min(poi.distance / radius, 1) // 1 if d=0, ~0 if d=radius
-  return Math.max(0, 1 - Math.pow(ratio, DISTANCE_DAMPEN))
+  let score = 0
+
+  // Option 1: distance dampening
+  // const ratio = Math.min(poi.distance / radius, 1) // 1 if d=0, ~0 if d=radius
+  // score = Math.max(0, 1 - Math.pow(ratio, DISTANCE_DAMPEN))
+
+  // Option 2: Minimum scoring
+  // const minScore = 0.2
+  // score = minScore + (1 - minScore) / (1 + Math.pow(poi.distance / radius, DISTANCE_DAMPEN))
+
+  // Option 3: logistic function
+  score = 1 / (1 + Math.pow(poi.distance / radius, DISTANCE_DAMPEN))
+
+  return score
 }
 
 function calcScoreCategory(pois: Poi[], radius: number) {

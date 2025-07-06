@@ -78,14 +78,14 @@ describe('useEvaluation', () => {
 
     const pois: Poi[] = [
       mockPoi(category, 0), // 1.0
-      mockPoi(category, 500), // 0.75
-      mockPoi(category, 1000), // 0.0
+      mockPoi(category, 500), // 0.8
+      mockPoi(category, 1000), // 0.5
     ]
 
     const scores = calcScores(pois, radius)
 
     const scoreDomain = scores.domain[domain!.name]
-    const expected = 0.73 / domain!.categories.length
+    const expected = 0.861 / domain!.categories.length
     const epsilon = 0.01
 
     expect(scoreDomain).toBeGreaterThan(0)
