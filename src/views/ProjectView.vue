@@ -22,6 +22,12 @@
       <ProjectScore :score="projectStore.project?.score" />
     </BaseSection>
 
+    <BaseSection v-if="scores">
+      <div class="mx-auto max-w-xl">
+        <ProjectScoreChart :scores="scores" />
+      </div>
+    </BaseSection>
+
     <BaseSection v-if="projectStore.pois && projectStore.pois.length">
       <div class="flex flex-wrap justify-center gap-2">
         <template v-for="domain in DOMAINS" :key="domain.name">
@@ -54,6 +60,7 @@ import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
 import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
 import ProjectScore from '@/components/project/ProjectScore.vue'
+import ProjectScoreChart from '@/components/project/ProjectScoreChart.vue'
 import useDB from '@/composables/db'
 import { useEvaluation } from '@/composables/evaluation'
 import type { EvaluationScores } from '@/composables/evaluation/types'
