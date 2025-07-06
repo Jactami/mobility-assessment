@@ -294,4 +294,4 @@ export const DOMAINS: AreaDomain[] = [
       },
     ],
   },
-]
+] as const

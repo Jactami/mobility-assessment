@@ -35,6 +35,8 @@
   </BaseSection>
 
   <DebugPanel title="Project Store" :value="projectStore.project" />
+
+  <DebugPanel title="Project Scores" :value="scores" />
 </template>
 
 <script setup lang="ts">
@@ -46,12 +48,14 @@ import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
 import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
 import useDB from '@/composables/db'
+import { useEvaluation } from '@/composables/evaluation'
+import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useNotification } from '@/composables/notification'
 import { usePdf } from '@/composables/pdf'
 import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 
@@ -62,9 +66,11 @@ const route = useRoute()
 const router = useRouter()
 const { errorToast, successToast, confirmDialog } = useNotification()
 const { pdf, loading, error, createPdf } = usePdf()
+const { calcScores } = useEvaluation()
 
 const project = ref<Project | null>(null)
 const pois = ref<Poi[] | null>(null)
+const scores = ref<EvaluationScores | null>(null)
 
 // a loading flag to indicate if geodata is being fetched
 const geodataLoading = ref(false)
@@ -174,4 +180,14 @@ async function createReport() {
     window.open(URL.createObjectURL(pdf.value))
   }
 }
+
+watch(
+  () => projectStore.pois,
+  () => {
+    if (projectStore.pois && projectStore.project?.radius) {
+      scores.value = calcScores(projectStore.pois, projectStore.project.radius)
+    }
+  },
+  { immediate: true, deep: true },
+)
 </script>
