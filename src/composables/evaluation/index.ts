@@ -78,13 +78,13 @@ function calcScores(pois: Poi[], radius: number): EvaluationScores {
       ? scoresCategory.reduce((a, b) => a + b, 0) / scoresCategory.length
       : 0
 
-    scores.domain[domain.name] = scoreDomain
+    scores.domain[domain.name] = Math.round(scoreDomain * 100) / 100
   }
 
   // Calculate the total score as the average of all domain scores
   // TODO: Consider using a weighted average if some domains are more important than others
   const scoreTotal = Object.values(scores.domain).reduce((a, b) => a + b, 0) / DOMAINS.length
-  scores.total = scoreTotal
+  scores.total = Math.round(scoreTotal * 100) / 100
 
   return scores
 }
