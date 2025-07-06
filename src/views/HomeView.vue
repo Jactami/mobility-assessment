@@ -42,12 +42,9 @@
         <button class="cursor-pointer" title="Neues Projekt" @click="createProject">
           <BaseCard :animation="true" class="min-h-64">
             <div
-              class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container p-2"
+              class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container-low p-2 text-on-surface-variant"
             >
-              <IconRenderer
-                class="rounded-full bg-surface text-7xl text-on-surface-variant"
-                icon="add"
-              />
+              <IconRenderer class="rounded-full text-7xl text-on-surface-variant" icon="add" />
               <span>{{ t('project.create') }}</span>
             </div>
           </BaseCard>

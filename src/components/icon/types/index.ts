@@ -1,5 +1,5 @@
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop'
-import MaterialSymbolsAddCircleOutline from '~icons/material-symbols/add-circle-outline'
+import MaterialSymbolsAdd2Rounded from '~icons/material-symbols/add-2-rounded'
 import MaterialSymbolsArrowDropDownRounded from '~icons/material-symbols/arrow-drop-down-rounded'
 import MaterialSymbolsArrowDropUpRounded from '~icons/material-symbols/arrow-drop-up-rounded'
 import MaterialSymbolsCheckRounded from '~icons/material-symbols/check-rounded'
@@ -27,7 +27,7 @@ import TablerExternalLink from '~icons/tabler/external-link'
 
 export const iconMap = {
   link: TablerExternalLink,
-  add: MaterialSymbolsAddCircleOutline,
+  add: MaterialSymbolsAdd2Rounded,
   delete: MaterialSymbolsDeleteOutlineRounded,
   copy: MaterialSymbolsContentCopyOutlineRounded,
   check: MaterialSymbolsCheckRounded,
