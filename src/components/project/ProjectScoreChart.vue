@@ -1,10 +1,13 @@
 <template>
-  <Radar ref="chartRef" :data="chartData" :options="chartOptions" />
+  <div ref="chartContainer">
+    <Radar ref="chartRef" :data="chartData" :options="chartOptions" />
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { EvaluationScores } from '@/composables/evaluation/types'
 import { DOMAINS } from '@/constants'
+import { useResizeObserver } from '@vueuse/core'
 import {
   Chart as ChartJS,
   Filler,
@@ -35,7 +38,13 @@ const emits = defineEmits<{
   (e: 'export', image: string): void
 }>()
 
+const chartContainer = ref<HTMLDivElement | null>(null)
 const chartRef = ref<ChartComponentRef | null>(null)
+
+// Update chart size in browser window resize
+useResizeObserver(chartContainer, () => {
+  chartRef.value?.chart?.resize()
+})
 
 const borderColor = 'rgba(51, 51, 51, 0.5)'
 
