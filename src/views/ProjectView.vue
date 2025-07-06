@@ -17,26 +17,28 @@
     </div>
   </BaseSection>
 
-  <BaseSection v-if="projectStore.pois && projectStore.pois.length">
-    <div class="flex flex-wrap justify-center gap-2">
-      <template v-for="domain in DOMAINS" :key="domain.name">
-        <ProjectCategoryPill
-          v-for="category in domain.categories"
-          :key="category.name"
-          :category="category.name"
-          :count="projectStore.pois.filter((poi) => poi.category === category.name).length"
-        />
-      </template>
-    </div>
-  </BaseSection>
+  <template v-if="!geodataLoading">
+    <BaseSection v-if="projectStore.pois && projectStore.pois.length">
+      <div class="flex flex-wrap justify-center gap-2">
+        <template v-for="domain in DOMAINS" :key="domain.name">
+          <ProjectCategoryPill
+            v-for="category in domain.categories"
+            :key="category.name"
+            :category="category.name"
+            :count="projectStore.pois.filter((poi) => poi.category === category.name).length"
+          />
+        </template>
+      </div>
+    </BaseSection>
 
-  <BaseSection>
-    <ProjectPoiTable />
-  </BaseSection>
+    <BaseSection>
+      <ProjectPoiTable />
+    </BaseSection>
 
-  <DebugPanel title="Project Store" :value="projectStore.project" />
+    <DebugPanel title="Project Store" :value="projectStore.project" />
 
-  <DebugPanel title="Project Scores" :value="scores" />
+    <DebugPanel title="Project Scores" :value="scores" />
+  </template>
 </template>
 
 <script setup lang="ts">
