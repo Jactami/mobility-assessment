@@ -18,6 +18,10 @@
   </BaseSection>
 
   <template v-if="!geodataLoading">
+    <BaseSection v-if="projectStore.project?.score">
+      <ProjectScore :score="projectStore.project?.score" />
+    </BaseSection>
+
     <BaseSection v-if="projectStore.pois && projectStore.pois.length">
       <div class="flex flex-wrap justify-center gap-2">
         <template v-for="domain in DOMAINS" :key="domain.name">
@@ -49,6 +53,7 @@ import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
 import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
+import ProjectScore from '@/components/project/ProjectScore.vue'
 import useDB from '@/composables/db'
 import { useEvaluation } from '@/composables/evaluation'
 import type { EvaluationScores } from '@/composables/evaluation/types'
@@ -188,6 +193,10 @@ watch(
   () => {
     if (projectStore.pois && projectStore.project?.radius) {
       scores.value = calcScores(projectStore.pois, projectStore.project.radius)
+      projectStore.updateProject({
+        ...projectStore.project,
+        score: scores.value.total,
+      })
     }
   },
   { immediate: true, deep: true },

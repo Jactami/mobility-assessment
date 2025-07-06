@@ -48,6 +48,7 @@
     "errorMessage": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
     "ok": "OK",
     "optional": "Optional",
+    "notAvailable": "n.v.",
     "pleaseConfirm": "Bitte bestätigen",
     "success": "Erfolg",
     "save": "Speichern",
@@ -84,6 +85,8 @@
     "notFound": "Projekt konnte nicht gefunden werden.",
     "removeFavorite": "Von Favoriten entfernen",
     "projectCopy": "Kopie",
+    "score": "Gesamtbewertung",
+    "scoreDescription": "Es wurden alle Daten ausgewertet.",
     "saveError": "Fehler beim Speichern des Projekts",
     "saveSuccess": "Projekt erfolgreich gespeichert"
   },

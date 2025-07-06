@@ -15,6 +15,11 @@ export default createI18n({
         maximumFractionDigits: 0,
         minimumFractionDigits: 0,
       },
+      rounded: {
+        style: 'decimal',
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      },
     },
   },
 })
