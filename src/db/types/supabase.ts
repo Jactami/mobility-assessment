@@ -97,6 +97,7 @@ export type Database = {
           owner_id: string
           postcode: string | null
           radius: number | null
+          score: number | null
           street: string | null
           title: string
           updated_at: string | null
@@ -114,6 +115,7 @@ export type Database = {
           owner_id: string
           postcode?: string | null
           radius?: number | null
+          score?: number | null
           street?: string | null
           title: string
           updated_at?: string | null
@@ -131,6 +133,7 @@ export type Database = {
           owner_id?: string
           postcode?: string | null
           radius?: number | null
+          score?: number | null
           street?: string | null
           title?: string
           updated_at?: string | null

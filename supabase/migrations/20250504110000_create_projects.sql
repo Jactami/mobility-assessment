@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS public.projects (
     postcode VARCHAR(5),
     city VARCHAR(100),
     country VARCHAR(100),
-    radius INTEGER DEFAULT 1000
+    radius INTEGER DEFAULT 1000,
+    score NUMERIC(5,2)
 );
 
 ALTER TABLE public.projects OWNER TO postgres;
