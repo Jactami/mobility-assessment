@@ -189,7 +189,7 @@ export class PdfBuilder {
       fontName: options?.font, // falls back to the font with fallback flag set to true, if not provided
       fontColor: this._config.color[options?.color || 'text'],
       fontSize: this._config.fontSize[options?.fontSize || 'base'],
-      lineHeight: options?.lineHeight,
+      lineHeight: options?.lineHeight ?? 1.2,
       alignment: options?.alignment,
       verticalAlignment: options?.verticalAlignment,
     }

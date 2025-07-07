@@ -26,8 +26,17 @@ export function usePdf() {
 
       // Create the main body of the PDF
       const pdfBody = await new PdfReportBuilder(config, meta, fonts)
+        // Set header and footer
         .createHeader(`Standortbewertung - ${project?.title}`)
         .createFooter('Bayerische Gesellschaft für Wohneigentum – Digital mbH & Co. KG', 1)
+        // Create Introduction section
+        .createIntro(project)
+        // Create summary page
+        .newPage()
+        .createSeparatorPage('Ergebnisübersicht')
+        .newPage()
+        .createSectionHeader('Gesamtbewertung des Mikrostandorts')
+
         .createSeparatorPage('Anhang')
         .createDomainTables(pois)
         .build()

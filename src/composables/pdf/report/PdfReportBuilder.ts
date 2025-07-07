@@ -187,6 +187,19 @@ export class PdfReportBuilder extends PdfBuilder {
     })
   }
 
+  createIntro(project: Project): this {
+    let address = ''
+    address += project?.name ? project?.name + ', ' : ''
+    address += project?.street ? project?.street + ', ' : ''
+    address += project?.housenumber ? project?.housenumber + ', ' : ''
+    address += project?.postcode ? project?.postcode + ' ' : ''
+    address += project?.city ? project?.city : ''
+
+    return this.createText(
+      `Dieser Bericht dokumentiert die Ergebnisse der Standortbewertung für das Projekt ${address} im Umkreis von ${i18n.global.n(project.radius ?? Infinity, 'meter')}, basierend auf den vorliegenden Daten zum Stichtag ${i18n.global.d(new Date())}.\n\nZiel der Analyse ist es, die Stärken und Schwächen des Standorts transparent und nachvollziehbar darzustellen. Hierfür untersuchen wir den Standort aus verschiedenen Blickwinkeln hinsichtlich Nahversorgung, Mobilität, Freizeit, Gesundheit, Bildung und Naherholung. Auf dieser Grundlage vergeben wir eine Gesamtbewertung des Standorts von 0 bis 100 Punkten, wobei 100 Punkte einem optimalen Ergebnis entsprechen.\n\n\nDieser Bericht umfasst eine Übersicht zu den Ergebnissen, eine detaillierte Auswertung der Daten sowie eine Erläuterung der von uns angewandten Methodik.`,
+    )
+  }
+
   /**
    * Creates domain tables for the PDF document.
    *
