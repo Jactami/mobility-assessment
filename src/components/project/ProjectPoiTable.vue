@@ -86,7 +86,7 @@ import { usePoiService } from '@/composables/poi'
 import { DOMAINS } from '@/constants'
 import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
-import { computed, defineEmits, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const emit = defineEmits<{
