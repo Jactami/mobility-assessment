@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import type { EvaluationScores } from '@/composables/evaluation/types'
 import { DOMAINS } from '@/constants'
-import { useResizeObserver } from '@vueuse/core'
+import { useDark, useResizeObserver } from '@vueuse/core'
 import {
   Chart as ChartJS,
   Filler,
@@ -37,16 +37,22 @@ const emits = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const isDark = useDark()
 
 const chartContainer = ref<HTMLDivElement | null>(null)
 const chartRef = ref<ChartComponentRef | null>(null)
+
+const chartColors = computed(() => ({
+  text: isDark.value ? '#f9fafb' : '#111827',
+  grid: isDark.value ? '#374151' : '#d1d5db',
+  border: isDark.value ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)',
+  background: isDark.value ? 'rgba(54, 162, 235, 0.3)' : 'rgba(54, 162, 235, 0.2)',
+}))
 
 // Update chart size in browser window resize
 useResizeObserver(chartContainer, () => {
   chartRef.value?.chart?.resize()
 })
-
-const borderColor = 'rgba(51, 51, 51, 0.5)'
 
 const chartData = computed<ChartData<'radar'>>(() => ({
   labels: DOMAINS.map((domain) => t(`domain.${domain.name}`)),
@@ -54,29 +60,38 @@ const chartData = computed<ChartData<'radar'>>(() => ({
     {
       data: DOMAINS.map((domain) => props.scores.domain[domain.name] * 100),
       fill: true,
-      backgroundColor: 'rgba(54, 162, 235, 0.2)',
-      borderColor: borderColor,
+      backgroundColor: chartColors.value.background,
+      borderColor: chartColors.value.border,
       borderWidth: 1,
-
       pointBackgroundColor: DOMAINS.map((domain) => domain.color),
-      pointBorderColor: borderColor,
+      pointBorderColor: chartColors.value.border,
       pointRadius: 5,
     },
   ],
 }))
 
-const chartOptions: ChartOptions<'radar'> = {
+const chartOptions = computed<ChartOptions<'radar'>>(() => ({
   responsive: true,
   maintainAspectRatio: true,
   scales: {
     r: {
       beginAtZero: true,
+      grid: {
+        color: chartColors.value.grid,
+      },
+      angleLines: {
+        color: chartColors.value.grid,
+      },
       pointLabels: {
         font: {
           size: 14,
           weight: 'bold',
         },
-        color: (ctx) => DOMAINS[ctx.index].color, // use domain colors for point labels
+        color: (ctx) => DOMAINS[ctx.index].color,
+      },
+      ticks: {
+        color: chartColors.value.text,
+        backdropColor: 'transparent',
       },
     },
   },
@@ -87,6 +102,7 @@ const chartOptions: ChartOptions<'radar'> = {
       font: {
         size: 20,
       },
+      color: chartColors.value.text,
     },
     legend: {
       display: false,
@@ -100,10 +116,11 @@ const chartOptions: ChartOptions<'radar'> = {
   animation: {
     onComplete: async () => {
       const img = exportChart()
+      console.log(img)
       if (img) emits('export', img)
     },
   },
-}
+}))
 
 function exportChart() {
   const chart = chartRef.value?.chart
