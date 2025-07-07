@@ -1,5 +1,7 @@
 <template>
-  <header class="border-b border-outline-variant text-on-surface shadow-sm">
+  <header
+    class="sticky top-0 z-10 border-b border-outline-variant bg-surface text-on-surface shadow-sm"
+  >
     <nav class="mx-auto flex h-16 items-center justify-between px-4 lg:px-10">
       <div class="flex lg:flex-1">
         <RouterLink class="flex items-center gap-x-2" to="/">
