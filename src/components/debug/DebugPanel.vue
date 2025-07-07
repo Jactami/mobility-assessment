@@ -38,7 +38,7 @@ const highlightedJson = computed(() => {
         let cls = 'text-gray-600'
         if (p3) {
           // Keys
-          cls = 'text-black'
+          cls = 'text-black dark:text-white'
         } else if (/^"/.test(match)) {
           // Strings
           cls = 'text-green-600'
