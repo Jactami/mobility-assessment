@@ -15,8 +15,8 @@
 
   <!-- Map Overlay -->
   <Map.OlOverlay
-    v-if="selectedPoi"
-    :position="fromLonLat([selectedPoi.longitude, selectedPoi.latitude])"
+    v-if="overlayPoi"
+    :position="fromLonLat([overlayPoi.longitude, overlayPoi.latitude])"
     :auto-pan="{
       animation: {
         duration: 200,
@@ -30,19 +30,19 @@
       :style="`border-color: ${color};`"
     >
       <div class="flex items-start justify-between gap-x-10">
-        <strong>{{ selectedPoi.label || t(`category.${selectedPoi.category}`) }}</strong>
-        <IconButton icon="close" @click="featureCollection.clear()" />
+        <strong>{{ overlayPoi.label || t(`category.${overlayPoi.category}`) }}</strong>
+        <IconButton icon="close" @click="clearSelection()" />
       </div>
       <div class="mt-3 flex justify-between gap-x-10 text-sm text-on-surface-variant">
         <div class="flex items-center gap-x-1">
           <img
-            :src="`/img/map/${selectedPoi.category}.svg`"
-            :alt="t(`category.${selectedPoi.category}`)"
+            :src="`/img/map/${overlayPoi.category}.svg`"
+            :alt="t(`category.${overlayPoi.category}`)"
             class="inline-block h-5 w-5"
           />
-          <span>{{ t(`category.${selectedPoi.category}`) }}</span>
+          <span>{{ t(`category.${overlayPoi.category}`) }}</span>
         </div>
-        <span>{{ n(selectedPoi.distance, 'meter') }}</span>
+        <span>{{ n(overlayPoi.distance, 'meter') }}</span>
       </div>
       <!-- Bottom Triangle -->
       <div
@@ -66,16 +66,19 @@ import { Interactions, Layers, Map, Sources } from 'vue3-openlayers'
 
 const { n, t } = useI18n()
 
+const selectedPoi = defineModel<Poi | null>()
+
 const featureCollection = ref(new Collection<Feature>())
 
-const selectedPoi = computed<Poi | undefined>(
-  () => featureCollection.value.getArray()[0]?.getProperties()?.poi,
+const overlayPoi = computed<Poi | undefined>(
+  () => selectedPoi.value || featureCollection.value.getArray()[0]?.getProperties()?.poi,
 )
 
-const color = computed(() => (selectedPoi.value ? getColorByDomain(selectedPoi.value) : '#000'))
+const color = computed(() => (overlayPoi.value ? getColorByDomain(overlayPoi.value) : '#000'))
 
 function handleSelect(event: SelectEvent) {
   featureCollection.value.clear()
+  clearSelection()
 
   // Reset collection if click outside of any feature
   if (event.selected.length === 0) return
@@ -87,6 +90,12 @@ function handleSelect(event: SelectEvent) {
 function selectInteractionFilter(feature: Feature) {
   // Only select features that have a poi property
   return !!feature.getProperties().poi
+}
+
+// Reset the selection and clear the feature collection
+function clearSelection() {
+  featureCollection.value.clear()
+  selectedPoi.value = null
 }
 
 // TODO: This is a duplicate of the one in MapLayerPois.vue -> refactor to a shared utility

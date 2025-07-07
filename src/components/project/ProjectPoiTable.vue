@@ -86,8 +86,12 @@ import { usePoiService } from '@/composables/poi'
 import { DOMAINS } from '@/constants'
 import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
-import { computed, ref } from 'vue'
+import { computed, defineEmits, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+const emit = defineEmits<{
+  (e: 'poi-selected', poi: Poi): void
+}>()
 
 const { n, t } = useI18n()
 const { confirmDialog } = useNotification()
@@ -138,6 +142,11 @@ const config: TableConfig<Poi> = {
     order: 'asc',
   },
   actions: [
+    {
+      label: t('poi.viewOnMap'),
+      icon: 'map',
+      handler: (poi) => emit('poi-selected', poi),
+    },
     {
       label: t('poi.edit'),
       icon: 'edit',

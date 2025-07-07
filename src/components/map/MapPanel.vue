@@ -44,7 +44,7 @@
       <MapLayerLocation :location="location" />
 
       <!-- Overlay Layer -->
-      <MapLayerOverlay />
+      <MapLayerOverlay v-model="selectedPoi" />
     </template>
 
     <!-- Map Control Buttons -->
@@ -70,6 +70,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { useGeolocation } from '@vueuse/core'
 import type { Extent } from 'ol/extent'
@@ -93,6 +94,9 @@ const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: 
 const projectStore = useProjectStore()
 const { metersToPixels, zoomFromMeters } = useMapUtils()
 
+// Define a model for the selected POI to be used across components
+const selectedPoi = defineModel<Poi | null>()
+
 const mapRef = ref<{ map: OlMap } | null>(null)
 
 // Default coordinates and zoom level centered on Germany
@@ -108,6 +112,14 @@ const extent = ref<Extent>([])
 // Computed location center for the map view based on current location
 const location = computed(() => fromLonLat([lon.value, lat.value]))
 
+function resetMap(longitude: number, latitude: number, radius: number) {
+  lon.value = longitude
+  lat.value = latitude
+  center.value = fromLonLat([longitude, latitude])
+  const offset = radius * 0.1
+  zoom.value = zoomFromMeters(mapRef.value?.map as OlMap, location.value, (radius + offset) * 2)
+}
+
 // Update and initialize map view when the project location changes
 watch(
   () => projectStore.project,
@@ -115,11 +127,7 @@ watch(
     const { longitude, latitude, radius } = newProject || {}
     if (longitude && latitude && radius && mapRef.value) {
       // Update map center and zoom based on project location
-      lon.value = longitude
-      lat.value = latitude
-      center.value = fromLonLat([longitude, latitude])
-      const offset = radius * 0.1
-      zoom.value = zoomFromMeters(mapRef.value.map as OlMap, location.value, (radius + offset) * 2)
+      resetMap(longitude, latitude, radius)
 
       // save extent based on the new project location
       await nextTick()
@@ -145,4 +153,22 @@ watch(coords, ({ latitude, longitude }) => {
     pause() // Pause geolocation updates after first use
   }
 })
+
+watch(
+  () => selectedPoi?.value,
+  () => {
+    if (
+      selectedPoi.value &&
+      projectStore.project?.radius &&
+      projectStore.project?.latitude &&
+      projectStore.project?.longitude
+    ) {
+      resetMap(
+        projectStore.project?.longitude,
+        projectStore.project?.latitude,
+        projectStore.project?.radius,
+      )
+    }
+  },
+)
 </script>

@@ -1,11 +1,12 @@
 <template>
   <BaseSection>
-    <MapSearchInput
-      @search-initiated="geodataLoading = true"
-      @search-completed="geodataLoading = false"
-    />
-    <MapPanel :disabled="geodataLoading" />
-
+    <div ref="mapSection">
+      <MapSearchInput
+        @search-initiated="geodataLoading = true"
+        @search-completed="geodataLoading = false"
+      />
+      <MapPanel v-model="selectedPoi" :disabled="geodataLoading" />
+    </div>
     <!-- Temporary save button -->
     <div class="mt-10 flex justify-center">
       <BaseButton :disabled="!isProjectDirty || geodataLoading" @click="saveProject">
@@ -42,7 +43,7 @@
     </BaseSection>
 
     <BaseSection>
-      <ProjectPoiTable />
+      <ProjectPoiTable @poi-selected="handlePoiSelected" />
     </BaseSection>
 
     <DebugPanel title="Project Store" :value="projectStore.project" />
@@ -80,9 +81,13 @@ const { errorToast, successToast, confirmDialog } = useNotification()
 const { pdf, loading, error, createPdf } = usePdf()
 const { calcScores } = useEvaluation()
 
+const mapSection = ref<HTMLDivElement | null>(null)
+
 const project = ref<Project | null>(null)
 const pois = ref<Poi[] | null>(null)
 const scores = ref<EvaluationScores | null>(null)
+
+const selectedPoi = ref<Poi | null>(null)
 
 // a loading flag to indicate if geodata is being fetched
 const geodataLoading = ref(false)
@@ -204,6 +209,13 @@ async function createReport() {
     // Revoke the object URL to free up memory
     URL.revokeObjectURL(url)
   }
+}
+
+// Handle POI selection from the table
+function handlePoiSelected(poi: Poi) {
+  selectedPoi.value = poi
+  // scroll to the map section
+  mapSection.value?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 watch(
