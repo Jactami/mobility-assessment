@@ -177,7 +177,7 @@ async function createReport() {
   if (!projectStore.project || !projectStore.pois) return
 
   // Create the PDF report
-  await createPdf(projectStore.project)
+  await createPdf(projectStore.project, projectStore.pois)
 
   // If there is an error in creating the PDF, show error
   if (error.value) {

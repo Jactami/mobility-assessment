@@ -13,10 +13,17 @@ export class PdfReportBuilder extends PdfBuilder {
    */
   createHeader(header: string): this {
     return this.createText(header, {
-      y: this._config.padding.top - 10,
+      y: this._config.padding.top - 8,
       fontSize: 'sm',
       color: 'muted',
       alignment: 'left',
+      static: true,
+    }).createLine({
+      x: this._config.padding.left,
+      y: this._config.padding.top - 2,
+      width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+      height: 0.1,
+      color: 'muted',
       static: true,
     })
   }
@@ -28,18 +35,27 @@ export class PdfReportBuilder extends PdfBuilder {
    */
   createFooter(footer: string): this {
     return this.createText(footer, {
-      y: this._config.format.height - this._config.padding.bottom + 10,
+      y: this._config.format.height - this._config.padding.bottom + 4,
       fontSize: 'sm',
       color: 'muted',
       alignment: 'left',
       static: true,
-    }).createText('{currentPage}', {
-      y: this._config.format.height - this._config.padding.bottom + 10,
-      fontSize: 'sm',
-      color: 'muted',
-      alignment: 'right',
-      static: true,
     })
+      .createText('{currentPage}', {
+        y: this._config.format.height - this._config.padding.bottom + 4,
+        fontSize: 'sm',
+        color: 'muted',
+        alignment: 'right',
+        static: true,
+      })
+      .createLine({
+        x: this._config.padding.left,
+        y: this._config.format.height - this._config.padding.bottom + 2,
+        width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+        height: 0.1,
+        color: 'muted',
+        static: true,
+      })
   }
 
   createTitlePage(project: Project): this {
