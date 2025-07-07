@@ -86,7 +86,7 @@ export class PdfBuilder {
    * Generates a PDF document based on the schemas and inputs provided to the builder.
    * @returns A Promise that resolves to a Blob representing the generated PDF document.
    */
-  public async build(): Promise<Blob> {
+  public async build(): Promise<Uint8Array> {
     // Load fonts if available
     const fonts = await this.loadFonts()
 
@@ -112,14 +112,11 @@ export class PdfBuilder {
       options: { ...this._meta, font: fonts },
     })
 
-    // Transform pdf to Blob
-    const blob = new Blob([pdf.buffer], { type: 'application/pdf' })
-
     // Reset the builder to its initial state
     this.reset()
 
     // Return the generated PDF as a Blob
-    return blob
+    return pdf
   }
 
   /**

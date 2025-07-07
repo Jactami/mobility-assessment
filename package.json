@@ -25,6 +25,7 @@
     "@headlessui/vue": "^1.7.23",
     "@pdfme/common": "^5.4.0",
     "@pdfme/generator": "^5.4.0",
+    "@pdfme/manipulator": "^5.4.0",
     "@pdfme/schemas": "^5.4.0",
     "@supabase/supabase-js": "^2.50.2",
     "@tailwindcss/vite": "^4.1.11",

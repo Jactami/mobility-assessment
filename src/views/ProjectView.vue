@@ -186,9 +186,23 @@ async function createReport() {
     return
   }
 
-  // If the PDF is created successfully, open it in a new tab
   if (pdf.value) {
-    window.open(URL.createObjectURL(pdf.value))
+    const blob = new Blob([pdf.value], { type: 'application/pdf' })
+    const url = URL.createObjectURL(blob)
+
+    // Uncomment the following line to open the PDF in a new tab
+    // window.open(url)
+
+    // Download the PDF
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${projectStore.project.title}.pdf`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    // Revoke the object URL to free up memory
+    URL.revokeObjectURL(url)
   }
 }
 

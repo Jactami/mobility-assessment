@@ -33,7 +33,7 @@ export class PdfReportBuilder extends PdfBuilder {
    * @param footer - The footer text.
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
-  createFooter(footer: string): this {
+  createFooter(footer: string, pageOffset: number = 0): this {
     return this.createText(footer, {
       y: this._config.format.height - this._config.padding.bottom + 4,
       fontSize: 'sm',
@@ -41,7 +41,7 @@ export class PdfReportBuilder extends PdfBuilder {
       alignment: 'left',
       static: true,
     })
-      .createText('{currentPage}', {
+      .createText(`{currentPage + ${pageOffset}}`, {
         y: this._config.format.height - this._config.padding.bottom + 4,
         fontSize: 'sm',
         color: 'muted',
@@ -171,22 +171,20 @@ export class PdfReportBuilder extends PdfBuilder {
     const y = this._config.format.height * 0.25
     const h = 25
 
-    return this.newPage()
-      .createRect({
-        x: 0,
-        y,
-        width: this._config.format.width * 0.75,
-        height: h,
-        color: 'primary',
-      })
-      .createText(title, {
-        y,
-        height: h,
-        fontSize: 'xl',
-        color: 'neutral',
-        alignment: 'left',
-        verticalAlignment: 'middle',
-      })
+    return this.createRect({
+      x: 0,
+      y,
+      width: this._config.format.width * 0.75,
+      height: h,
+      color: 'primary',
+    }).createText(title, {
+      y,
+      height: h,
+      fontSize: 'xl',
+      color: 'neutral',
+      alignment: 'left',
+      verticalAlignment: 'middle',
+    })
   }
 
   /**

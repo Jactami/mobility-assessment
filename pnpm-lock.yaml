@@ -35,6 +35,9 @@ importers:
       '@pdfme/generator':
         specifier: ^5.4.0
         version: 5.4.0(@pdfme/common@5.4.0(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.3(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))(@pdfme/schemas@5.4.0(@pdfme/common@5.4.0(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.3(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))))
+      '@pdfme/manipulator':
+        specifier: ^5.4.0
+        version: 5.4.0
       '@pdfme/schemas':
         specifier: ^5.4.0
         version: 5.4.0(@pdfme/common@5.4.0(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.3(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))
@@ -772,6 +775,9 @@ packages:
     peerDependencies:
       '@pdfme/common': latest
       '@pdfme/schemas': latest
+
+  '@pdfme/manipulator@5.4.0':
+    resolution: {integrity: sha512-kCvSjIRUwq1Eh9l1aFtGMS0z41M2TRjla72lgpss6enb/6udPe6veFOV8R2/XjxyYfi3g9ZwVc1nMCEi4Z1aUw==}
 
   '@pdfme/pdf-lib@1.18.4':
     resolution: {integrity: sha512-i9XGkKCCb2wHLfJC/wUZ221/58o4unG4dGvnS+Tk8kOQBVMf+DCXzIqs0SGDsF3DrEpXHIhaW2iscWNjM0qNtA==}
@@ -4274,6 +4280,10 @@ snapshots:
       '@pdfme/pdf-lib': 1.18.4
       '@pdfme/schemas': 5.4.0(@pdfme/common@5.4.0(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.3(antd@5.26.0(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))
       fontkit: 2.0.4
+
+  '@pdfme/manipulator@5.4.0':
+    dependencies:
+      '@pdfme/pdf-lib': 1.18.4
 
   '@pdfme/pdf-lib@1.18.4':
     dependencies:
