@@ -180,7 +180,7 @@ export class PdfReportBuilder extends PdfBuilder {
     }).createText(title, {
       y,
       height: h,
-      fontSize: 'xl',
+      fontSize: 'xl2',
       color: 'neutral',
       alignment: 'left',
       verticalAlignment: 'middle',
