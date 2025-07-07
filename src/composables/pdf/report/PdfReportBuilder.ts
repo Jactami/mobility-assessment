@@ -1,6 +1,7 @@
 import { DOMAINS } from '@/constants'
-import type { Poi } from '@/db/types'
+import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
+import logoBgw from '../assets/logo-bgw'
 import { PdfBuilder } from '../core/PdfBuilder'
 import type { PdfTextOptions } from '../types'
 
@@ -39,6 +40,77 @@ export class PdfReportBuilder extends PdfBuilder {
       alignment: 'right',
       static: true,
     })
+  }
+
+  createTitlePage(project: Project): this {
+    let address = ''
+    address += project?.name ? project?.name + ',\n' : ''
+    address += project?.street ? project?.street : ''
+    address += project?.housenumber ? ' ' + project?.housenumber + ',\n' : '\n'
+    address += project?.postcode ? project?.postcode + ' ' : ''
+    address += project?.city ? project?.city : ''
+
+    return (
+      this.createText('Standortbewertung', {
+        y: this._config.padding.top + 10,
+        alignment: 'center',
+        fontSize: 'xl3',
+        font: 'bold',
+      })
+        .createText(project.title, {
+          y: this._config.padding.top + 30,
+          alignment: 'center',
+          fontSize: 'xl2',
+        })
+        .createLine({
+          x: this._config.padding.left,
+          y: this._config.padding.top + 60,
+          width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+          height: 1,
+          color: 'primary',
+        })
+        .createText('Ergebnisbericht der Standortanalyse', {
+          y: this._config.padding.top + 70,
+          alignment: 'center',
+          fontSize: 'xl',
+        })
+        .createText(address, {
+          y: this._config.padding.top + 90,
+          alignment: 'center',
+          fontSize: 'lg',
+          color: 'muted',
+          lineHeight: 1.5,
+        })
+        .createLine({
+          x: this._config.padding.left,
+          y: this._config.padding.top + 115,
+          width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+          height: 1,
+          color: 'primary',
+        })
+        // TODO: Decide if to use the creation Date or the current date
+        .createText(`Stichtag: ${i18n.global.d(new Date())}`, {
+          y: this._config.padding.top + 130,
+        })
+        .createText(`Untersuchter Umkreis: ${i18n.global.n(project.radius ?? Infinity, 'meter')}`, {
+          y: this._config.padding.top + 140,
+        })
+        .createImage(logoBgw, {
+          x: this._config.format.width / 2 - 40, // Center the logo
+          y: this._config.padding.top + 165,
+          width: 80,
+          height: 80,
+        })
+        .createText(
+          'Dieser Bericht ist vertraulich und ausschließlich für den Empfänger bestimmt.',
+          {
+            y: this._config.format.height - this._config.padding.bottom - 5,
+            alignment: 'center',
+            fontSize: 'sm',
+            color: 'muted',
+          },
+        )
+    )
   }
 
   /**

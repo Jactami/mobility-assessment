@@ -7,9 +7,9 @@ export const config: PdfConfig = {
     height: 297,
   },
   padding: {
-    top: 25,
+    top: 20,
     right: 20,
-    bottom: 25,
+    bottom: 20,
     left: 20,
   },
   color: {
@@ -21,10 +21,16 @@ export const config: PdfConfig = {
   },
   fontSize: {
     xs: 8,
-    sm: 10,
-    base: 14,
-    lg: 18,
-    xl: 24,
+    sm: 9,
+    base: 11,
+    lg: 14,
+    xl: 18,
+    xl2: 24,
+    xl3: 32,
+    xl4: 40,
+    xl5: 48,
+    xl6: 56,
+    xl7: 64,
   },
 }
 

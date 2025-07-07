@@ -174,11 +174,10 @@ async function saveProject() {
 }
 
 async function createReport() {
+  if (!projectStore.project || !projectStore.pois) return
+
   // Create the PDF report
-  await createPdf({
-    project: projectStore.project,
-    pois: projectStore.pois,
-  })
+  await createPdf(projectStore.project)
 
   // If there is an error in creating the PDF, show error
   if (error.value) {

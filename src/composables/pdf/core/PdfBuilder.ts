@@ -6,10 +6,11 @@ import {
   type Schema,
 } from '@pdfme/common'
 import { generate } from '@pdfme/generator'
-import { image, rectangle, table, text } from '@pdfme/schemas'
+import { image, line, rectangle, table, text } from '@pdfme/schemas'
 import type {
   PdfConfig,
   PdfImageOptions,
+  PdfLineOptions,
   PdfRectOptions,
   PdfTableOptions,
   PdfTextOptions,
@@ -191,6 +192,7 @@ export class PdfBuilder {
       fontName: options?.font, // falls back to the font with fallback flag set to true, if not provided
       fontColor: this._config.color[options?.color || 'text'],
       fontSize: this._config.fontSize[options?.fontSize || 'base'],
+      lineHeight: options?.lineHeight,
       alignment: options?.alignment,
       verticalAlignment: options?.verticalAlignment,
     }
@@ -233,6 +235,26 @@ export class PdfBuilder {
 
     // Append the image element to the current page
     return this.addToPage(data, schema, options?.static)
+  }
+
+  createLine(options: PdfLineOptions): this {
+    // Add line plugin
+    this._plugins.line = line
+
+    // Create schema for the line element
+    const schema: Schema = {
+      type: 'line',
+      name: this._id,
+      position: {
+        x: options.x,
+        y: options.y,
+      },
+      width: options.width,
+      height: options.height,
+      color: options?.color ? this._config.color[options.color] : undefined,
+    }
+
+    return this.addToPage('', schema, options?.static)
   }
 
   createRect(options: PdfRectOptions): this {

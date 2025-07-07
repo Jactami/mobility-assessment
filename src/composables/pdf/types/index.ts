@@ -25,6 +25,12 @@ export interface PdfConfig {
     base?: number
     lg?: number
     xl?: number
+    xl2?: number
+    xl3?: number
+    xl4?: number
+    xl5?: number
+    xl6?: number
+    xl7?: number
     // TODO: Add more sizes if needed
   }
 }
@@ -48,6 +54,7 @@ export interface PdfTextOptions extends PdfElementOptions {
   font?: FontKeys
   fontSize?: keyof PdfConfig['fontSize']
   color?: keyof PdfConfig['color']
+  lineHeight?: number
   alignment?: 'left' | 'center' | 'right'
   verticalAlignment?: 'top' | 'middle' | 'bottom'
   // TODO: Add more options like opacity, rotation, background color, etc.
@@ -56,6 +63,14 @@ export interface PdfTextOptions extends PdfElementOptions {
 export interface PdfImageOptions extends PdfElementOptions {
   width: number
   height: number
+}
+
+export interface PdfLineOptions extends PdfElementOptions {
+  x: number
+  y: number
+  width: number
+  height: number
+  color?: keyof PdfConfig['color']
 }
 
 export interface PdfRectOptions extends PdfElementOptions {
