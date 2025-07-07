@@ -51,6 +51,18 @@ async function handleDBCall<T>(
   throw new Error('Unexpected error in database call.')
 }
 
+/**
+ * Replaces undefined values in an object with null.
+ * This is useful to ensure that undefined values are deleted when inserting into the database
+ * @param obj - The object to process.
+ * @returns {T} - The object with undefined values replaced by null.
+ */
+function undefinedToNull<T extends object>(obj: T): T {
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [k, v === undefined ? null : v]),
+  ) as T
+}
+
 export default function useDB() {
   /**
    * Fetches the list of projects from the database.
@@ -80,7 +92,7 @@ export default function useDB() {
       if (project.id) await supabase.from('pois').delete().eq('project_id', project.id)
 
       // upsert the POI data
-      return await supabase.from('projects').upsert(project).select().maybeSingle()
+      return await supabase.from('projects').upsert(undefinedToNull(project)).select().maybeSingle()
     })
 
   /**
@@ -113,7 +125,7 @@ export default function useDB() {
    * @returns {Promise<PostgrestResponse<Tables<'pois'>>>} - The inserted or updated POIs.
    */
   const setPois = (pois: TablesInsert<'pois'>[]): Promise<PostgrestResponse<Tables<'pois'>>> =>
-    handleDBCall(async () => await supabase.from('pois').upsert(pois).select())
+    handleDBCall(async () => await supabase.from('pois').upsert(pois.map(undefinedToNull)).select())
 
   /**
    * Fetches the list of user profiles from the database.
