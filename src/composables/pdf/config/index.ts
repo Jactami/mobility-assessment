@@ -7,9 +7,9 @@ export const config: PdfConfig = {
     height: 297,
   },
   padding: {
-    top: 20,
+    top: 25,
     right: 20,
-    bottom: 20,
+    bottom: 25,
     left: 20,
   },
   color: {

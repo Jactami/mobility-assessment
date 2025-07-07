@@ -53,7 +53,7 @@ export interface PdfElementOptions {
 export interface PdfTextOptions extends PdfElementOptions {
   font?: FontKeys
   fontSize?: keyof PdfConfig['fontSize']
-  color?: keyof PdfConfig['color']
+  color?: string
   lineHeight?: number
   alignment?: 'left' | 'center' | 'right'
   verticalAlignment?: 'top' | 'middle' | 'bottom'
@@ -70,7 +70,7 @@ export interface PdfLineOptions extends PdfElementOptions {
   y: number
   width: number
   height: number
-  color?: keyof PdfConfig['color']
+  color?: string
 }
 
 export interface PdfRectOptions extends PdfElementOptions {
@@ -78,7 +78,7 @@ export interface PdfRectOptions extends PdfElementOptions {
   y: number
   width: number
   height: number
-  color?: keyof PdfConfig['color']
+  color?: string
 }
 
 export interface PdfTableOptions extends PdfElementOptions {
@@ -94,5 +94,5 @@ export interface PdfTableOptions extends PdfElementOptions {
 interface PdfTableStyleOptions {
   font?: FontKeys
   fontSize?: keyof PdfConfig['fontSize']
-  color?: keyof PdfConfig['color']
+  color?: string
 }

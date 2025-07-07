@@ -187,7 +187,10 @@ export class PdfBuilder {
       width: options?.width || this._config.format.width - this._config.padding.right - x,
       height: options?.height || this._config.format.height - this._config.padding.bottom - y,
       fontName: options?.font, // falls back to the font with fallback flag set to true, if not provided
-      fontColor: this._config.color[options?.color || 'text'],
+      fontColor:
+        this._config.color[options?.color as keyof PdfConfig['color']] ||
+        options?.color ||
+        this._config.color.text,
       fontSize: this._config.fontSize[options?.fontSize || 'base'],
       lineHeight: options?.lineHeight ?? 1.2,
       alignment: options?.alignment,
@@ -248,7 +251,7 @@ export class PdfBuilder {
       },
       width: options.width,
       height: options.height,
-      color: options?.color ? this._config.color[options.color] : undefined,
+      color: this._config.color[options?.color as keyof PdfConfig['color']] || options?.color,
     }
 
     return this.addToPage('', schema, options?.static)
@@ -268,7 +271,7 @@ export class PdfBuilder {
       },
       width: options.width,
       height: options.height,
-      color: options?.color ? this._config.color[options.color] : undefined,
+      color: this._config.color[options?.color as keyof PdfConfig['color']] || options?.color,
     }
 
     return this.addToPage('', schema, options?.static)
@@ -309,7 +312,10 @@ export class PdfBuilder {
         lineHeight: 1,
         alignment: 'left',
         verticalAlignment: 'middle',
-        fontColor: this._config.color[options?.head?.color || 'text'],
+        fontColor:
+          this._config.color[options?.head?.color as keyof PdfConfig['color']] ||
+          options?.head?.color ||
+          this._config.color.text,
         borderColor: '#000',
         backgroundColor: '',
         borderWidth: {
@@ -332,7 +338,10 @@ export class PdfBuilder {
         lineHeight: 1,
         alignment: 'left',
         verticalAlignment: 'middle',
-        fontColor: this._config.color[options?.body?.color || 'text'],
+        fontColor:
+          this._config.color[options?.body?.color as keyof PdfConfig['color']] ||
+          options?.body?.color ||
+          this._config.color.text,
         borderColor: '#000',
         backgroundColor: '',
         alternateBackgroundColor: options?.stripedColor,

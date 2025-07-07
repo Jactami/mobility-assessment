@@ -36,7 +36,9 @@ export function usePdf() {
         .createSeparatorPage('Ergebnisübersicht')
         .newPage()
         .createSectionHeader('Gesamtbewertung des Mikrostandorts')
+        .createScore(project.score ?? 0)
 
+        .newPage()
         .createSeparatorPage('Anhang')
         .createDomainTables(pois)
         .build()

@@ -1,6 +1,8 @@
+import { useColorUtil } from '@/composables/util/color'
 import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
+import arrowDown from '../assets/arrow-down'
 import logoBgw from '../assets/logo-bgw'
 import { PdfBuilder } from '../core/PdfBuilder'
 import type { PdfTextOptions } from '../types'
@@ -159,7 +161,7 @@ export class PdfReportBuilder extends PdfBuilder {
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
   createSectionHeader(header: string, options?: PdfTextOptions): this {
-    return this.createText(header, { font: 'bold', ...options })
+    return this.createText(header, { font: 'bold', fontSize: 'lg', ...options })
   }
 
   /**
@@ -198,6 +200,94 @@ export class PdfReportBuilder extends PdfBuilder {
     return this.createText(
       `Dieser Bericht dokumentiert die Ergebnisse der Standortbewertung für das Projekt ${address} im Umkreis von ${i18n.global.n(project.radius ?? Infinity, 'meter')}, basierend auf den vorliegenden Daten zum Stichtag ${i18n.global.d(new Date())}.\n\nZiel der Analyse ist es, die Stärken und Schwächen des Standorts transparent und nachvollziehbar darzustellen. Hierfür untersuchen wir den Standort aus verschiedenen Blickwinkeln hinsichtlich Nahversorgung, Mobilität, Freizeit, Gesundheit, Bildung und Naherholung. Auf dieser Grundlage vergeben wir eine Gesamtbewertung des Standorts von 0 bis 100 Punkten, wobei 100 Punkte einem optimalen Ergebnis entsprechen.\n\n\nDieser Bericht umfasst eine Übersicht zu den Ergebnissen, eine detaillierte Auswertung der Daten sowie eine Erläuterung der von uns angewandten Methodik.`,
     )
+  }
+
+  createScore(score: number): this {
+    const { scoreToColor, scoreColorThresholds } = useColorUtil()
+
+    const y = this._config.padding.top + 10
+
+    // Score Box
+    this.createRect({
+      x: this._config.padding.left,
+      y,
+      width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+      height: 40,
+      color: scoreToColor(score),
+    })
+      .createText(i18n.global.n(score * 100, 'rounded'), {
+        y,
+        height: 30,
+        fontSize: 'xl5',
+        color: 'neutral',
+        alignment: 'center',
+        verticalAlignment: 'middle',
+      })
+      .createText('Gesamtbewertung', {
+        y: y + 25,
+        height: 15,
+        fontSize: 'xl2',
+        color: 'neutral',
+        alignment: 'center',
+        verticalAlignment: 'middle',
+      })
+
+    // Score scale line
+    this.createImage(arrowDown, {
+      x:
+        this._config.padding.left +
+        (this._config.format.width - this._config.padding.left - this._config.padding.right) *
+          score -
+        10,
+      y: y + 42,
+      width: 20,
+      height: 20,
+    })
+
+    let x = this._config.padding.left
+    scoreColorThresholds.forEach((threshold, index) => {
+      const range = threshold.max - (scoreColorThresholds[index - 1]?.max || 0)
+      const width =
+        (this._config.format.width - this._config.padding.left - this._config.padding.right) * range
+      this.createRect({
+        x,
+        y: y + 55,
+        width,
+        height: 3,
+        color: threshold.color,
+      })
+      x += width
+    })
+
+    this.createText('0', {
+      x: this._config.padding.left,
+      y: y + 58,
+      fontSize: 'xs',
+      color: 'muted',
+      alignment: 'left',
+    }).createText('100', {
+      x: this._config.padding.left,
+      y: y + 58,
+      fontSize: 'xs',
+      color: 'muted',
+      alignment: 'right',
+    })
+
+    for (let i = 1; i < 10; i++) {
+      const xPos =
+        this._config.padding.left +
+        (i * (this._config.format.width - this._config.padding.left - this._config.padding.right)) /
+          10
+      this.createText((i * 10).toString(), {
+        x: xPos,
+        y: y + 58,
+        fontSize: 'xs',
+        color: 'muted',
+        alignment: 'left',
+      })
+    }
+
+    return this
   }
 
   /**
