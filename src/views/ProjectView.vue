@@ -1,6 +1,6 @@
 <template>
   <BaseSection>
-    <div ref="mapSection">
+    <div ref="mapSection" class="scroll-mt-4">
       <MapSearchInput
         @search-initiated="geodataLoading = true"
         @search-completed="geodataLoading = false"
@@ -215,7 +215,7 @@ async function createReport() {
 function handlePoiSelected(poi: Poi) {
   selectedPoi.value = poi
   // scroll to the map section
-  mapSection.value?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  mapSection.value?.scrollIntoView({ behavior: 'smooth' })
 }
 
 watch(
