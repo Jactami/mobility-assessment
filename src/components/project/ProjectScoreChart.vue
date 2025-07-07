@@ -116,7 +116,6 @@ const chartOptions = computed<ChartOptions<'radar'>>(() => ({
   animation: {
     onComplete: async () => {
       const img = exportChart()
-      console.log(img)
       if (img) emits('export', img)
     },
   },
