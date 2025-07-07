@@ -12,7 +12,7 @@
     <Teleport to="body">
       <MenuItems
         ref="floating"
-        class="max-w-md min-w-56 origin-top-right divide-y divide-outline-variant rounded-border bg-surface p-1 text-on-surface shadow-md ring ring-outline-variant focus:outline-none"
+        class="z-50 max-w-md min-w-56 origin-top-right divide-y divide-outline-variant rounded-border bg-surface p-1 text-on-surface shadow-md ring ring-outline-variant focus:outline-none"
         :style="floatingStyles"
       >
         <!-- Menu Header -->
