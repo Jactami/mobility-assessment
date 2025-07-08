@@ -37,6 +37,7 @@ import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { useGeocodingService } from '@/composables/geocoding'
 import { useNotification } from '@/composables/notification'
 import { usePoiService } from '@/composables/poi'
+import { useUtil } from '@/composables/util/misc'
 import { useProjectStore } from '@/stores/Project'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -57,6 +58,7 @@ const {
 const { data: pois, error: poisError, loading: poisLoading, getPois } = usePoiService()
 const { errorToast } = useNotification()
 const projectStore = useProjectStore()
+const { createAddress } = useUtil()
 
 const query = ref('')
 
@@ -130,16 +132,13 @@ watch(
   () => projectStore.project,
   (newProject) => {
     if (newProject) {
-      let address = ''
-      address += projectStore.project?.name ? projectStore.project.name + ', ' : ''
-      address += projectStore.project?.street ? projectStore.project.street : ''
-      address += projectStore.project?.housenumber
-        ? ' ' + projectStore.project.housenumber + ', '
-        : ''
-      address += projectStore.project?.postcode ? projectStore.project.postcode + ' ' : ''
-      address += projectStore.project?.city ? projectStore.project.city : ''
-
-      query.value = address
+      query.value = createAddress({
+        name: newProject.name,
+        street: newProject.street,
+        housenumber: newProject.housenumber,
+        postcode: newProject.postcode,
+        city: newProject.city,
+      })
     }
   },
   { immediate: true },

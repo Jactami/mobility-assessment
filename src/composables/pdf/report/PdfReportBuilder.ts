@@ -1,4 +1,5 @@
 import { useColorUtil } from '@/composables/util/color'
+import { useUtil } from '@/composables/util/misc'
 import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
@@ -61,12 +62,16 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   createTitlePage(project: Project): this {
-    let address = ''
-    address += project?.name ? project?.name + ',\n' : ''
-    address += project?.street ? project?.street : ''
-    address += project?.housenumber ? ' ' + project?.housenumber + ',\n' : '\n'
-    address += project?.postcode ? project?.postcode + ' ' : ''
-    address += project?.city ? project?.city : ''
+    const { createAddress } = useUtil()
+    let address = createAddress({
+      name: project?.name,
+      street: project?.street,
+      housenumber: project?.housenumber,
+      postcode: project?.postcode,
+      city: project?.city,
+    })
+
+    address = address.replace(/,\s+/g, ',\n')
 
     return (
       this.createText('Standortbewertung', {
@@ -190,12 +195,14 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   createIntro(project: Project): this {
-    let address = ''
-    address += project?.name ? project?.name + ', ' : ''
-    address += project?.street ? project?.street + ', ' : ''
-    address += project?.housenumber ? project?.housenumber + ', ' : ''
-    address += project?.postcode ? project?.postcode + ' ' : ''
-    address += project?.city ? project?.city : ''
+    const { createAddress } = useUtil()
+    const address = createAddress({
+      name: project?.name,
+      street: project?.street,
+      housenumber: project?.housenumber,
+      postcode: project?.postcode,
+      city: project?.city,
+    })
 
     return this.createText(
       `Dieser Bericht dokumentiert die Ergebnisse der Standortbewertung für das Projekt ${address} im Umkreis von ${i18n.global.n(project.radius ?? Infinity, 'meter')}, basierend auf den vorliegenden Daten zum Stichtag ${i18n.global.d(new Date())}.\n\nZiel der Analyse ist es, die Stärken und Schwächen des Standorts transparent und nachvollziehbar darzustellen. Hierfür untersuchen wir den Standort aus verschiedenen Blickwinkeln hinsichtlich Nahversorgung, Mobilität, Freizeit, Gesundheit, Bildung und Naherholung. Auf dieser Grundlage vergeben wir eine Gesamtbewertung des Standorts von 0 bis 100 Punkten, wobei 100 Punkte einem optimalen Ergebnis entsprechen.\n\n\nDieser Bericht umfasst eine Übersicht zu den Ergebnissen, eine detaillierte Auswertung der Daten sowie eine Erläuterung der von uns angewandten Methodik.`,
