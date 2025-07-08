@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { DOMAINS } from '@/constants'
+import { useColorUtil } from '@/composables/util/color'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -19,16 +19,9 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const { categoryToColor } = useColorUtil()
 
 const ALPHA = 'CC' // 80% opacity
 
-const bgColor = computed(() => getColorByDomain())
-
-// TODO: Again this function should be moved to a utility file
-function getColorByDomain(): string {
-  const domain = DOMAINS.find((domain) =>
-    domain.categories.some((cat) => cat.name === props.category),
-  )
-  return (domain ? domain.color : '#FFFFFF') + ALPHA
-}
+const bgColor = computed(() => categoryToColor(props.category) + ALPHA)
 </script>

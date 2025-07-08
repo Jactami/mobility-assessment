@@ -1,5 +1,8 @@
+import { DOMAINS } from '@/constants'
+
 export function useColorUtil() {
   return {
+    categoryToColor,
     scoreToColor,
     scoreColorThresholds,
   }
@@ -28,4 +31,14 @@ function scoreToColor(score: number): string {
     }
   }
   return '#d9d9d9' // fallback
+}
+
+/**
+ * Get the color representation of the domain of a category.
+ * @param category - The category name to find the corresponding color.
+ * @returns A color string representing the category.
+ */
+function categoryToColor(category: string): string {
+  const domain = DOMAINS.find((domain) => domain.categories.some((cat) => cat.name === category))
+  return domain ? domain.color : '#FFFFFF'
 }

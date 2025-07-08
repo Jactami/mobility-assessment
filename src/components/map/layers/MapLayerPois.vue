@@ -9,11 +9,11 @@
             <!-- <Styles.OlStyleIcon
               src="/img/map/marker.svg"
               :anchor="[0.5, 0.9]"
-              :color="getColorByDomain(poi)"
+              :color="categoryToColor(poi.category)"
             /> -->
             <Styles.OlStyleCircle :radius="10">
               <Styles.OlStyleFill color="#fff" />
-              <Styles.OlStyleStroke :color="getColorByDomain(poi)" :width="2" />
+              <Styles.OlStyleStroke :color="categoryToColor(poi.category)" :width="2" />
             </Styles.OlStyleCircle>
           </Styles.OlStyle>
         </Map.OlFeature>
@@ -25,7 +25,7 @@
             <Styles.OlStyleIcon
               :src="`/img/map/${poi.category}.svg`"
               :scale="0.45"
-              :color="getColorByDomain(poi)"
+              :color="categoryToColor(poi.category)"
             />
           </Styles.OlStyle>
         </Map.OlFeature>
@@ -35,17 +35,11 @@
 </template>
 
 <script setup lang="ts">
-import { DOMAINS } from '@/constants'
-import type { Poi } from '@/db/types'
+import { useColorUtil } from '@/composables/util/color'
 import { useProjectStore } from '@/stores/Project'
 import { fromLonLat } from 'ol/proj'
 import { Geometries, Layers, Map, Sources, Styles } from 'vue3-openlayers'
 
 const projectStore = useProjectStore()
-
-function getColorByDomain(poi: Poi) {
-  return DOMAINS.find((domain) =>
-    domain.categories.some((category) => category.name === poi.category),
-  )?.color
-}
+const { categoryToColor } = useColorUtil()
 </script>

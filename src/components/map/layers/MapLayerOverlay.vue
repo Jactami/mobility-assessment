@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import IconButton from '@/components/icon/IconButton.vue'
-import { DOMAINS } from '@/constants'
+import { useColorUtil } from '@/composables/util/color'
 import type { Poi } from '@/db/types'
 import { Collection, type Feature } from 'ol'
 import type { SelectEvent } from 'ol/interaction/Select'
@@ -65,6 +65,7 @@ import { useI18n } from 'vue-i18n'
 import { Interactions, Layers, Map, Sources } from 'vue3-openlayers'
 
 const { n, t } = useI18n()
+const { categoryToColor } = useColorUtil()
 
 const selectedPoi = defineModel<Poi | null>()
 
@@ -74,7 +75,9 @@ const overlayPoi = computed<Poi | undefined>(
   () => selectedPoi.value || featureCollection.value.getArray()[0]?.getProperties()?.poi,
 )
 
-const color = computed(() => (overlayPoi.value ? getColorByDomain(overlayPoi.value) : '#000'))
+const color = computed(() =>
+  overlayPoi.value ? categoryToColor(overlayPoi.value.category) : '#000',
+)
 
 function handleSelect(event: SelectEvent) {
   featureCollection.value.clear()
@@ -96,12 +99,5 @@ function selectInteractionFilter(feature: Feature) {
 function clearSelection() {
   featureCollection.value.clear()
   selectedPoi.value = null
-}
-
-// TODO: This is a duplicate of the one in MapLayerPois.vue -> refactor to a shared utility
-function getColorByDomain(poi: Poi) {
-  return DOMAINS.find((domain) =>
-    domain.categories.some((category) => category.name === poi.category),
-  )?.color
 }
 </script>
