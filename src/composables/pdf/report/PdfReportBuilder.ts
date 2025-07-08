@@ -5,6 +5,7 @@ import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
 import arrowDown from '../assets/arrow-down'
 import logoBgw from '../assets/logo-bgw'
+import methodic from '../assets/methodic'
 import { PdfBuilder } from '../core/PdfBuilder'
 import type { PdfTextOptions } from '../types'
 
@@ -191,6 +192,24 @@ export class PdfReportBuilder extends PdfBuilder {
     return this.createText(
       `Dieser Bericht dokumentiert die Ergebnisse der Standortbewertung für das Projekt ${address} im Umkreis von ${i18n.global.n(project.radius ?? Infinity, 'meter')}, basierend auf den vorliegenden Daten zum Stichtag ${i18n.global.d(new Date())}.\n\nZiel der Analyse ist es, die Stärken und Schwächen des Standorts transparent und nachvollziehbar darzustellen. Hierfür untersuchen wir den Standort aus verschiedenen Blickwinkeln hinsichtlich Nahversorgung, Mobilität, Freizeit, Gesundheit, Bildung und Naherholung. Auf dieser Grundlage vergeben wir eine Gesamtbewertung des Standorts von 0 bis 100 Punkten, wobei 100 Punkte einem optimalen Ergebnis entsprechen.\n\n\nDieser Bericht umfasst eine Übersicht zu den Ergebnissen, eine detaillierte Auswertung der Daten sowie eine Erläuterung der von uns angewandten Methodik.`,
     )
+  }
+
+  createMethodic(): this {
+    return this.createSectionHeader('Methodik')
+      .createText(
+        'Unsere Methodik orientiert sich an dem Leitbild der 15-Minuten-Stadt, einem modernen Konzept nachhaltiger Stadt- und Quartiersentwicklung. Dieses Modell stellt die Bedürfnisse der Menschen und ihren Alltag in den Mittelpunkt. Ziel ist es, alle wesentlichen Einrichtungen des täglichen Lebens innerhalb von maximal 15 Minuten zu Fuß oder mit dem Fahrrad erreichbar zu machen. So entsteht eine Stadt der kurzen Wege, die nicht nur die Lebensqualität steigert und die Abhängigkeit vom Auto reduziert, sondern auch die Nachhaltigkeit und Resilienz des urbanen Raums stärkt.',
+        { y: this._config.padding.top + 10 },
+      )
+      .createImage(methodic, {
+        x: this._config.format.width / 2 - 55,
+        y: this._config.padding.top + 50,
+        width: 110,
+        height: 110,
+      })
+      .createText(
+        'Auf dieser Grundlage analysieren wir den Standort anhand der zentralen Kriterien der 15-Minuten-Stadt. Dazu definieren wir einen Umkreis um den Standort, der dem Prinzip der 15-Minuten-Stadt entspricht. Innerhalb dieses Radius identifizieren und bewerten wir alle relevanten Angebote und Einrichtungen.\n\nDabei erfassen wir eine Vielzahl von Standortfaktoren aus den Bereichen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität. Jeder Bereich wird separat analysiert und mit einer Kennzahl zwischen 0 und 100 bewertet. Sowohl die Anzahl der vorhandenen Angebote als auch deren Entfernung zum Standort fließen in die Auswertung ein – je näher und zahlreicher die Angebote, desto besser die Bewertung. Auf diese Weise werden die spezifischen Stärken und Schwächen des Standorts klar und nachvollziehbar dargestellt.\n\nAus den Einzelbewertungen der jeweiligen Bereiche ermitteln wir eine abschließende Gesamtbewertung. Diese wird ebenfalls als Kennzahl zwischen 0 und 100 ausgewiesen und bietet auf einen Blick eine verständliche und vergleichbare Einschätzung der Standortqualität.',
+        { y: this._config.padding.top + 170 },
+      )
   }
 
   createScore(score: number): this {
