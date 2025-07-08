@@ -6,12 +6,12 @@ export function useColorUtil() {
 }
 
 const scoreColorThresholds = [
-  { max: 0.5, color: '#ff4d4f' }, // 0–50%
-  { max: 0.6, color: '#ffa940' }, // 51–60%
-  { max: 0.7, color: '#ffec3d' }, // 61–70%
-  { max: 0.8, color: '#bae637' }, // 71–80%
-  { max: 0.9, color: '#73d13d' }, // 81–90%
-  { max: 1.0, color: '#52c41a' }, // 91–100%
+  { max: 0.5, color: '#d32029' },
+  { max: 0.6, color: '#d46b08' },
+  { max: 0.7, color: '#d4b106' },
+  { max: 0.8, color: '#7cb305' },
+  { max: 0.9, color: '#389e0d' },
+  { max: 1.0, color: '#237804' },
 ]
 
 /**
