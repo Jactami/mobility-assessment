@@ -33,6 +33,7 @@ export interface PdfConfig {
     xl7?: number
     // TODO: Add more sizes if needed
   }
+  alignment?: 'left' | 'center' | 'right' | 'justify' // Default alignment for text
 }
 
 type FontKeys = 'regular' | 'bold'
@@ -55,7 +56,7 @@ export interface PdfTextOptions extends PdfElementOptions {
   fontSize?: keyof PdfConfig['fontSize']
   color?: string
   lineHeight?: number
-  alignment?: 'left' | 'center' | 'right'
+  alignment?: PdfConfig['alignment']
   verticalAlignment?: 'top' | 'middle' | 'bottom'
   // TODO: Add more options like opacity, rotation, background color, etc.
 }

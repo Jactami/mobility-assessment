@@ -193,7 +193,7 @@ export class PdfBuilder {
         this._config.color.text,
       fontSize: this._config.fontSize[options?.fontSize || 'base'],
       lineHeight: options?.lineHeight ?? 1.2,
-      alignment: options?.alignment,
+      alignment: options?.alignment || this._config.alignment,
       verticalAlignment: options?.verticalAlignment,
     }
 
