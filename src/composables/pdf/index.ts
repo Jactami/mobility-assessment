@@ -1,4 +1,5 @@
 import type { Poi, Project } from '@/db/types'
+import i18n from '@/i18n'
 import { merge } from '@pdfme/manipulator'
 import { ref } from 'vue'
 import { config, fonts } from './config'
@@ -27,7 +28,7 @@ export function usePdf() {
       // Create the main body of the PDF
       const pdfBody = await new PdfReportBuilder(config, meta, fonts)
         // Set header and footer
-        .createHeader(`Standortbewertung - ${project?.title}`)
+        .createHeader(`Standortbewertung - ${project?.title}`, i18n.global.d(new Date()))
         .createFooter('Bayerische Gesellschaft für Wohneigentum – Digital mbH & Co. KG', 1)
         // Create Introduction section
         .createIntro(project)

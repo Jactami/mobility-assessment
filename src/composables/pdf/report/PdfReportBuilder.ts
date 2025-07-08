@@ -14,12 +14,19 @@ export class PdfReportBuilder extends PdfBuilder {
    * @param header - The header text.
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
-  createHeader(header: string): this {
-    return this.createText(header, {
+  createHeader(headerLeft: string, headerRight: string): this {
+    this.createText(headerLeft, {
       y: this._config.padding.top - 8,
       fontSize: 'sm',
       color: 'muted',
       alignment: 'left',
+      static: true,
+    })
+    return this.createText(headerRight, {
+      y: this._config.padding.top - 8,
+      fontSize: 'sm',
+      color: 'muted',
+      alignment: 'right',
       static: true,
     }).createLine({
       x: this._config.padding.left,
