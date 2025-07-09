@@ -29,7 +29,10 @@ export function usePdf() {
       const pdfBody = await new PdfReportBuilder(config, meta, fonts)
         // Set header and footer
         .createHeader(`Standortbewertung - ${project?.title}`, i18n.global.d(new Date()))
-        .createFooter('Bayerische Gesellschaft für Wohneigentum – Digital mbH & Co. KG', 1)
+        .createFooter(
+          `Bayerische Gesellschaft für Wohneigentum – Digital mbH & Co. KG © ${new Date().getFullYear()}`,
+          1,
+        )
         // Create Introduction section
         .createIntro(project)
         // Create summary page
