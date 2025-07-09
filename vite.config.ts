@@ -1,3 +1,4 @@
+import ViteYaml from '@modyfi/vite-plugin-yaml'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath } from 'node:url'
@@ -20,6 +21,7 @@ export default defineConfig(async () => ({
         families: ['Open Sans'],
       },
     }),
+    ViteYaml(),
   ],
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
