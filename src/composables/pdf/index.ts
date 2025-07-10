@@ -41,12 +41,17 @@ export function usePdf() {
         .newPage()
         .createSectionHeader('Gesamtbewertung des Mikrostandorts')
         .createScore(project.score ?? 0)
-        // Create the Methodic section
+        // Create the methodic section
         .newPage()
         .createSeparatorPage('Auswertung')
         .newPage()
-        // Create appendix
         .createMethodic()
+        // Create about us section
+        .newPage()
+        .createSeparatorPage('Herausgeber')
+        .newPage()
+        .createAboutUs()
+        // Create appendix
         .newPage()
         .createSeparatorPage('Anhang')
         .createDomainTables(pois)

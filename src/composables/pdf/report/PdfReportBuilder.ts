@@ -1,3 +1,4 @@
+import { useLegal } from '@/composables/legal'
 import { useColorUtil } from '@/composables/util/color'
 import { useUtil } from '@/composables/util/misc'
 import { DOMAINS } from '@/constants'
@@ -303,10 +304,34 @@ export class PdfReportBuilder extends PdfBuilder {
   createLegalNotice(): this {
     return this.createSectionHeader('Rechtliche Hinweise').createText(
       'Dieser Bericht wurde mit größter Sorgfalt auf Basis der zum Zeitpunkt der Erstellung vorliegenden Daten und Informationen erstellt. Der Datenstand bezieht sich auf den im Bericht genannten Stichtag. Spätere Entwicklungen sind nicht berücksichtigt. Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Aktualität der enthaltenen Angaben.\n\nAlle Inhalte dieses Berichts sind Eigentum der Bayerischen Gesellschaft für Wohneigentum mbH & Co. KG. Er dient ausschließlich zu Informationszwecken und richtet sich ausschließlich an den benannten Empfänger.Eine vollständige oder auszugsweise Weitergabe an Dritte oder Veröffentlichung bedarf unserer vorherigen schriftlichen Zustimmung.\n\nAlle im Bericht enthaltenen Texte, Grafiken und Auswertungen sind urheberrechtlich geschützt und dürfen ohne ausdrückliche Genehmigung des Herausgebers nicht vervielfältigt oder anderweitig verwendet werden.',
-      {
-        y: this._config.padding.top + 10,
-      },
+      { y: this._config.padding.top + 10 },
     )
+  }
+
+  createAboutUs(): this {
+    const company = useLegal().getCompanyData()
+
+    return this.createSectionHeader('Über Uns')
+      .createText(
+        'Die Bayerische Gesellschaft für Wohneigentum mbH & Co. KG ist Teil der BGW Gruppe, die seit vielen Jahren erfolgreich im Immobilienmarkt und der Quartiersentwicklung tätig ist. Mit unserer langjährigen Expertise begleiten wir Projekte von der ersten Idee bis zur Umsetzung und schaffen so die Grundlage für nachhaltige und lebenswerte Stadtquartiere.\n\nAls spezialisierter Partner für datenbasierte Standortanalysen im urbanen Raum unterstützen wir Projektentwickler, Investoren und öffentliche Einrichtungen dabei, fundierte Entscheidungen zu treffen. Unser Ansatz verbindet fachliche Kompetenz in Stadtentwicklung, Nachhaltigkeit und Marktanalyse mit praxisnaher Umsetzung und orientiert sich am Leitbild der Stadt der kurzen Wege.\n\nUnsere Arbeit verbindet Fachwissen in Stadtentwicklung, Nachhaltigkeit und Marktanalyse mit praxisnaher Umsetzung. Dabei legen wir besonderen Wert auf das Leitbild der „Stadt der kurzen Wege“ und die Förderung lebenswerter, resilienter Städte.',
+        { y: this._config.padding.top + 10 },
+      )
+      .createImage(logoBgw, {
+        x: this._config.format.width / 2 - 40, // Center the logo
+        y: this._config.padding.top + 90,
+        width: 80,
+        height: 80,
+      })
+      .createText('Kontakt', {
+        y: this._config.padding.top + 190,
+        font: 'bold',
+        fontSize: 'lg',
+        alignment: 'center',
+      })
+      .createText(
+        `${company.name}\n${company.address}\nE-Mail: ${company.email}\nTelefon: ${company.phone}\nWebseite: ${company.web}`,
+        { y: this._config.padding.top + 200, alignment: 'center', lineHeight: 1.5 },
+      )
   }
 
   /**
