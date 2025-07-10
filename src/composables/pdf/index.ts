@@ -45,10 +45,16 @@ export function usePdf() {
         .newPage()
         .createSeparatorPage('Auswertung')
         .newPage()
+        // Create appendix
         .createMethodic()
         .newPage()
         .createSeparatorPage('Anhang')
         .createDomainTables(pois)
+        // Create legal notice page
+        .newPage()
+        .createSeparatorPage('Rechtliche Hinweise')
+        .newPage()
+        .createLegalNotice()
         .build()
 
       // Merge the title page and body into a single PDF

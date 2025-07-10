@@ -300,6 +300,15 @@ export class PdfReportBuilder extends PdfBuilder {
     return this
   }
 
+  createLegalNotice(): this {
+    return this.createSectionHeader('Rechtliche Hinweise').createText(
+      'Dieser Bericht wurde mit größter Sorgfalt auf Basis der zum Zeitpunkt der Erstellung vorliegenden Daten und Informationen erstellt. Der Datenstand bezieht sich auf den im Bericht genannten Stichtag. Spätere Entwicklungen sind nicht berücksichtigt. Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Aktualität der enthaltenen Angaben.\n\nAlle Inhalte dieses Berichts sind Eigentum der Bayerischen Gesellschaft für Wohneigentum mbH & Co. KG. Er dient ausschließlich zu Informationszwecken und richtet sich ausschließlich an den benannten Empfänger.Eine vollständige oder auszugsweise Weitergabe an Dritte oder Veröffentlichung bedarf unserer vorherigen schriftlichen Zustimmung.\n\nAlle im Bericht enthaltenen Texte, Grafiken und Auswertungen sind urheberrechtlich geschützt und dürfen ohne ausdrückliche Genehmigung des Herausgebers nicht vervielfältigt oder anderweitig verwendet werden.',
+      {
+        y: this._config.padding.top + 10,
+      },
+    )
+  }
+
   /**
    * Creates domain tables for the PDF document.
    *
