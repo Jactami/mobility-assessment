@@ -17,21 +17,21 @@ export class PdfReportBuilder extends PdfBuilder {
    */
   createHeader(headerLeft: string, headerRight: string): this {
     this.createText(headerLeft, {
-      y: this._config.padding.top - 8,
+      y: this._config.padding.top - 11,
       fontSize: 'sm',
       color: 'muted',
       alignment: 'left',
       static: true,
     })
     return this.createText(headerRight, {
-      y: this._config.padding.top - 8,
+      y: this._config.padding.top - 11,
       fontSize: 'sm',
       color: 'muted',
       alignment: 'right',
       static: true,
     }).createLine({
       x: this._config.padding.left,
-      y: this._config.padding.top - 2,
+      y: this._config.padding.top - 5,
       width: this._config.format.width - this._config.padding.left - this._config.padding.right,
       height: 0.1,
       color: 'muted',
@@ -46,14 +46,14 @@ export class PdfReportBuilder extends PdfBuilder {
    */
   createFooter(footer: string, pageOffset: number = 0): this {
     return this.createText(footer, {
-      y: this._config.format.height - this._config.padding.bottom + 4,
+      y: this._config.format.height - this._config.padding.bottom + 7,
       fontSize: 'sm',
       color: 'muted',
       alignment: 'left',
       static: true,
     })
       .createText(`{currentPage + ${pageOffset}}`, {
-        y: this._config.format.height - this._config.padding.bottom + 4,
+        y: this._config.format.height - this._config.padding.bottom + 7,
         fontSize: 'sm',
         color: 'muted',
         alignment: 'right',
@@ -61,7 +61,7 @@ export class PdfReportBuilder extends PdfBuilder {
       })
       .createLine({
         x: this._config.padding.left,
-        y: this._config.format.height - this._config.padding.bottom + 2,
+        y: this._config.format.height - this._config.padding.bottom + 5,
         width: this._config.format.width - this._config.padding.left - this._config.padding.right,
         height: 0.1,
         color: 'muted',
