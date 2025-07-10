@@ -14,7 +14,7 @@
       </BaseButton>
     </div>
     <div class="mt-10 flex justify-center">
-      <BaseButton :disabled="loading" @click="createReport">Report</BaseButton>
+      <BaseButton :disabled="loading && !chart" @click="createReport">Report</BaseButton>
     </div>
   </BaseSection>
 
@@ -25,7 +25,7 @@
 
     <BaseSection v-if="scores">
       <div class="mx-auto max-w-xl">
-        <ProjectScoreChart :scores="scores" />
+        <ProjectScoreChart :scores="scores" @export="(img) => (chart = img)" />
       </div>
     </BaseSection>
 
@@ -88,6 +88,8 @@ const pois = ref<Poi[] | null>(null)
 const scores = ref<EvaluationScores | null>(null)
 
 const selectedPoi = ref<Poi | null>(null)
+
+const chart = ref<string | null>(null)
 
 // a loading flag to indicate if geodata is being fetched
 const geodataLoading = ref(false)
@@ -179,10 +181,14 @@ async function saveProject() {
 }
 
 async function createReport() {
-  if (!projectStore.project || !projectStore.pois) return
+  if (!projectStore.project || !projectStore.pois || !chart.value) return
 
   // Create the PDF report
-  await createPdf(projectStore.project, projectStore.pois)
+  await createPdf({
+    project: projectStore.project,
+    pois: projectStore.pois,
+    chart: chart.value,
+  })
 
   // If there is an error in creating the PDF, show error
   if (error.value) {

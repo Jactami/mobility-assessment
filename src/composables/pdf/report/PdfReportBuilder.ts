@@ -195,6 +195,68 @@ export class PdfReportBuilder extends PdfBuilder {
     )
   }
 
+  createSummary(project: Project, chart: string): this {
+    const { createAddress } = useUtil()
+    const address = createAddress({
+      name: project?.name,
+      street: project?.street,
+      housenumber: project?.housenumber,
+      postcode: project?.postcode,
+      city: project?.city,
+    })
+
+    this.createSectionHeader('Mikrostandort')
+      .createText(
+        'Im Rahmen dieser Analyse wurde der Mikrostandort untersucht. Die Bewertung bezieht sich auf die unmittelbare Umgebung des Standorts und berücksichtigt relevante Angebote und Einrichtungen innerhalb eines definierten Radius zum  untersuchten Zeitpunkt.',
+        { y: this._config.padding.top + 10 },
+      )
+      .createText('Standort:', {
+        y: this._config.padding.top + 30,
+        font: 'bold',
+      })
+      .createText(address, {
+        x: this._config.padding.left + 17,
+        y: this._config.padding.top + 30,
+      })
+      .createText('Untersuchter Umkreis:', {
+        y: this._config.padding.top + 36,
+        font: 'bold',
+      })
+      .createText(`${i18n.global.n(project.radius ?? Infinity, 'meter')}`, {
+        x: this._config.padding.left + 40,
+        y: this._config.padding.top + 36,
+      })
+      .createText('Stichtag:', {
+        y: this._config.padding.top + 42,
+        font: 'bold',
+      })
+      .createText(i18n.global.d(new Date()), {
+        x: this._config.padding.left + 17,
+        y: this._config.padding.top + 42,
+      })
+
+    this.createSectionHeader('Gesamtbewertung', { y: this._config.padding.top + 60 })
+      .createScore(project.score ?? 0, this._config.padding.top + 70)
+      .createText(
+        `Der Standort erreicht in der Analyse ${i18n.global.n((project.score ?? 0) * 100, 'rounded')} von 100 möglichen Punkten. Diese Kennzahl bietet eine schnelle und verständliche Einschätzung der Standortqualität.`,
+        { y: this._config.padding.top + 130 },
+      )
+
+    this.createSectionHeader('Einzelbewertungen', { y: this._config.padding.top + 150 })
+      .createText(
+        'Um die Stärken und Schwächen des Standorts zu betonen, wird die Analyse in verschiedene Bereiche unterteilt. Analysiert werden hierfür die Dimensionen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität.',
+        { y: this._config.padding.top + 160 },
+      )
+      .createImage(chart, {
+        x: this._config.format.width / 2 - 38, // center chart
+        y: this._config.padding.top + 170,
+        width: 76,
+        height: 76,
+      })
+
+    return this
+  }
+
   createMethodic(): this {
     return this.createSectionHeader('Methodik')
       .createText(
@@ -208,15 +270,13 @@ export class PdfReportBuilder extends PdfBuilder {
         height: 110,
       })
       .createText(
-        'Auf dieser Grundlage analysieren wir den Standort anhand der zentralen Kriterien der 15-Minuten-Stadt. Dazu definieren wir einen Umkreis um den Standort, der dem Prinzip der 15-Minuten-Stadt entspricht. Innerhalb dieses Radius identifizieren und bewerten wir alle relevanten Angebote und Einrichtungen.\n\nDabei erfassen wir eine Vielzahl von Standortfaktoren aus den Bereichen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität. Jeder Bereich wird separat analysiert und mit einer Kennzahl zwischen 0 und 100 bewertet. Sowohl die Anzahl der vorhandenen Angebote als auch deren Entfernung zum Standort fließen in die Auswertung ein – je näher und zahlreicher die Angebote, desto besser die Bewertung. Auf diese Weise werden die spezifischen Stärken und Schwächen des Standorts klar und nachvollziehbar dargestellt.\n\nAus den Einzelbewertungen der Bereiche ermitteln wir eine abschließende Gesamtbewertung. Diese wird ebenfalls als Kennzahl zwischen 0 und 100 ausgewiesen und bietet auf einen Blick eine verständliche und vergleichbare Einschätzung der Standortqualität.',
+        'Auf dieser Grundlage analysieren wir den Standort anhand der zentralen Kriterien der 15-Minuten-Stadt. Dazu definieren wir einen Umkreis um den Standort, der dem Prinzip der 15-Minuten-Stadt entspricht. Innerhalb dieses Radius identifizieren und bewerten wir alle relevanten Angebote und Einrichtungen.\n\nDabei erfassen wir eine Vielzahl von Standortfaktoren aus den Bereichen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität. Jeder Bereich wird separat analysiert und mit einer Punktzahl zwischen 0 und 100 bewertet. Sowohl die Anzahl der vorhandenen Angebote als auch deren Entfernung zum Standort fließen in die Auswertung ein – je näher und zahlreicher die Angebote, desto besser die Bewertung. Auf diese Weise werden die spezifischen Stärken und Schwächen des Standorts klar und nachvollziehbar dargestellt.\n\nAus den Einzelbewertungen der Bereiche ermitteln wir eine abschließende Gesamtbewertung. Diese wird ebenfalls als Kennzahl zwischen 0 und 100 ausgewiesen und bietet auf einen Blick eine verständliche und vergleichbare Einschätzung der Standortqualität.',
         { y: this._config.padding.top + 170 },
       )
   }
 
-  createScore(score: number): this {
+  createScore(score: number, y: number): this {
     const { scoreToColor, scoreColorThresholds } = useColorUtil()
-
-    const y = this._config.padding.top + 10
 
     // Score Box
     this.createRect({
@@ -250,7 +310,7 @@ export class PdfReportBuilder extends PdfBuilder {
         (this._config.format.width - this._config.padding.left - this._config.padding.right) *
           score -
         10,
-      y: y + 42,
+      y: y + 34,
       width: 20,
       height: 20,
     })
@@ -262,7 +322,7 @@ export class PdfReportBuilder extends PdfBuilder {
         (this._config.format.width - this._config.padding.left - this._config.padding.right) * range
       this.createRect({
         x,
-        y: y + 55,
+        y: y + 47,
         width,
         height: 3,
         color: threshold.color,
@@ -272,13 +332,13 @@ export class PdfReportBuilder extends PdfBuilder {
 
     this.createText('0', {
       x: this._config.padding.left,
-      y: y + 58,
+      y: y + 50,
       fontSize: 'xs',
       color: 'muted',
       alignment: 'left',
     }).createText('100', {
       x: this._config.padding.left,
-      y: y + 58,
+      y: y + 50,
       fontSize: 'xs',
       color: 'muted',
       alignment: 'right',
@@ -291,7 +351,7 @@ export class PdfReportBuilder extends PdfBuilder {
           10
       this.createText((i * 10).toString(), {
         x: xPos,
-        y: y + 58,
+        y: y + 50,
         fontSize: 'xs',
         color: 'muted',
         alignment: 'left',

@@ -10,37 +10,36 @@ export function usePdf() {
   const error = ref<Error | null>(null)
   const loading = ref<boolean>(false)
 
-  async function createPdf(project: Project, pois: Poi[]) {
+  async function createPdf(data: { project: Project; pois: Poi[]; chart: string }) {
     try {
       loading.value = true
 
       const meta = {
-        title: `Standortbewertung - ${project?.title}`,
+        title: `Standortbewertung - ${data.project?.title}`,
         author: 'Bayerische Gesellschaft für Wohneigentum – Digital mbH & Co. KG',
         date: new Date().toLocaleDateString(),
       }
 
       // Create the title page
       const pdfTitlePage = await new PdfReportBuilder(config, meta, fonts)
-        .createTitlePage(project)
+        .createTitlePage(data.project)
         .build()
 
       // Create the main body of the PDF
       const pdfBody = await new PdfReportBuilder(config, meta, fonts)
         // Set header and footer
-        .createHeader(`Standortbewertung - ${project?.title}`, i18n.global.d(new Date()))
+        .createHeader(`Standortbewertung - ${data.project?.title}`, i18n.global.d(new Date()))
         .createFooter(
           `Bayerische Gesellschaft für Wohneigentum – Digital mbH & Co. KG © ${new Date().getFullYear()}`,
           1,
         )
         // Create Introduction section
-        .createIntro(project)
+        .createIntro(data.project)
         // Create summary page
         .newPage()
         .createSeparatorPage('Ergebnisübersicht')
         .newPage()
-        .createSectionHeader('Gesamtbewertung des Mikrostandorts')
-        .createScore(project.score ?? 0)
+        .createSummary(data.project, data.chart)
         // Create the methodic section
         .newPage()
         .createSeparatorPage('Auswertung')
@@ -54,7 +53,7 @@ export function usePdf() {
         // Create appendix
         .newPage()
         .createSeparatorPage('Anhang')
-        .createDomainTables(pois)
+        .createDomainTables(data.pois)
         // Create legal notice page
         .newPage()
         .createSeparatorPage('Rechtliche Hinweise')

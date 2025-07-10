@@ -97,11 +97,8 @@ const chartOptions = computed<ChartOptions<'radar'>>(() => ({
   },
   plugins: {
     title: {
-      display: true,
+      display: false,
       text: t('project.score'),
-      font: {
-        size: 20,
-      },
       color: chartColors.value.text,
     },
     legend: {
