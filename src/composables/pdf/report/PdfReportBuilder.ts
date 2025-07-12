@@ -4,7 +4,6 @@ import { useUtil } from '@/composables/util/misc'
 import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
-import arrowDown from '../assets/arrow-down'
 import logoBgw from '../assets/logo-bgw'
 import methodic from '../assets/methodic'
 import { PdfBuilder } from '../core/PdfBuilder'
@@ -304,17 +303,6 @@ export class PdfReportBuilder extends PdfBuilder {
       })
 
     // Score scale line
-    this.createImage(arrowDown, {
-      x:
-        this._config.padding.left +
-        (this._config.format.width - this._config.padding.left - this._config.padding.right) *
-          score -
-        10,
-      y: y + 34,
-      width: 20,
-      height: 20,
-    })
-
     let x = this._config.padding.left
     scoreColorThresholds.forEach((threshold, index) => {
       const range = threshold.max - (scoreColorThresholds[index - 1]?.max || 0)
@@ -328,6 +316,18 @@ export class PdfReportBuilder extends PdfBuilder {
         color: threshold.color,
       })
       x += width
+    })
+
+    this.createRect({
+      x:
+        this._config.padding.left +
+        (this._config.format.width - this._config.padding.left - this._config.padding.right) *
+          score -
+        0.5,
+      y: y + 45,
+      width: 1,
+      height: 7,
+      color: 'text',
     })
 
     this.createText('0', {
