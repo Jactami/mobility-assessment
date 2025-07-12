@@ -11,8 +11,9 @@ describe('createAddress', () => {
       housenumber: '21',
       postcode: '96052',
       city: 'Bamberg',
+      country: 'Deutschland',
     })
-    expect(result).toBe('Universität Bamberg, Feldkirchenstraße 21, 96052 Bamberg')
+    expect(result).toBe('Universität Bamberg, Feldkirchenstraße 21, 96052 Bamberg, Deutschland')
   })
 
   it('should return only name when only name is provided', () => {

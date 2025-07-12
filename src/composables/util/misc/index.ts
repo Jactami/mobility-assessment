@@ -25,6 +25,7 @@ function createAddress(options: {
   street?: string | null
   postcode?: string | null
   city?: string | null
+  country?: string | null
 }): string {
   let address = ''
 
@@ -34,6 +35,7 @@ function createAddress(options: {
   address += options.housenumber ? ' ' + options.housenumber + ', ' : ''
   address += options.postcode ? options.postcode + ' ' : ''
   address += options.city ? options.city : ''
+  address += options.country ? ', ' + options.country : ''
 
   // Remove any trailing whitespace
   address = address.trim()
