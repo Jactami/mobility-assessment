@@ -151,7 +151,7 @@ export class PdfReportBuilder extends PdfBuilder {
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
   createSectionHeader(header: string, options?: PdfTextOptions): this {
-    return this.createText(header, { font: 'bold', fontSize: 'lg', ...options })
+    return this.createText(header, { font: 'bold', fontSize: 'lg', color: 'primary', ...options })
   }
 
   /**
@@ -382,10 +382,8 @@ export class PdfReportBuilder extends PdfBuilder {
         width: 80,
         height: 80,
       })
-      .createText('Kontakt', {
+      .createSectionHeader('Kontakt', {
         y: this._config.padding.top + 190,
-        font: 'bold',
-        fontSize: 'lg',
         alignment: 'center',
       })
       .createText(
