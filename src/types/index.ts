@@ -2,7 +2,7 @@
  * Organizes categories into semantic groups such as leisure, education, medical, etc.
  */
 export interface AreaDomain {
-  name: string
+  name: 'education' | 'leisure' | 'health' | 'supply' | 'recreation' | 'mobility'
   color: string
   icon: string
   categories: AreaCategory[]
