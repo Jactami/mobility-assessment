@@ -3,7 +3,6 @@
   <Layers.OlVectorLayer>
     <Sources.OlSourceVector>
       <Interactions.OlInteractionSelect
-        :features="featureCollection as Collection<Feature>"
         :filter="selectInteractionFilter"
         :style="null"
         @select="handleSelect"
@@ -15,8 +14,8 @@
 
   <!-- Map Overlay -->
   <Map.OlOverlay
-    v-if="overlayPoi"
-    :position="fromLonLat([overlayPoi.longitude, overlayPoi.latitude])"
+    v-if="selectedPoi"
+    :position="fromLonLat([selectedPoi.longitude, selectedPoi.latitude])"
     :auto-pan="{
       animation: {
         duration: 200,
@@ -30,19 +29,19 @@
       :style="`border-color: ${color};`"
     >
       <div class="flex items-start justify-between gap-x-10">
-        <strong>{{ overlayPoi.label || t(`category.${overlayPoi.category}`) }}</strong>
-        <IconButton icon="close" @click="clearSelection()" />
+        <strong>{{ selectedPoi.label || t(`category.${selectedPoi.category}`) }}</strong>
+        <IconButton icon="close" @click="selectedPoi = null" />
       </div>
       <div class="mt-3 flex justify-between gap-x-10 text-sm text-on-surface-variant">
         <div class="flex items-center gap-x-1">
           <img
-            :src="`/img/map/${overlayPoi.category}.svg`"
-            :alt="t(`category.${overlayPoi.category}`)"
+            :src="`/img/map/${selectedPoi.category}.svg`"
+            :alt="t(`category.${selectedPoi.category}`)"
             class="inline-block h-5 w-5"
           />
-          <span>{{ t(`category.${overlayPoi.category}`) }}</span>
+          <span>{{ t(`category.${selectedPoi.category}`) }}</span>
         </div>
-        <span>{{ n(overlayPoi.distance, 'meter') }}</span>
+        <span>{{ n(selectedPoi.distance, 'meter') }}</span>
       </div>
       <!-- Bottom Triangle -->
       <div
@@ -57,10 +56,10 @@
 import IconButton from '@/components/icon/IconButton.vue'
 import { useColorUtil } from '@/composables/util/color'
 import type { Poi } from '@/db/types'
-import { Collection, type Feature } from 'ol'
+import { type Feature } from 'ol'
 import type { SelectEvent } from 'ol/interaction/Select'
 import { fromLonLat } from 'ol/proj'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Interactions, Layers, Map, Sources } from 'vue3-openlayers'
 
@@ -69,35 +68,17 @@ const { categoryToColor } = useColorUtil()
 
 const selectedPoi = defineModel<Poi | null>()
 
-const featureCollection = ref(new Collection<Feature>())
-
-const overlayPoi = computed<Poi | undefined>(
-  () => selectedPoi.value || featureCollection.value.getArray()[0]?.getProperties()?.poi,
-)
-
 const color = computed(() =>
-  overlayPoi.value ? categoryToColor(overlayPoi.value.category) : '#000',
+  selectedPoi.value ? categoryToColor(selectedPoi.value.category) : '#000',
 )
 
 function handleSelect(event: SelectEvent) {
-  featureCollection.value.clear()
-  clearSelection()
-
-  // Reset collection if click outside of any feature
-  if (event.selected.length === 0) return
-
-  // Add the selected feature to the collection
-  featureCollection.value.push(event.selected[0])
+  // Important: Set the poi as a property on the feature in the poi layer!
+  selectedPoi.value = event.selected.length > 0 ? event.selected[0].getProperties().poi : null
 }
 
 function selectInteractionFilter(feature: Feature) {
   // Only select features that have a poi property
   return !!feature.getProperties().poi
-}
-
-// Reset the selection and clear the feature collection
-function clearSelection() {
-  featureCollection.value.clear()
-  selectedPoi.value = null
 }
 </script>

@@ -5,7 +5,12 @@
         @search-initiated="geodataLoading = true"
         @search-completed="geodataLoading = false"
       />
-      <MapPanel v-model="selectedPoi" :project="project" :pois="pois" :disabled="geodataLoading" />
+      <MapPanel
+        v-model="selectedPoi"
+        :project="projectStore.project"
+        :pois="projectStore.pois"
+        :disabled="geodataLoading"
+      />
     </div>
     <!-- Temporary save button -->
     <div class="mt-10 flex justify-center">
@@ -93,14 +98,15 @@ const { errorToast, successToast, confirmDialog } = useNotification()
 const { pdf, error, createPdf } = usePdf()
 const { calcScores } = useEvaluation()
 
-const mapSection = ref<HTMLDivElement | null>(null)
-
+// Original project and POIs from database to compare with store
 const project = ref<Project | null>(null)
 const pois = ref<Poi[] | null>(null)
+
 const scores = ref<EvaluationScores | null>(null)
 
 const selectedPoi = ref<Poi | null>(null)
 
+const mapSection = ref<HTMLDivElement | null>(null)
 const chartRef = ref<InstanceType<typeof ProjectScoreChart> | null>(null)
 const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[] | null>('maps')
 
@@ -269,6 +275,12 @@ function filterPoisByDomain(domain: string) {
 watch(
   () => projectStore.pois,
   () => {
+    // Check if selectedPoi is still valid
+    if (selectedPoi.value && !projectStore.pois?.some((poi) => poi === selectedPoi.value)) {
+      selectedPoi.value = null // Reset if not found
+    }
+
+    // Recalculate scores whenever POIs change
     if (projectStore.pois && projectStore.project?.radius) {
       scores.value = calcScores(projectStore.pois, projectStore.project.radius)
       projectStore.updateProject({
