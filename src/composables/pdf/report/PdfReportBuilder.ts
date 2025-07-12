@@ -77,9 +77,10 @@ export class PdfReportBuilder extends PdfBuilder {
       housenumber: project?.housenumber,
       postcode: project?.postcode,
       city: project?.city,
+      country: project?.country,
     })
 
-    address = address.replace(/,\s+/g, ',\n')
+    address = address.replace(/,\s+/g, '\n')
 
     return (
       this.createText('Standortbewertung', {
@@ -87,45 +88,50 @@ export class PdfReportBuilder extends PdfBuilder {
         alignment: 'center',
         fontSize: 'xl3',
         font: 'bold',
+        color: 'primary',
       })
         .createText(project.title, {
           y: this._config.padding.top + 30,
           alignment: 'center',
           fontSize: 'xl2',
+          font: 'bold',
+          color: 'primary',
         })
         .createLine({
           x: this._config.padding.left,
-          y: this._config.padding.top + 60,
+          y: this._config.padding.top + 70,
           width: this._config.format.width - this._config.padding.left - this._config.padding.right,
           height: 1,
           color: 'primary',
         })
         .createText('Ergebnisbericht der Standortanalyse', {
-          y: this._config.padding.top + 70,
+          y: this._config.padding.top + 80,
           alignment: 'center',
           fontSize: 'xl',
         })
         .createText(address, {
           y: this._config.padding.top + 90,
           alignment: 'center',
-          fontSize: 'lg',
           color: 'muted',
+          fontSize: 'lg',
+          height: 50,
+          verticalAlignment: 'middle',
           lineHeight: 1.5,
+        })
+        // TODO: Decide if to use the creation Date or the current date
+        .createText(`Stichtag: ${i18n.global.d(new Date())}`, {
+          y: this._config.padding.top + 140,
+          alignment: 'center',
+          color: 'muted',
         })
         .createLine({
           x: this._config.padding.left,
-          y: this._config.padding.top + 115,
+          y: this._config.padding.top + 155,
           width: this._config.format.width - this._config.padding.left - this._config.padding.right,
           height: 1,
           color: 'primary',
         })
-        // TODO: Decide if to use the creation Date or the current date
-        .createText(`Stichtag: ${i18n.global.d(new Date())}`, {
-          y: this._config.padding.top + 130,
-        })
-        .createText(`Untersuchter Umkreis: ${i18n.global.n(project.radius ?? Infinity, 'meter')}`, {
-          y: this._config.padding.top + 140,
-        })
+
         .createImage(logoBgw, {
           x: this._config.format.width / 2 - 40, // Center the logo
           y: this._config.padding.top + 165,
@@ -135,10 +141,11 @@ export class PdfReportBuilder extends PdfBuilder {
         .createText(
           'Dieser Bericht ist vertraulich und ausschließlich für den Empfänger bestimmt.',
           {
-            y: this._config.format.height - this._config.padding.bottom - 5,
+            y: this._config.format.height - 10,
             alignment: 'center',
             fontSize: 'sm',
             color: 'muted',
+            static: true,
           },
         )
     )
