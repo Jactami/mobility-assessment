@@ -28,11 +28,12 @@
   --color-surface-container-highest: var(--color-gray-400);
 
   --color-on-surface: var(--color-gray-900);
-  --color-on-surface-variant: var(--color-gray-600);
+  --color-on-surface-variant: var(--color-gray-700);
+  --color-on-surface-muted: var(--color-gray-500);
   --color-on-surface-inverse: var(--color-gray-100);
 
-  --color-outline: var(--color-gray-300);
-  --color-outline-variant: var(--color-gray-200);
+  --color-outline: var(--color-gray-400);
+  --color-outline-variant: var(--color-gray-300);
 
   /* Status colors */
   --color-error: var(--color-red-600);
@@ -64,11 +65,12 @@
       --color-surface-container-highest: var(--color-gray-500);
 
       --color-on-surface: var(--color-gray-100);
-      --color-on-surface-variant: var(--color-gray-400);
+      --color-on-surface-variant: var(--color-gray-300);
+      --color-on-surface-muted: var(--color-gray-400);
       --color-on-surface-inverse: var(--color-gray-900);
 
-      --color-outline: var(--color-gray-600);
-      --color-outline-variant: var(--color-gray-700);
+      --color-outline: var(--color-gray-500);
+      --color-outline-variant: var(--color-gray-600);
 
       /* Status colors */
       --color-error: var(--color-red-400);
