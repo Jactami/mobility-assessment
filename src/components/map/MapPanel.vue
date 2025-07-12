@@ -20,20 +20,20 @@
     <template
       v-if="
         mapRef &&
-        projectStore.project?.longitude &&
-        projectStore.project.latitude &&
-        projectStore.project?.radius &&
+        props.project?.longitude &&
+        props.project?.latitude &&
+        props.project?.radius &&
         !disabled
       "
     >
       <!-- Radius Layer -->
       <MapLayerRadius
         :location="location"
-        :radius="metersToPixels(mapRef.map as OlMap, location, projectStore.project.radius)"
+        :radius="metersToPixels(mapRef.map as OlMap, location, props.project?.radius)"
       />
 
       <!-- Points of Interest Layer -->
-      <MapLayerPois />
+      <MapLayerPois :pois="pois" />
 
       <!-- Location Layer -->
       <MapLayerLocation :location="location" />
@@ -65,8 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Poi } from '@/db/types'
-import { useProjectStore } from '@/stores/Project'
+import type { Poi, Project } from '@/db/types'
 import { useGeolocation } from '@vueuse/core'
 import type { Extent } from 'ol/extent'
 import type OlMap from 'ol/Map'
@@ -81,11 +80,14 @@ import MapLayerPois from './layers/MapLayerPois.vue'
 import MapLayerRadius from './layers/MapLayerRadius.vue'
 
 interface Props {
+  project?: Project | null
+  pois?: Poi[] | null
   height?: number
   disabled?: boolean
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
+  pois: () => [],
   height: 500,
   disabled: false,
 })
@@ -94,7 +96,6 @@ defineExpose({ exportMap })
 
 const { t } = useI18n()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
-const projectStore = useProjectStore()
 const { exportMapToImage, metersToPixels, zoomFromMeters } = useMapUtils()
 
 // Define a model for the selected POI to be used across components
@@ -141,13 +142,13 @@ async function exportMap() {
   const size = 200 // 4:3
   const attribution = { text: attributions.join(' '), size: 22 }
 
-  const img = await exportMapToImage(map, [size, size * 0.75], 240, 0.8, attribution)
+  const img = await exportMapToImage(map, [size, size * 0.75], 192, 0.8, attribution)
   return img
 }
 
 // Update and initialize map view when the project location changes
 watch(
-  () => projectStore.project,
+  () => props.project,
   async (newProject) => {
     const { longitude, latitude, radius } = newProject || {}
     if (longitude && latitude && radius && mapRef.value) {
@@ -165,7 +166,7 @@ watch(
 // Watch for geolocation updates and center the map on the user's location
 watch(coords, ({ latitude, longitude }) => {
   // If the project already has a location, pause geolocation updates
-  if (projectStore.project?.longitude && projectStore.project?.latitude) {
+  if (props.project?.longitude && props.project?.latitude) {
     pause()
     return
   }
@@ -184,15 +185,11 @@ watch(
   () => {
     if (
       selectedPoi.value &&
-      projectStore.project?.radius &&
-      projectStore.project?.latitude &&
-      projectStore.project?.longitude
+      props.project?.radius &&
+      props.project?.latitude &&
+      props.project?.longitude
     ) {
-      resetMap(
-        projectStore.project?.longitude,
-        projectStore.project?.latitude,
-        projectStore.project?.radius,
-      )
+      resetMap(props.project?.longitude, props.project?.latitude, props.project?.radius)
     }
   },
 )

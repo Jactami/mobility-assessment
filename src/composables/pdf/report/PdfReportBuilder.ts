@@ -263,6 +263,24 @@ export class PdfReportBuilder extends PdfBuilder {
     return this
   }
 
+  createDomainPage(pois: Poi[], maps: Record<string, string>): this {
+    DOMAINS.forEach((domain) => {
+      this.newPage()
+        .createSectionHeader(i18n.global.t(`domain.${domain.name}`))
+        .createText('Lorem ipsum dolor sit amet', { y: this._config.padding.top + 10 })
+        .createImage(maps[domain.name], {
+          x: this._config.padding.left,
+          y: this._config.padding.top + 20,
+          width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+          height:
+            (this._config.format.width - this._config.padding.left - this._config.padding.right) *
+            0.75,
+        })
+    })
+
+    return this
+  }
+
   createMethodic(): this {
     return this.createSectionHeader('Methodik')
       .createText(

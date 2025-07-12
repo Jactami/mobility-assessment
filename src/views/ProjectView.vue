@@ -5,7 +5,7 @@
         @search-initiated="geodataLoading = true"
         @search-completed="geodataLoading = false"
       />
-      <MapPanel v-model="selectedPoi" :disabled="geodataLoading" />
+      <MapPanel v-model="selectedPoi" :project="project" :pois="pois" :disabled="geodataLoading" />
     </div>
     <!-- Temporary save button -->
     <div class="mt-10 flex justify-center">
@@ -47,6 +47,18 @@
     </BaseSection>
 
     <DebugPanel title="Project Store" :value="projectStore.project" />
+
+    <!-- Hidden Maps to produce map image exports -->
+    <div class="invisible">
+      <MapPanel
+        v-for="domain in DOMAINS"
+        :key="domain.name"
+        ref="maps"
+        :project="project"
+        :pois="filterPoisByDomain(domain.name)"
+        :height="1"
+      />
+    </div>
   </template>
 </template>
 
@@ -68,7 +80,7 @@ import { usePdf } from '@/composables/pdf'
 import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 
@@ -90,6 +102,8 @@ const scores = ref<EvaluationScores | null>(null)
 const selectedPoi = ref<Poi | null>(null)
 
 const chart = ref<string | null>(null)
+
+const mapRefs = useTemplateRef<(typeof MapPanel)[]>('maps')
 
 // a loading flag to indicate if geodata is being fetched
 const geodataLoading = ref(false)
@@ -183,11 +197,21 @@ async function saveProject() {
 async function createReport() {
   if (!projectStore.project || !projectStore.pois || !chart.value) return
 
+  // Generate map images for each domain
+  const maps: Record<string, string> = {}
+  await Promise.all(
+    mapRefs.value?.map(async (mapRef, i) => {
+      const img = await mapRef.exportMap()
+      maps[DOMAINS[i].name] = img
+    }) || [],
+  )
+
   // Create the PDF report
   await createPdf({
     project: projectStore.project,
     pois: projectStore.pois,
     chart: chart.value,
+    maps,
   })
 
   // If there is an error in creating the PDF, show error
@@ -222,6 +246,13 @@ function handlePoiSelected(poi: Poi) {
   selectedPoi.value = poi
   // scroll to the map section
   mapSection.value?.scrollIntoView({ behavior: 'smooth' })
+}
+
+function filterPoisByDomain(domain: string) {
+  // Get all categories for the given domain
+  const categories = DOMAINS.find((d) => d.name === domain)?.categories.map((c) => c.name) || []
+  // Filter POIs by the selected domain categories
+  return projectStore.pois?.filter((poi) => categories.includes(poi.category)) || []
 }
 
 watch(

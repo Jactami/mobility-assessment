@@ -10,7 +10,12 @@ export function usePdf() {
   const error = ref<Error | null>(null)
   const loading = ref<boolean>(false)
 
-  async function createPdf(data: { project: Project; pois: Poi[]; chart: string }) {
+  async function createPdf(data: {
+    project: Project
+    pois: Poi[]
+    chart: string
+    maps: Record<string, string>
+  }) {
     try {
       loading.value = true
 
@@ -45,6 +50,8 @@ export function usePdf() {
         .createSeparatorPage('Auswertung')
         .newPage()
         .createMethodic()
+        // Create domain specific sections
+        .createDomainPage(data.pois, data.maps)
         // Create about us section
         .newPage()
         .createSeparatorPage('Herausgeber')

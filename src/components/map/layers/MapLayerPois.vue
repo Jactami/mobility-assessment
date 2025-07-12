@@ -1,7 +1,7 @@
 <template>
   <Layers.OlVectorLayer :min-zoom="10">
     <Sources.OlSourceVector>
-      <template v-for="poi in projectStore.pois" :key="poi.id">
+      <template v-for="poi in pois" :key="poi.id">
         <!-- Marker: Append poi to properties for selection -->
         <Map.OlFeature :properties="{ poi }">
           <Geometries.OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
@@ -36,10 +36,13 @@
 
 <script setup lang="ts">
 import { useColorUtil } from '@/composables/util/color'
-import { useProjectStore } from '@/stores/Project'
+import type { Poi } from '@/db/types'
 import { fromLonLat } from 'ol/proj'
 import { Geometries, Layers, Map, Sources, Styles } from 'vue3-openlayers'
 
-const projectStore = useProjectStore()
+defineProps<{
+  pois: Poi[] | null
+}>()
+
 const { categoryToColor } = useColorUtil()
 </script>
