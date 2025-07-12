@@ -1,8 +1,9 @@
 <template>
   <Map.OlMap
     ref="mapRef"
-    class="h-[500px] overflow-hidden rounded-border"
+    class="overflow-hidden rounded-border"
     :class="{ 'opacity-60': disabled }"
+    :style="{ height: `${height}px` }"
   >
     <Map.OlView
       :center="center"
@@ -13,13 +14,7 @@
 
     <!-- Openstreetmap Layer -->
     <Layers.OlTileLayer>
-      <Sources.OlSourceOsm
-        :attributions="[
-          `© ${new Date().getFullYear()} by BGW Digital`,
-          '© OpenStreetMap contributors/',
-          'Lizenz: ODbL',
-        ]"
-      />
+      <Sources.OlSourceOsm :attributions="attributions" />
     </Layers.OlTileLayer>
 
     <template
@@ -85,14 +80,22 @@ import MapLayerOverlay from './layers/MapLayerOverlay.vue'
 import MapLayerPois from './layers/MapLayerPois.vue'
 import MapLayerRadius from './layers/MapLayerRadius.vue'
 
-defineProps<{
+interface Props {
+  height?: number
   disabled?: boolean
-}>()
+}
+
+withDefaults(defineProps<Props>(), {
+  height: 500,
+  disabled: false,
+})
+
+defineExpose({ exportMap })
 
 const { t } = useI18n()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
 const projectStore = useProjectStore()
-const { metersToPixels, zoomFromMeters } = useMapUtils()
+const { exportMapToImage, metersToPixels, zoomFromMeters } = useMapUtils()
 
 // Define a model for the selected POI to be used across components
 const selectedPoi = defineModel<Poi | null>()
@@ -106,6 +109,13 @@ const lon = ref(10.4477)
 const center = ref(fromLonLat([lon.value, lat.value]))
 const zoom = ref(5.7)
 
+// Attribution text for the exported map image
+const attributions: string[] = [
+  `© ${new Date().getFullYear()} by BGW Digital`,
+  `© OpenStreetMap contributors/`,
+  `Lizenz: ODbL`,
+]
+
 // Extent for the map view
 const extent = ref<Extent>([])
 
@@ -118,6 +128,21 @@ function resetMap(longitude: number, latitude: number, radius: number) {
   center.value = fromLonLat([longitude, latitude])
   const offset = radius * 0.1
   zoom.value = zoomFromMeters(mapRef.value?.map as OlMap, location.value, (radius + offset) * 2)
+}
+
+/**
+ * Exports the current map view as an image.
+ * @returns A promise that resolves to the exported image data URL.
+ */
+async function exportMap() {
+  if (!mapRef.value) return
+
+  const map = mapRef.value.map as OlMap
+  const size = 200 // 4:3
+  const attribution = { text: attributions.join(' '), size: 22 }
+
+  const img = await exportMapToImage(map, [size, size * 0.75], 240, 0.8, attribution)
+  return img
 }
 
 // Update and initialize map view when the project location changes
