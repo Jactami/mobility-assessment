@@ -7,7 +7,7 @@
     <div class="fixed inset-0 flex w-screen items-center justify-center p-4">
       <!-- The actual dialog panel -->
       <DialogPanel
-        class="relative w-full max-w-5xl rounded-border border border-outline bg-surface p-6 shadow-md"
+        class="relative w-full max-w-5xl rounded-border border border-outline-variant bg-surface p-6 shadow-md"
       >
         <div class="absolute top-4 right-4 z-9999">
           <IconButton icon="close" @click="isOpen = false" />

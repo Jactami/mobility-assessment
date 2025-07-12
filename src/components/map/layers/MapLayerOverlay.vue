@@ -26,7 +26,7 @@
     :offset="[0, -18]"
   >
     <div
-      class="relative max-w-96 min-w-64 rounded-border border-2 border-outline bg-surface p-2 shadow-md"
+      class="relative max-w-96 min-w-64 rounded-border border-2 bg-surface p-2 shadow-md"
       :style="`border-color: ${color};`"
     >
       <div class="flex items-start justify-between gap-x-10">

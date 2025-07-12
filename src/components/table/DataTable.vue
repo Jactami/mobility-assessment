@@ -23,11 +23,11 @@
     </div>
 
     <!-- Data Table -->
-    <div class="overflow-hidden rounded-border border border-outline">
+    <div class="overflow-hidden rounded-border border border-outline-variant">
       <div class="overflow-x-auto">
         <table class="w-full border-collapse">
           <!-- Table Head -->
-          <thead class="border-b border-outline">
+          <thead class="border-b border-outline-variant">
             <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
               <th
                 v-for="header in headerGroup.headers"

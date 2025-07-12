@@ -2,15 +2,11 @@
   <div class="divide-y divide-outline-variant rounded-border border border-outline-variant">
     <div class="flex items-center justify-between gap-x-3 px-4 py-2">
       <span class="font-semibold">{{ title }}</span>
-      <button
-        type="button"
+      <IconButton
+        :icon="isCopied ? 'check' : 'copy'"
         :title="isCopied ? 'Copied!' : 'Copy to clipboard'"
-        class="cursor-pointer rounded-border border border-outline p-2 hover:bg-surface-container-low"
         @click="copyToClipboard"
-      >
-        <IconRenderer v-if="!isCopied" icon="copy" />
-        <IconRenderer v-else icon="check" />
-      </button>
+      />
     </div>
     <pre
       class="max-h-fit resize-y overflow-y-auto bg-surface-container-low px-4 py-3 text-sm/6 break-words whitespace-pre-wrap text-on-surface-variant"
@@ -20,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import IconRenderer from '@/components/icon/IconRenderer.vue'
+import IconButton from '@/components/icon/IconButton.vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps<{
