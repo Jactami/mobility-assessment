@@ -179,18 +179,4 @@ watch(coords, ({ latitude, longitude }) => {
     pause() // Pause geolocation updates after first use
   }
 })
-
-watch(
-  () => selectedPoi?.value,
-  () => {
-    if (
-      selectedPoi.value &&
-      props.project?.radius &&
-      props.project?.latitude &&
-      props.project?.longitude
-    ) {
-      resetMap(props.project?.longitude, props.project?.latitude, props.project?.radius)
-    }
-  },
-)
 </script>

@@ -3,6 +3,7 @@
   <Layers.OlVectorLayer>
     <Sources.OlSourceVector>
       <Interactions.OlInteractionSelect
+        :features="featureCollection"
         :filter="selectInteractionFilter"
         :style="null"
         @select="handleSelect"
@@ -25,13 +26,14 @@
     :offset="[0, -18]"
   >
     <div
+      v-if="selectedPoi"
       class="relative max-w-96 min-w-64 rounded-border border-2 bg-surface p-2 shadow-md"
       :style="`border-color: ${color};`"
     >
       <div>
         <div class="flex items-start justify-between gap-x-10">
           <strong>{{ selectedPoi.label || t(`category.${selectedPoi.category}`) }}</strong>
-          <IconButton icon="close" @click="selectedPoi = null" />
+          <IconButton icon="close" @click="handleClose" />
         </div>
         <div class="mt-4 text-sm text-on-surface-variant">
           <div class="flex items-center gap-x-1">
@@ -69,7 +71,8 @@ import { useNotification } from '@/composables/notification'
 import { useColorUtil } from '@/composables/util/color'
 import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
-import { type Feature } from 'ol'
+import { Collection, type Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
 import type { SelectEvent } from 'ol/interaction/Select'
 import { fromLonLat } from 'ol/proj'
 import { computed, ref } from 'vue'
@@ -83,6 +86,8 @@ const projectStore = useProjectStore()
 
 const modalOpen = ref(false)
 
+const featureCollection = new Collection<Feature<Geometry>>()
+
 const selectedPoi = defineModel<Poi | null>()
 
 const color = computed(() =>
@@ -90,8 +95,22 @@ const color = computed(() =>
 )
 
 function handleSelect(event: SelectEvent) {
+  // Clear previous selection
+  handleClose()
+
+  // If user clicked outside of any feature, do nothing
+  if (event.selected.length === 0) return
+
+  // Select the first feature
+  featureCollection.push(event.selected[0])
+
   // Important: Set the poi as a property on the feature in the poi layer!
   selectedPoi.value = event.selected.length > 0 ? event.selected[0].getProperties().poi : null
+}
+
+function handleClose() {
+  featureCollection.clear()
+  selectedPoi.value = null
 }
 
 function selectInteractionFilter(feature: Feature) {
