@@ -276,7 +276,7 @@ watch(
   () => projectStore.pois,
   () => {
     // Check if selectedPoi is still valid
-    if (selectedPoi.value && !projectStore.pois?.some((poi) => poi === selectedPoi.value)) {
+    if (selectedPoi.value && !projectStore.pois?.some((poi) => poi.id === selectedPoi.value?.id)) {
       selectedPoi.value = null // Reset if not found
     }
 

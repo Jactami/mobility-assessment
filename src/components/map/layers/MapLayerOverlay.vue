@@ -28,20 +28,28 @@
       class="relative max-w-96 min-w-64 rounded-border border-2 bg-surface p-2 shadow-md"
       :style="`border-color: ${color};`"
     >
-      <div class="flex items-start justify-between gap-x-10">
-        <strong>{{ selectedPoi.label || t(`category.${selectedPoi.category}`) }}</strong>
-        <IconButton icon="close" @click="selectedPoi = null" />
-      </div>
-      <div class="mt-3 flex justify-between gap-x-10 text-sm text-on-surface-variant">
-        <div class="flex items-center gap-x-1">
-          <img
-            :src="`/img/map/${selectedPoi.category}.svg`"
-            :alt="t(`category.${selectedPoi.category}`)"
-            class="inline-block h-5 w-5"
-          />
-          <span>{{ t(`category.${selectedPoi.category}`) }}</span>
+      <div>
+        <div class="flex items-start justify-between gap-x-10">
+          <strong>{{ selectedPoi.label || t(`category.${selectedPoi.category}`) }}</strong>
+          <IconButton icon="close" @click="selectedPoi = null" />
         </div>
-        <span>{{ n(selectedPoi.distance, 'meter') }}</span>
+        <div class="mt-4 text-sm text-on-surface-variant">
+          <div class="flex items-center gap-x-1">
+            <img
+              :src="`/img/map/${selectedPoi.category}.svg`"
+              :alt="t(`category.${selectedPoi.category}`)"
+              class="inline-block h-5 w-5"
+            />
+            <span>{{ t(`category.${selectedPoi.category}`) }}</span>
+          </div>
+          <div class="mt-2 flex items-center justify-between">
+            <span>{{ n(selectedPoi.distance, 'meter') }}</span>
+            <div class="">
+              <IconButton icon="edit" @click="modalOpen = true" />
+              <IconButton icon="delete" @click="deletePoi(selectedPoi)" />
+            </div>
+          </div>
+        </div>
       </div>
       <!-- Bottom Triangle -->
       <div
@@ -50,21 +58,30 @@
       />
     </div>
   </Map.OlOverlay>
+
+  <ProjectPoiForm v-if="selectedPoi" v-model:open="modalOpen" v-model:poi="selectedPoi" />
 </template>
 
 <script setup lang="ts">
 import IconButton from '@/components/icon/IconButton.vue'
+import ProjectPoiForm from '@/components/project/ProjectPoiForm.vue'
+import { useNotification } from '@/composables/notification'
 import { useColorUtil } from '@/composables/util/color'
 import type { Poi } from '@/db/types'
+import { useProjectStore } from '@/stores/Project'
 import { type Feature } from 'ol'
 import type { SelectEvent } from 'ol/interaction/Select'
 import { fromLonLat } from 'ol/proj'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Interactions, Layers, Map, Sources } from 'vue3-openlayers'
 
 const { n, t } = useI18n()
 const { categoryToColor } = useColorUtil()
+const { confirmDialog } = useNotification()
+const projectStore = useProjectStore()
+
+const modalOpen = ref(false)
 
 const selectedPoi = defineModel<Poi | null>()
 
@@ -80,5 +97,20 @@ function handleSelect(event: SelectEvent) {
 function selectInteractionFilter(feature: Feature) {
   // Only select features that have a poi property
   return !!feature.getProperties().poi
+}
+
+// TODO: This is a duplicate of the delete function in ProjectPoiTable.vue
+async function deletePoi(poi: Poi) {
+  if (!projectStore.pois) return
+
+  // Confirm deletion
+  const confirmation = await confirmDialog(
+    t('table.confirmDelete', { object: poi.label || t(`category.${poi.category}`) }),
+  )
+  if (!confirmation) return
+
+  // Remove the POI from the store
+  const newPois = projectStore.pois.filter((p) => p !== poi)
+  projectStore.updatePois(newPois)
 }
 </script>
