@@ -103,7 +103,7 @@ const selectedPoi = ref<Poi | null>(null)
 
 const chart = ref<string | null>(null)
 
-const mapRefs = useTemplateRef<(typeof MapPanel)[]>('maps')
+const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[]>('maps')
 
 // a loading flag to indicate if geodata is being fetched
 const geodataLoading = ref(false)
@@ -202,7 +202,7 @@ async function createReport() {
   await Promise.all(
     mapRefs.value?.map(async (mapRef, i) => {
       const img = await mapRef.exportMap()
-      maps[DOMAINS[i].name] = img
+      if (img) maps[DOMAINS[i].name] = img
     }) || [],
   )
 
