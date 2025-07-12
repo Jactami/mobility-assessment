@@ -14,7 +14,7 @@
       </BaseButton>
     </div>
     <div class="mt-10 flex justify-center">
-      <BaseButton :disabled="loading && !chart" @click="createReport">Report</BaseButton>
+      <BaseButton :disabled="loading" @click="createReport">Report</BaseButton>
     </div>
   </BaseSection>
 
@@ -25,7 +25,7 @@
 
     <BaseSection v-if="scores">
       <div class="mx-auto max-w-xl">
-        <ProjectScoreChart :scores="scores" @export="(img) => (chart = img)" />
+        <ProjectScoreChart ref="chartRef" :scores="scores" />
       </div>
     </BaseSection>
 
@@ -101,9 +101,8 @@ const scores = ref<EvaluationScores | null>(null)
 
 const selectedPoi = ref<Poi | null>(null)
 
-const chart = ref<string | null>(null)
-
-const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[]>('maps')
+const chartRef = ref<InstanceType<typeof ProjectScoreChart> | null>(null)
+const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[] | null>('maps')
 
 // a loading flag to indicate if geodata is being fetched
 const geodataLoading = ref(false)
@@ -195,7 +194,7 @@ async function saveProject() {
 }
 
 async function createReport() {
-  if (!projectStore.project || !projectStore.pois || !chart.value) return
+  if (!projectStore.project || !projectStore.pois) return
 
   // Generate map images for each domain
   const maps: Record<string, string> = {}
@@ -206,11 +205,14 @@ async function createReport() {
     }) || [],
   )
 
+  // Generate chart image
+  const chart = (await chartRef.value?.exportChart()) || ''
+
   // Create the PDF report
   await createPdf({
     project: projectStore.project,
     pois: projectStore.pois,
-    chart: chart.value,
+    chart,
     maps,
   })
 

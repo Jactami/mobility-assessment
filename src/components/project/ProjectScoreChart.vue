@@ -32,9 +32,7 @@ const props = defineProps<{
   scores: EvaluationScores
 }>()
 
-const emits = defineEmits<{
-  (e: 'export', image: string): void
-}>()
+defineExpose({ exportChart })
 
 const { t } = useI18n()
 const isDark = useDark()
@@ -110,12 +108,6 @@ const chartOptions = computed<ChartOptions<'radar'>>(() => ({
       },
     },
   },
-  animation: {
-    onComplete: async () => {
-      const img = exportChart()
-      if (img) emits('export', img)
-    },
-  },
 }))
 
 function exportChart() {
@@ -123,22 +115,42 @@ function exportChart() {
 
   if (!chart) return
 
-  // Save original chart config
-  const originalDim = [chart.width, chart.height]
-  const isResponsive = chart.options.responsive
-  chart.options.animation = false // Disable animation for export
+  return new Promise<string>((resolve) => {
+    // Save original chart config
+    const originalDim = [chart.width, chart.height]
+    const isResponsive = chart.options.responsive
+    const originalAnimation = chart.options.animation
 
-  // Set chart to fixed size for export
-  chart.options.responsive = false
-  chart.resize(500, 500) // Set fixed size for export
+    const originalDark = isDark.value
 
-  // Export chart as base64 string
-  const img = chart.toBase64Image()
+    // Disable animations and responsiveness
+    chart.options.animation = false
+    chart.options.responsive = false
 
-  // Restore original chart config
-  chart.options.responsive = isResponsive
-  chart.resize(originalDim[0], originalDim[1])
+    // Resize
+    chart.resize(500, 500)
 
-  return img
+    // Force light mode for consistent export
+    isDark.value = false
+
+    // Force update to ensure render
+    chart.update()
+
+    // Small trick: wait for next frame
+    requestAnimationFrame(() => {
+      const img = chart.toBase64Image()
+
+      // Restore
+      chart.options.animation = originalAnimation
+      chart.options.responsive = isResponsive
+      chart.resize(originalDim[0], originalDim[1])
+      chart.update()
+
+      // Restore dark mode
+      isDark.value = originalDark
+
+      resolve(img)
+    })
+  })
 }
 </script>
