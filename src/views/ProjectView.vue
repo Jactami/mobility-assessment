@@ -14,7 +14,7 @@
       </BaseButton>
     </div>
     <div class="mt-10 flex justify-center">
-      <BaseButton :disabled="loading" @click="createReport">Report</BaseButton>
+      <BaseButton :disabled="pdfLoading" @click="createReport">Report</BaseButton>
     </div>
   </BaseSection>
 
@@ -90,7 +90,7 @@ const projectStore = useProjectStore()
 const route = useRoute()
 const router = useRouter()
 const { errorToast, successToast, confirmDialog } = useNotification()
-const { pdf, loading, error, createPdf } = usePdf()
+const { pdf, error, createPdf } = usePdf()
 const { calcScores } = useEvaluation()
 
 const mapSection = ref<HTMLDivElement | null>(null)
@@ -104,8 +104,11 @@ const selectedPoi = ref<Poi | null>(null)
 const chartRef = ref<InstanceType<typeof ProjectScoreChart> | null>(null)
 const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[] | null>('maps')
 
-// a loading flag to indicate if geodata is being fetched
+// Loading flag to indicate if geodata is being fetched
 const geodataLoading = ref(false)
+
+// Loading flag to indicate if the pdf is being generated
+const pdfLoading = ref(false)
 
 // Checks if the project has unsaved changes in a simple way
 const isProjectDirty = computed(
@@ -196,6 +199,9 @@ async function saveProject() {
 async function createReport() {
   if (!projectStore.project || !projectStore.pois) return
 
+  // Set loading state for PDF generation
+  pdfLoading.value = true
+
   // Generate map images for each domain
   const maps: Record<string, string> = {}
   await Promise.all(
@@ -240,6 +246,9 @@ async function createReport() {
 
     // Revoke the object URL to free up memory
     URL.revokeObjectURL(url)
+
+    // Reset loading state
+    pdfLoading.value = false
   }
 }
 
