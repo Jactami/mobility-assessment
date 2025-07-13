@@ -1,5 +1,5 @@
 <template>
-  <BaseModal v-model="open" :title="poi?.id ? t('poi.edit') : t('poi.add')">
+  <BaseModal v-model="open" :title="poi?.id ? t('common.edit') : t('common.add')">
     <FormKit
       id="edit-poi-form"
       v-model="poi"
