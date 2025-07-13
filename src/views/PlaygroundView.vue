@@ -163,6 +163,23 @@
     </div>
   </BaseSection>
 
+  <BaseSection title="Popover">
+    <p>
+      The popover is a component that can be used to display additional information. It is defined
+      in the <code>src/components/base/BasePopover.vue</code> file.
+    </p>
+    <div class="mt-10 flex items-center justify-center">
+      <BasePopover>
+        <template #trigger>
+          <div class="p- bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
+            Hover me
+          </div>
+        </template>
+        This is a popover content that appears on hover.
+      </BasePopover>
+    </div>
+  </BaseSection>
+
   <BaseSection title="Data Table">
     <p>
       The data table is a component that can be used to display a list of generic items. It is
@@ -197,6 +214,7 @@
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import BasePageHeader from '@/components/base/BasePageHeader.vue'
+import BasePopover from '@/components/base/BasePopover.vue'
 import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
 import MenuPopup from '@/components/menu/MenuPopup.vue'
