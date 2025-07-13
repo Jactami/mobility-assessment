@@ -3,7 +3,7 @@
     <DataTable v-if="profiles" :data="profiles" :config="tableConfig" />
   </BaseSection>
 
-  <BaseModal v-model="modalOpen" :title="editProfile?.id ? t('auth.editUser') : t('auth.addUser')">
+  <BaseModal v-model="modalOpen" :title="editProfile?.id ? t('common.edit') : t('common.add')">
     <FormKit
       id="edit-user-form"
       v-model="editProfile"
