@@ -8,7 +8,7 @@
     </template>
   </DataTable>
   <div class="mt-4 flex justify-end">
-    <BaseButton @click="addPoi">{{ t('poi.add') }}</BaseButton>
+    <BaseButton @click="addPoi">{{ t('common.add') }}</BaseButton>
   </div>
 
   <ProjectPoiForm v-model:open="modalOpen" v-model:poi="editPoi" />
@@ -83,7 +83,7 @@ const config: TableConfig<Poi> = {
       handler: (poi) => emit('poi-selected', poi),
     },
     {
-      label: t('poi.edit'),
+      label: t('common.edit'),
       icon: 'edit',
       handler: (poi) => {
         modalOpen.value = true
@@ -91,7 +91,7 @@ const config: TableConfig<Poi> = {
       },
     },
     {
-      label: t('poi.delete'),
+      label: t('common.delete'),
       icon: 'delete',
       handler: deletePoi,
     },

@@ -41,6 +41,7 @@
     "upsertSuccess": "Nutzer erfolgreich aktualisiert"
   },
   "common": {
+    "add": "Hinzufügen",
     "cancel": "Abbrechen",
     "delete": "Löschen",
     "edit": "Bearbeiten",
@@ -91,11 +92,8 @@
     "saveSuccess": "Projekt erfolgreich gespeichert"
   },
   "poi": {
-    "add": "POI hinzufügen",
     "label": "Bezeichnung",
     "category": "Kategorie",
-    "delete": "POI löschen",
-    "edit": "POI bearbeiten",
     "distance": "Entfernung",
     "latitude": "Breitengrad",
     "longitude": "Längengrad",
@@ -148,13 +146,7 @@
     "actions": "Aktionen",
     "confirmDelete": "Möchten Sie den Eintrag \"{object}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
     "noData": "Keine Daten verfügbar",
-    "pagination": {
-      "page": "Seite",
-      "next": "Nächste",
-      "previous": "Vorherige",
-      "first": "Erste",
-      "last": "Letzte"
-    },
+    "page": "Seite",
     "search": "Suchen",
     "searchPlaceholder": "Durchsuchen..."
   },

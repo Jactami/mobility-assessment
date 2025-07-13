@@ -113,29 +113,21 @@
       <IconButton
         icon="first"
         :disabled="!table.getCanPreviousPage()"
-        :title="t('table.pagination.first')"
         @click="table.setPageIndex(0)"
       />
       <IconButton
         icon="previous"
         :disabled="!table.getCanPreviousPage()"
-        :title="t('table.pagination.previous')"
         @click="table.previousPage()"
       />
       <span>
-        {{ t('table.pagination.page') }} {{ table.getState().pagination.pageIndex + 1 }} /
+        {{ t('table.page') }} {{ table.getState().pagination.pageIndex + 1 }} /
         {{ table.getPageCount() }}
       </span>
-      <IconButton
-        icon="next"
-        :disabled="!table.getCanNextPage()"
-        :title="t('table.pagination.next')"
-        @click="table.nextPage()"
-      />
+      <IconButton icon="next" :disabled="!table.getCanNextPage()" @click="table.nextPage()" />
       <IconButton
         icon="last"
         :disabled="!table.getCanNextPage()"
-        :title="t('table.pagination.last')"
         @click="table.setPageIndex(table.getPageCount() - 1)"
       />
     </div>
