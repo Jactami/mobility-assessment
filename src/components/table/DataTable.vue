@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Global Search -->
-    <div v-if="config.searchable" class="mb-4 w-full max-w-sm">
+    <div v-if="config.searchable" class="mb-2 w-full max-w-sm">
       <FormKit
         v-model="globalFilter"
         type="text"
@@ -108,32 +108,44 @@
       </div>
     </div>
 
-    <!-- Pagination -->
-    <div v-if="table.getPageCount() > 1" class="mt-4 flex items-center justify-center gap-x-4">
-      <IconButton
-        icon="first"
-        :disabled="!table.getCanPreviousPage()"
-        @click="table.setPageIndex(0)"
-      />
-      <IconButton
-        icon="previous"
-        :disabled="!table.getCanPreviousPage()"
-        @click="table.previousPage()"
-      />
-      <span>
-        {{ t('table.page') }} {{ table.getState().pagination.pageIndex + 1 }} /
-        {{ table.getPageCount() }}
-      </span>
-      <IconButton icon="next" :disabled="!table.getCanNextPage()" @click="table.nextPage()" />
-      <IconButton
-        icon="last"
-        :disabled="!table.getCanNextPage()"
-        @click="table.setPageIndex(table.getPageCount() - 1)"
-      />
+    <div class="mt-2 flex justify-center">
+      <!-- Pagination -->
+      <div
+        v-if="table.getPageCount() > 1"
+        class="flex grow items-center justify-center gap-x-4 text-sm"
+      >
+        <IconButton
+          icon="first"
+          :disabled="!table.getCanPreviousPage()"
+          @click="table.setPageIndex(0)"
+        />
+        <IconButton
+          icon="previous"
+          :disabled="!table.getCanPreviousPage()"
+          @click="table.previousPage()"
+        />
+        <span>
+          {{ t('table.page') }} {{ table.getState().pagination.pageIndex + 1 }} /
+          {{ table.getPageCount() }}
+        </span>
+        <IconButton icon="next" :disabled="!table.getCanNextPage()" @click="table.nextPage()" />
+        <IconButton
+          icon="last"
+          :disabled="!table.getCanNextPage()"
+          @click="table.setPageIndex(table.getPageCount() - 1)"
+        />
+      </div>
+
+      <!-- Add new item button -->
+      <div v-if="config.add" class="ml-2 self-end">
+        <BaseButton flavor="secondary" class="size-10 text-xl" @click="config.add">+</BaseButton>
+      </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts" generic="T">
+import BaseButton from '@/components/base/BaseButton.vue'
 import IconButton from '@/components/icon/IconButton.vue'
 import IconRenderer from '@/components/icon/IconRenderer.vue'
 import {

@@ -7,15 +7,11 @@
       </div>
     </template>
   </DataTable>
-  <div class="mt-4 flex justify-end">
-    <BaseButton @click="addPoi">{{ t('common.add') }}</BaseButton>
-  </div>
 
   <ProjectPoiForm v-model:open="modalOpen" v-model:poi="editPoi" />
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
 import DataTable from '@/components/table/DataTable.vue'
 import type TableConfig from '@/components/table/types'
 import { useNotification } from '@/composables/notification'
@@ -96,6 +92,7 @@ const config: TableConfig<Poi> = {
       handler: deletePoi,
     },
   ],
+  add: addPoi,
 }
 
 async function deletePoi(poi: Poi) {

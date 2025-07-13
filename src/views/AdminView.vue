@@ -1,12 +1,6 @@
 <template>
   <BaseSection title="Nutzer">
-    <template v-if="profiles">
-      <DataTable :data="profiles" :config="tableConfig" />
-
-      <div class="mt-4 flex justify-end">
-        <BaseButton @click="addUser">{{ t('auth.addUser') }}</BaseButton>
-      </div>
-    </template>
+    <DataTable v-if="profiles" :data="profiles" :config="tableConfig" />
   </BaseSection>
 
   <BaseModal v-model="modalOpen" :title="editProfile?.id ? t('auth.editUser') : t('auth.addUser')">
@@ -142,6 +136,7 @@ const tableConfig: TableConfig<Profile> = {
       handler: deleteUser,
     },
   ],
+  add: addUser,
 }
 
 onMounted(() => {

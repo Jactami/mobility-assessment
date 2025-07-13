@@ -49,4 +49,7 @@ export default interface TableConfig<T> {
     label: string
     icon: Icon
   }[]
+
+  /** Optional action to handle adding a new item to the table. */
+  add?: () => unknown
 }
