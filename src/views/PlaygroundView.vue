@@ -59,6 +59,9 @@
         <BaseButton disabled>Disabled Button</BaseButton>
       </div>
       <div>
+        <BaseButton title="This is a popover!">Popover Button</BaseButton>
+      </div>
+      <div>
         <BaseButton flavor="custom" class="w-full max-w-96 rounded-full bg-lime-700 text-white">
           Custom Button <MaterialSymbolsLogin />
         </BaseButton>
@@ -169,13 +172,10 @@
       in the <code>src/components/base/BasePopover.vue</code> file.
     </p>
     <div class="mt-10 flex items-center justify-center">
-      <BasePopover>
-        <template #trigger>
-          <div class="p- bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
-            Hover me
-          </div>
-        </template>
-        This is a popover content that appears on hover.
+      <BasePopover message="This is a popover content that appears on hover.">
+        <div class="p- bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
+          Hover me
+        </div>
       </BasePopover>
     </div>
   </BaseSection>

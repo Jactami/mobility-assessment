@@ -4,11 +4,11 @@
     <PopoverButton
       ref="reference"
       as="div"
-      class="inline-block bg-red-500"
+      class="inline-block"
       @mouseenter="isHovered = true"
       @mouseleave="isHovered = false"
     >
-      <slot name="trigger">
+      <slot>
         <!-- Trigger goes here -->
       </slot>
     </PopoverButton>
@@ -21,9 +21,9 @@
         :style="floatingStyles"
         static
       >
-        <slot>
-          <!-- Panel content goes here. -->
-        </slot>
+        <span>
+          {{ message }}
+        </span>
 
         <!-- Bottom Triangle -->
         <div
@@ -38,6 +38,10 @@
 import { autoUpdate, offset, useFloating } from '@floating-ui/vue'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { ref } from 'vue'
+
+defineProps<{
+  message: string
+}>()
 
 const isHovered = ref(false)
 
