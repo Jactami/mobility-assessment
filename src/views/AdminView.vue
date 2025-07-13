@@ -59,7 +59,7 @@
         />
       </div>
       <div class="mt-4 flex justify-center gap-2">
-        <BaseButton type="submit" :disabled="!valid">{{ t('common.submit') }}</BaseButton>
+        <BaseButton type="submit" :disabled="!valid">{{ t('common.save') }}</BaseButton>
         <BaseButton flavor="secondary" @click="modalOpen = false">
           {{ t('common.cancel') }}
         </BaseButton>

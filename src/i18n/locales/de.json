@@ -54,8 +54,7 @@
     "success": "Erfolg",
     "save": "Speichern",
     "search": "Suchen",
-    "searchPlaceholder": "Durchsuchen...",
-    "submit": "Absenden"
+    "searchPlaceholder": "Durchsuchen..."
   },
   "map": {
     "resetMap": "Karte zurücksetzen",
