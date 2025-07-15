@@ -351,7 +351,7 @@ export class PdfReportBuilder extends PdfBuilder {
     return this
   }
 
-  createMethodic(): this {
+  createMethodology(): this {
     return this.createSectionHeader(i18n.global.t('pdf.methodology.title'))
       .createText(i18n.global.t('pdf.methodology.text1'), { y: this._config.padding.top + 10 })
       .createImage(methodic, {

@@ -53,7 +53,7 @@ export function usePdf() {
         // Create the methodic section
         .createSeparatorPage(t('pdf.section.methodology'))
         // Create methodic overview
-        .createMethodic()
+        .createMethodology()
         // Create domain specific sections
         .newPage()
         .createDomainPage(data.pois, data.scores, data.maps)
