@@ -20,15 +20,15 @@ pdf:
     legal: 'Rechtliche Hinweise'
   summary:
     microLocationTitle: 'Mikrostandort'
-    microLocationText: |
+    microLocationText: >
       Im Rahmen dieser Analyse wurde der Mikrostandort untersucht. 
       Die Bewertung bezieht sich auf die unmittelbare Umgebung des Standorts und berücksichtigt relevante Angebote und Einrichtungen innerhalb eines definierten Radius zum  untersuchten Zeitpunkt.
     totalRatingTitle: 'Gesamtbewertung'
-    totalRatingText: |
+    totalRatingText: >
       Der Standort erreicht in der Analyse {score} von 100 möglichen Punkten.
       Diese Kennzahl bietet eine schnelle und verständliche Einschätzung der Standortqualität.
     singleRatingsTitle: 'Einzelbewertungen'
-    singleRatingsText: |
+    singleRatingsText: >
       Um die Stärken und Schwächen des Standorts zu betonen, wird die Analyse in verschiedene Bereiche unterteilt.
       Analysiert werden hierfür die Dimensionen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität.
   methodology:
