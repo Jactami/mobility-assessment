@@ -41,7 +41,7 @@
             v-for="category in domain.categories"
             :key="category.name"
             :category="category.name"
-            :count="projectStore.pois.filter((poi) => poi.category === category.name).length"
+            :count="getPoisByCategory(projectStore.pois, category.name).length"
           />
         </template>
       </div>
@@ -60,7 +60,7 @@
         :key="domain.name"
         ref="maps"
         :project="project"
-        :pois="filterPoisByDomain(domain.name)"
+        :pois="getPoisByDomain(projectStore.pois || [], domain.name)"
         :height="1"
       />
     </div>
@@ -82,6 +82,7 @@ import { useEvaluation } from '@/composables/evaluation'
 import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useNotification } from '@/composables/notification'
 import { usePdf } from '@/composables/pdf'
+import { useProjectUtil } from '@/composables/util/project'
 import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
@@ -97,6 +98,7 @@ const router = useRouter()
 const { errorToast, loadingToast, successToast, confirmDialog } = useNotification()
 const { pdf, error, createPdf } = usePdf()
 const { calcScores } = useEvaluation()
+const { getPoisByDomain, getPoisByCategory } = useProjectUtil()
 
 // Original project and POIs from database to compare with store
 const project = ref<Project | null>(null)
@@ -270,13 +272,6 @@ function handlePoiSelected(poi: Poi) {
   selectedPoi.value = poi
   // scroll to the map section
   mapSection.value?.scrollIntoView({ behavior: 'smooth' })
-}
-
-function filterPoisByDomain(domain: string) {
-  // Get all categories for the given domain
-  const categories = DOMAINS.find((d) => d.name === domain)?.categories.map((c) => c.name) || []
-  // Filter POIs by the selected domain categories
-  return projectStore.pois?.filter((poi) => categories.includes(poi.category)) || []
 }
 
 watch(

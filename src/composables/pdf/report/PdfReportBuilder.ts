@@ -2,6 +2,7 @@ import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useLegal } from '@/composables/legal'
 import { useColorUtil } from '@/composables/util/color'
 import { useUtil } from '@/composables/util/misc'
+import { useProjectUtil } from '@/composables/util/project'
 import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
@@ -256,28 +257,23 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   createDomainPage(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
+    const {
+      getPoisByDomain,
+      sortPoisByDistance,
+      getClosestPois,
+      getCategoriesByDomain,
+      getPoisByCategory,
+    } = useProjectUtil()
+
     // Find the closest POI for each category
-    const closestPois = pois.reduce((acc: Poi[], poi) => {
-      const existingIndex = acc.findIndex((p) => p.category === poi.category)
-      if (existingIndex === -1) {
-        // First POI of this category
-        acc.push(poi)
-      } else if (poi.distance < acc[existingIndex].distance) {
-        // Found a closer POI for this category
-        acc[existingIndex] = poi
-      }
-      return acc
-    }, [])
+    let closestPois = getClosestPois(pois)
 
     // Sort the closest POIs by distance
-    closestPois.sort((a, b) => a.distance - b.distance)
+    closestPois = sortPoisByDistance(closestPois)
 
     DOMAINS.forEach((domain, i) => {
       // Filter POIs that belong to the current domain's categories
-      const categories = domain.categories.map((category) => category.name)
-      const domainPois = closestPois.filter(
-        (poi) => poi.category && categories.includes(poi.category),
-      )
+      const domainPois = getPoisByDomain(closestPois, domain.name)
 
       this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
         .createText(i18n.global.t(`pdf.analysis.description.${domain.name}`), {
@@ -324,6 +320,7 @@ export class PdfReportBuilder extends PdfBuilder {
           },
         )
 
+      const categories = getCategoriesByDomain(domain.name)
       const padding = 2
       const cardsPerRow = 5
       const cardH = 20
@@ -333,8 +330,8 @@ export class PdfReportBuilder extends PdfBuilder {
           this._config.padding.right -
           padding * (cardsPerRow - 1)) /
         cardsPerRow
-      categories.forEach((category, i) => {
-        const count = pois.filter((poi) => poi.category === category).length
+      categories?.forEach((category, i) => {
+        const count = getPoisByCategory(pois, category).length
         this.createCard(i18n.global.t(`category.${category}`), count ? count.toString() : '-', {
           x: this._config.padding.left + (i % cardsPerRow) * (CardW + padding),
           y: this._config.padding.top + 150 + Math.floor(i / cardsPerRow) * (cardH + padding),
@@ -535,14 +532,14 @@ export class PdfReportBuilder extends PdfBuilder {
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
   createDomainTables(pois: Poi[]): this {
+    const { getPoisByDomain, sortPoisByDistance } = useProjectUtil()
+
     DOMAINS.forEach((domain, i) => {
       // Filter POIs that belong to the current domain's categories
-      const domainCategories = domain.categories.map((category) => category.name)
-      let domainPois = pois.filter((poi) => poi.category && domainCategories.includes(poi.category))
+      let domainPois = getPoisByDomain(pois, domain.name)
 
       // Sort the POIs by distance
-      domainPois.sort((a, b) => (a.distance || 0) - (b.distance || 0))
-      domainPois = []
+      domainPois = sortPoisByDistance(domainPois)
 
       this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
 

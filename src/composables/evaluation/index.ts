@@ -1,5 +1,6 @@
 import { DOMAINS } from '@/constants'
 import type { Poi } from '@/db/types'
+import { useProjectUtil } from '../util/project'
 import type { EvaluationScores } from './types'
 
 /**
@@ -45,19 +46,12 @@ function calcScoreCategory(pois: Poi[], radius: number) {
 }
 
 function calcScores(pois: Poi[], radius: number): EvaluationScores {
+  const { getPoisByCategory } = useProjectUtil()
+
   // Init empty scores
   const scores: EvaluationScores = {
     total: 0,
     domain: {},
-  }
-
-  // filter POIs per category
-  const poiMap = new Map<string, Poi[]>()
-  for (const poi of pois) {
-    if (!poiMap.has(poi.category)) {
-      poiMap.set(poi.category, [])
-    }
-    poiMap.get(poi.category)!.push(poi)
   }
 
   // Iterate over all domains
@@ -66,7 +60,7 @@ function calcScores(pois: Poi[], radius: number): EvaluationScores {
 
     // Calculate the score for each category in the current domain
     for (const category of domain.categories) {
-      const categoryPois = poiMap.get(category.name) || []
+      const categoryPois = getPoisByCategory(pois, category.name)
 
       const score = calcScoreCategory(categoryPois, radius)
       scoresCategory.push(score)
