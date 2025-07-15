@@ -57,7 +57,6 @@ export function useNotification() {
 
   const loadingToast = async (message: string) => {
     Swal.fire({
-      title: t('common.loading'),
       icon: 'info',
       text: message,
       ...options,
