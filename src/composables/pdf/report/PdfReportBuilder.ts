@@ -84,7 +84,7 @@ export class PdfReportBuilder extends PdfBuilder {
     address = address.replace(/,\s+/g, '\n')
 
     return (
-      this.createText('Standortbewertung', {
+      this.createText(i18n.global.t('pdf.title'), {
         y: this._config.padding.top + 10,
         alignment: 'center',
         fontSize: 'xl3',
@@ -105,7 +105,7 @@ export class PdfReportBuilder extends PdfBuilder {
           height: 1,
           color: 'primary',
         })
-        .createText('Ergebnisbericht der Standortanalyse', {
+        .createText(i18n.global.t('pdf.subtitle'), {
           y: this._config.padding.top + 80,
           alignment: 'center',
           fontSize: 'xl',
@@ -120,7 +120,7 @@ export class PdfReportBuilder extends PdfBuilder {
           lineHeight: 1.5,
         })
         // TODO: Decide if to use the creation Date or the current date
-        .createText(`Stichtag: ${i18n.global.d(new Date())}`, {
+        .createText(`${i18n.global.t('pdf.date')}: ${i18n.global.d(new Date())}`, {
           y: this._config.padding.top + 140,
           alignment: 'center',
           color: 'muted',
@@ -139,16 +139,13 @@ export class PdfReportBuilder extends PdfBuilder {
           width: 80,
           height: 80,
         })
-        .createText(
-          'Dieser Bericht ist vertraulich und ausschließlich für den Empfänger bestimmt.',
-          {
-            y: this._config.format.height - 10,
-            alignment: 'center',
-            fontSize: 'sm',
-            color: 'muted',
-            static: true,
-          },
-        )
+        .createText(i18n.global.t('pdf.disclaimer'), {
+          y: this._config.format.height - 10,
+          alignment: 'center',
+          fontSize: 'sm',
+          color: 'muted',
+          static: true,
+        })
     )
   }
 
@@ -200,12 +197,11 @@ export class PdfReportBuilder extends PdfBuilder {
       city: project?.city,
     })
 
-    this.createSectionHeader('Mikrostandort')
-      .createText(
-        'Im Rahmen dieser Analyse wurde der Mikrostandort untersucht. Die Bewertung bezieht sich auf die unmittelbare Umgebung des Standorts und berücksichtigt relevante Angebote und Einrichtungen innerhalb eines definierten Radius zum  untersuchten Zeitpunkt.',
-        { y: this._config.padding.top + 10 },
-      )
-      .createText('Standort:', {
+    this.createSectionHeader(i18n.global.t('pdf.summary.microLocationTitle'))
+      .createText(i18n.global.t('pdf.summary.microLocationText'), {
+        y: this._config.padding.top + 10,
+      })
+      .createText(`${i18n.global.t('pdf.location')}:`, {
         y: this._config.padding.top + 30,
         font: 'bold',
       })
@@ -213,7 +209,7 @@ export class PdfReportBuilder extends PdfBuilder {
         x: this._config.padding.left + 17,
         y: this._config.padding.top + 30,
       })
-      .createText('Untersuchter Umkreis:', {
+      .createText(`${i18n.global.t('pdf.radius')}:`, {
         y: this._config.padding.top + 36,
         font: 'bold',
       })
@@ -221,7 +217,7 @@ export class PdfReportBuilder extends PdfBuilder {
         x: this._config.padding.left + 40,
         y: this._config.padding.top + 36,
       })
-      .createText('Stichtag:', {
+      .createText(`${i18n.global.t('pdf.date')}:`, {
         y: this._config.padding.top + 42,
         font: 'bold',
       })
@@ -230,18 +226,25 @@ export class PdfReportBuilder extends PdfBuilder {
         y: this._config.padding.top + 42,
       })
 
-    this.createSectionHeader('Gesamtbewertung', { y: this._config.padding.top + 60 })
-      .createScore(project.score ?? 0, 'Gesamtbewertung', this._config.padding.top + 70)
+    this.createSectionHeader(i18n.global.t('pdf.summary.totalRatingTitle'), {
+      y: this._config.padding.top + 60,
+    })
+      .createScore(
+        project.score ?? 0,
+        i18n.global.t('pdf.summary.totalRatingTitle'),
+        this._config.padding.top + 70,
+      )
       .createText(
-        `Der Standort erreicht in der Analyse ${i18n.global.n((project.score ?? 0) * 100, 'rounded')} von 100 möglichen Punkten. Diese Kennzahl bietet eine schnelle und verständliche Einschätzung der Standortqualität.`,
+        `${i18n.global.t('pdf.summary.totalRatingText', { score: i18n.global.n((project.score ?? 0) * 100, 'rounded') })}`,
         { y: this._config.padding.top + 130 },
       )
 
-    this.createSectionHeader('Einzelbewertungen', { y: this._config.padding.top + 150 })
-      .createText(
-        'Um die Stärken und Schwächen des Standorts zu betonen, wird die Analyse in verschiedene Bereiche unterteilt. Analysiert werden hierfür die Dimensionen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität.',
-        { y: this._config.padding.top + 160 },
-      )
+    this.createSectionHeader(i18n.global.t('pdf.summary.singleRatingsTitle'), {
+      y: this._config.padding.top + 150,
+    })
+      .createText(i18n.global.t('pdf.summary.singleRatingsText'), {
+        y: this._config.padding.top + 160,
+      })
       .createImage(chart, {
         x: this._config.format.width / 2 - 38, // center chart
         y: this._config.padding.top + 170,
@@ -277,11 +280,9 @@ export class PdfReportBuilder extends PdfBuilder {
       )
 
       this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
-        // TODO: Add descriptions for all domains
-        .createText(
-          'Unter dem Gesichtspunkt der Nahversorgung bewerten wir die Erreichbarkeit von Einrichtungen und Dienstleistungen des täglichen Bedarfs wie u.a. Supermärkte, Bäckereien oder Drogerien.',
-          { y: this._config.padding.top + 10 },
-        )
+        .createText(i18n.global.t(`pdf.analysis.description.${domain.name}`), {
+          y: this._config.padding.top + 10,
+        })
         .createImage(maps[domain.name], {
           x: this._config.padding.left,
           y: this._config.padding.top + 30,
@@ -292,17 +293,21 @@ export class PdfReportBuilder extends PdfBuilder {
         })
         .createScore(
           scores.domain[domain.name],
-          `Bewertung ${i18n.global.t(`domain.${domain.name}`)}`,
+          `${i18n.global.t('pdf.analysis.rating')} ${i18n.global.t(`domain.${domain.name}`)}`,
           this._config.padding.top + 170,
         )
         .newPage()
         .createText(
-          `Die nachfolgende Tabelle zeigt die nächstgelegenen Angebote in der Kategorie ${i18n.global.t(
-            `domain.${domain.name}`,
-          )}.`,
+          i18n.global.t('pdf.analysis.tableIntro', {
+            domain: i18n.global.t(`domain.${domain.name}`),
+          }),
         )
         .createTable(
-          [i18n.global.t('poi.category'), 'Nächstes Angebot', i18n.global.t('poi.distance')],
+          [
+            i18n.global.t('poi.category'),
+            i18n.global.t('pdf.analysis.closestElement'),
+            i18n.global.t('poi.distance'),
+          ],
           domainPois.map((poi) => [
             i18n.global.t(`category.${poi.category}`),
             poi.label || i18n.global.t(`category.${poi.category}`),
@@ -347,21 +352,15 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   createMethodic(): this {
-    return this.createSectionHeader('Methodik')
-      .createText(
-        'Unsere Methodik orientiert sich an dem Leitbild der 15-Minuten-Stadt, einem modernen Konzept nachhaltiger Stadt- und Quartiersentwicklung. Dieses Modell stellt die Bedürfnisse der Menschen und ihren Alltag in den Mittelpunkt. Ziel ist es, alle wesentlichen Einrichtungen des täglichen Lebens innerhalb von maximal 15 Minuten zu Fuß oder mit dem Fahrrad erreichbar zu machen. So entsteht eine Stadt der kurzen Wege, die nicht nur die Lebensqualität steigert und die Abhängigkeit vom Auto reduziert, sondern auch die Nachhaltigkeit und Resilienz des urbanen Raums stärkt.',
-        { y: this._config.padding.top + 10 },
-      )
+    return this.createSectionHeader(i18n.global.t('pdf.methodology.title'))
+      .createText(i18n.global.t('pdf.methodology.text1'), { y: this._config.padding.top + 10 })
       .createImage(methodic, {
         x: this._config.format.width / 2 - 55,
         y: this._config.padding.top + 50,
         width: 110,
         height: 110,
       })
-      .createText(
-        'Auf dieser Grundlage analysieren wir den Standort anhand der zentralen Kriterien der 15-Minuten-Stadt. Dazu definieren wir einen Umkreis um den Standort, der dem Prinzip der 15-Minuten-Stadt entspricht. Innerhalb dieses Radius identifizieren und bewerten wir alle relevanten Angebote und Einrichtungen.\n\nDabei erfassen wir eine Vielzahl von Standortfaktoren aus den Bereichen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität. Jeder Bereich wird separat analysiert und mit einer Punktzahl zwischen 0 und 100 bewertet. Sowohl die Anzahl der vorhandenen Angebote als auch deren Entfernung zum Standort fließen in die Auswertung ein – je näher und zahlreicher die Angebote, desto besser die Bewertung. Auf diese Weise werden die spezifischen Stärken und Schwächen des Standorts klar und nachvollziehbar dargestellt.\n\nAus den Einzelbewertungen der Bereiche ermitteln wir eine abschließende Gesamtbewertung. Diese wird ebenfalls als Kennzahl zwischen 0 und 100 ausgewiesen und bietet auf einen Blick eine verständliche und vergleichbare Einschätzung der Standortqualität.',
-        { y: this._config.padding.top + 170 },
-      )
+      .createText(i18n.global.t('pdf.methodology.text2'), { y: this._config.padding.top + 170 })
   }
 
   createScore(score: number, label: string, y: number): this {
@@ -453,8 +452,8 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   createLegalNotice(): this {
-    return this.createSectionHeader('Rechtliche Hinweise').createText(
-      'Dieser Bericht wurde mit größter Sorgfalt auf Basis der zum Zeitpunkt der Erstellung vorliegenden Daten und Informationen erstellt. Der Datenstand bezieht sich auf den im Bericht genannten Stichtag. Spätere Entwicklungen sind nicht berücksichtigt. Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Aktualität der enthaltenen Angaben.\n\nAlle Inhalte dieses Berichts sind Eigentum der Bayerischen Gesellschaft für Wohneigentum mbH & Co. KG. Er dient ausschließlich zu Informationszwecken und richtet sich ausschließlich an den benannten Empfänger.Eine vollständige oder auszugsweise Weitergabe an Dritte oder Veröffentlichung bedarf unserer vorherigen schriftlichen Zustimmung.\n\nAlle im Bericht enthaltenen Texte, Grafiken und Auswertungen sind urheberrechtlich geschützt und dürfen ohne ausdrückliche Genehmigung des Herausgebers nicht vervielfältigt oder anderweitig verwendet werden.',
+    return this.createSectionHeader(i18n.global.t('pdf.legal.title')).createText(
+      i18n.global.t('pdf.legal.text'),
       { y: this._config.padding.top + 10 },
     )
   }
@@ -462,24 +461,27 @@ export class PdfReportBuilder extends PdfBuilder {
   createAboutUs(): this {
     const company = useLegal().getCompanyData()
 
-    return this.createSectionHeader('Über Uns')
-      .createText(
-        'Die Bayerische Gesellschaft für Wohneigentum mbH & Co. KG ist Teil der BGW Gruppe, die seit vielen Jahren erfolgreich im Immobilienmarkt und der Quartiersentwicklung tätig ist. Mit unserer langjährigen Expertise begleiten wir Projekte von der ersten Idee bis zur Umsetzung und schaffen so die Grundlage für nachhaltige und lebenswerte Stadtquartiere.\n\nAls spezialisierter Partner für datenbasierte Standortanalysen im urbanen Raum unterstützen wir Projektentwickler, Investoren und öffentliche Einrichtungen dabei, fundierte Entscheidungen zu treffen. Unser Ansatz verbindet fachliche Kompetenz in Stadtentwicklung, Nachhaltigkeit und Marktanalyse mit praxisnaher Umsetzung und orientiert sich am Leitbild der Stadt der kurzen Wege.\n\nUnsere Arbeit verbindet Fachwissen in Stadtentwicklung, Nachhaltigkeit und Marktanalyse mit praxisnaher Umsetzung. Dabei legen wir besonderen Wert auf das Leitbild der „Stadt der kurzen Wege“ und die Förderung lebenswerter, resilienter Städte.',
-        { y: this._config.padding.top + 10 },
-      )
+    return this.createSectionHeader(i18n.global.t('pdf.publisher.title'))
+      .createText(i18n.global.t('pdf.publisher.text'), { y: this._config.padding.top + 10 })
       .createImage(logoBgw, {
         x: this._config.format.width / 2 - 40, // Center the logo
         y: this._config.padding.top + 90,
         width: 80,
         height: 80,
       })
-      .createSectionHeader('Kontakt', {
+      .createSectionHeader(i18n.global.t('pdf.publisher.contactTitle'), {
         y: this._config.padding.top + 190,
         alignment: 'center',
       })
       .createText(
-        `${company.name}\n${company.address}\nE-Mail: ${company.email}\nTelefon: ${company.phone}\nWebseite: ${company.web}`,
-        { y: this._config.padding.top + 200, alignment: 'center', lineHeight: 1.5 },
+        i18n.global.t('pdf.publisher.contactText', {
+          name: company.name,
+          address: company.address,
+          email: company.email,
+          phone: company.phone,
+          web: company.web,
+        }),
+        { y: this._config.padding.top + 200, alignment: 'center' },
       )
   }
 
@@ -569,15 +571,12 @@ export class PdfReportBuilder extends PdfBuilder {
         )
       } else {
         // Show a message if no POIs are found
-        this.createText(
-          `Keine Angebote in der Kategorie ${i18n.global.t(`domain.${domain.name}`)} gefunden.`,
-          {
-            y: this._config.padding.top + 10,
-            alignment: 'left',
-            color: 'muted',
-            fontSize: 'sm',
-          },
-        )
+        this.createText(i18n.global.t('pdf.appendix.noEntries', { domain: domain.name }), {
+          y: this._config.padding.top + 10,
+          alignment: 'left',
+          color: 'muted',
+          fontSize: 'sm',
+        })
       }
 
       // Start a new page after each domain table except the last one

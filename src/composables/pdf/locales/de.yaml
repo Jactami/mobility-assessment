@@ -1,3 +1,110 @@
 pdf:
-  test: |
-    Hello World!
+  title: 'Standortbewertung'
+  subtitle: 'Ergebnisbericht der Standortanalyse'
+  author: '{company}'
+  location: 'Standort'
+  radius: 'Untersuchter Umkreis'
+  date: 'Stichtag'
+  disclaimer: 'Dieser Bericht ist vertraulich und ausschließlich für den Empfänger bestimmt.'
+  header:
+    left: 'Standortbewertung - {title}'
+    right: '{date}'
+  footer:
+    left: '{company} © {year}'
+  section:
+    summary: 'Zusammenfassung'
+    analysis: 'Auswertung'
+    methodology: 'Methodik'
+    publisher: 'Herausgeber'
+    appendix: 'Anhang'
+    legal: 'Rechtliche Hinweise'
+  summary:
+    microLocationTitle: 'Mikrostandort'
+    microLocationText: |
+      Im Rahmen dieser Analyse wurde der Mikrostandort untersucht. 
+      Die Bewertung bezieht sich auf die unmittelbare Umgebung des Standorts und berücksichtigt relevante Angebote und Einrichtungen innerhalb eines definierten Radius zum  untersuchten Zeitpunkt.
+    totalRatingTitle: 'Gesamtbewertung'
+    totalRatingText: |
+      Der Standort erreicht in der Analyse {score} von 100 möglichen Punkten.
+      Diese Kennzahl bietet eine schnelle und verständliche Einschätzung der Standortqualität.
+    singleRatingsTitle: 'Einzelbewertungen'
+    singleRatingsText: |
+      Um die Stärken und Schwächen des Standorts zu betonen, wird die Analyse in verschiedene Bereiche unterteilt.
+      Analysiert werden hierfür die Dimensionen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität.
+  methodology:
+    title: 'Methodik'
+    text1: >
+      Unsere Methodik orientiert sich an dem Leitbild der 15-Minuten-Stadt, einem modernen Konzept nachhaltiger Stadt- und Quartiersentwicklung.
+      Dieses Modell stellt die Bedürfnisse der Menschen und ihren Alltag in den Mittelpunkt.
+      Ziel ist es, alle wesentlichen Einrichtungen des täglichen Lebens innerhalb von maximal 15 Minuten zu Fuß oder mit dem Fahrrad erreichbar zu machen.
+      So entsteht eine Stadt der kurzen Wege, die nicht nur die Lebensqualität steigert und die Abhängigkeit vom Auto reduziert, sondern auch die Nachhaltigkeit und Resilienz des urbanen Raums stärkt.
+    text2: >
+      Auf dieser Grundlage analysieren wir den Standort anhand der zentralen Kriterien der 15-Minuten-Stadt.
+      Dazu definieren wir einen Umkreis um den Standort, der dem Prinzip der 15-Minuten-Stadt entspricht.
+      Innerhalb dieses Radius identifizieren und bewerten wir alle relevanten Angebote und Einrichtungen.
+
+
+      Dabei erfassen wir eine Vielzahl von Standortfaktoren aus den Bereichen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität.
+      Jeder Bereich wird separat analysiert und mit einer Punktzahl zwischen 0 und 100 bewertet.
+      Sowohl die Anzahl der vorhandenen Angebote als auch deren Entfernung zum Standort fließen in die Auswertung ein – je näher und zahlreicher die Angebote, desto besser die Bewertung.
+      Auf diese Weise werden die spezifischen Stärken und Schwächen des Standorts klar und nachvollziehbar dargestellt.
+
+
+      Aus den Einzelbewertungen der Bereiche ermitteln wir eine abschließende Gesamtbewertung.
+      Diese wird ebenfalls als Kennzahl zwischen 0 und 100 ausgewiesen und bietet auf einen Blick eine verständliche und vergleichbare Einschätzung der Standortqualität.
+  analysis:
+    description:
+      education: >
+        Wir untersuchen die Bildungsangebote am Standort.
+        Kindergärten, Schulen, Bibliotheken und Hochschulen sind zentrale Faktoren für die schulische und persönliche Entwicklung sowie für eine verlässliche Betreuung und Erziehung von Kindern und Jugendlichen.
+      health: >
+        Wir analysieren, wie gut der Standort mit medizinischer Versorgung und Pflegeeinrichtungen ausgestattet ist.
+        Dazu erfassen wir Arztpraxen, Apotheken, Krankenhäuser und Pflegeangebote, die eine wohnortnahe Gesundheitsversorgung und Betreuung der Bevölkerung gewährleisten.
+      leisure: >
+        Wir analysieren, welche Möglichkeiten zur Freizeitgestaltung das Umfeld bietet. 
+        Dazu betrachten wir gastronomische, sportliche und kulturelle Einrichtungen und Unterhaltungsangebote wie Restaurants, Kinos, Fitnessstudios und Sportplätze, die die Lebensqualität im Quartier erhöhen.
+      mobility: >
+        Unter dem Gesichtspunkt der Mobilität bewerten wir die Anbindung des Standorts an den öffentlichen und individuellen Verkehr.
+        Haltestellen des öffentlichen Nahverkehrs, Leihräder und Carsharing-Angebote fördern die Flexibilität der Bewohner und erweitern ihren Aktionsradius.
+      recreation: >
+        Wir prüfen, inwieweit der Standort Zugang zu öffentlichen Natur- und Grünflächen wie Parks, Wäldern und Spielplätzen bietet.
+        Solche Freiräume dienen der Erholung und Freizeitgestaltung und leisten einen wichtigen Beitrag zum Stadtklima.
+      supply: >
+        Wir untersuchen die Nahversorgung des Standorts, indem wir die Erreichbarkeit von Einrichtungen und Dienstleistungen des täglichen Bedarfs erfassen.
+        Dazu zählen Supermärkte, Bäckereien, Drogerien und weitere Einzelhändler, die eine wohnortnahe Versorgung sicherstellen.
+    rating: 'Bewertung'
+    closestElement: 'Nächstgelegenes Angebot'
+    tableIntro: 'Die nachfolgende Tabelle zeigt die nächstgelegenen Angebote in dem Bereich {domain}.'
+  publisher:
+    title: 'Über Uns'
+    text: >
+      Die Bayerische Gesellschaft für Wohneigentum mbH & Co. KG ist Teil der BGW Gruppe, die seit vielen Jahren erfolgreich im Immobilienmarkt und der Quartiersentwicklung tätig ist.
+      Mit unserer langjährigen Expertise begleiten wir Projekte von der ersten Idee bis zur Umsetzung und schaffen so die Grundlage für nachhaltige und lebenswerte Stadtquartiere.
+
+
+      Als spezialisierter Partner für datenbasierte Standortanalysen im urbanen Raum unterstützen wir Projektentwickler, Investoren und öffentliche Einrichtungen dabei, fundierte Entscheidungen zu treffen.
+      Unser Ansatz verbindet fachliche Kompetenz in Stadtentwicklung, Nachhaltigkeit und Marktanalyse mit praxisnaher Umsetzung und orientiert sich am Leitbild der Stadt der kurzen Wege.
+      Dabei legen wir besonderen Wert auf das Leitbild der „Stadt der kurzen Wege“ und die Förderung lebenswerter, resilienter Städte.
+    contactTitle: 'Kontakt'
+    contactText: |
+      {company}
+      {address}
+      E-Mail: {email}
+      Telefon: {phone}
+      Webseite: {web}
+  appendix:
+    noEntries: 'Keine Angebote in dem Bereich {domain} gefunden.'
+  legal:
+    title: 'Rechtliche Hinweise'
+    text: >
+      Dieser Bericht wurde mit größter Sorgfalt auf Basis der zum Zeitpunkt der Erstellung vorliegenden Daten und Informationen erstellt.
+      Der Datenstand bezieht sich auf den im Bericht genannten Stichtag. Spätere Entwicklungen sind nicht berücksichtigt.
+      Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Aktualität der enthaltenen Angaben.
+
+
+      Alle Inhalte dieses Berichts sind Eigentum der Bayerischen Gesellschaft für Wohneigentum mbH & Co. KG.
+      Er dient ausschließlich zu Informationszwecken und richtet sich ausschließlich an den benannten Empfänger.
+      Eine vollständige oder auszugsweise Weitergabe an Dritte oder Veröffentlichung bedarf unserer vorherigen schriftlichen Zustimmung.
+
+
+      Alle im Bericht enthaltenen Texte, Grafiken und Auswertungen sind urheberrechtlich geschützt und dürfen ohne ausdrückliche Genehmigung des Herausgebers nicht vervielfältigt oder anderweitig verwendet werden.

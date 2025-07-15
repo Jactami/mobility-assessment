@@ -1,8 +1,9 @@
+import type { EvaluationScores } from '@/composables/evaluation/types'
+import { useLegal } from '@/composables/legal'
 import type { Poi, Project } from '@/db/types'
-import i18n from '@/i18n'
 import { merge } from '@pdfme/manipulator'
 import { ref } from 'vue'
-import type { EvaluationScores } from '../evaluation/types'
+import { useI18n } from 'vue-i18n'
 import { config, fonts } from './config'
 import { PdfReportBuilder } from './report/PdfReportBuilder'
 
@@ -10,6 +11,9 @@ export function usePdf() {
   const pdf = ref<Uint8Array | null>(null)
   const error = ref<Error | null>(null)
   const loading = ref<boolean>(false)
+
+  const { t } = useI18n()
+  const company = useLegal().getCompanyData()
 
   async function createPdf(data: {
     project: Project
@@ -22,8 +26,8 @@ export function usePdf() {
       loading.value = true
 
       const meta = {
-        title: `Standortbewertung - ${data.project?.title}`,
-        author: 'Bayerische Gesellschaft für Wohneigentum – Digital mbH & Co. KG',
+        title: t('pdf.title', { title: data.project?.title }),
+        author: t('pdf.author', { company: company.name }),
         date: new Date().toLocaleDateString(),
       }
 
@@ -35,29 +39,32 @@ export function usePdf() {
       // Create the main body of the PDF
       const pdfBody = await new PdfReportBuilder(config, meta, fonts)
         // Set header and footer
-        .createHeader(`Standortbewertung - ${data.project?.title}`, i18n.global.d(new Date()))
+        .createHeader(
+          t('pdf.header.left', { title: data.project?.title }),
+          t('pdf.header.right', { date: new Date().toLocaleDateString() }),
+        )
         .createFooter(
-          `Bayerische Gesellschaft für Wohneigentum – Digital mbH & Co. KG © ${new Date().getFullYear()}`,
+          t('pdf.footer.left', { company: company.name, year: new Date().getFullYear() }),
           1,
         )
         // Create summary page
-        .createSeparatorPage('Zusammenfassung')
+        .createSeparatorPage(t('pdf.section.summary'))
         .createSummary(data.project, data.chart)
         // Create the methodic section
-        .createSeparatorPage('Auswertung')
+        .createSeparatorPage(t('pdf.section.methodology'))
         // Create methodic overview
         .createMethodic()
         // Create domain specific sections
         .newPage()
         .createDomainPage(data.pois, data.scores, data.maps)
         // Create about us section
-        .createSeparatorPage('Herausgeber')
+        .createSeparatorPage(t('pdf.section.publisher'))
         .createAboutUs()
         // Create appendix
-        .createSeparatorPage('Anhang')
+        .createSeparatorPage(t('pdf.section.appendix'))
         .createDomainTables(data.pois)
         // Create legal notice page
-        .createSeparatorPage('Rechtliche Hinweise')
+        .createSeparatorPage(t('pdf.section.legal'))
         .createLegalNotice()
         .build()
 
