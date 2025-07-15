@@ -264,7 +264,29 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   createDomainPage(pois: Poi[], maps: Record<string, string>): this {
+    // Find the closest POI for each category
+    const closestPois = pois.reduce((acc: Poi[], poi) => {
+      const existingIndex = acc.findIndex((p) => p.category === poi.category)
+      if (existingIndex === -1) {
+        // First POI of this category
+        acc.push(poi)
+      } else if (poi.distance < acc[existingIndex].distance) {
+        // Found a closer POI for this category
+        acc[existingIndex] = poi
+      }
+      return acc
+    }, [])
+
+    // Sort the closest POIs by distance
+    closestPois.sort((a, b) => a.distance - b.distance)
+
     DOMAINS.forEach((domain) => {
+      // Filter POIs that belong to the current domain's categories
+      const categories = domain.categories.map((category) => category.name)
+      const domainPois = closestPois.filter(
+        (poi) => poi.category && categories.includes(poi.category),
+      )
+
       this.newPage()
         .createSectionHeader(i18n.global.t(`domain.${domain.name}`))
         .createText('Lorem ipsum dolor sit amet', { y: this._config.padding.top + 10 })
@@ -276,6 +298,23 @@ export class PdfReportBuilder extends PdfBuilder {
             (this._config.format.width - this._config.padding.left - this._config.padding.right) *
             0.75,
         })
+        .newPage()
+        .createTable(
+          [i18n.global.t('poi.category'), 'Nächstes Angebot', i18n.global.t('poi.distance')],
+          domainPois.map((poi) => [
+            i18n.global.t(`category.${poi.category}`),
+            poi.label || i18n.global.t(`category.${poi.category}`),
+            i18n.global.n(poi.distance, 'meter'),
+          ]),
+          {
+            border: false,
+            padding: 2,
+            columnWidths: [30, 50, 20],
+            head: { font: 'bold', fontSize: 'sm' },
+            body: { fontSize: 'xs' },
+            stripedColor: this._config.color.light,
+          },
+        )
     })
 
     return this
