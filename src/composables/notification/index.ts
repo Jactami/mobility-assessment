@@ -38,6 +38,41 @@ export function useNotification() {
     })
   }
 
+  const infoToast = async (message: string) => {
+    Swal.fire({
+      title: t('common.info'),
+      icon: 'info',
+      text: message,
+      ...options,
+      iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-secondary'),
+      customClass: {
+        timerProgressBar: '!bg-secondary',
+      },
+    })
+
+    const dismiss = () => Swal.close()
+
+    return { dismiss }
+  }
+
+  const loadingToast = async (message: string) => {
+    Swal.fire({
+      title: t('common.loading'),
+      icon: 'info',
+      text: message,
+      ...options,
+      timer: undefined, // disable auto-close
+      didOpen: () => {
+        Swal.showLoading()
+      },
+      iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-secondary'),
+    })
+
+    const dismiss = () => Swal.close()
+
+    return { dismiss }
+  }
+
   const confirmDialog = (message: string) => {
     return new Promise((resolve) => {
       let confirmResult = false
@@ -57,6 +92,8 @@ export function useNotification() {
   return {
     successToast,
     errorToast,
+    infoToast,
+    loadingToast,
     confirmDialog,
   }
 }

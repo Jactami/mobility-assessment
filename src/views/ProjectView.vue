@@ -94,7 +94,7 @@ const db = useDB()
 const projectStore = useProjectStore()
 const route = useRoute()
 const router = useRouter()
-const { errorToast, successToast, confirmDialog } = useNotification()
+const { errorToast, loadingToast, successToast, confirmDialog } = useNotification()
 const { pdf, error, createPdf } = usePdf()
 const { calcScores } = useEvaluation()
 
@@ -208,6 +208,8 @@ async function createReport() {
     return
   }
 
+  const toast = await loadingToast(t('project.generatingReport'))
+
   // Set loading state for PDF generation
   pdfLoading.value = true
 
@@ -259,6 +261,7 @@ async function createReport() {
 
     // Reset loading state
     pdfLoading.value = false
+    await toast.dismiss()
   }
 }
 
