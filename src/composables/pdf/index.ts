@@ -40,33 +40,24 @@ export function usePdf() {
           `Bayerische Gesellschaft für Wohneigentum – Digital mbH & Co. KG © ${new Date().getFullYear()}`,
           1,
         )
-        // Create Introduction section
-        .createIntro(data.project)
         // Create summary page
-        .newPage()
-        .createSeparatorPage('Ergebnisübersicht')
-        .newPage()
+        .createSeparatorPage('Zusammenfassung')
         .createSummary(data.project, data.chart)
         // Create the methodic section
-        .newPage()
         .createSeparatorPage('Auswertung')
-        .newPage()
+        // Create methodic overview
         .createMethodic()
         // Create domain specific sections
+        .newPage()
         .createDomainPage(data.pois, data.scores, data.maps)
         // Create about us section
-        .newPage()
         .createSeparatorPage('Herausgeber')
-        .newPage()
         .createAboutUs()
         // Create appendix
-        .newPage()
         .createSeparatorPage('Anhang')
         .createDomainTables(data.pois)
         // Create legal notice page
-        .newPage()
         .createSeparatorPage('Rechtliche Hinweise')
-        .newPage()
         .createLegalNotice()
         .build()
 

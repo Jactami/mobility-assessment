@@ -171,35 +171,23 @@ export class PdfReportBuilder extends PdfBuilder {
     const y = this._config.format.height * 0.25
     const h = 25
 
-    return this.createRect({
-      x: 0,
-      y,
-      width: this._config.format.width * 0.75,
-      height: h,
-      color: 'primary',
-    }).createText(title, {
-      y,
-      height: h,
-      fontSize: 'xl2',
-      color: 'neutral',
-      alignment: 'left',
-      verticalAlignment: 'middle',
-    })
-  }
-
-  createIntro(project: Project): this {
-    const { createAddress } = useUtil()
-    const address = createAddress({
-      name: project?.name,
-      street: project?.street,
-      housenumber: project?.housenumber,
-      postcode: project?.postcode,
-      city: project?.city,
-    })
-
-    return this.createText(
-      `Dieser Bericht dokumentiert die Ergebnisse der Standortbewertung für das Projekt ${address} im Umkreis von ${i18n.global.n(project.radius ?? Infinity, 'meter')}, basierend auf den vorliegenden Daten zum Stichtag ${i18n.global.d(new Date())}.\n\nZiel der Analyse ist es, die Stärken und Schwächen des Standorts transparent und nachvollziehbar darzustellen. Hierfür untersuchen wir den Standort aus verschiedenen Blickwinkeln hinsichtlich Nahversorgung, Mobilität, Freizeit, Gesundheit, Bildung und Naherholung. Auf dieser Grundlage vergeben wir eine Gesamtbewertung des Standorts von 0 bis 100 Punkten, wobei 100 Punkte einem optimalen Ergebnis entsprechen.\n\n\nDieser Bericht umfasst eine Übersicht zu den Ergebnissen, eine detaillierte Auswertung der Daten sowie eine Erläuterung der von uns angewandten Methodik.`,
-    )
+    return this.newPage()
+      .createRect({
+        x: 0,
+        y,
+        width: this._config.format.width * 0.75,
+        height: h,
+        color: 'primary',
+      })
+      .createText(title, {
+        y,
+        height: h,
+        fontSize: 'xl2',
+        color: 'neutral',
+        alignment: 'left',
+        verticalAlignment: 'middle',
+      })
+      .newPage()
   }
 
   createSummary(project: Project, chart: string): this {
@@ -281,15 +269,14 @@ export class PdfReportBuilder extends PdfBuilder {
     // Sort the closest POIs by distance
     closestPois.sort((a, b) => a.distance - b.distance)
 
-    DOMAINS.forEach((domain) => {
+    DOMAINS.forEach((domain, i) => {
       // Filter POIs that belong to the current domain's categories
       const categories = domain.categories.map((category) => category.name)
       const domainPois = closestPois.filter(
         (poi) => poi.category && categories.includes(poi.category),
       )
 
-      this.newPage()
-        .createSectionHeader(i18n.global.t(`domain.${domain.name}`))
+      this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
         // TODO: Add descriptions for all domains
         .createText(
           'Unter dem Gesichtspunkt der Nahversorgung bewerten wir die Erreichbarkeit von Einrichtungen und Dienstleistungen des täglichen Bedarfs wie u.a. Supermärkte, Bäckereien oder Drogerien.',
@@ -351,6 +338,9 @@ export class PdfReportBuilder extends PdfBuilder {
           color: domain.color,
         })
       })
+
+      // Create a new page after each domain section except the last one
+      if (i < DOMAINS.length - 1) this.newPage()
     })
 
     return this
@@ -543,20 +533,20 @@ export class PdfReportBuilder extends PdfBuilder {
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
   createDomainTables(pois: Poi[]): this {
-    DOMAINS.forEach((domain) => {
+    DOMAINS.forEach((domain, i) => {
       // Filter POIs that belong to the current domain's categories
       const domainCategories = domain.categories.map((category) => category.name)
-      const domainPois = pois.filter(
-        (poi) => poi.category && domainCategories.includes(poi.category),
-      )
+      let domainPois = pois.filter((poi) => poi.category && domainCategories.includes(poi.category))
 
       // Sort the POIs by distance
       domainPois.sort((a, b) => (a.distance || 0) - (b.distance || 0))
+      domainPois = []
 
-      // Create a new page for each domain
-      this.newPage()
-        .createSectionHeader(i18n.global.t(`domain.${domain.name}`))
-        .createTable(
+      this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
+
+      if (domainPois.length > 0) {
+        // Show POIs in a table
+        this.createTable(
           [
             i18n.global.t('poi.label'),
             i18n.global.t('poi.category'),
@@ -577,6 +567,21 @@ export class PdfReportBuilder extends PdfBuilder {
             stripedColor: this._config.color.light,
           },
         )
+      } else {
+        // Show a message if no POIs are found
+        this.createText(
+          `Keine Angebote in der Kategorie ${i18n.global.t(`domain.${domain.name}`)} gefunden.`,
+          {
+            y: this._config.padding.top + 10,
+            alignment: 'left',
+            color: 'muted',
+            fontSize: 'sm',
+          },
+        )
+      }
+
+      // Start a new page after each domain table except the last one
+      if (i < DOMAINS.length - 1) this.newPage()
     })
 
     return this
