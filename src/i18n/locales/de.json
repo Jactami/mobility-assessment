@@ -77,7 +77,7 @@
     "deleteError": "Fehler beim Löschen des Projekts",
     "deleteSuccess": "Projekt erfolgreich gelöscht",
     "favorites": "Favoriten",
-    "generatingReport": "Bericht wird generiert.",
+    "generatingReport": "Bericht wird generiert...",
     "limitReached": "Sie haben die maximale Anzahl an Projekten erreicht. Bitte löschen Sie ein Projekt, um ein neues zu erstellen.",
     "loadAllError": "Fehler beim Laden der Projekte",
     "loadError": "Fehler beim Laden des Projekts",
