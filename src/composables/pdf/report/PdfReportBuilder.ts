@@ -331,6 +331,26 @@ export class PdfReportBuilder extends PdfBuilder {
             stripedColor: this._config.color.light,
           },
         )
+
+      const padding = 2
+      const cardsPerRow = 5
+      const cardH = 20
+      const CardW =
+        (this._config.format.width -
+          this._config.padding.left -
+          this._config.padding.right -
+          padding * (cardsPerRow - 1)) /
+        cardsPerRow
+      categories.forEach((category, i) => {
+        const count = pois.filter((poi) => poi.category === category).length
+        this.createCard(i18n.global.t(`category.${category}`), count ? count.toString() : '-', {
+          x: this._config.padding.left + (i % cardsPerRow) * (CardW + padding),
+          y: this._config.padding.top + 150 + Math.floor(i / cardsPerRow) * (cardH + padding),
+          width: CardW,
+          height: cardH,
+          color: domain.color,
+        })
+      })
     })
 
     return this
@@ -471,6 +491,47 @@ export class PdfReportBuilder extends PdfBuilder {
         `${company.name}\n${company.address}\nE-Mail: ${company.email}\nTelefon: ${company.phone}\nWebseite: ${company.web}`,
         { y: this._config.padding.top + 200, alignment: 'center', lineHeight: 1.5 },
       )
+  }
+
+  createCard(
+    key: string,
+    value: string,
+    options: {
+      x: number
+      y: number
+      width: number
+      height: number
+      color: string
+    },
+  ): this {
+    return this.createRect({
+      x: options.x,
+      y: options.y,
+      width: options.width,
+      height: options.height,
+      color: 'light',
+    })
+      .createText(value, {
+        x: options.x,
+        y: options.y,
+        width: options.width,
+        height: (options.height * 2) / 3,
+        fontSize: 'xl2',
+        font: 'bold',
+        color: options.color,
+        verticalAlignment: 'middle',
+        alignment: 'center',
+      })
+      .createText(key, {
+        x: options.x,
+        y: options.y + (options.height * 2) / 3,
+        width: options.width,
+        height: options.height / 3,
+        fontSize: 'sm',
+        color: 'muted',
+        verticalAlignment: 'middle',
+        alignment: 'center',
+      })
   }
 
   /**
