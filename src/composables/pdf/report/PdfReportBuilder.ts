@@ -1,3 +1,4 @@
+import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useLegal } from '@/composables/legal'
 import { useColorUtil } from '@/composables/util/color'
 import { useUtil } from '@/composables/util/misc'
@@ -242,7 +243,7 @@ export class PdfReportBuilder extends PdfBuilder {
       })
 
     this.createSectionHeader('Gesamtbewertung', { y: this._config.padding.top + 60 })
-      .createScore(project.score ?? 0, this._config.padding.top + 70)
+      .createScore(project.score ?? 0, 'Gesamtbewertung', this._config.padding.top + 70)
       .createText(
         `Der Standort erreicht in der Analyse ${i18n.global.n((project.score ?? 0) * 100, 'rounded')} von 100 möglichen Punkten. Diese Kennzahl bietet eine schnelle und verständliche Einschätzung der Standortqualität.`,
         { y: this._config.padding.top + 130 },
@@ -263,7 +264,7 @@ export class PdfReportBuilder extends PdfBuilder {
     return this
   }
 
-  createDomainPage(pois: Poi[], maps: Record<string, string>): this {
+  createDomainPage(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
     // Find the closest POI for each category
     const closestPois = pois.reduce((acc: Poi[], poi) => {
       const existingIndex = acc.findIndex((p) => p.category === poi.category)
@@ -289,16 +290,30 @@ export class PdfReportBuilder extends PdfBuilder {
 
       this.newPage()
         .createSectionHeader(i18n.global.t(`domain.${domain.name}`))
-        .createText('Lorem ipsum dolor sit amet', { y: this._config.padding.top + 10 })
+        // TODO: Add descriptions for all domains
+        .createText(
+          'Unter dem Gesichtspunkt der Nahversorgung bewerten wir die Erreichbarkeit von Einrichtungen und Dienstleistungen des täglichen Bedarfs wie u.a. Supermärkte, Bäckereien oder Drogerien.',
+          { y: this._config.padding.top + 10 },
+        )
         .createImage(maps[domain.name], {
           x: this._config.padding.left,
-          y: this._config.padding.top + 20,
+          y: this._config.padding.top + 30,
           width: this._config.format.width - this._config.padding.left - this._config.padding.right,
           height:
             (this._config.format.width - this._config.padding.left - this._config.padding.right) *
             0.75,
         })
+        .createScore(
+          scores.domain[domain.name],
+          `Bewertung ${i18n.global.t(`domain.${domain.name}`)}`,
+          this._config.padding.top + 170,
+        )
         .newPage()
+        .createText(
+          `Die nachfolgende Tabelle zeigt die nächstgelegenen Angebote in der Kategorie ${i18n.global.t(
+            `domain.${domain.name}`,
+          )}.`,
+        )
         .createTable(
           [i18n.global.t('poi.category'), 'Nächstes Angebot', i18n.global.t('poi.distance')],
           domainPois.map((poi) => [
@@ -307,6 +322,7 @@ export class PdfReportBuilder extends PdfBuilder {
             i18n.global.n(poi.distance, 'meter'),
           ]),
           {
+            y: this._config.padding.top + 10,
             border: false,
             padding: 2,
             columnWidths: [30, 50, 20],
@@ -338,7 +354,7 @@ export class PdfReportBuilder extends PdfBuilder {
       )
   }
 
-  createScore(score: number, y: number): this {
+  createScore(score: number, label: string, y: number): this {
     const { scoreToColor, scoreColorThresholds } = useColorUtil()
 
     // Score Box
@@ -357,7 +373,7 @@ export class PdfReportBuilder extends PdfBuilder {
         alignment: 'center',
         verticalAlignment: 'middle',
       })
-      .createText('Gesamtbewertung', {
+      .createText(label, {
         y: y + 25,
         height: 15,
         fontSize: 'xl2',
@@ -388,21 +404,21 @@ export class PdfReportBuilder extends PdfBuilder {
         (this._config.format.width - this._config.padding.left - this._config.padding.right) *
           score -
         0.5,
-      y: y + 45,
+      y: y + 46,
       width: 1,
-      height: 7,
+      height: 5,
       color: 'text',
     })
 
     this.createText('0', {
       x: this._config.padding.left,
-      y: y + 50,
+      y: y + 51,
       fontSize: 'xs',
       color: 'muted',
       alignment: 'left',
     }).createText('100', {
       x: this._config.padding.left,
-      y: y + 50,
+      y: y + 51,
       fontSize: 'xs',
       color: 'muted',
       alignment: 'right',
@@ -414,11 +430,12 @@ export class PdfReportBuilder extends PdfBuilder {
         (i * (this._config.format.width - this._config.padding.left - this._config.padding.right)) /
           10
       this.createText((i * 10).toString(), {
-        x: xPos,
-        y: y + 50,
+        x: xPos - 10,
+        y: y + 51,
+        width: 20,
         fontSize: 'xs',
         color: 'muted',
-        alignment: 'left',
+        alignment: 'center',
       })
     }
 

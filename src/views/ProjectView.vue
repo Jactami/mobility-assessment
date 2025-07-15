@@ -203,7 +203,10 @@ async function saveProject() {
 }
 
 async function createReport() {
-  if (!projectStore.project || !projectStore.pois) return
+  if (!projectStore.project || !projectStore.pois || !scores.value) {
+    errorToast(t('common.errorMessage'))
+    return
+  }
 
   // Set loading state for PDF generation
   pdfLoading.value = true
@@ -224,6 +227,7 @@ async function createReport() {
   await createPdf({
     project: projectStore.project,
     pois: projectStore.pois,
+    scores: scores.value,
     chart,
     maps,
   })

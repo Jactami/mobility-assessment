@@ -2,6 +2,7 @@ import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
 import { merge } from '@pdfme/manipulator'
 import { ref } from 'vue'
+import type { EvaluationScores } from '../evaluation/types'
 import { config, fonts } from './config'
 import { PdfReportBuilder } from './report/PdfReportBuilder'
 
@@ -13,6 +14,7 @@ export function usePdf() {
   async function createPdf(data: {
     project: Project
     pois: Poi[]
+    scores: EvaluationScores
     chart: string
     maps: Record<string, string>
   }) {
@@ -51,7 +53,7 @@ export function usePdf() {
         .newPage()
         .createMethodic()
         // Create domain specific sections
-        .createDomainPage(data.pois, data.maps)
+        .createDomainPage(data.pois, data.scores, data.maps)
         // Create about us section
         .newPage()
         .createSeparatorPage('Herausgeber')
