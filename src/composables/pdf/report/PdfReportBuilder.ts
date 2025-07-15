@@ -169,14 +169,17 @@ export class PdfReportBuilder extends PdfBuilder {
     const y = this._config.format.height * 0.25
     const h = 25
 
-    return this.newPage()
-      .createRect({
-        x: 0,
-        y,
-        width: this._config.format.width * 0.75,
-        height: h,
-        color: 'primary',
-      })
+    // If we are not on the first page, create a new page
+    if (this._page > 0) this.newPage()
+
+    // Create separator page with title
+    return this.createRect({
+      x: 0,
+      y,
+      width: this._config.format.width * 0.75,
+      height: h,
+      color: 'primary',
+    })
       .createText(title, {
         y,
         height: h,
