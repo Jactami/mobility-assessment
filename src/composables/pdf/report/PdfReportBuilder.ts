@@ -71,6 +71,21 @@ export class PdfReportBuilder extends PdfBuilder {
       })
   }
 
+  /**
+   * Creates a section header for the PDF document, which includes a main header and an optional subheader.
+   * @param header - The main header for the section.
+   * @param options - Optional layout and styling options for the section header.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createSectionHeader(header: string, options?: PdfTextOptions): this {
+    return this.createText(header, { font: 'bold', fontSize: 'lg', color: 'primary', ...options })
+  }
+
+  /**
+   * Creates a title page for the PDF document.
+   * @param project - The project data used to create the title page.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
   createTitlePage(project: Project): this {
     const { createAddress } = useUtil()
     let address = createAddress({
@@ -151,16 +166,6 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   /**
-   * Creates a section header for the PDF document, which includes a main header and an optional subheader.
-   * @param header - The main header for the section.
-   * @param options - Optional layout and styling options for the section header.
-   * @returns The current instance of PdfReportBuilder for method chaining.
-   */
-  createSectionHeader(header: string, options?: PdfTextOptions): this {
-    return this.createText(header, { font: 'bold', fontSize: 'lg', color: 'primary', ...options })
-  }
-
-  /**
    * Creates a separator page in the PDF document.
    * @param title - The title for the separator page.
    * @returns The current instance of PdfReportBuilder for method chaining.
@@ -191,8 +196,15 @@ export class PdfReportBuilder extends PdfBuilder {
       .newPage()
   }
 
-  createSummary(project: Project, chart: string): this {
+  /**
+   * Creates a summary section in the PDF document.
+   * @param project - The project data used to create the summary.
+   * @param chart - The base64 encoded image of the chart to be included in the summary.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createSummaryPage(project: Project, chart: string): this {
     const { createAddress } = useUtil()
+
     const address = createAddress({
       name: project?.name,
       street: project?.street,
@@ -201,6 +213,7 @@ export class PdfReportBuilder extends PdfBuilder {
       city: project?.city,
     })
 
+    // Info about project details
     this.createSectionHeader(i18n.global.t('pdf.summary.microLocationTitle'))
       .createText(i18n.global.t('pdf.summary.microLocationText'), {
         y: this._config.padding.top + 10,
@@ -230,23 +243,25 @@ export class PdfReportBuilder extends PdfBuilder {
         y: this._config.padding.top + 42,
       })
 
-    this.createSectionHeader(i18n.global.t('pdf.summary.totalRatingTitle'), {
+    // Project score
+    this.createSectionHeader(i18n.global.t('pdf.summary.totalScoreTitle'), {
       y: this._config.padding.top + 60,
     })
       .createScore(
         project.score ?? 0,
-        i18n.global.t('pdf.summary.totalRatingTitle'),
+        i18n.global.t('pdf.summary.totalScoreTitle'),
         this._config.padding.top + 70,
       )
       .createText(
-        `${i18n.global.t('pdf.summary.totalRatingText', { score: i18n.global.n((project.score ?? 0) * 100, 'rounded') })}`,
+        `${i18n.global.t('pdf.summary.totalScoreText', { score: i18n.global.n((project.score ?? 0) * 100, 'rounded') })}`,
         { y: this._config.padding.top + 130 },
       )
 
-    this.createSectionHeader(i18n.global.t('pdf.summary.singleRatingsTitle'), {
+    // Single score
+    this.createSectionHeader(i18n.global.t('pdf.summary.singleScoresTitle'), {
       y: this._config.padding.top + 150,
     })
-      .createText(i18n.global.t('pdf.summary.singleRatingsText'), {
+      .createText(i18n.global.t('pdf.summary.singleScoresText'), {
         y: this._config.padding.top + 160,
       })
       .createImage(chart, {
@@ -259,7 +274,14 @@ export class PdfReportBuilder extends PdfBuilder {
     return this
   }
 
-  createDomainPage(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
+  /**
+   * Creates a domain page in the PDF document.
+   * @param pois - The list of points of interest (POIs) to include in the domain page.
+   * @param scores - The evaluation scores for the domain.
+   * @param maps - A record of map images for each domain.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createDomainPages(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
     const {
       getPoisByDomain,
       sortPoisByDistance,
@@ -290,7 +312,7 @@ export class PdfReportBuilder extends PdfBuilder {
         })
         .createScore(
           scores.domain[domain.name],
-          `${i18n.global.t('pdf.analysis.rating')} ${i18n.global.t(`domain.${domain.name}`)}`,
+          `${i18n.global.t('pdf.analysis.score')} ${i18n.global.t(`domain.${domain.name}`)}`,
           this._config.padding.top + 170,
         )
         .newPage()
@@ -349,7 +371,11 @@ export class PdfReportBuilder extends PdfBuilder {
     return this
   }
 
-  createMethodology(): this {
+  /**
+   * Creates the methodology page of the PDF report.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createMethodologyPage(): this {
     return this.createSectionHeader(i18n.global.t('pdf.methodology.title'))
       .createText(i18n.global.t('pdf.methodology.text1'), { y: this._config.padding.top + 10 })
       .createImage(methodic, {
@@ -361,6 +387,13 @@ export class PdfReportBuilder extends PdfBuilder {
       .createText(i18n.global.t('pdf.methodology.text2'), { y: this._config.padding.top + 170 })
   }
 
+  /**
+   * Creates a score element in the PDF report.
+   * @param score The score value (0-1).
+   * @param label The label for the score.
+   * @param y The vertical position for the score element.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
   createScore(score: number, label: string, y: number): this {
     const { scoreToColor, scoreColorThresholds } = useColorUtil()
 
@@ -441,14 +474,22 @@ export class PdfReportBuilder extends PdfBuilder {
     return this
   }
 
-  createLegalNotice(): this {
+  /**
+   * Creates the legal notice page of the PDF report.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createLegalNoticePage(): this {
     return this.createSectionHeader(i18n.global.t('pdf.legal.title')).createText(
       i18n.global.t('pdf.legal.text'),
       { y: this._config.padding.top + 10 },
     )
   }
 
-  createAboutUs(): this {
+  /**
+   * Creates the publisher page of the PDF report.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createPublisherPage(): this {
     const company = useLegal().getCompanyData()
 
     return this.createSectionHeader(i18n.global.t('pdf.publisher.title'))
@@ -465,16 +506,23 @@ export class PdfReportBuilder extends PdfBuilder {
       })
       .createText(
         i18n.global.t('pdf.publisher.contactText', {
-          name: company.name,
+          company: company.name,
           address: company.address,
           email: company.email,
           phone: company.phone,
           web: company.web,
         }),
-        { y: this._config.padding.top + 200, alignment: 'center' },
+        { y: this._config.padding.top + 200, lineHeight: 1.5, alignment: 'center' },
       )
   }
 
+  /**
+   * Creates a card element in the PDF report.
+   * @param key The key for the card.
+   * @param value The value for the card.
+   * @param options The positioning and styling options for the card.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
   createCard(
     key: string,
     value: string,
@@ -518,9 +566,6 @@ export class PdfReportBuilder extends PdfBuilder {
 
   /**
    * Creates domain tables for the PDF document.
-   *
-   * TODO: Decide if the POIs should be processed in the composable or here.
-   *
    * @param pois - The list of Points of Interest (POIs) to be categorized and displayed in domain tables.
    * @returns The current instance of PdfReportBuilder for method chaining.
    */

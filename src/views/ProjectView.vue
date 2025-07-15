@@ -263,7 +263,7 @@ async function createReport() {
 
     // Reset loading state
     pdfLoading.value = false
-    await toast.dismiss()
+    toast.dismiss()
   }
 }
 

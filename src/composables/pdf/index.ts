@@ -49,23 +49,23 @@ export function usePdf() {
         )
         // Create summary page
         .createSeparatorPage(t('pdf.section.summary'))
-        .createSummary(data.project, data.chart)
+        .createSummaryPage(data.project, data.chart)
         // Create the methodic section
         .createSeparatorPage(t('pdf.section.methodology'))
         // Create methodic overview
-        .createMethodology()
+        .createMethodologyPage()
         // Create domain specific sections
         .newPage()
-        .createDomainPage(data.pois, data.scores, data.maps)
+        .createDomainPages(data.pois, data.scores, data.maps)
         // Create about us section
         .createSeparatorPage(t('pdf.section.publisher'))
-        .createAboutUs()
+        .createPublisherPage()
         // Create appendix
         .createSeparatorPage(t('pdf.section.appendix'))
         .createDomainTables(data.pois)
         // Create legal notice page
         .createSeparatorPage(t('pdf.section.legal'))
-        .createLegalNotice()
+        .createLegalNoticePage()
         .build()
 
       // Merge the title page and body into a single PDF
