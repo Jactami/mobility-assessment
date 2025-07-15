@@ -72,6 +72,16 @@ export class PdfBuilder {
   protected _page: number = 0
 
   /**
+   * The inner width of the PDF document after accounting for padding.
+   */
+  protected _innerWidth: number = 0
+
+  /**
+   * The inner height of the PDF document after accounting for padding.
+   */
+  protected _innerHeight: number = 0
+
+  /**
    * Creates an instance of the PdfBuilder class.
    * @param config - Configuration options for the PDF document, such as format, padding, colors, and font sizes.
    */
@@ -80,6 +90,10 @@ export class PdfBuilder {
     this._config = config
     this._meta = meta
     this._fonts = fonts
+    this._innerWidth =
+      this._config.format.width - this._config.padding.left - this._config.padding.right
+    this._innerHeight =
+      this._config.format.height - this._config.padding.top - this._config.padding.bottom
   }
 
   /**

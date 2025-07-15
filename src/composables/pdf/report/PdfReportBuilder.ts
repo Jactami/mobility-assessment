@@ -34,7 +34,7 @@ export class PdfReportBuilder extends PdfBuilder {
     }).createLine({
       x: this._config.padding.left,
       y: this._config.padding.top - 5,
-      width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+      width: this._innerWidth,
       height: 0.1,
       color: 'muted',
       static: true,
@@ -64,7 +64,7 @@ export class PdfReportBuilder extends PdfBuilder {
       .createLine({
         x: this._config.padding.left,
         y: this._config.format.height - this._config.padding.bottom + 5,
-        width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+        width: this._innerWidth,
         height: 0.1,
         color: 'muted',
         static: true,
@@ -102,7 +102,7 @@ export class PdfReportBuilder extends PdfBuilder {
         .createLine({
           x: this._config.padding.left,
           y: this._config.padding.top + 70,
-          width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+          width: this._innerWidth,
           height: 1,
           color: 'primary',
         })
@@ -129,7 +129,7 @@ export class PdfReportBuilder extends PdfBuilder {
         .createLine({
           x: this._config.padding.left,
           y: this._config.padding.top + 155,
-          width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+          width: this._innerWidth,
           height: 1,
           color: 'primary',
         })
@@ -282,10 +282,8 @@ export class PdfReportBuilder extends PdfBuilder {
         .createImage(maps[domain.name], {
           x: this._config.padding.left,
           y: this._config.padding.top + 30,
-          width: this._config.format.width - this._config.padding.left - this._config.padding.right,
-          height:
-            (this._config.format.width - this._config.padding.left - this._config.padding.right) *
-            0.75,
+          width: this._innerWidth,
+          height: this._innerWidth * 0.75,
         })
         .createScore(
           scores.domain[domain.name],
@@ -367,7 +365,7 @@ export class PdfReportBuilder extends PdfBuilder {
     this.createRect({
       x: this._config.padding.left,
       y,
-      width: this._config.format.width - this._config.padding.left - this._config.padding.right,
+      width: this._innerWidth,
       height: 40,
       color: scoreToColor(score),
     })
@@ -392,8 +390,7 @@ export class PdfReportBuilder extends PdfBuilder {
     let x = this._config.padding.left
     scoreColorThresholds.forEach((threshold, index) => {
       const range = threshold.max - (scoreColorThresholds[index - 1]?.max || 0)
-      const width =
-        (this._config.format.width - this._config.padding.left - this._config.padding.right) * range
+      const width = this._innerWidth * range
       this.createRect({
         x,
         y: y + 47,
@@ -405,11 +402,7 @@ export class PdfReportBuilder extends PdfBuilder {
     })
 
     this.createRect({
-      x:
-        this._config.padding.left +
-        (this._config.format.width - this._config.padding.left - this._config.padding.right) *
-          score -
-        0.5,
+      x: this._config.padding.left + this._innerWidth * score - 0.5,
       y: y + 46,
       width: 1,
       height: 5,
@@ -431,10 +424,7 @@ export class PdfReportBuilder extends PdfBuilder {
     })
 
     for (let i = 1; i < 10; i++) {
-      const xPos =
-        this._config.padding.left +
-        (i * (this._config.format.width - this._config.padding.left - this._config.padding.right)) /
-          10
+      const xPos = this._config.padding.left + (i * this._innerWidth) / 10
       this.createText((i * 10).toString(), {
         x: xPos - 10,
         y: y + 51,
