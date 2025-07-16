@@ -19,7 +19,9 @@
       </BaseButton>
     </div>
     <div class="mt-10 flex justify-center">
-      <BaseButton :disabled="pdfLoading" @click="createReport">Report</BaseButton>
+      <BaseButton :disabled="pdfLoading" @click="handleReport">
+        {{ t('project.report') }}
+      </BaseButton>
     </div>
   </BaseSection>
 
@@ -96,7 +98,7 @@ const projectStore = useProjectStore()
 const route = useRoute()
 const router = useRouter()
 const { errorToast, loadingToast, successToast, confirmDialog } = useNotification()
-const { pdf, error, createPdf } = usePdf()
+const { pdf, error, createReport } = usePdf()
 const { calcScores } = useEvaluation()
 const { getPoisByDomain, getPoisByCategory } = useProjectUtil()
 
@@ -204,7 +206,7 @@ async function saveProject() {
   projectStore.set(project.value, pois.value)
 }
 
-async function createReport() {
+async function handleReport() {
   if (!projectStore.project || !projectStore.pois || !scores.value) {
     errorToast(t('common.errorMessage'))
     return
@@ -228,7 +230,7 @@ async function createReport() {
   const chart = (await chartRef.value?.exportChart()) || ''
 
   // Create the PDF report
-  await createPdf({
+  await createReport({
     project: projectStore.project,
     pois: projectStore.pois,
     scores: scores.value,

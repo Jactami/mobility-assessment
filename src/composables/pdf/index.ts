@@ -13,18 +13,38 @@ export function usePdf() {
   const loading = ref<boolean>(false)
 
   const { t } = useI18n()
-  const company = useLegal().getCompanyData()
 
-  async function createPdf(data: {
+  /**
+   * Helper to build a PDF using the provided function.
+   * @param buildFn Function that builds the PDF and returns a promise that resolves to a Uint8Array.
+   */
+  async function buildPdf(buildFn: () => Promise<Uint8Array>) {
+    try {
+      loading.value = true
+      pdf.value = await buildFn()
+    } catch (err) {
+      error.value = err instanceof Error ? err : new Error('Unknown error.')
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /**
+   * Creates evaluation report for the given project
+   * @param data - Data to create the report, including project, points of interest, scores, chart data, and maps.
+   * @returns A promise that resolves to the generated PDF as a Uint8Array.
+   */
+  function createReport(data: {
     project: Project
     pois: Poi[]
     scores: EvaluationScores
     chart: string
     maps: Record<string, string>
   }) {
-    try {
-      loading.value = true
+    const company = useLegal().getCompanyData()
 
+    const buildReport = async () => {
+      // Create metadata for the PDF
       const meta = {
         title: t('pdf.title', { title: data.project?.title }),
         author: t('pdf.author', { company: company.name }),
@@ -69,16 +89,15 @@ export function usePdf() {
         .build()
 
       // Merge the title page and body into a single PDF
-      pdf.value = await merge([pdfTitlePage, pdfBody])
-    } catch (err) {
-      error.value = err instanceof Error ? err : new Error('An unknown error occurred')
-    } finally {
-      loading.value = false
+      const pdf = await merge([pdfTitlePage, pdfBody])
+      return pdf
     }
+
+    return buildPdf(buildReport)
   }
 
   return {
-    createPdf,
+    createReport,
     pdf,
     error,
     loading,
