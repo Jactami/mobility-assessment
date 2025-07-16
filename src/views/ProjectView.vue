@@ -19,7 +19,7 @@
       </BaseButton>
     </div>
     <div class="mt-10 flex justify-center">
-      <BaseButton :disabled="pdfLoading" @click="handleReport">
+      <BaseButton :disabled="loading" @click="handleReport">
         {{ t('project.report') }}
       </BaseButton>
     </div>
@@ -98,7 +98,7 @@ const projectStore = useProjectStore()
 const route = useRoute()
 const router = useRouter()
 const { errorToast, loadingToast, successToast, confirmDialog } = useNotification()
-const { pdf, error, createReport } = usePdf()
+const { pdf, error, loading, createReport } = usePdf()
 const { calcScores } = useEvaluation()
 const { getPoisByDomain, getPoisByCategory } = useProjectUtil()
 
@@ -116,9 +116,6 @@ const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[] | null>('maps')
 
 // Loading flag to indicate if geodata is being fetched
 const geodataLoading = ref(false)
-
-// Loading flag to indicate if the pdf is being generated
-const pdfLoading = ref(false)
 
 // Checks if the project has unsaved changes in a simple way
 const isProjectDirty = computed(
@@ -214,8 +211,8 @@ async function handleReport() {
 
   const toast = await loadingToast(t('project.generatingReport'))
 
-  // Set loading state for PDF generation
-  pdfLoading.value = true
+  // Manually set loading state for PDF generation because we have to await image exports
+  loading.value = true
 
   // Generate map images for each domain
   const maps: Record<string, string> = {}
@@ -264,7 +261,6 @@ async function handleReport() {
     URL.revokeObjectURL(url)
 
     // Reset loading state
-    pdfLoading.value = false
     toast.dismiss()
   }
 }
