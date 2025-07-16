@@ -59,7 +59,7 @@ export class PdfBuilder {
   /**
    * An object mapping unique IDs to input strings for the PDF document.
    */
-  protected _inputs: Record<number, string> = {}
+  protected _inputs: Record<string, string> = {}
 
   /**
    * A unique identifier for the current schema and input.
@@ -140,6 +140,7 @@ export class PdfBuilder {
     this._schemas = [[]]
     this._staticSchema = []
     this._inputs = {}
+    this._plugins = {}
     this._page = 0
     this._id = crypto.randomUUID()
   }
@@ -162,7 +163,7 @@ export class PdfBuilder {
     } else {
       // Assign the schema and input to the current page
       this._schemas[this._page].push(schema)
-      this._inputs = { ...this._inputs, [this._id]: input }
+      this._inputs[this._id] = input
     }
 
     // Generate a unique ID for the next schema and input
