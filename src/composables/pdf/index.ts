@@ -20,6 +20,11 @@ export function usePdf() {
    */
   async function buildPdf(buildFn: () => Promise<Uint8Array>) {
     try {
+      // Reset state
+      pdf.value = null
+      error.value = null
+
+      // Generate PDF
       loading.value = true
       pdf.value = await buildFn()
     } catch (err) {
