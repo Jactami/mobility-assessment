@@ -48,6 +48,9 @@
 
   /* Border radius */
   --radius-border: var(--radius-md);
+
+  /* Fonts */
+  --font-logo: 'MontserratAlt1', sans-serif;
 }
 
 /* Dark theme overrides */

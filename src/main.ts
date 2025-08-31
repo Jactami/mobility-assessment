@@ -1,3 +1,4 @@
+import 'unfonts.css'
 import './assets/main.css'
 
 import formkitConfig from '@/config/formkit/config'

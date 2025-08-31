@@ -4,14 +4,8 @@
   >
     <nav class="mx-auto flex h-16 items-center justify-between px-4 lg:px-10">
       <div class="flex lg:flex-1">
-        <RouterLink class="flex items-center gap-x-2" to="/">
-          <!-- TODO: Replace with real logo -->
-          <img
-            src="/img/placeholder.webp"
-            class="aspect-square h-8 w-auto rounded-full object-cover object-center"
-            :alt="t('app.title')"
-          />
-          <span class="hidden text-lg font-medium sm:block sm:text-2xl">{{ t('app.title') }}</span>
+        <RouterLink to="/">
+          <AppLogo />
         </RouterLink>
       </div>
 
@@ -31,6 +25,7 @@ import AuthUserAvatar from '@/components/auth/AuthUserAvatar.vue'
 import { useAuthStore } from '@/stores/Auth'
 import { useI18n } from 'vue-i18n'
 import AppDarkModeButton from './AppDarkModeButton.vue'
+import AppLogo from './AppLogo.vue'
 
 const authStore = useAuthStore()
 const { t } = useI18n()

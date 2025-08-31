@@ -20,6 +20,16 @@ export default defineConfig(async () => ({
       fontsource: {
         families: ['Open Sans'],
       },
+      custom: {
+        families: [
+          {
+            name: 'MontserratAlt1',
+            src: './public/fonts/MontserratAlt1-*.ttf',
+          },
+        ],
+        injectTo: 'head-prepend',
+        preload: true,
+      },
     }),
     ViteYaml(),
   ],
