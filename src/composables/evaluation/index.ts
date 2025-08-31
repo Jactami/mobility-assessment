@@ -31,7 +31,7 @@ function calcScorePoi(poi: Poi, radius: number) {
 
   // Option 2: Minimum scoring
   // const minScore = 0.2
-  // score = minScore + (1 - minScore) / (1 + Math.pow(poi.distance / radius, DISTANCE_DAMPEN))
+  // score = minScore + (1 - minScore) * (1 + Math.pow(poi.distance / radius, DISTANCE_DAMPEN))
 
   // Option 3: logistic function
   score = 1 / (1 + Math.pow(poi.distance / radius, DISTANCE_DAMPEN))
