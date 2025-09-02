@@ -12,7 +12,7 @@
     <Teleport to="body">
       <MenuItems
         ref="floating"
-        class="z-50 max-w-md min-w-56 origin-top-right divide-y divide-outline-variant rounded-border bg-surface p-1 text-on-surface shadow-md ring ring-outline-variant focus:outline-none"
+        class="z-50 max-w-md min-w-56 origin-top-right rounded-border bg-surface p-1 text-on-surface shadow-md ring ring-outline-variant focus:outline-none"
         :style="floatingStyles"
       >
         <!-- Menu Header -->
@@ -22,6 +22,7 @@
               <!-- Content before the menu items goes here. -->
             </slot>
           </div>
+          <hr class="my-1 border-outline-variant" />
         </template>
 
         <!-- Menu Items -->
@@ -50,6 +51,7 @@
 
         <!-- Menu Footer -->
         <template v-if="$slots.end">
+          <hr class="my-1 border-outline-variant" />
           <div class="p-2">
             <slot name="end">
               <!-- Content after the menu items goes here. -->

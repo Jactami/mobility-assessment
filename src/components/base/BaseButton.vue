@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { twMerge } from 'tailwind-merge'
-import { computed, useAttrs } from 'vue'
+import { computed } from 'vue'
 import BasePopover from './BasePopover.vue'
 
 interface Props {
@@ -32,6 +32,7 @@ interface Props {
   flavor?: 'primary' | 'secondary' | 'tertiary' | 'custom'
   size?: 'small' | 'normal' | 'large'
   disabled?: boolean
+  class?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -39,6 +40,7 @@ const props = withDefaults(defineProps<Props>(), {
   flavor: 'primary',
   size: 'normal',
   disabled: false,
+  class: '',
 })
 
 // Ensure that the component does not inherit classes from the parent at root level.
@@ -57,8 +59,6 @@ const sizeMap: Record<Exclude<Props['size'], undefined>, string> = {
   large: 'text-lg px-4 py-3',
 }
 
-const attrs = useAttrs()
-
 /**
  * Generated button classes based on the flavor and size props and passed classes.
  */
@@ -67,7 +67,7 @@ const buttonClasses = computed(() => {
     'relative inline-flex w-fit cursor-pointer items-center justify-center gap-x-2 rounded-border shadow-sm hover:shadow-md hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:brightness-100',
     flavorMap[props.flavor],
     sizeMap[props.size],
-    String(attrs.class),
+    props.class,
   ])
 })
 </script>

@@ -2,17 +2,17 @@
   <MenuPopup v-if="authStore.profile" :items="menu" placement="bottom-end">
     <template #trigger>
       <BaseButton
-        class="flex aspect-square items-center justify-center rounded-full bg-primary p-1.5 font-medium text-on-primary shadow-none hover:outline-2 hover:outline-primary/50"
+        class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary font-mono font-medium text-on-primary shadow-none select-none hover:outline-2 hover:outline-primary/50"
       >
         {{ initials }}
       </BaseButton>
     </template>
     <template #start>
       <div>
-        <div class="text-lg font-semibold">
+        <div class="text-base font-semibold">
           {{ authStore.profile?.first_name }} {{ authStore.profile?.last_name }}
         </div>
-        <div class="text-sm text-on-surface-variant">{{ authStore.profile?.email }}</div>
+        <div class="mt-1 text-sm text-on-surface-variant">{{ authStore.profile?.email }}</div>
       </div>
     </template>
   </MenuPopup>
