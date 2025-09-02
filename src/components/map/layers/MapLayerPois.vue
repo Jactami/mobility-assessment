@@ -1,44 +1,54 @@
 <template>
-  <Layers.OlVectorLayer :min-zoom="10">
-    <Sources.OlSourceVector>
+  <OlVectorLayer :min-zoom="10">
+    <OlSourceVector>
       <template v-for="poi in pois" :key="poi.id">
         <!-- Marker: Append poi to properties for selection -->
-        <Map.OlFeature :properties="{ poi }">
-          <Geometries.OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
-          <Styles.OlStyle>
+        <OlFeature :properties="{ poi }">
+          <OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
+          <OlStyle>
             <!-- <Styles.OlStyleIcon
               src="/img/map/marker.svg"
               :anchor="[0.5, 0.9]"
               :color="categoryToColor(poi.category)"
             /> -->
-            <Styles.OlStyleCircle :radius="10">
-              <Styles.OlStyleFill color="#fff" />
-              <Styles.OlStyleStroke :color="categoryToColor(poi.category)" :width="2" />
-            </Styles.OlStyleCircle>
-          </Styles.OlStyle>
-        </Map.OlFeature>
+            <OlStyleCircle :radius="10">
+              <OlStyleFill color="#fff" />
+              <OlStyleStroke :color="categoryToColor(poi.category)" :width="2" />
+            </OlStyleCircle>
+          </OlStyle>
+        </OlFeature>
 
         <!-- Icon; TODO: Add white background -->
-        <Map.OlFeature>
-          <Geometries.OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
-          <Styles.OlStyle>
-            <Styles.OlStyleIcon
+        <OlFeature>
+          <OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
+          <OlStyle>
+            <OlStyleIcon
               :src="`/img/map/${poi.category}.svg`"
               :scale="0.45"
               :color="categoryToColor(poi.category)"
             />
-          </Styles.OlStyle>
-        </Map.OlFeature>
+          </OlStyle>
+        </OlFeature>
       </template>
-    </Sources.OlSourceVector>
-  </Layers.OlVectorLayer>
+    </OlSourceVector>
+  </OlVectorLayer>
 </template>
 
 <script setup lang="ts">
 import { useColorUtil } from '@/composables/util/color'
 import type { Poi } from '@/db/types'
 import { fromLonLat } from 'ol/proj'
-import { Geometries, Layers, Map, Sources, Styles } from 'vue3-openlayers'
+import { OlGeomPoint } from 'vue3-openlayers/geometries'
+import { OlVectorLayer } from 'vue3-openlayers/layers'
+import { OlFeature } from 'vue3-openlayers/map'
+import { OlSourceVector } from 'vue3-openlayers/sources'
+import {
+  OlStyle,
+  OlStyleCircle,
+  OlStyleFill,
+  OlStyleIcon,
+  OlStyleStroke,
+} from 'vue3-openlayers/styles'
 
 defineProps<{
   pois: Poi[] | null

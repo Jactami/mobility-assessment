@@ -1,11 +1,11 @@
 <template>
-  <Map.OlMap
+  <OlMap
     ref="mapRef"
     class="overflow-hidden rounded-border"
     :class="{ 'opacity-60': disabled }"
     :style="{ height: `${height}px` }"
   >
-    <Map.OlView
+    <OlView
       :center="center"
       :zoom="zoom"
       @change:resolution="(e) => (zoom = e.target.getZoom())"
@@ -13,9 +13,9 @@
     />
 
     <!-- Openstreetmap Layer -->
-    <Layers.OlTileLayer>
-      <Sources.OlSourceOsm :attributions="attributions" />
-    </Layers.OlTileLayer>
+    <OlTileLayer>
+      <OlSourceOSM :attributions="attributions" />
+    </OlTileLayer>
 
     <template
       v-if="
@@ -29,7 +29,7 @@
       <!-- Radius Layer -->
       <MapLayerRadius
         :location="location"
-        :radius="metersToPixels(mapRef.map as OlMap, location, props.project?.radius)"
+        :radius="metersToPixels(mapRef.map as Map, location, props.project?.radius)"
       />
 
       <!-- Points of Interest Layer -->
@@ -44,35 +44,41 @@
 
     <!-- Map Control Buttons -->
     <template v-if="!disabled">
-      <MapControls.OlZoomControl
-        :zoom-in-tip-label="t('map.zoomIn')"
-        :zoom-out-tip-label="t('map.zoomOut')"
-      />
-      <MapControls.OlFullscreenControl :tip-label="t('map.toggleFullscreen')" />
-      <MapControls.OlZoomtoextentControl
+      <OlZoomControl :zoom-in-tip-label="t('map.zoomIn')" :zoom-out-tip-label="t('map.zoomOut')" />
+      <OlFullScreenControl :tip-label="t('map.toggleFullscreen')" />
+      <OlZoomToExtentControl
         :extent="extent"
         label="🞋"
         :tip-label="t('map.resetMap')"
         class-name="ol-zoom-extent [&>button]:!text-[#be0030]"
       />
     </template>
-    <MapControls.OlScalelineControl units="metric" />
+    <OlScaleLineControl units="metric" />
 
     <!-- Map Interactions -->
-    <Interactions.OlInteractionMouseWheelZoom :use-anchor="true" />
-    <Interactions.OlInteractionPointer :handle-event="() => !disabled" />
-  </Map.OlMap>
+    <OlInteractionMouseWheelZoom :use-anchor="true" />
+    <OlInteractionPointer :handle-event="() => !disabled" />
+  </OlMap>
 </template>
 
 <script setup lang="ts">
 import type { Poi, Project } from '@/db/types'
 import { useGeolocation } from '@vueuse/core'
 import type { Extent } from 'ol/extent'
-import type OlMap from 'ol/Map'
+import type Map from 'ol/Map'
 import { fromLonLat } from 'ol/proj'
 import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Interactions, Layers, Map, MapControls, Sources } from 'vue3-openlayers'
+import {
+  OlFullScreenControl,
+  OlScaleLineControl,
+  OlZoomControl,
+  OlZoomToExtentControl,
+} from 'vue3-openlayers/controls'
+import { OlInteractionMouseWheelZoom, OlInteractionPointer } from 'vue3-openlayers/interactions'
+import { OlTileLayer } from 'vue3-openlayers/layers'
+import { OlMap, OlView } from 'vue3-openlayers/map'
+import { OlSourceOSM } from 'vue3-openlayers/sources'
 import { useMapUtils } from './composables'
 import MapLayerLocation from './layers/MapLayerLocation.vue'
 import MapLayerOverlay from './layers/MapLayerOverlay.vue'
@@ -101,7 +107,7 @@ const { exportMapToImage, metersToPixels, zoomFromMeters } = useMapUtils()
 // Define a model for the selected POI to be used across components
 const selectedPoi = defineModel<Poi | null>()
 
-const mapRef = ref<{ map: OlMap } | null>(null)
+const mapRef = ref<{ map: Map } | null>(null)
 
 // Default coordinates and zoom level centered on Germany
 const lat = ref(51.1634)
@@ -128,7 +134,7 @@ function resetMap(longitude: number, latitude: number, radius: number) {
   lat.value = latitude
   center.value = fromLonLat([longitude, latitude])
   const offset = radius * 0.1
-  zoom.value = zoomFromMeters(mapRef.value?.map as OlMap, location.value, (radius + offset) * 2)
+  zoom.value = zoomFromMeters(mapRef.value?.map as Map, location.value, (radius + offset) * 2)
 }
 
 /**
@@ -138,7 +144,7 @@ function resetMap(longitude: number, latitude: number, radius: number) {
 async function exportMap() {
   if (!mapRef.value) return
 
-  const map = mapRef.value.map as OlMap
+  const map = mapRef.value.map as Map
   const size = 200 // 4:3
   const attribution = { text: attributions.join(' '), size: 22 }
 

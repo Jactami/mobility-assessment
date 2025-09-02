@@ -1,20 +1,20 @@
 <template>
   <!-- Selection Layer -->
-  <Layers.OlVectorLayer>
-    <Sources.OlSourceVector>
-      <Interactions.OlInteractionSelect
+  <OlVectorLayer>
+    <OlSourceVector>
+      <OlInteractionSelect
         :features="featureCollection"
         :filter="selectInteractionFilter"
         :style="null"
         @select="handleSelect"
       >
         <!-- With style=null, no styling is applied to the selected feature -->
-      </Interactions.OlInteractionSelect>
-    </Sources.OlSourceVector>
-  </Layers.OlVectorLayer>
+      </OlInteractionSelect>
+    </OlSourceVector>
+  </OlVectorLayer>
 
   <!-- Map Overlay -->
-  <Map.OlOverlay
+  <OlOverlay
     v-if="selectedPoi"
     :position="fromLonLat([selectedPoi.longitude, selectedPoi.latitude])"
     :auto-pan="{
@@ -59,7 +59,7 @@
         :style="`border-top-color: ${color};`"
       />
     </div>
-  </Map.OlOverlay>
+  </OlOverlay>
 
   <ProjectPoiForm v-if="selectedPoi" v-model:open="modalOpen" v-model:poi="selectedPoi" />
 </template>
@@ -77,7 +77,10 @@ import type { SelectEvent } from 'ol/interaction/Select'
 import { fromLonLat } from 'ol/proj'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Interactions, Layers, Map, Sources } from 'vue3-openlayers'
+import { OlInteractionSelect } from 'vue3-openlayers/interactions'
+import { OlVectorLayer } from 'vue3-openlayers/layers'
+import { OlOverlay } from 'vue3-openlayers/map'
+import { OlSourceVector } from 'vue3-openlayers/sources'
 
 const { n, t } = useI18n()
 const { categoryToColor } = useColorUtil()

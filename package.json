@@ -38,7 +38,7 @@
     "jwt-decode": "^4.0.0",
     "ol": "^10.6.1",
     "ol-contextmenu": "^5.5.0",
-    "ol-ext": "^4.0.33",
+    "ol-ext": "^4.0.34",
     "pinia": "^3.0.3",
     "sweetalert2": "^11.22.2",
     "tailwind-merge": "^3.3.1",
@@ -48,7 +48,7 @@
     "vue-chartjs": "^5.3.2",
     "vue-i18n": "^11.1.10",
     "vue-router": "^4.5.1",
-    "vue3-openlayers": "^11.6.2"
+    "vue3-openlayers": "^12.1.0"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.359",

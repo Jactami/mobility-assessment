@@ -1,9 +1,15 @@
+/* Tailwind */
 @import 'tailwindcss';
 @import './theme.css';
+
+/* OpenLayers */
+@import 'ol/ol.css';
+/* @import 'vue3-openlayers/vue3-openlayers.css'; */
 
 /* Initialize Dark Mode */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Global CSS styles */
 body {
   @apply bg-surface text-on-surface;
   font-family:
