@@ -1,14 +1,13 @@
 --
 -- Function update_user
 --
-CREATE
-OR REPLACE FUNCTION PUBLIC.update_user(
-    target_user_id UUID,
-    new_first_name VARCHAR(100) DEFAULT NULL,
-    new_last_name VARCHAR(100) DEFAULT NULL,
-    new_email VARCHAR(100) DEFAULT NULL,
-    new_password VARCHAR(100) DEFAULT NULL
-) RETURNS VOID SECURITY DEFINER AS $ $ DECLARE encrypted_pw VARCHAR(255);
+CREATE OR REPLACE FUNCTION PUBLIC.update_user (
+  target_user_id UUID,
+  new_first_name VARCHAR(100) DEFAULT NULL,
+  new_last_name VARCHAR(100) DEFAULT NULL,
+  new_email VARCHAR(100) DEFAULT NULL,
+  new_password VARCHAR(100) DEFAULT NULL
+) RETURNS VOID SECURITY DEFINER AS $$ DECLARE encrypted_pw VARCHAR(255);
 
 BEGIN -- Update auth.users (email and password if provided)
 IF new_password IS NOT NULL THEN encrypted_pw := crypt(new_password, gen_salt('bf'));
@@ -60,6 +59,6 @@ WHERE
 
 END;
 
-$ $ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 COMMENT ON FUNCTION PUBLIC.update_user IS 'Updates user fields across auth.users, auth.identities, and public.profiles, except role.';

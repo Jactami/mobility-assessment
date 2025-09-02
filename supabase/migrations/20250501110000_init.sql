@@ -1,4 +1,6 @@
 --
 -- Extensions
 --
-CREATE EXTENSION IF NOT EXISTS "moddatetime" WITH SCHEMA "extensions";
+CREATE EXTENSION IF NOT EXISTS "moddatetime"
+WITH
+  SCHEMA "extensions";

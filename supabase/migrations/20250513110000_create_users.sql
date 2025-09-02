@@ -1,15 +1,14 @@
 --
 -- Function create_user
 --
-CREATE
-OR REPLACE FUNCTION public.create_user(
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    email VARCHAR(100),
-    PASSWORD VARCHAR(100),
-    user_role public.user_role DEFAULT 'user',
-    user_id UUID DEFAULT NULL
-) RETURNS uuid SECURITY DEFINER AS $ $ DECLARE encrypted_pw VARCHAR(255);
+CREATE OR REPLACE FUNCTION public.create_user (
+  first_name VARCHAR(100),
+  last_name VARCHAR(100),
+  email VARCHAR(100),
+  PASSWORD VARCHAR(100),
+  user_role public.user_role DEFAULT 'user',
+  user_id UUID DEFAULT NULL
+) RETURNS uuid SECURITY DEFINER AS $$ DECLARE encrypted_pw VARCHAR(255);
 
 confirmation timestamp;
 
@@ -113,6 +112,6 @@ RETURN user_id;
 
 END;
 
-$ $ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
-COMMENT ON FUNCTION public.create_user IS 'Helper function to add users during development.';
+COMMENT ON FUNCTION public.create_user IS 'Helper function to add users.';
