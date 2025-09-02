@@ -108,11 +108,13 @@
       </div>
     </div>
 
-    <div class="mt-2 flex justify-center">
+    <div class="mt-2 flex items-center justify-between gap-x-6">
+      <!-- Placeholder to balance add button -->
+      <div v-if="config.add" class="w-10" />
       <!-- Pagination -->
       <div
         v-if="table.getPageCount() > 1"
-        class="flex grow items-center justify-center gap-x-4 text-sm"
+        class="flex grow items-center justify-center gap-x-2 text-sm"
       >
         <IconButton
           icon="first"
@@ -124,10 +126,10 @@
           :disabled="!table.getCanPreviousPage()"
           @click="table.previousPage()"
         />
-        <span>
+        <div class="px-2">
           {{ t('table.page') }} {{ table.getState().pagination.pageIndex + 1 }} /
           {{ table.getPageCount() }}
-        </span>
+        </div>
         <IconButton icon="next" :disabled="!table.getCanNextPage()" @click="table.nextPage()" />
         <IconButton
           icon="last"
@@ -137,7 +139,7 @@
       </div>
 
       <!-- Add new item button -->
-      <div v-if="config.add" class="ml-2 self-end">
+      <div v-if="config.add" class="self-end">
         <BaseButton flavor="secondary" class="size-10 text-xl" @click="config.add">+</BaseButton>
       </div>
     </div>
