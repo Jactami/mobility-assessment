@@ -6,7 +6,10 @@
   </BaseSection>
 
   <BaseSection :title="t('settings.appInfo')">
-    <p class="text-sm">v{{ version }} ({{ new Date(buildDate).toISOString() }})</p>
+    <div class="text-sm">
+      <p>v{{ version }} ({{ new Date(buildDate).toISOString() }})</p>
+      <p>{{ t('app.copyright', { app: t('app.title'), year: new Date().getFullYear() }) }}</p>
+    </div>
   </BaseSection>
 </template>
 

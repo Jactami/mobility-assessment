@@ -1,9 +1,10 @@
 {
   "app": {
-    "title": "MOBIMETER"
+    "title": "MobiMeter",
+    "copyright": "{app} © {year} Bayerische Gesellschaft für Wohneigentum - Digital mbH & Co. KG"
   },
   "meta": {
-    "title": "MOBIMETER",
+    "title": "MobiMeter",
     "admin": "Admin",
     "login": "Anmelden",
     "home": "Home",
