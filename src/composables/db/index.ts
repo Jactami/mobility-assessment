@@ -1,6 +1,10 @@
 import { supabase } from '@/db'
 import type { Tables, TablesInsert } from '@/db/types/supabase'
-import type { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js'
+import {
+  PostgrestError,
+  type PostgrestResponse,
+  type PostgrestSingleResponse,
+} from '@supabase/supabase-js'
 
 /**
  * Wrapper function to handle errors for database calls.
@@ -29,26 +33,39 @@ async function handleDBCall<T>(
   retries = 3,
   delay = 100,
 ): Promise<PostgrestResponse<T[]> | PostgrestSingleResponse<T>> {
-  let attempt = 0
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      // Make database call
+      const response = await dbCall()
 
-  while (attempt < retries) {
-    const response = await dbCall()
+      // Check for errors
+      if (!response.error) {
+        return response
+      } else {
+        throw response.error
+      }
+    } catch (e) {
+      // Log error
+      console.error(`Database call failed (attempt ${attempt}/${retries}).`, e)
 
-    if (!response.error) {
-      return response
-    }
-
-    attempt++
-    if (attempt < retries) {
-      console.error(`Database error. Waiting ${delay} ms before retrying.`, response.error)
-      await new Promise((resolve) => setTimeout(resolve, delay))
-    } else {
-      console.error(`Final database error after ${retries} attempts.`, response.error)
-      return response
+      if (attempt === retries) {
+        // Log final error
+        console.error(`Final database call failed after ${retries} attempts.`)
+      } else {
+        // Retry db call after delay
+        await new Promise((resolve) => setTimeout(resolve, delay))
+      }
     }
   }
 
-  throw new Error('Unexpected error in database call.')
+  // Return a fake PostgrestError response
+  return {
+    data: null,
+    error: new PostgrestError({ message: 'Unknown error.', details: '', hint: '', code: '500' }),
+    count: null,
+    status: 500,
+    statusText: 'Internal Error',
+  }
 }
 
 /**
