@@ -102,7 +102,7 @@ function handleSelect(event: SelectEvent) {
   handleClose()
 
   // If user clicked outside of any feature, do nothing
-  if (event.selected.length === 0) return
+  if (!event.selected[0]) return
 
   // Select the first feature
   featureCollection.push(event.selected[0])
