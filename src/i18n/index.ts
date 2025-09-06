@@ -11,7 +11,7 @@ export default createI18n({
       // Application messages (json)
       ...de,
       // PDF messages (yaml)
-      pdf: pdfDe.pdf,
+      ...pdfDe,
     },
   },
   numberFormats: {
