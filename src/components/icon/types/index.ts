@@ -15,6 +15,7 @@ import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded
 import MaterialSymbolsMapOutlineRounded from '~icons/material-symbols/map-outline-rounded'
 import MaterialSymbolsMoreVert from '~icons/material-symbols/more-vert'
 import MaterialSymbolsPerson from '~icons/material-symbols/person'
+import MaterialSymbolsSaveOutlineRounded from '~icons/material-symbols/save-outline-rounded'
 import MaterialSymbolsSearchRounded from '~icons/material-symbols/search-rounded'
 import MaterialSymbolsSettings from '~icons/material-symbols/settings'
 import MaterialSymbolsStarOutlineRounded from '~icons/material-symbols/star-outline-rounded'
@@ -24,6 +25,8 @@ import MaterialSymbolsVisibilityOffOutlineRounded from '~icons/material-symbols/
 import MaterialSymbolsVisibilityOutlineRounded from '~icons/material-symbols/visibility-outline-rounded'
 import MdiChevronDoubleLeft from '~icons/mdi/chevron-double-left'
 import MdiChevronDoubleRight from '~icons/mdi/chevron-double-right'
+import MdiFilePdfOutline from '~icons/mdi/file-pdf-outline'
+import TablerArrowBackUp from '~icons/tabler/arrow-back-up'
 import TablerExternalLink from '~icons/tabler/external-link'
 
 export const iconMap = {
@@ -55,6 +58,9 @@ export const iconMap = {
   settings: MaterialSymbolsSettings,
   home: MaterialSymbolsHome,
   map: MaterialSymbolsMapOutlineRounded,
+  save: MaterialSymbolsSaveOutlineRounded,
+  back: TablerArrowBackUp,
+  report: MdiFilePdfOutline,
 }
 
 export type Icon = keyof typeof iconMap

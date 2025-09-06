@@ -1,80 +1,77 @@
 <template>
-  <BaseSection>
-    <div ref="mapSection" class="scroll-mt-4">
-      <MapSearchInput
-        @search-initiated="geodataLoading = true"
-        @search-completed="geodataLoading = false"
-      />
-      <MapPanel
-        v-model="selectedPoi"
-        :project="projectStore.project"
-        :pois="projectStore.pois"
-        :disabled="geodataLoading"
-      />
-    </div>
-    <!-- Temporary save button -->
-    <div class="mt-10 flex justify-center">
-      <BaseButton :disabled="!isProjectDirty || geodataLoading" @click="saveProject">
-        {{ t('common.save') }}
-      </BaseButton>
-    </div>
-    <div class="mt-10 flex justify-center">
-      <BaseButton :disabled="loading" @click="handleReport">
-        {{ t('project.report') }}
-      </BaseButton>
-    </div>
-  </BaseSection>
-
-  <template v-if="!geodataLoading">
-    <BaseSection v-if="projectStore.project?.score">
-      <ProjectScore :score="projectStore.project?.score" />
-    </BaseSection>
-
-    <BaseSection v-if="scores">
-      <div class="mx-auto max-w-xl">
-        <ProjectScoreChart ref="chartRef" :scores="scores" />
-      </div>
-    </BaseSection>
-
-    <BaseSection v-if="projectStore.pois && projectStore.pois.length">
-      <div class="flex flex-wrap justify-center gap-2">
-        <template v-for="domain in DOMAINS" :key="domain.name">
-          <ProjectCategoryPill
-            v-for="category in domain.categories"
-            :key="category.name"
-            :category="category.name"
-            :count="getPoisByCategory(projectStore.pois, category.name).length"
-          />
-        </template>
-      </div>
-    </BaseSection>
-
+  <div class="pr-20">
     <BaseSection>
-      <ProjectPoiTable @poi-selected="handlePoiSelected" />
+      <div ref="mapSection" class="scroll-mt-4">
+        <MapSearchInput
+          @search-initiated="geodataLoading = true"
+          @search-completed="geodataLoading = false"
+        />
+        <MapPanel
+          v-model="selectedPoi"
+          :project="projectStore.project"
+          :pois="projectStore.pois"
+          :disabled="geodataLoading"
+        />
+      </div>
     </BaseSection>
 
-    <DebugPanel title="Project Store" :value="projectStore.project" />
+    <template v-if="!geodataLoading">
+      <BaseSection v-if="projectStore.project?.score">
+        <ProjectScore :score="projectStore.project?.score" />
+      </BaseSection>
 
-    <!-- Hidden Maps to produce map image exports -->
-    <div class="invisible">
-      <MapPanel
-        v-for="domain in DOMAINS"
-        :key="domain.name"
-        ref="maps"
-        :project="project"
-        :pois="getPoisByDomain(projectStore.pois || [], domain.name)"
-        :height="1"
-      />
-    </div>
-  </template>
+      <BaseSection v-if="scores">
+        <div class="mx-auto max-w-xl">
+          <ProjectScoreChart ref="chartRef" :scores="scores" />
+        </div>
+      </BaseSection>
+
+      <BaseSection v-if="projectStore.pois && projectStore.pois.length">
+        <div class="flex flex-wrap justify-center gap-2">
+          <template v-for="domain in DOMAINS" :key="domain.name">
+            <ProjectCategoryPill
+              v-for="category in domain.categories"
+              :key="category.name"
+              :category="category.name"
+              :count="getPoisByCategory(projectStore.pois, category.name).length"
+            />
+          </template>
+        </div>
+      </BaseSection>
+
+      <BaseSection>
+        <ProjectPoiTable @poi-selected="handlePoiSelected" />
+      </BaseSection>
+
+      <DebugPanel title="Project Store" :value="projectStore.project" />
+
+      <!-- Hidden Maps to produce map image exports -->
+      <div class="invisible">
+        <MapPanel
+          v-for="domain in DOMAINS"
+          :key="domain.name"
+          ref="maps"
+          :project="project"
+          :pois="getPoisByDomain(projectStore.pois || [], domain.name)"
+          :height="1"
+        />
+      </div>
+    </template>
+  </div>
+
+  <!-- Action Bar -->
+  <div class="fixed top-1/2 right-10 z-10 -translate-y-1/2">
+    <ProjectActionBar :buttons="actionButtons" />
+  </div>
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
 import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
+import type { Icon } from '@/components/icon/types'
 import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
+import ProjectActionBar from '@/components/project/ProjectActionBar.vue'
 import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
 import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
 import ProjectScore from '@/components/project/ProjectScore.vue'
@@ -82,6 +79,7 @@ import ProjectScoreChart from '@/components/project/ProjectScoreChart.vue'
 import useDB from '@/composables/db'
 import { useEvaluation } from '@/composables/evaluation'
 import type { EvaluationScores } from '@/composables/evaluation/types'
+import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { usePdf } from '@/composables/pdf'
 import { useProjectUtil } from '@/composables/util/project'
@@ -123,6 +121,29 @@ const isProjectDirty = computed(
     JSON.stringify(projectStore.project) !== JSON.stringify(project.value) ||
     JSON.stringify(projectStore.pois) !== JSON.stringify(pois.value),
 )
+
+const actionButtons = [
+  {
+    title: t('common.back'),
+    icon: 'back' as Icon,
+    action: () => router.push('/'),
+  },
+  {
+    title: t('common.edit'),
+    icon: 'edit' as Icon,
+    action: () => useLogger().log('TODO: EDIT'),
+  },
+  {
+    title: t('project.report'),
+    icon: 'report' as Icon,
+    action: generateReport,
+  },
+  {
+    title: t('common.save'),
+    icon: 'save' as Icon,
+    action: saveProject,
+  },
+]
 
 // Load the project and POIs when the user enters the page
 onMounted(loadProject)
@@ -203,7 +224,7 @@ async function saveProject() {
   projectStore.set(project.value, pois.value)
 }
 
-async function handleReport() {
+async function generateReport() {
   if (!projectStore.project || !projectStore.pois || !scores.value) {
     errorToast(t('common.errorMessage'))
     return
@@ -219,7 +240,7 @@ async function handleReport() {
   await Promise.all(
     mapRefs.value?.map(async (mapRef, i) => {
       const img = await mapRef.exportMap()
-      if (img) maps[DOMAINS[i].name] = img
+      if (img && DOMAINS[i]?.name) maps[DOMAINS[i].name] = img
     }) || [],
   )
 

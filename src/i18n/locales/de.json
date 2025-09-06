@@ -43,6 +43,7 @@
   },
   "common": {
     "add": "Hinzufügen",
+    "back": "Zurück",
     "cancel": "Abbrechen",
     "delete": "Löschen",
     "edit": "Bearbeiten",
