@@ -1,5 +1,6 @@
 import { DOMAINS } from '@/constants'
 import type { Poi } from '@/db/types'
+import type { AreaDomain } from '@/types'
 import { useProjectUtil } from '../util/project'
 import type { EvaluationScores } from './types'
 
@@ -51,7 +52,7 @@ function calcScores(pois: Poi[], radius: number): EvaluationScores {
   // Init empty scores
   const scores: EvaluationScores = {
     total: 0,
-    domain: {},
+    domain: {} as Record<AreaDomain['name'], number>,
   }
 
   // Iterate over all domains

@@ -75,7 +75,7 @@ function exportMapToImage(
 ): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     const mapSize = map.getSize()
-    if (!mapSize) return reject()
+    if (!mapSize || !mapSize[0] || !mapSize[1]) return reject()
 
     const viewResolution = map.getView().getResolution()
     if (!viewResolution) return reject()
@@ -125,7 +125,7 @@ function _mapToCanvas(map: Map): HTMLCanvasElement | undefined {
   const mapContext = mapCanvas.getContext('2d')
   const size = map.getSize()
 
-  if (!mapContext || !size) return
+  if (!mapContext || !size || !size[0] || !size[1]) return
 
   mapCanvas.width = size[0]
   mapCanvas.height = size[1]

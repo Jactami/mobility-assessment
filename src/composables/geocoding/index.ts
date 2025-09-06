@@ -69,8 +69,8 @@ export function useGeocodingService() {
   function transformGeocodingToAddress(features: GeocodeJSONFeature[]): Address[] {
     return features.map((feature) => {
       // Parse Nominatim response
-      const longitude = Number(feature.geometry.coordinates[0].toFixed(7)), // Ensure lon + lat has 7 decimal places
-        latitude = Number(feature.geometry.coordinates[1].toFixed(7)),
+      const longitude = Number((feature.geometry.coordinates[0] ?? 0).toFixed(7)), // Ensure lon + lat has 7 decimal places
+        latitude = Number((feature.geometry.coordinates[1] ?? 0).toFixed(7)),
         name = feature.properties.geocoding.name,
         housenumber = feature.properties.geocoding.housenumber,
         // // Use district as fallback if street is not available (i.e., small villages)

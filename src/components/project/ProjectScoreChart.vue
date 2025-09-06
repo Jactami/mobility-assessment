@@ -56,7 +56,7 @@ const chartData = computed<ChartData<'radar'>>(() => ({
   labels: DOMAINS.map((domain) => t(`domain.${domain.name}`)),
   datasets: [
     {
-      data: DOMAINS.map((domain) => props.scores.domain[domain.name] * 100),
+      data: DOMAINS.map((domain) => (props.scores.domain?.[domain.name] ?? 0) * 100),
       fill: true,
       backgroundColor: chartColors.value.background,
       borderColor: chartColors.value.border,
@@ -85,7 +85,7 @@ const chartOptions = computed<ChartOptions<'radar'>>(() => ({
           size: 14,
           weight: 'bold',
         },
-        color: (ctx) => DOMAINS[ctx.index].color,
+        color: (ctx) => DOMAINS[ctx.index]?.color,
       },
       ticks: {
         color: chartColors.value.text,

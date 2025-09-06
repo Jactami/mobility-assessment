@@ -23,6 +23,13 @@ function mockPoi(category: string, distance: number): Poi {
 }
 
 describe('useEvaluation', () => {
+  // Sample domain and category
+  const DOMAIN = DOMAINS[0]
+  if (!DOMAIN) throw new Error('No domain found for testing')
+
+  const CATEGORY = DOMAIN.categories[0]?.name
+  if (!CATEGORY) throw new Error('No category found for testing')
+
   const radius = 1000 // 1000m
   const { calcScores, SATURATION_THRESHOLD } = useEvaluation()
 
@@ -36,7 +43,7 @@ describe('useEvaluation', () => {
   })
 
   it('returns maximal score when POI at distance 0', () => {
-    const categories = DOMAINS[0].categories.map((c) => c.name)
+    const categories = DOMAIN.categories.map((c) => c.name)
     const pois: Poi[] = []
     for (const category of categories) {
       for (let i = 0; i < SATURATION_THRESHOLD; i++) {
@@ -46,26 +53,24 @@ describe('useEvaluation', () => {
 
     const scores = calcScores(pois, radius)
 
-    expect(scores.domain[DOMAINS[0].name]).toBe(1)
+    expect(scores.domain[DOMAIN.name]).toBe(1)
     expect(scores.total).toBeGreaterThan(0)
   })
 
   it('scores decrease as distance increases', () => {
-    const category = DOMAINS[0].categories[0].name
-    const closePoi = mockPoi(category, 100)
-    const farPoi = mockPoi(category, 900)
+    const closePoi = mockPoi(CATEGORY, 100)
+    const farPoi = mockPoi(CATEGORY, 900)
 
-    const closeScore = calcScores([closePoi], radius).domain[DOMAINS[0].name]
-    const farScore = calcScores([farPoi], radius).domain[DOMAINS[0].name]
+    const closeScore = calcScores([closePoi], radius).domain[DOMAIN.name]
+    const farScore = calcScores([farPoi], radius).domain[DOMAIN.name]
 
     expect(closeScore).toBeGreaterThan(farScore)
   })
 
   it('scores saturate when many POIs in same category', () => {
-    const category = DOMAINS[0].categories[0].name
-    const pois = Array.from({ length: SATURATION_THRESHOLD * 2 }, () => mockPoi(category, 100))
+    const pois = Array.from({ length: SATURATION_THRESHOLD * 2 }, () => mockPoi(CATEGORY, 100))
 
-    const score = calcScores(pois, radius).domain[DOMAINS[0].name]
+    const score = calcScores(pois, radius).domain[DOMAIN.name]
 
     expect(score).toBeLessThanOrEqual(1)
     expect(score).toBeGreaterThan(0)

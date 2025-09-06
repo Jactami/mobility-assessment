@@ -1,4 +1,6 @@
+import type { AreaDomain } from '@/types'
+
 export interface EvaluationScores {
   total: number
-  domain: Record<string, number>
+  domain: Record<AreaDomain['name'], number>
 }

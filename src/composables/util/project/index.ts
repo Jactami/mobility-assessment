@@ -59,7 +59,7 @@ function getPoisByCategory(pois: Poi[], category: string): Poi[] {
 function getClosestPois(pois: Poi[]): Poi[] {
   return pois.reduce((acc: Poi[], poi) => {
     const index = acc.findIndex((p) => p.category === poi.category)
-    if (index === -1) {
+    if (!acc[index]) {
       // First POI of this category
       acc.push(poi)
     } else if (poi.distance < acc[index].distance) {
