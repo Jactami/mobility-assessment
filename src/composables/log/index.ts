@@ -1,9 +1,6 @@
-import type { LogType } from './types'
+const logTypes = ['log', 'info', 'debug', 'warn', 'error'] as const
 
-const logMap: Record<LogType, string> = {
-  log: 'LOG',
-  error: 'ERROR',
-}
+type LogType = (typeof logTypes)[number]
 
 export function useLogger(module = '') {
   const modulePrefix = module ? ` :: ${module}` : ''
@@ -13,19 +10,17 @@ export function useLogger(module = '') {
       return
     }
 
-    const logType = logMap[type]
+    const logType = type.toUpperCase()
     const timestamp = new Date().toLocaleString()
 
     console[type](`[${logType}] ${timestamp}${modulePrefix}\n→`, ...message)
   }
 
-  const log = (...message: unknown[]) => {
-    logMessage('log', ...message)
-  }
+  const logger = {} as Record<LogType, (...message: unknown[]) => void>
 
-  const error = (...message: unknown[]) => {
-    logMessage('error', ...message)
-  }
+  logTypes.forEach((type) => {
+    logger[type] = (...message: unknown[]) => logMessage(type, ...message)
+  })
 
-  return { log, error }
+  return logger
 }
