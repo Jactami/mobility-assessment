@@ -162,7 +162,7 @@ export class PdfBuilder {
       })
     } else {
       // Assign the schema and input to the current page
-      this._schemas[this._page].push(schema)
+      this._schemas[this._page]?.push(schema)
       this._inputs[this._id] = input
     }
 
@@ -287,6 +287,10 @@ export class PdfBuilder {
       width: options.width,
       height: options.height,
       color: this._config.color[options?.color as keyof PdfConfig['color']] || options?.color,
+      borderColor:
+        this._config.color[options?.borderColor as keyof PdfConfig['color']] ||
+        options?.borderColor,
+      borderWidth: options?.borderWidth || 0,
     }
 
     return this.addToPage('', schema, options?.static)
@@ -390,12 +394,12 @@ export class PdfBuilder {
     const fonts: Font = {}
     for (const key of Object.keys(this._fonts)) {
       const font = this._fonts[key]
-      if (typeof font.data === 'string') {
+      if (typeof font?.data === 'string') {
         fonts[key] = {
           data: await fetch(font.data).then(async (res) => await res.arrayBuffer()),
           fallback: font.fallback || false,
         }
-      } else {
+      } else if (font) {
         fonts[key] = font
       }
     }

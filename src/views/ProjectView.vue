@@ -264,11 +264,11 @@ async function generateReport() {
   }
 
   if (pdf.value) {
-    const blob = new Blob([pdf.value], { type: 'application/pdf' })
+    const blob = new Blob([new Uint8Array(pdf.value)], { type: 'application/pdf' })
     const url = URL.createObjectURL(blob)
 
     // Uncomment the following line to open the PDF in a new tab
-    // window.open(url)
+    window.open(url)
 
     // Download the PDF
     const link = document.createElement('a')

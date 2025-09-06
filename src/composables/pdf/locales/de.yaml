@@ -73,6 +73,8 @@ pdf:
         Wir untersuchen die Nahversorgung des Standorts, indem wir die Erreichbarkeit von Einrichtungen und Dienstleistungen des täglichen Bedarfs erfassen.
         Dazu zählen Supermärkte, Bäckereien, Drogerien und weitere Einzelhändler, die eine wohnortnahe Versorgung sicherstellen.
     score: 'Bewertung'
+    mapCaption: 'Übersichtskarte der Angebote im Bereich {domain} um den Standort.'
+    cardIntro: 'Im Bereich {domain} wurden folgende Angebote gefunden:'
     closestElement: 'Nächstgelegenes Angebot'
     tableIntro: 'Die nachfolgende Tabelle zeigt die nächstgelegenen Angebote in dem Bereich {domain}.'
   publisher:

@@ -6,12 +6,15 @@ import { useProjectUtil } from '@/composables/util/project'
 import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
+import type { AreaDomain } from '@/types'
 import logoBgw from '../assets/logo-bgw'
 import methodic from '../assets/methodic'
 import { PdfBuilder } from '../core/PdfBuilder'
 import type { PdfTextOptions } from '../types'
 
 export class PdfReportBuilder extends PdfBuilder {
+  // ==================== Basic Building Blocks =========================
+
   /**
    * Creates a header for the page.
    * @param header - The header text.
@@ -80,6 +83,219 @@ export class PdfReportBuilder extends PdfBuilder {
   createSectionHeader(header: string, options?: PdfTextOptions): this {
     return this.createText(header, { font: 'bold', fontSize: 'lg', color: 'primary', ...options })
   }
+
+  /**
+   * Creates a card element in the PDF report.
+   * @param key The key for the card.
+   * @param value The value for the card.
+   * @param options The positioning and styling options for the card.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createCard(
+    key: string,
+    value: string,
+    options: {
+      x: number
+      y: number
+      width: number
+      height: number
+      color: string
+    },
+  ): this {
+    return this.createRect({
+      x: options.x,
+      y: options.y,
+      width: options.width,
+      height: options.height,
+      borderColor: options.color,
+      borderWidth: 0.5,
+    })
+      .createText(value, {
+        x: options.x,
+        y: options.y,
+        width: options.width,
+        height: (options.height * 2) / 3,
+        fontSize: 'xl2',
+        font: 'bold',
+        color: options.color,
+        verticalAlignment: 'middle',
+        alignment: 'center',
+      })
+      .createText(key, {
+        x: options.x,
+        y: options.y + (options.height * 2) / 3,
+        width: options.width,
+        height: options.height / 3,
+        fontSize: 'sm',
+        color: 'muted',
+        verticalAlignment: 'middle',
+        alignment: 'center',
+      })
+  }
+
+  /**
+   * Creates a score element in the PDF report.
+   * @param score The score value (0-1).
+   * @param label The label for the score.
+   * @param y The vertical position for the score element.
+   * @returns The current instance of PdfReportBuilder for method chaining.
+   */
+  createScoreMeter(score: number, label: string, y: number): this {
+    const { scoreToColor, scoreColorThresholds } = useColorUtil()
+
+    // Score Box
+    this.createRect({
+      x: this._config.padding.left,
+      y,
+      width: this._innerWidth,
+      height: 40,
+      color: scoreToColor(score),
+    })
+      .createText(i18n.global.n(score * 100, 'rounded'), {
+        y,
+        height: 30,
+        fontSize: 'xl5',
+        color: 'neutral',
+        alignment: 'center',
+        verticalAlignment: 'middle',
+      })
+      .createText(label, {
+        y: y + 25,
+        height: 15,
+        fontSize: 'xl2',
+        color: 'neutral',
+        alignment: 'center',
+        verticalAlignment: 'middle',
+      })
+
+    // Score scale line
+    let x = this._config.padding.left
+    scoreColorThresholds.forEach((threshold, index) => {
+      const range = threshold.max - (scoreColorThresholds[index - 1]?.max || 0)
+      const width = this._innerWidth * range
+      this.createRect({
+        x,
+        y: y + 47,
+        width,
+        height: 3,
+        color: threshold.color,
+      })
+      x += width
+    })
+
+    this.createRect({
+      x: this._config.padding.left + this._innerWidth * score - 0.5,
+      y: y + 46,
+      width: 1,
+      height: 5,
+      color: 'text',
+    })
+
+    this.createText('0', {
+      x: this._config.padding.left,
+      y: y + 51,
+      fontSize: 'xs',
+      color: 'muted',
+      alignment: 'left',
+    }).createText('100', {
+      x: this._config.padding.left,
+      y: y + 51,
+      fontSize: 'xs',
+      color: 'muted',
+      alignment: 'right',
+    })
+
+    for (let i = 1; i < 10; i++) {
+      const xPos = this._config.padding.left + (i * this._innerWidth) / 10
+      this.createText((i * 10).toString(), {
+        x: xPos - 10,
+        y: y + 51,
+        width: 20,
+        fontSize: 'xs',
+        color: 'muted',
+        alignment: 'center',
+      })
+    }
+
+    return this
+  }
+
+  createClosestPoisTable(pois: Poi[], domain: AreaDomain, y: number): this {
+    const { getClosestPois, sortPoisByDistance, getPoisByDomain } = useProjectUtil()
+
+    // Filter POIs that belong to the current domain's categories
+    const domainPois = getPoisByDomain(pois, domain.name)
+
+    // Abort if no POIs are found
+    if (domainPois.length === 0) return this
+
+    // Find the closest POI for each category
+    let closestPois = getClosestPois(domainPois)
+
+    // Sort the closest POIs by distance
+    closestPois = sortPoisByDistance(closestPois)
+
+    return this.createText(
+      i18n.global.t('pdf.analysis.tableIntro', { domain: i18n.global.t(`domain.${domain.name}`) }),
+      { y },
+    ).createTable(
+      [
+        i18n.global.t('poi.category'),
+        i18n.global.t('pdf.analysis.closestElement'),
+        i18n.global.t('poi.distance'),
+      ],
+      closestPois.map((poi) => [
+        i18n.global.t(`category.${poi.category}`),
+        poi.label || i18n.global.t(`category.${poi.category}`),
+        i18n.global.n(poi.distance, 'meter'),
+      ]),
+      {
+        y: y + 10,
+        border: false,
+        padding: 2,
+        columnWidths: [30, 50, 20],
+        head: { font: 'bold', fontSize: 'sm' },
+        body: { fontSize: 'xs' },
+        stripedColor: this._config.color.light,
+      },
+    )
+  }
+
+  createDomainCards(pois: Poi[], domain: AreaDomain, y: number): this {
+    const { getCategoriesByDomain, getPoisByCategory } = useProjectUtil()
+    const categories = getCategoriesByDomain(domain.name)
+
+    // Card configuration
+    const padding = 2
+    const cardsPerRow = 5
+    const cardH = 20
+    const CardW =
+      (this._config.format.width -
+        this._config.padding.left -
+        this._config.padding.right -
+        padding * (cardsPerRow - 1)) /
+      cardsPerRow
+
+    // Create cards for each category in the domain
+    this.createText(
+      i18n.global.t(`pdf.analysis.cardIntro`, { domain: i18n.global.t(`domain.${domain.name}`) }),
+      { y },
+    )
+    categories?.forEach((category, i) => {
+      const count = getPoisByCategory(pois, category).length
+      this.createCard(i18n.global.t(`category.${category}`), count ? count.toString() : '-', {
+        x: this._config.padding.left + (i % cardsPerRow) * (CardW + padding),
+        y: y + 10 + Math.floor(i / cardsPerRow) * (cardH + padding),
+        width: CardW,
+        height: cardH,
+        color: domain.color,
+      })
+    })
+
+    return this
+  }
+
+  // ==================== Page Templates =========================
 
   /**
    * Creates a title page for the PDF document.
@@ -247,7 +463,7 @@ export class PdfReportBuilder extends PdfBuilder {
     this.createSectionHeader(i18n.global.t('pdf.summary.totalScoreTitle'), {
       y: this._config.padding.top + 60,
     })
-      .createScore(
+      .createScoreMeter(
         project.score ?? 0,
         i18n.global.t('pdf.summary.totalScoreTitle'),
         this._config.padding.top + 70,
@@ -275,103 +491,6 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   /**
-   * Creates a domain page in the PDF document.
-   * @param pois - The list of points of interest (POIs) to include in the domain page.
-   * @param scores - The evaluation scores for the domain.
-   * @param maps - A record of map images for each domain.
-   * @returns The current instance of PdfReportBuilder for method chaining.
-   */
-  createDomainPages(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
-    const {
-      getPoisByDomain,
-      sortPoisByDistance,
-      getClosestPois,
-      getCategoriesByDomain,
-      getPoisByCategory,
-    } = useProjectUtil()
-
-    // Find the closest POI for each category
-    let closestPois = getClosestPois(pois)
-
-    // Sort the closest POIs by distance
-    closestPois = sortPoisByDistance(closestPois)
-
-    DOMAINS.forEach((domain, i) => {
-      // Filter POIs that belong to the current domain's categories
-      const domainPois = getPoisByDomain(closestPois, domain.name)
-
-      this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
-        .createText(i18n.global.t(`pdf.analysis.description.${domain.name}`), {
-          y: this._config.padding.top + 10,
-        })
-        .createImage(maps[domain.name], {
-          x: this._config.padding.left,
-          y: this._config.padding.top + 30,
-          width: this._innerWidth,
-          height: this._innerWidth * 0.75,
-        })
-        .createScore(
-          scores.domain[domain.name],
-          `${i18n.global.t('pdf.analysis.score')} ${i18n.global.t(`domain.${domain.name}`)}`,
-          this._config.padding.top + 170,
-        )
-        .newPage()
-        .createText(
-          i18n.global.t('pdf.analysis.tableIntro', {
-            domain: i18n.global.t(`domain.${domain.name}`),
-          }),
-        )
-        .createTable(
-          [
-            i18n.global.t('poi.category'),
-            i18n.global.t('pdf.analysis.closestElement'),
-            i18n.global.t('poi.distance'),
-          ],
-          domainPois.map((poi) => [
-            i18n.global.t(`category.${poi.category}`),
-            poi.label || i18n.global.t(`category.${poi.category}`),
-            i18n.global.n(poi.distance, 'meter'),
-          ]),
-          {
-            y: this._config.padding.top + 10,
-            border: false,
-            padding: 2,
-            columnWidths: [30, 50, 20],
-            head: { font: 'bold', fontSize: 'sm' },
-            body: { fontSize: 'xs' },
-            stripedColor: this._config.color.light,
-          },
-        )
-
-      const categories = getCategoriesByDomain(domain.name)
-      const padding = 2
-      const cardsPerRow = 5
-      const cardH = 20
-      const CardW =
-        (this._config.format.width -
-          this._config.padding.left -
-          this._config.padding.right -
-          padding * (cardsPerRow - 1)) /
-        cardsPerRow
-      categories?.forEach((category, i) => {
-        const count = getPoisByCategory(pois, category).length
-        this.createCard(i18n.global.t(`category.${category}`), count ? count.toString() : '-', {
-          x: this._config.padding.left + (i % cardsPerRow) * (CardW + padding),
-          y: this._config.padding.top + 150 + Math.floor(i / cardsPerRow) * (cardH + padding),
-          width: CardW,
-          height: cardH,
-          color: domain.color,
-        })
-      })
-
-      // Create a new page after each domain section except the last one
-      if (i < DOMAINS.length - 1) this.newPage()
-    })
-
-    return this
-  }
-
-  /**
    * Creates the methodology page of the PDF report.
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
@@ -388,88 +507,52 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   /**
-   * Creates a score element in the PDF report.
-   * @param score The score value (0-1).
-   * @param label The label for the score.
-   * @param y The vertical position for the score element.
+   * Creates a domain page in the PDF document.
+   * @param pois - The list of points of interest (POIs) to include in the domain page.
+   * @param scores - The evaluation scores for the domain.
+   * @param maps - A record of map images for each domain.
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
-  createScore(score: number, label: string, y: number): this {
-    const { scoreToColor, scoreColorThresholds } = useColorUtil()
+  createDomainPages(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
+    DOMAINS.forEach((domain, i) => {
+      this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
+        // Show score evaluation
+        .createScoreMeter(
+          scores.domain[domain.name] ?? 0,
+          `${i18n.global.t('pdf.analysis.score')} ${i18n.global.t(`domain.${domain.name}`)}`,
+          this._config.padding.top + 10,
+        )
+        // Show description
+        .createText(i18n.global.t(`pdf.analysis.description.${domain.name}`), {
+          y: this._config.padding.top + 75,
+        })
+        // Show map with POIs
+        .createImage(maps[domain.name] ?? '', {
+          x: this._config.padding.left,
+          y: this._config.padding.top + 100,
+          width: this._innerWidth,
+          height: this._innerWidth * 0.75,
+        })
+        .createText(
+          i18n.global.t('pdf.analysis.mapCaption', {
+            domain: i18n.global.t(`domain.${domain.name}`),
+          }),
+          {
+            y: this._config.padding.top + 100 + this._innerWidth * 0.75 + 2,
+            fontSize: 'xs',
+            color: 'muted',
+            alignment: 'left',
+          },
+        )
+        .newPage()
+        // Create domain cards
+        .createDomainCards(pois, domain, this._config.padding.top)
+        // Create closest POIs table
+        .createClosestPoisTable(pois, domain, this._config.padding.top + 90)
 
-    // Score Box
-    this.createRect({
-      x: this._config.padding.left,
-      y,
-      width: this._innerWidth,
-      height: 40,
-      color: scoreToColor(score),
+      // Create a new page after each domain section except the last one
+      if (i < DOMAINS.length - 1) this.newPage()
     })
-      .createText(i18n.global.n(score * 100, 'rounded'), {
-        y,
-        height: 30,
-        fontSize: 'xl5',
-        color: 'neutral',
-        alignment: 'center',
-        verticalAlignment: 'middle',
-      })
-      .createText(label, {
-        y: y + 25,
-        height: 15,
-        fontSize: 'xl2',
-        color: 'neutral',
-        alignment: 'center',
-        verticalAlignment: 'middle',
-      })
-
-    // Score scale line
-    let x = this._config.padding.left
-    scoreColorThresholds.forEach((threshold, index) => {
-      const range = threshold.max - (scoreColorThresholds[index - 1]?.max || 0)
-      const width = this._innerWidth * range
-      this.createRect({
-        x,
-        y: y + 47,
-        width,
-        height: 3,
-        color: threshold.color,
-      })
-      x += width
-    })
-
-    this.createRect({
-      x: this._config.padding.left + this._innerWidth * score - 0.5,
-      y: y + 46,
-      width: 1,
-      height: 5,
-      color: 'text',
-    })
-
-    this.createText('0', {
-      x: this._config.padding.left,
-      y: y + 51,
-      fontSize: 'xs',
-      color: 'muted',
-      alignment: 'left',
-    }).createText('100', {
-      x: this._config.padding.left,
-      y: y + 51,
-      fontSize: 'xs',
-      color: 'muted',
-      alignment: 'right',
-    })
-
-    for (let i = 1; i < 10; i++) {
-      const xPos = this._config.padding.left + (i * this._innerWidth) / 10
-      this.createText((i * 10).toString(), {
-        x: xPos - 10,
-        y: y + 51,
-        width: 20,
-        fontSize: 'xs',
-        color: 'muted',
-        alignment: 'center',
-      })
-    }
 
     return this
   }
@@ -492,76 +575,32 @@ export class PdfReportBuilder extends PdfBuilder {
   createPublisherPage(): this {
     const company = useLegal().getCompanyData()
 
-    return this.createSectionHeader(i18n.global.t('pdf.publisher.title'))
-      .createText(i18n.global.t('pdf.publisher.text'), { y: this._config.padding.top + 10 })
-      .createImage(logoBgw, {
-        x: this._config.format.width / 2 - 40, // Center the logo
-        y: this._config.padding.top + 90,
-        width: 80,
-        height: 80,
-      })
-      .createSectionHeader(i18n.global.t('pdf.publisher.contactTitle'), {
-        y: this._config.padding.top + 190,
-        alignment: 'center',
-      })
-      .createText(
-        i18n.global.t('pdf.publisher.contactText', {
-          company: company.name,
-          address: company.address,
-          email: company.email,
-          phone: company.phone,
-          web: company.web,
-        }),
-        { y: this._config.padding.top + 200, lineHeight: 1.5, alignment: 'center' },
-      )
-  }
-
-  /**
-   * Creates a card element in the PDF report.
-   * @param key The key for the card.
-   * @param value The value for the card.
-   * @param options The positioning and styling options for the card.
-   * @returns The current instance of PdfReportBuilder for method chaining.
-   */
-  createCard(
-    key: string,
-    value: string,
-    options: {
-      x: number
-      y: number
-      width: number
-      height: number
-      color: string
-    },
-  ): this {
-    return this.createRect({
-      x: options.x,
-      y: options.y,
-      width: options.width,
-      height: options.height,
-      color: 'light',
-    })
-      .createText(value, {
-        x: options.x,
-        y: options.y,
-        width: options.width,
-        height: (options.height * 2) / 3,
-        fontSize: 'xl2',
-        font: 'bold',
-        color: options.color,
-        verticalAlignment: 'middle',
-        alignment: 'center',
-      })
-      .createText(key, {
-        x: options.x,
-        y: options.y + (options.height * 2) / 3,
-        width: options.width,
-        height: options.height / 3,
-        fontSize: 'sm',
-        color: 'muted',
-        verticalAlignment: 'middle',
-        alignment: 'center',
-      })
+    return (
+      this.createSectionHeader(i18n.global.t('pdf.publisher.title'))
+        .createText(i18n.global.t('pdf.publisher.text'), { y: this._config.padding.top + 10 })
+        // About us section
+        .createImage(logoBgw, {
+          x: this._config.format.width / 2 - 40, // Center the logo
+          y: this._config.padding.top + 90,
+          width: 80,
+          height: 80,
+        })
+        // Contact information
+        .createSectionHeader(i18n.global.t('pdf.publisher.contactTitle'), {
+          y: this._config.padding.top + 190,
+          alignment: 'center',
+        })
+        .createText(
+          i18n.global.t('pdf.publisher.contactText', {
+            company: company.name,
+            address: company.address,
+            email: company.email,
+            phone: company.phone,
+            web: company.web,
+          }),
+          { y: this._config.padding.top + 200, lineHeight: 1.5, alignment: 'center' },
+        )
+    )
   }
 
   /**

@@ -80,6 +80,8 @@ export interface PdfRectOptions extends PdfElementOptions {
   width: number
   height: number
   color?: string
+  borderColor?: string
+  borderWidth?: number // in mm
 }
 
 export interface PdfTableOptions extends PdfElementOptions {
