@@ -1,17 +1,19 @@
 <template>
-  <div class="flex flex-col items-center gap-5 rounded-full p-1.5">
-    <UIButtonIcon
-      v-for="item in items"
-      :key="item.label"
-      :icon="item.icon"
-      :title="item.label"
-      :tooltip="{
-        content: item.label,
-        position: 'left',
-      }"
-      class="bg-primary p-2.5 text-lg text-on-primary hover:bg-primary hover:brightness-125"
-      @click="item.action"
-    />
+  <!-- https://excalidraw.com/ -->
+  <div
+    class="flex items-center gap-2 rounded-full border border-outline bg-surface p-1.5 shadow-md"
+  >
+    <template v-for="item in items" :key="item.label">
+      <UIButtonIcon
+        :icon="item.icon"
+        :title="item.label"
+        :disabled="item.disabled"
+        :tooltip="{ content: item.label }"
+        class="p-2.5 text-lg"
+        @click="item.action"
+      />
+      <div v-if="item.divider" class="my-2 w-px self-stretch bg-outline-variant" />
+    </template>
   </div>
 </template>
 

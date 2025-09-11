@@ -1,5 +1,5 @@
 <template>
-  <div class="pr-20">
+  <div class="pb-16">
     <UISection>
       <div ref="mapSection" class="scroll-mt-4">
         <MapSearchInput
@@ -58,9 +58,8 @@
       </div>
     </template>
   </div>
-
   <!-- Action Bar -->
-  <div class="fixed top-1/2 right-10 z-10 -translate-y-1/2">
+  <div class="fixed bottom-8 left-1/2 z-10 -translate-x-1/2">
     <UIMenuActionBar :items="actionItems" />
   </div>
 </template>
@@ -127,6 +126,7 @@ const actionItems: MenuListItem[] = [
     label: t('common.back'),
     icon: 'back',
     action: () => router.push('/'),
+    divider: true,
   },
   {
     label: t('common.edit'),
