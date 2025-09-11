@@ -11,18 +11,18 @@
       :spellcheck="false"
     >
       <template #prefixIcon>
-        <IconRenderer icon="search" class="mr-2 text-on-surface-variant" />
+        <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
       </template>
       <template #suffixIcon>
         <div class="absolute right-0 bottom-1 flex items-center pr-2">
-          <IconButton v-if="searchQuery" icon="clear" @click="searchQuery = ''" />
+          <UIButtonIcon v-if="searchQuery" icon="clear" @click="searchQuery = ''" />
         </div>
       </template>
     </FormKit>
   </div>
 
   <!-- Favorites -->
-  <BaseSection v-if="favoriteProjects && favoriteProjects.length" :title="t('project.favorites')">
+  <UISection v-if="favoriteProjects && favoriteProjects.length" :title="t('project.favorites')">
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
       <ProjectCard
         v-for="project in favoriteProjects"
@@ -33,21 +33,21 @@
         @favorite="toggleFavorite(project)"
       />
     </div>
-  </BaseSection>
+  </UISection>
 
   <!-- All Projects -->
-  <BaseSection :title="t('project.myProjects')">
+  <UISection :title="t('project.myProjects')">
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
       <template v-if="!loading">
         <button class="cursor-pointer" title="Neues Projekt" @click="createProject">
-          <BaseCard :animation="true" class="min-h-64">
+          <UICard :animation="true" class="min-h-64">
             <div
               class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container-low p-2 text-on-surface-variant"
             >
-              <IconRenderer class="rounded-full text-7xl text-on-surface-variant" icon="add" />
+              <UIIcon class="rounded-full text-7xl text-on-surface-variant" icon="add" />
               <span>{{ t('project.create') }}</span>
             </div>
-          </BaseCard>
+          </UICard>
         </button>
         <ProjectCard
           v-for="project in filteredProjects"
@@ -59,21 +59,21 @@
         />
       </template>
       <template v-else>
-        <BaseCard v-for="i in 4" :key="i" :animation="false" class="min-h-64">
-          <BaseSkeleton width="100%" height="100%" />
-        </BaseCard>
+        <UICard v-for="i in 4" :key="i" :animation="false" class="min-h-64">
+          <UISkeleton width="100%" height="100%" />
+        </UICard>
       </template>
     </div>
-  </BaseSection>
+  </UISection>
 </template>
 
 <script setup lang="ts">
-import BaseCard from '@/components/base/BaseCard.vue'
-import BaseSection from '@/components/base/BaseSection.vue'
-import BaseSkeleton from '@/components/base/BaseSkeleton.vue'
-import IconButton from '@/components/icon/IconButton.vue'
-import IconRenderer from '@/components/icon/IconRenderer.vue'
 import ProjectCard from '@/components/project/ProjectCard.vue'
+import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
+import UIIcon from '@/components/ui/icon/UIIcon.vue'
+import UICard from '@/components/ui/UICard.vue'
+import UISection from '@/components/ui/UISection.vue'
+import UISkeleton from '@/components/ui/UISkeleton.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
 import type { Project } from '@/db/types'

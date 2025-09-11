@@ -28,7 +28,7 @@
       >
         <template #suffix>
           <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-            <IconButton
+            <UIButtonIcon
               tabindex="-1"
               :icon="passwordVisible ? 'hide' : 'show'"
               @mousedown="passwordVisible = true"
@@ -37,9 +37,9 @@
           </div>
         </template>
       </FormKit>
-      <BaseButton type="submit" class="w-full" :disabled="!valid || loading">
+      <UIButton type="submit" class="w-full" :disabled="!valid || loading">
         {{ t('auth.login') }}
-      </BaseButton>
+      </UIButton>
     </FormKit>
     <div v-else class="text-center">
       <p>{{ t('auth.loggedInAs', { user: authStore.user.email }) }}</p>
@@ -48,8 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
-import IconButton from '@/components/icon/IconButton.vue'
+import UIButton from '@/components/ui/button/UIButton.vue'
+import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
 import { useAuthStore } from '@/stores/Auth'

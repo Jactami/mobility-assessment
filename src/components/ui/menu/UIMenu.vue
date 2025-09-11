@@ -4,7 +4,7 @@
     <MenuButton ref="reference" as="div" @click.prevent>
       <slot name="trigger">
         <!-- Fallback trigger -->
-        <IconButton icon="more" />
+        <UIButtonIcon icon="more" />
       </slot>
     </MenuButton>
 
@@ -41,7 +41,7 @@
                 ]"
                 @click="handleAction(item)"
               >
-                <IconRenderer v-if="item.icon" :icon="item.icon" />
+                <UIIcon v-if="item.icon" :icon="item.icon" />
                 <div class="flex-1">{{ item.label }}</div>
               </component>
             </MenuItem>
@@ -64,32 +64,34 @@
 </template>
 
 <script setup lang="ts">
-import IconButton from '@/components/icon/IconButton.vue'
-import IconRenderer from '@/components/icon/IconRenderer.vue'
 import { autoUpdate, flip, offset, useFloating, type Placement } from '@floating-ui/vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ref } from 'vue'
-import type { MenuActionItem } from './types'
+import UIButtonIcon from '../button/UIButtonIcon.vue'
+import UIIcon from '../icon/UIIcon.vue'
+import type { MenuListItem } from './types'
 
 interface Props {
-  items: MenuActionItem[]
-  placement?: Placement
+  items: MenuListItem[]
+  // Temporary fix for type issue with floating-ui Placement
+  // TODO: remove '& string' when fixed
+  position?: Placement & string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  placement: 'top-start',
+  position: 'top-start',
 })
 
 const reference = ref(null)
 const floating = ref(null)
 
 const { floatingStyles } = useFloating(reference, floating, {
-  placement: props.placement,
+  placement: props.position,
   middleware: [offset(5), flip()],
   whileElementsMounted: autoUpdate,
 })
 
-function handleAction(item: MenuActionItem) {
+function handleAction(item: MenuListItem) {
   if (item.disabled) return
   if (!item.action) return
 

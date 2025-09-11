@@ -1,3 +1,4 @@
+import type { FunctionalComponent } from 'vue'
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop'
 import MaterialSymbolsAdd2Rounded from '~icons/material-symbols/add-2-rounded'
 import MaterialSymbolsArrowDropDownRounded from '~icons/material-symbols/arrow-drop-down-rounded'
@@ -11,6 +12,7 @@ import MaterialSymbolsDarkModeRounded from '~icons/material-symbols/dark-mode-ro
 import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
 import MaterialSymbolsEditRounded from '~icons/material-symbols/edit-rounded'
 import MaterialSymbolsHome from '~icons/material-symbols/home'
+import MaterialSymbolsLoginRounded from '~icons/material-symbols/login-rounded'
 import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded'
 import MaterialSymbolsMapOutlineRounded from '~icons/material-symbols/map-outline-rounded'
 import MaterialSymbolsMoreVert from '~icons/material-symbols/more-vert'
@@ -29,38 +31,45 @@ import MdiFilePdfOutline from '~icons/mdi/file-pdf-outline'
 import TablerArrowBackUp from '~icons/tabler/arrow-back-up'
 import TablerExternalLink from '~icons/tabler/external-link'
 
-export const iconMap = {
-  link: TablerExternalLink,
+/**
+ * Mapping of icon names to their respective components.
+ */
+export const icons = {
   add: MaterialSymbolsAdd2Rounded,
-  delete: MaterialSymbolsDeleteOutlineRounded,
-  copy: MaterialSymbolsContentCopyOutlineRounded,
-  check: MaterialSymbolsCheckRounded,
-  signOut: MaterialSymbolsLogoutRounded,
-  hide: MaterialSymbolsVisibilityOffOutlineRounded,
-  show: MaterialSymbolsVisibilityOutlineRounded,
-  more: MaterialSymbolsMoreVert,
-  clear: MaterialSymbolsCloseRounded,
-  search: MaterialSymbolsSearchRounded,
-  loading: LineMdLoadingTwotoneLoop,
-  user: MaterialSymbolsPerson,
-  close: MaterialSymbolsCloseRounded,
-  up: MaterialSymbolsArrowDropUpRounded,
-  down: MaterialSymbolsArrowDropDownRounded,
-  next: MaterialSymbolsChevronRight,
-  previous: MaterialSymbolsChevronLeft,
-  first: MdiChevronDoubleLeft,
-  last: MdiChevronDoubleRight,
-  edit: MaterialSymbolsEditRounded,
-  light: MaterialSymbolsSunnyRounded,
-  dark: MaterialSymbolsDarkModeRounded,
-  favorite: MaterialSymbolsStarRounded,
-  noFavorite: MaterialSymbolsStarOutlineRounded,
-  settings: MaterialSymbolsSettings,
-  home: MaterialSymbolsHome,
-  map: MaterialSymbolsMapOutlineRounded,
-  save: MaterialSymbolsSaveOutlineRounded,
   back: TablerArrowBackUp,
+  check: MaterialSymbolsCheckRounded,
+  clear: MaterialSymbolsCloseRounded,
+  close: MaterialSymbolsCloseRounded,
+  copy: MaterialSymbolsContentCopyOutlineRounded,
+  dark: MaterialSymbolsDarkModeRounded,
+  delete: MaterialSymbolsDeleteOutlineRounded,
+  down: MaterialSymbolsArrowDropDownRounded,
+  edit: MaterialSymbolsEditRounded,
+  favorite: MaterialSymbolsStarRounded,
+  first: MdiChevronDoubleLeft,
+  hide: MaterialSymbolsVisibilityOffOutlineRounded,
+  home: MaterialSymbolsHome,
+  last: MdiChevronDoubleRight,
+  light: MaterialSymbolsSunnyRounded,
+  link: TablerExternalLink,
+  loading: LineMdLoadingTwotoneLoop,
+  map: MaterialSymbolsMapOutlineRounded,
+  more: MaterialSymbolsMoreVert,
+  next: MaterialSymbolsChevronRight,
+  noFavorite: MaterialSymbolsStarOutlineRounded,
+  previous: MaterialSymbolsChevronLeft,
   report: MdiFilePdfOutline,
-}
+  save: MaterialSymbolsSaveOutlineRounded,
+  search: MaterialSymbolsSearchRounded,
+  settings: MaterialSymbolsSettings,
+  signIn: MaterialSymbolsLoginRounded,
+  signOut: MaterialSymbolsLogoutRounded,
+  show: MaterialSymbolsVisibilityOutlineRounded,
+  up: MaterialSymbolsArrowDropUpRounded,
+  user: MaterialSymbolsPerson,
+} satisfies Record<string, FunctionalComponent>
 
-export type Icon = keyof typeof iconMap
+/**
+ * Valid icon names.
+ */
+export type Icon = keyof typeof icons

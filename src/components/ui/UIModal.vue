@@ -1,7 +1,7 @@
 <template>
   <Dialog :open="isOpen" @close="isOpen = false" class="relative z-50">
     <!-- The backdrop, rendered as a fixed sibling to the panel container -->
-    <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+    <div class="fixed inset-0 bg-black opacity-30 dark:bg-white" aria-hidden="true" />
 
     <!-- Full-screen container to center the panel -->
     <div class="fixed inset-0 flex w-screen items-center justify-center p-4">
@@ -10,7 +10,7 @@
         class="relative w-full max-w-5xl rounded-border border border-outline-variant bg-surface p-6 shadow-md"
       >
         <div class="absolute top-4 right-4 z-9999">
-          <IconButton icon="close" @click="isOpen = false" />
+          <UIButtonIcon icon="close" @click="isOpen = false" />
         </div>
         <DialogTitle v-if="title" class="mb-6 text-xl font-bold">{{ title }}</DialogTitle>
         <div>
@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import IconButton from '@/components/icon/IconButton.vue'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
+import UIButtonIcon from './button/UIButtonIcon.vue'
 
 defineProps<{
   title?: string

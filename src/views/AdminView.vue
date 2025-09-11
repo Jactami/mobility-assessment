@@ -1,9 +1,9 @@
 <template>
-  <BaseSection title="Nutzer">
+  <UISection title="Nutzer">
     <DataTable v-if="profiles" :data="profiles" :config="tableConfig" />
-  </BaseSection>
+  </UISection>
 
-  <BaseModal v-model="modalOpen" :title="editProfile?.id ? t('common.edit') : t('common.add')">
+  <UIModal v-model="modalOpen" :title="editProfile?.id ? t('common.edit') : t('common.add')">
     <FormKit
       id="edit-user-form"
       v-model="editProfile"
@@ -53,21 +53,21 @@
         />
       </div>
       <div class="mt-4 flex justify-center gap-2">
-        <BaseButton type="submit" :disabled="!valid">{{ t('common.save') }}</BaseButton>
-        <BaseButton flavor="secondary" @click="modalOpen = false">
+        <UIButton type="submit" :disabled="!valid">{{ t('common.save') }}</UIButton>
+        <UIButton flavor="secondary" @click="modalOpen = false">
           {{ t('common.cancel') }}
-        </BaseButton>
+        </UIButton>
       </div>
     </FormKit>
-  </BaseModal>
+  </UIModal>
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
-import BaseModal from '@/components/base/BaseModal.vue'
-import BaseSection from '@/components/base/BaseSection.vue'
 import DataTable from '@/components/table/DataTable.vue'
 import type TableConfig from '@/components/table/types'
+import UIButton from '@/components/ui/button/UIButton.vue'
+import UIModal from '@/components/ui/UIModal.vue'
+import UISection from '@/components/ui/UISection.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
 import type { Profile } from '@/db/types'

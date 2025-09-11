@@ -19,7 +19,7 @@
       >
         <template #suffix>
           <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-            <IconButton
+            <UIButtonIcon
               tabindex="-1"
               :icon="oldPasswordVisible ? 'hide' : 'show'"
               @mousedown="oldPasswordVisible = true"
@@ -40,7 +40,7 @@
       >
         <template #suffix>
           <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-            <IconButton
+            <UIButtonIcon
               tabindex="-1"
               :icon="newPasswordVisible ? 'hide' : 'show'"
               @mousedown="newPasswordVisible = true"
@@ -58,16 +58,16 @@
         validation="required|confirm"
       />
 
-      <BaseButton type="submit" :disabled="!valid || loading">
+      <UIButton type="submit" :disabled="!valid || loading">
         {{ t('auth.changePassword') }}
-      </BaseButton>
+      </UIButton>
     </FormKit>
   </div>
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
-import IconButton from '@/components/icon/IconButton.vue'
+import UIButton from '@/components/ui/button/UIButton.vue'
+import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
 import { useAuthStore } from '@/stores/Auth'

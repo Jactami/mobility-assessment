@@ -12,11 +12,11 @@
         :spellcheck="false"
       >
         <template #prefixIcon>
-          <IconRenderer icon="search" class="mr-2 text-on-surface-variant" />
+          <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
         </template>
         <template #suffixIcon>
           <div class="absolute right-0 bottom-1 flex items-center pr-2">
-            <IconButton v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
+            <UIButtonIcon v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
           </div>
         </template>
       </FormKit>
@@ -44,12 +44,12 @@
                     :props="header.getContext()"
                   />
                   <span v-if="header.column.getCanSort()" class="text-lg">
-                    <IconRenderer
+                    <UIIcon
                       icon="up"
                       class="-mb-3.5"
                       :class="header.column.getIsSorted() === 'asc' ? 'opacity-100' : 'opacity-40'"
                     />
-                    <IconRenderer
+                    <UIIcon
                       icon="down"
                       :class="header.column.getIsSorted() === 'desc' ? 'opacity-100' : 'opacity-40'"
                     />
@@ -92,7 +92,7 @@
                 </td>
                 <td v-if="config.actions" class="px-2 text-right">
                   <div class="flex items-center gap-x-1">
-                    <IconButton
+                    <UIButtonIcon
                       v-for="(action, i) in config.actions"
                       :key="i"
                       :icon="action.icon"
@@ -116,12 +116,12 @@
         v-if="table.getPageCount() > 1"
         class="flex grow items-center justify-center gap-x-2 text-sm"
       >
-        <IconButton
+        <UIButtonIcon
           icon="first"
           :disabled="!table.getCanPreviousPage()"
           @click="table.setPageIndex(0)"
         />
-        <IconButton
+        <UIButtonIcon
           icon="previous"
           :disabled="!table.getCanPreviousPage()"
           @click="table.previousPage()"
@@ -130,8 +130,8 @@
           {{ t('table.page') }} {{ table.getState().pagination.pageIndex + 1 }} /
           {{ table.getPageCount() }}
         </div>
-        <IconButton icon="next" :disabled="!table.getCanNextPage()" @click="table.nextPage()" />
-        <IconButton
+        <UIButtonIcon icon="next" :disabled="!table.getCanNextPage()" @click="table.nextPage()" />
+        <UIButtonIcon
           icon="last"
           :disabled="!table.getCanNextPage()"
           @click="table.setPageIndex(table.getPageCount() - 1)"
@@ -140,16 +140,16 @@
 
       <!-- Add new item button -->
       <div v-if="config.add" class="self-end">
-        <BaseButton flavor="secondary" class="size-10 text-xl" @click="config.add">+</BaseButton>
+        <UIButton flavor="secondary" class="size-10 text-xl" @click="config.add">+</UIButton>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts" generic="T">
-import BaseButton from '@/components/base/BaseButton.vue'
-import IconButton from '@/components/icon/IconButton.vue'
-import IconRenderer from '@/components/icon/IconRenderer.vue'
+import UIButton from '@/components/ui/button/UIButton.vue'
+import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
+import UIIcon from '@/components/ui/icon/UIIcon.vue'
 import {
   createColumnHelper,
   FlexRender,

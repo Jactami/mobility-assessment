@@ -1,5 +1,5 @@
 <template>
-  <IconButton
+  <UIButtonIcon
     :icon="isDark ? 'light' : 'dark'"
     :label="isDark ? 'Light Mode' : 'Dark Mode'"
     class="text-xl"
@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import IconButton from '@/components/icon/IconButton.vue'
 import { useDark } from '@vueuse/core'
+import UIButtonIcon from '../ui/button/UIButtonIcon.vue'
 
 const isDark = useDark()
 </script>

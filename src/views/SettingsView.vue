@@ -1,22 +1,22 @@
 <template>
-  <BasePageHeader :title="t('settings.title')" />
+  <UIPageHeader :title="t('settings.title')" />
 
-  <BaseSection :title="t('auth.changePassword')" class="grow">
+  <UISection :title="t('auth.changePassword')" class="grow">
     <AuthChangePasswordForm />
-  </BaseSection>
+  </UISection>
 
-  <BaseSection :title="t('settings.appInfo')">
+  <UISection :title="t('settings.appInfo')">
     <div class="text-sm">
       <p>v{{ version }} ({{ new Date(buildDate).toISOString() }})</p>
       <p>{{ t('app.copyright', { app: t('app.title'), year: new Date().getFullYear() }) }}</p>
     </div>
-  </BaseSection>
+  </UISection>
 </template>
 
 <script setup lang="ts">
 import AuthChangePasswordForm from '@/components/auth/AuthChangePasswordForm.vue'
-import BasePageHeader from '@/components/base/BasePageHeader.vue'
-import BaseSection from '@/components/base/BaseSection.vue'
+import UIPageHeader from '@/components/ui/UIPageHeader.vue'
+import UISection from '@/components/ui/UISection.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

@@ -1,6 +1,6 @@
 <template>
   <div class="pr-20">
-    <BaseSection>
+    <UISection>
       <div ref="mapSection" class="scroll-mt-4">
         <MapSearchInput
           @search-initiated="geodataLoading = true"
@@ -13,20 +13,20 @@
           :disabled="geodataLoading"
         />
       </div>
-    </BaseSection>
+    </UISection>
 
     <template v-if="!geodataLoading">
-      <BaseSection v-if="projectStore.project?.score">
+      <UISection v-if="projectStore.project?.score">
         <ProjectScore :score="projectStore.project?.score" />
-      </BaseSection>
+      </UISection>
 
-      <BaseSection v-if="scores">
+      <UISection v-if="scores">
         <div class="mx-auto max-w-xl">
           <ProjectScoreChart ref="chartRef" :scores="scores" />
         </div>
-      </BaseSection>
+      </UISection>
 
-      <BaseSection v-if="projectStore.pois && projectStore.pois.length">
+      <UISection v-if="projectStore.pois && projectStore.pois.length">
         <div class="flex flex-wrap justify-center gap-2">
           <template v-for="domain in DOMAINS" :key="domain.name">
             <ProjectCategoryPill
@@ -37,11 +37,11 @@
             />
           </template>
         </div>
-      </BaseSection>
+      </UISection>
 
-      <BaseSection>
+      <UISection>
         <ProjectPoiTable @poi-selected="handlePoiSelected" />
-      </BaseSection>
+      </UISection>
 
       <DebugPanel title="Project Store" :value="projectStore.project" />
 
@@ -61,21 +61,21 @@
 
   <!-- Action Bar -->
   <div class="fixed top-1/2 right-10 z-10 -translate-y-1/2">
-    <ProjectActionBar :buttons="actionButtons" />
+    <UIMenuActionBar :items="actionItems" />
   </div>
 </template>
 
 <script setup lang="ts">
-import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
-import type { Icon } from '@/components/icon/types'
 import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
-import ProjectActionBar from '@/components/project/ProjectActionBar.vue'
 import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
 import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
 import ProjectScore from '@/components/project/ProjectScore.vue'
 import ProjectScoreChart from '@/components/project/ProjectScoreChart.vue'
+import type { MenuListItem } from '@/components/ui/menu/types'
+import UIMenuActionBar from '@/components/ui/menu/UIMenuActionBar.vue'
+import UISection from '@/components/ui/UISection.vue'
 import useDB from '@/composables/db'
 import { useEvaluation } from '@/composables/evaluation'
 import type { EvaluationScores } from '@/composables/evaluation/types'
@@ -122,25 +122,25 @@ const isProjectDirty = computed(
     JSON.stringify(projectStore.pois) !== JSON.stringify(pois.value),
 )
 
-const actionButtons = [
+const actionItems: MenuListItem[] = [
   {
-    title: t('common.back'),
-    icon: 'back' as Icon,
+    label: t('common.back'),
+    icon: 'back',
     action: () => router.push('/'),
   },
   {
-    title: t('common.edit'),
-    icon: 'edit' as Icon,
+    label: t('common.edit'),
+    icon: 'edit',
     action: () => useLogger().log('TODO: EDIT'),
   },
   {
-    title: t('project.report'),
-    icon: 'report' as Icon,
+    label: t('project.report'),
+    icon: 'report',
     action: generateReport,
   },
   {
-    title: t('common.save'),
-    icon: 'save' as Icon,
+    label: t('common.save'),
+    icon: 'save',
     action: saveProject,
   },
 ]

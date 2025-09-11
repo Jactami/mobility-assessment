@@ -33,7 +33,7 @@
       <div>
         <div class="flex items-start justify-between gap-x-10">
           <strong>{{ selectedPoi.label || t(`category.${selectedPoi.category}`) }}</strong>
-          <IconButton icon="close" @click="handleClose" />
+          <UIButtonIcon icon="close" @click="handleClose" />
         </div>
         <div class="mt-4 text-sm text-on-surface-variant">
           <div class="flex items-center gap-x-1">
@@ -47,8 +47,8 @@
           <div class="mt-2 flex items-center justify-between">
             <span>{{ n(selectedPoi.distance, 'meter') }}</span>
             <div class="">
-              <IconButton icon="edit" @click="modalOpen = true" />
-              <IconButton icon="delete" @click="deletePoi(selectedPoi)" />
+              <UIButtonIcon icon="edit" @click="modalOpen = true" />
+              <UIButtonIcon icon="delete" @click="deletePoi(selectedPoi)" />
             </div>
           </div>
         </div>
@@ -65,8 +65,8 @@
 </template>
 
 <script setup lang="ts">
-import IconButton from '@/components/icon/IconButton.vue'
 import ProjectPoiForm from '@/components/project/ProjectPoiForm.vue'
+import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import { useNotification } from '@/composables/notification'
 import { useColorUtil } from '@/composables/util/color'
 import type { Poi } from '@/db/types'

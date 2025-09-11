@@ -1,11 +1,11 @@
 <template>
-  <MenuPopup v-if="authStore.profile" :items="menu" placement="bottom-end">
+  <UIMenu v-if="authStore.profile" :items="menu" position="bottom-end">
     <template #trigger>
-      <BaseButton
+      <UIButton
         class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary font-mono font-medium text-on-primary shadow-none select-none hover:outline-2 hover:outline-primary/50"
       >
         {{ initials }}
-      </BaseButton>
+      </UIButton>
     </template>
     <template #start>
       <div>
@@ -15,19 +15,19 @@
         <div class="mt-1 text-sm text-on-surface-variant">{{ authStore.profile?.email }}</div>
       </div>
     </template>
-  </MenuPopup>
+  </UIMenu>
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
-import MenuPopup from '@/components/menu/MenuPopup.vue'
-import type { MenuActionItem } from '@/components/menu/types'
+import UIButton from '@/components/ui/button/UIButton.vue'
+import UIMenu from '@/components/ui/menu/UIMenu.vue'
 import { useAuthService } from '@/composables/auth'
 import { useNotification } from '@/composables/notification'
 import { useAuthStore } from '@/stores/Auth'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import type { MenuListItem } from '../ui/menu/types'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -35,7 +35,7 @@ const authService = useAuthService()
 const { errorToast } = useNotification()
 const { t } = useI18n()
 
-const menu: MenuActionItem[] = [
+const menu: MenuListItem[] = [
   {
     label: t('settings.title'),
     icon: 'settings',

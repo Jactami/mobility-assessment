@@ -1,5 +1,5 @@
 <template>
-  <BaseModal v-model="open" :title="poi?.id ? t('common.edit') : t('common.add')">
+  <UIModal v-model="open" :title="poi?.id ? t('common.edit') : t('common.add')">
     <FormKit
       id="edit-poi-form"
       v-model="poi"
@@ -55,18 +55,18 @@
         />
       </div>
       <div class="mt-4 flex justify-center gap-2">
-        <BaseButton type="submit" :disabled="!valid">{{ t('common.save') }}</BaseButton>
-        <BaseButton flavor="secondary" @click="open = false">
+        <UIButton type="submit" :disabled="!valid">{{ t('common.save') }}</UIButton>
+        <UIButton flavor="secondary" @click="open = false">
           {{ t('common.cancel') }}
-        </BaseButton>
+        </UIButton>
       </div>
     </FormKit>
-  </BaseModal>
+  </UIModal>
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
-import BaseModal from '@/components/base/BaseModal.vue'
+import UIModal from '@/components/ui/UIModal.vue'
+import UIButton from '@/components/ui/button/UIButton.vue'
 import { usePoiService } from '@/composables/api/poi'
 import { DOMAINS } from '@/constants'
 import type { Poi } from '@/db/types'

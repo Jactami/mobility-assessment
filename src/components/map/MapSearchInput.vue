@@ -16,24 +16,25 @@
     >
       <template #suffixIcon>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-          <IconButton v-if="query && !loading" icon="close" @click="resetQuery" />
-          <IconRenderer v-else-if="loading" icon="loading" />
+          <UIButtonIcon v-if="query && !loading" icon="close" @click="resetQuery" />
+          <UIIcon v-else-if="loading" icon="loading" />
         </div>
       </template>
     </FormKit>
-    <BaseButton
+    <UIButton
       class="rounded-l-none text-lg"
       :disabled="loading || query.trim() === ''"
       @click="search"
     >
-      <IconRenderer icon="search" />
-    </BaseButton>
+      <UIIcon icon="search" />
+    </UIButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
-import IconRenderer from '@/components/icon/IconRenderer.vue'
+import UIButton from '@/components/ui/button/UIButton.vue'
+import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
+import UIIcon from '@/components/ui/icon/UIIcon.vue'
 import { useGeocodingService } from '@/composables/api/geocoding'
 import { usePoiService } from '@/composables/api/poi'
 import { useNotification } from '@/composables/notification'
@@ -41,7 +42,6 @@ import { useUtil } from '@/composables/util/misc'
 import { useProjectStore } from '@/stores/Project'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import IconButton from '../icon/IconButton.vue'
 
 const emit = defineEmits<{
   (e: 'search-initiated'): void

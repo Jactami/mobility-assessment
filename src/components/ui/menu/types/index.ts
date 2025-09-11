@@ -1,6 +1,6 @@
-import type { Icon } from '@/components/icon/types'
+import type { Icon } from '../../icon/types'
 
-export type MenuActionItem = {
+export type MenuListItem = {
   label: string
   icon: Icon
   link?: string

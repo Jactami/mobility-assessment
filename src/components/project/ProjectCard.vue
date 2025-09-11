@@ -1,6 +1,6 @@
 <template>
   <RouterLink :to="`/project/${project.id}`">
-    <BaseCard :animation="true" class="group flex flex-col">
+    <UICard :animation="true" class="group flex flex-col">
       <!-- Card Header -->
       <div class="relative overflow-hidden">
         <div
@@ -16,8 +16,8 @@
           :title="project.favorite ? t('project.removeFavorite') : t('project.addFavorite')"
           @click.prevent="emit('favorite')"
         >
-          <IconRenderer v-if="project.favorite" icon="favorite" />
-          <IconRenderer v-else icon="noFavorite" class="hidden group-hover:block" />
+          <UIIcon v-if="project.favorite" icon="favorite" />
+          <UIIcon v-else icon="noFavorite" class="hidden group-hover:block" />
         </span>
       </div>
 
@@ -34,22 +34,22 @@
         class="relative flex items-center justify-between gap-x-1 bg-surface-container-lowest py-1 pr-1 pl-4 text-on-surface-variant"
       >
         <time class="text-xs" :datetime="project.created_at">{{ d(project.created_at) }}</time>
-        <MenuPopup :items="menu" />
+        <UIMenu :items="menu" />
       </div>
-    </BaseCard>
+    </UICard>
   </RouterLink>
 </template>
 
 <script setup lang="ts">
-import BaseCard from '@/components/base/BaseCard.vue'
-import MenuPopup from '@/components/menu/MenuPopup.vue'
-import type { MenuActionItem } from '@/components/menu/types'
+import UIIcon from '@/components/ui/icon/UIIcon.vue'
+import type { MenuListItem } from '@/components/ui/menu/types'
+import UIMenu from '@/components/ui/menu/UIMenu.vue'
+import UICard from '@/components/ui/UICard.vue'
 import { useColorUtil } from '@/composables/util/color'
 import { useUtil } from '@/composables/util/misc'
 import type { Project } from '@/db/types'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import IconRenderer from '../icon/IconRenderer.vue'
 
 const props = defineProps<{
   project: Project
@@ -78,7 +78,7 @@ const address = computed(() => {
 
 const bgColor = computed(() => (props.project.score ? scoreToColor(props.project.score) : ''))
 
-const menu = computed<MenuActionItem[]>(() => [
+const menu = computed<MenuListItem[]>(() => [
   {
     label: props.project.favorite ? t('project.removeFavorite') : t('project.addFavorite'),
     icon: props.project.favorite ? 'noFavorite' : 'favorite',

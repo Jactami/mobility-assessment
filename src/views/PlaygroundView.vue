@@ -1,10 +1,10 @@
 <template>
-  <BasePageHeader
+  <UIPageHeader
     title="Playground"
     subtitle="A place to develop and test new components and features."
   />
 
-  <BaseSection title="Color Palette">
+  <UISection title="Color Palette">
     <p>
       The color palette is based on the Material Design 3 guidelines. The colors are defined in the
       <code>assets/main.css</code>file and can be used throughout the application.
@@ -34,50 +34,66 @@
       <div class="bg-surface-container-high text-on-surface">Container high</div>
       <div class="bg-surface-container-highest text-on-surface">Container highest</div>
     </div>
-  </BaseSection>
+  </UISection>
 
-  <BaseSection title="Buttons">
+  <UISection title="Buttons">
     <p>
-      The buttons can be configur ed with different colors, sizes, and states. The buttons are
-      defined in the <code>src/components/base/BaseButton.vue</code> file and can be used throughout
-      the application.
+      The buttons can be configured with different colors, sizes, and states. The buttons are
+      defined in the <code>src/components/ui/UIButton.vue</code> file and can be used throughout the
+      application.
     </p>
     <div
       class="mt-10 space-y-8 [&>div]:flex [&>div]:flex-col [&>div]:items-center [&>div]:justify-center [&>div]:gap-6 [&>div]:sm:flex-row"
     >
       <div>
-        <BaseButton>Primary Button</BaseButton>
-        <BaseButton flavor="secondary">Secondary Button</BaseButton>
-        <BaseButton flavor="tertiary">Tertiary Button</BaseButton>
+        <UIButton>Primary Button</UIButton>
+        <UIButton variant="secondary">Secondary Button</UIButton>
+        <UIButton variant="tertiary">Tertiary Button</UIButton>
       </div>
       <div>
-        <BaseButton size="small">Small Button</BaseButton>
-        <BaseButton>Normal Button</BaseButton>
-        <BaseButton size="large">Large Button</BaseButton>
+        <UIButton size="small">Small Button</UIButton>
+        <UIButton>Normal Button</UIButton>
+        <UIButton size="large">Large Button</UIButton>
       </div>
       <div>
-        <BaseButton disabled>Disabled Button</BaseButton>
+        <UIButton disabled>Disabled Button</UIButton>
       </div>
       <div>
-        <BaseButton title="This is a popover!">Popover Button</BaseButton>
+        <UIButton :tooltip="{ content: 'This is a tooltip!' }">Tooltip Button</UIButton>
       </div>
       <div>
-        <BaseButton flavor="custom" class="w-full max-w-96 rounded-full bg-lime-700 text-white">
-          Custom Button <MaterialSymbolsLogin />
-        </BaseButton>
+        <UIButton variant="custom" class="w-full max-w-96 rounded-full bg-lime-700 text-white">
+          Custom Button <UIIcon icon="signIn" />
+        </UIButton>
+      </div>
+      <div>
+        <UIButtonIcon icon="link" title="Icon Button" />
       </div>
     </div>
-  </BaseSection>
+  </UISection>
 
-  <BaseSection title="Debug Panel">
+  <UISection title="Icons">
+    <p>
+      This is an overview of the available icons. The icons are defined in the
+      <code>src/components/ui/icon/UIIcon.vue</code> file.
+    </p>
+    <div class="mt-10 grid grid-cols-4 gap-x-8 gap-y-10 lg:grid-cols-12">
+      <div v-for="icon of Object.keys(icons)" :key="icon" class="flex flex-col items-center gap-2">
+        <UIIcon :icon="icon as Icon" />
+        <div class="text-sm text-on-surface-variant">{{ icon }}</div>
+      </div>
+    </div>
+  </UISection>
+
+  <UISection title="Debug Panel">
     <p>
       The debug panel is a component that can be used to display the current state of variables. It
       is defined in the <code>src/components/debug/DebugPanel.vue</code> file.
     </p>
     <DebugPanel title="Quiz Data" :value="quiz" class="mt-10" />
-  </BaseSection>
+  </UISection>
 
-  <BaseSection title="FormKit Integration">
+  <UISection title="FormKit Integration">
     <FormKit type="form" @submit="(data) => logger.log('formkit data', data)">
       <FormKit
         type="text"
@@ -134,53 +150,70 @@
         help="How many dexterity points should this character have?"
       />
     </FormKit>
-  </BaseSection>
+  </UISection>
 
-  <BaseSection title="Notifications">
+  <UISection title="Notifications">
     <p>The notifications are based on the SweetAlert2 library.</p>
     <div class="mt-10 flex items-center justify-center gap-6">
-      <BaseButton
-        flavor="custom"
+      <UIButton
+        variant="custom"
         class="bg-success text-on-success"
         @click="notification.successToast('Success message...')"
       >
         Success
-      </BaseButton>
-      <BaseButton
-        flavor="custom"
+      </UIButton>
+      <UIButton
+        variant="custom"
         class="bg-error text-on-error"
         @click="notification.errorToast('Error message...')"
       >
         Error
-      </BaseButton>
+      </UIButton>
     </div>
-  </BaseSection>
+  </UISection>
 
-  <BaseSection title="Menu">
+  <UISection title="Menu">
     <p>
       The menu is a component that can be used to display a list of items. It is defined in the
-      <code>src/components/menu/MenuPopup.vue</code> file.
+      <code>src/components/menu/UIMenu.vue</code> file.
     </p>
-    <div class="text-center">
-      <MenuPopup :items="menu" placement="bottom-start" />
+    <div class="mt-10 text-center">
+      <UIMenu :items="menu" position="bottom-start" />
     </div>
-  </BaseSection>
+  </UISection>
 
-  <BaseSection title="Popover">
+  <UISection title="Popover">
     <p>
       The popover is a component that can be used to display additional information. It is defined
-      in the <code>src/components/base/BasePopover.vue</code> file.
+      in the <code>src/components/ui/UIPopover.vue</code> file.
     </p>
-    <div class="mt-10 flex items-center justify-center">
-      <BasePopover message="This is a popover content that appears on hover.">
-        <div class="p- bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
-          Hover me
-        </div>
-      </BasePopover>
+    <div class="mt-10 flex items-center justify-evenly gap-10">
+      <UIPopover>
+        <template #trigger>
+          <div class="p- bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
+            Hover me
+          </div>
+        </template>
+        <template #popover>
+          This is a popover content that appears on hover. You can put any content here, even
+          <strong>HTML</strong>.
+        </template>
+      </UIPopover>
+      <UIPopover position="bottom">
+        <template #trigger>
+          <div class="p- bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
+            Hover me
+          </div>
+        </template>
+        <template #popover>
+          You can also define the position of the popover. This one is on the bottom.
+        </template>
+      </UIPopover>
     </div>
-  </BaseSection>
+    <div></div>
+  </UISection>
 
-  <BaseSection title="Data Table">
+  <UISection title="Data Table">
     <p>
       The data table is a component that can be used to display a list of generic items. It is
       defined in the <code>src/components/table/DataTable.vue</code> file.
@@ -192,39 +225,42 @@
         </template>
       </DataTable>
     </div>
-  </BaseSection>
+  </UISection>
 
-  <BaseSection title="Modal">
+  <UISection title="Modal">
     <p>
       The modal is a component that can be used to display a dialog. It is defined in the
-      <code>src/components/base/BaseModal.vue</code> file.
+      <code>src/components/base/UIModal.vue</code> file.
     </p>
     <div class="mt-4 flex justify-center">
-      <BaseButton @click="modalOpen = true">Open Modal</BaseButton>
+      <UIButton @click="modalOpen = true">Open Modal</UIButton>
     </div>
-    <BaseModal v-model="modalOpen" title="My Modal">
+    <UIModal v-model="modalOpen" title="My Modal">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum rem, ex assumenda, eligendi
       voluptate provident sint non doloremque perferendis accusamus, unde quisquam ullam? Tempore
       delectus ipsum voluptatem temporibus velit laboriosam.
-    </BaseModal>
-  </BaseSection>
+    </UIModal>
+  </UISection>
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
-import BaseModal from '@/components/base/BaseModal.vue'
-import BasePageHeader from '@/components/base/BasePageHeader.vue'
-import BasePopover from '@/components/base/BasePopover.vue'
-import BaseSection from '@/components/base/BaseSection.vue'
 import DebugPanel from '@/components/debug/DebugPanel.vue'
-import MenuPopup from '@/components/menu/MenuPopup.vue'
-import type { MenuActionItem } from '@/components/menu/types'
 import DataTable from '@/components/table/DataTable.vue'
 import type TableConfig from '@/components/table/types'
+import UIButton from '@/components/ui/button/UIButton.vue'
+import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
+import type { Icon } from '@/components/ui/icon/types'
+import { icons } from '@/components/ui/icon/types'
+import UIIcon from '@/components/ui/icon/UIIcon.vue'
+import type { MenuListItem } from '@/components/ui/menu/types'
+import UIMenu from '@/components/ui/menu/UIMenu.vue'
+import UIModal from '@/components/ui/UIModal.vue'
+import UIPageHeader from '@/components/ui/UIPageHeader.vue'
+import UIPopover from '@/components/ui/UIPopover.vue'
+import UISection from '@/components/ui/UISection.vue'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { ref } from 'vue'
-import MaterialSymbolsLogin from '~icons/material-symbols/login'
 
 const logger = useLogger('playground')
 const notification = useNotification()
@@ -250,7 +286,7 @@ const quiz = {
   },
 }
 
-const menu: MenuActionItem[] = [
+const menu: MenuListItem[] = [
   {
     label: 'Link',
     icon: 'link',

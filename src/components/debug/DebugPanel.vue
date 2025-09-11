@@ -2,7 +2,7 @@
   <div class="divide-y divide-outline-variant rounded-border border border-outline-variant">
     <div class="flex items-center justify-between gap-x-3 px-4 py-2">
       <span class="font-semibold">{{ title }}</span>
-      <IconButton
+      <UIButtonIcon
         :icon="isCopied ? 'check' : 'copy'"
         :title="isCopied ? 'Copied!' : 'Copy to clipboard'"
         @click="copyToClipboard"
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import IconButton from '@/components/icon/IconButton.vue'
+import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps<{
