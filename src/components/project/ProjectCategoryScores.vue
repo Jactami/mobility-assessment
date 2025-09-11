@@ -7,6 +7,7 @@
         </dt>
         <dd
           v-if="scores?.domain[domain.name]"
+          class="transition-color duration-500"
           :style="{ color: scoreToColor(scores.domain[domain.name]) }"
         >
           {{ n(scores?.domain[domain.name] * 100, 'rounded') }}
