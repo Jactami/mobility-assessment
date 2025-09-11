@@ -18,6 +18,8 @@
     <template v-if="!geodataLoading">
       <UISection v-if="projectStore.project?.score">
         <ProjectScore :score="projectStore.project?.score" />
+        <br />
+        <ProjectCategoryScores :scores="scores" />
       </UISection>
 
       <UISection v-if="scores">
@@ -69,6 +71,7 @@ import DebugPanel from '@/components/debug/DebugPanel.vue'
 import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
+import ProjectCategoryScores from '@/components/project/ProjectCategoryScores.vue'
 import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
 import ProjectScore from '@/components/project/ProjectScore.vue'
 import ProjectScoreChart from '@/components/project/ProjectScoreChart.vue'
