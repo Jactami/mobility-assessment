@@ -29,7 +29,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const btnClass = computed(() =>
   twMerge(
-    'aspect-square cursor-pointer rounded-full p-1.5 shadow-none hover:bg-surface-container-highest hover:shadow-none hover:brightness-100 disabled:cursor-not-allowed disabled:bg-transparent disabled:shadow-none',
+    // TODO: Decide if to switch to primary-container
+    'aspect-square cursor-pointer rounded-full p-1.5 hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:bg-transparent disabled:text-on-surface-muted',
     props.class,
   ),
 )
