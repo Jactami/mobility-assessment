@@ -34,9 +34,9 @@
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
 import IconRenderer from '@/components/icon/IconRenderer.vue'
-import { useGeocodingService } from '@/composables/geocoding'
+import { useGeocodingService } from '@/composables/api/geocoding'
+import { usePoiService } from '@/composables/api/poi'
 import { useNotification } from '@/composables/notification'
-import { usePoiService } from '@/composables/poi'
 import { useUtil } from '@/composables/util/misc'
 import { useProjectStore } from '@/stores/Project'
 import { computed, ref, watch } from 'vue'

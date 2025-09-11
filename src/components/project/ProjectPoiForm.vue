@@ -67,7 +67,7 @@
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
-import { usePoiService } from '@/composables/poi'
+import { usePoiService } from '@/composables/api/poi'
 import { DOMAINS } from '@/constants'
 import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
