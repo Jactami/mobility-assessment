@@ -1,0 +1,58 @@
+--
+-- Update existing users
+--
+CREATE OR REPLACE FUNCTION public.update_user(target_user_id uuid, new_first_name varchar(100) DEFAULT NULL, new_last_name varchar(100) DEFAULT NULL, new_email varchar(100) DEFAULT NULL, new_password varchar(100) DEFAULT NULL)
+    RETURNS VOID
+    SECURITY DEFINER
+    AS $$
+DECLARE
+    encrypted_pw varchar(255);
+BEGIN
+    -- Update auth.users (email and password if provided)
+    IF new_password IS NOT NULL THEN
+        encrypted_pw := crypt(new_password, gen_salt('bf'));
+        UPDATE
+            auth.users
+        SET
+            encrypted_password = encrypted_pw,
+            email = coalesce(new_email, auth.users.email),
+            email_confirmed_at = now(),
+            updated_at = now()
+        WHERE
+            id = target_user_id;
+    ELSE
+        UPDATE
+            auth.users
+        SET
+            email = coalesce(new_email, auth.users.email),
+            email_confirmed_at = now(),
+            updated_at = now()
+        WHERE
+            id = target_user_id;
+    END IF;
+    -- Update auth.identities email in identity_data JSON
+    IF new_email IS NOT NULL THEN
+        UPDATE
+            auth.identities
+        SET
+            identity_data = jsonb_set(identity_data, '{email}', to_jsonb(new_email)),
+            updated_at = now()
+        WHERE
+            user_id = target_user_id
+            AND provider = 'email';
+    END IF;
+    -- Update public.profiles
+    UPDATE
+        public.profiles
+    SET
+        first_name = coalesce(new_first_name, public.profiles.first_name),
+        last_name = coalesce(new_last_name, public.profiles.last_name),
+        email = coalesce(new_email, public.profiles.email)
+    WHERE
+        id = target_user_id;
+END;
+$$
+LANGUAGE plpgsql;
+
+COMMENT ON FUNCTION public.update_user IS 'Updates an existing user.';
+
