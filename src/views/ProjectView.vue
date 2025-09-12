@@ -294,7 +294,10 @@ async function generateReport() {
 function handlePoiSelected(poi: Poi) {
   selectedPoi.value = poi
   // scroll to the map section
-  mapSection.value?.scrollIntoView({ behavior: 'smooth' })
+  mapSection.value?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+  })
 }
 
 watch(
