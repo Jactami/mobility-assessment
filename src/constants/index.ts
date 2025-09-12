@@ -12,10 +12,12 @@ export const DOMAINS: AreaDomain[] = [
       {
         name: 'school',
         tags: [{ key: 'amenity', value: 'school' }],
+        saturation: 3,
       },
       {
         name: 'university',
         tags: [{ key: 'amenity', value: 'university' }],
+        saturation: 1,
       },
       {
         name: 'kindergarten',
@@ -24,10 +26,12 @@ export const DOMAINS: AreaDomain[] = [
           { key: 'amenity', value: 'childcare' },
           { key: 'amenity', value: 'preschool' }, // Deprecated, but still might be used
         ],
+        saturation: 4,
       },
       {
         name: 'library',
         tags: [{ key: 'amenity', value: 'library' }],
+        saturation: 2,
       },
     ],
   },
@@ -39,26 +43,32 @@ export const DOMAINS: AreaDomain[] = [
       {
         name: 'restaurant',
         tags: [{ key: 'amenity', value: 'restaurant' }],
+        saturation: 5,
       },
       {
         name: 'cafe',
         tags: [{ key: 'amenity', value: 'cafe' }],
+        saturation: 4,
       },
       {
         name: 'bar',
         tags: [{ key: 'amenity', value: 'bar' }],
+        saturation: 4,
       },
       {
         name: 'cinema',
         tags: [{ key: 'amenity', value: 'cinema' }],
+        saturation: 2,
       },
       {
         name: 'theatre',
         tags: [{ key: 'amenity', value: 'theatre' }],
+        saturation: 2,
       },
       {
         name: 'gym',
         tags: [{ key: 'leisure', value: 'fitness_centre' }],
+        saturation: 3,
       },
       {
         // TODO: handle different types of pitches (e.g. football, basketball)
@@ -111,6 +121,7 @@ export const DOMAINS: AreaDomain[] = [
           },
           // TODO: To be continued...
         ],
+        saturation: 5,
       },
       {
         name: 'swimming',
@@ -120,6 +131,7 @@ export const DOMAINS: AreaDomain[] = [
           { key: 'leisure', value: 'bathing_place' },
           { key: 'amenity', value: 'public_bath' },
         ],
+        saturation: 2,
       },
     ],
   },
@@ -131,6 +143,7 @@ export const DOMAINS: AreaDomain[] = [
       {
         name: 'hospital',
         tags: [{ key: 'amenity', value: 'hospital' }],
+        saturation: 1,
       },
       {
         name: 'doctor',
@@ -138,14 +151,17 @@ export const DOMAINS: AreaDomain[] = [
           { key: 'amenity', value: 'doctors' },
           { key: 'amenity', value: 'clinic' }, // multiple doctors in one place
         ],
+        saturation: 3,
       },
       {
         name: 'pharmacy',
         tags: [{ key: 'amenity', value: 'pharmacy' }],
+        saturation: 3,
       },
       {
         name: 'dentist',
         tags: [{ key: 'amenity', value: 'dentist' }],
+        saturation: 3,
       },
       {
         name: 'care',
@@ -154,6 +170,7 @@ export const DOMAINS: AreaDomain[] = [
           { key: 'social_facility', value: 'assisted_living' },
           { key: 'social_facility', value: 'day_care' },
         ],
+        saturation: 1,
       },
     ],
   },
@@ -197,10 +214,12 @@ export const DOMAINS: AreaDomain[] = [
             prefix: 'Straßenbahnhaltestelle',
           },
         ],
+        saturation: 6,
       },
       {
         name: 'bicycle',
         tags: [{ key: 'amenity', value: 'bicycle_rental' }],
+        saturation: 2,
       },
       {
         name: 'car',
@@ -211,10 +230,12 @@ export const DOMAINS: AreaDomain[] = [
             fallback: 'operator',
           },
         ],
+        saturation: 2,
       },
       {
         name: 'taxi',
         tags: [{ key: 'amenity', value: 'taxi' }],
+        saturation: 1,
       },
     ],
   },
@@ -226,10 +247,12 @@ export const DOMAINS: AreaDomain[] = [
       {
         name: 'park',
         tags: [{ key: 'leisure', value: 'park' }],
+        saturation: 3,
       },
       {
         name: 'playground',
         tags: [{ key: 'leisure', value: 'playground' }],
+        saturation: 3,
       },
       {
         name: 'forest',
@@ -237,6 +260,7 @@ export const DOMAINS: AreaDomain[] = [
           { key: 'landuse', value: 'forest' },
           { key: 'natural', value: 'wood' },
         ],
+        saturation: 2,
       },
     ],
   },
@@ -248,34 +272,42 @@ export const DOMAINS: AreaDomain[] = [
       {
         name: 'supermarket',
         tags: [{ key: 'shop', value: 'supermarket' }],
+        saturation: 4,
       },
       {
         name: 'bakery',
         tags: [{ key: 'shop', value: 'bakery' }],
+        saturation: 3,
       },
       {
         name: 'butcher',
         tags: [{ key: 'shop', value: 'butcher' }],
+        saturation: 2,
       },
       {
         name: 'drugstore',
         tags: [{ key: 'shop', value: 'chemist' }],
+        saturation: 2,
       },
       {
         name: 'clothing',
         tags: [{ key: 'shop', value: 'clothes' }],
+        saturation: 2,
       },
       {
         name: 'hairdresser',
         tags: [{ key: 'shop', value: 'hairdresser' }],
+        saturation: 2,
       },
       {
         name: 'bank',
         tags: [{ key: 'amenity', value: 'bank' }],
+        saturation: 2,
       },
       {
         name: 'atm',
         tags: [{ key: 'amenity', value: 'atm' }],
+        saturation: 3,
       },
       {
         name: 'post',
@@ -285,6 +317,7 @@ export const DOMAINS: AreaDomain[] = [
           { key: 'post_office', value: 'post_partner' },
           // TODO: add post_boxes (?)
         ],
+        saturation: 2,
       },
     ],
   },

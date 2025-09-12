@@ -11,12 +11,6 @@ import type { EvaluationScores } from './types'
 const DISTANCE_DAMPEN = 2
 
 /**
- * Maximum amount of POIs per category that can contribute to the score.
- * TODO: Use different values for different categories, e.g. 2 for schools, 5 for restaurants, etc.?
- */
-const SATURATION_THRESHOLD = 3
-
-/**
  * Calculate the score for a point of interest (POI) based on its distance from a reference point.
  * The score is maximized if the poi is close to the reference point and decreases as the distance increases.
  * @param poi The point of interest to evaluate.
@@ -40,9 +34,12 @@ function calcScorePoi(poi: Poi, radius: number) {
   return score
 }
 
-function calcScoreCategory(pois: Poi[], radius: number) {
+function calcScoreCategory(pois: Poi[], radius: number, saturation: number = 1) {
+  // Sum up the scores of all POIs in the category
   const sum = pois.reduce((acc, poi) => acc + calcScorePoi(poi, radius), 0)
-  const norm = Math.log(1 + sum) / Math.log(1 + SATURATION_THRESHOLD) // limit between 0 and 1
+
+  // Apply diminishing returns and limit score between 0 and 1
+  const norm = Math.log(1 + sum) / Math.log(1 + saturation)
   return Math.min(1, norm)
 }
 
@@ -62,8 +59,9 @@ function calcScores(pois: Poi[], radius: number): EvaluationScores {
     // Calculate the score for each category in the current domain
     for (const category of domain.categories) {
       const categoryPois = getPoisByCategory(pois, category.name)
+      const saturation = category.saturation ?? 1
 
-      const score = calcScoreCategory(categoryPois, radius)
+      const score = calcScoreCategory(categoryPois, radius, saturation)
       scoresCategory.push(score)
     }
 
@@ -87,7 +85,6 @@ function calcScores(pois: Poi[], radius: number): EvaluationScores {
 export function useEvaluation() {
   return {
     DISTANCE_DAMPEN,
-    SATURATION_THRESHOLD,
     calcScores,
   }
 }

@@ -41,4 +41,9 @@ export interface AreaCategory {
     // An alternative and more flexible approach could be a label with placeholders
     // e.g. "Bushaltestell {name}" where {name} is replaced with the actual name
   }[]
+  /**
+   * Maximum number of elements that can contribute to the score.
+   * TODO: Play with this value to find the best fit for the scoring system.
+   */
+  saturation?: number
 }
