@@ -38,7 +38,7 @@
         <div class="mt-4 text-sm text-on-surface-variant">
           <div class="flex items-center gap-x-1">
             <img
-              :src="`/img/map/${selectedPoi.category}.svg`"
+              :src="`/img/icons/${selectedPoi.category}.svg`"
               :alt="t(`category.${selectedPoi.category}`)"
               class="inline-block h-5 w-5"
             />

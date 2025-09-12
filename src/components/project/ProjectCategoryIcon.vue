@@ -9,7 +9,7 @@
     aria-hidden="true"
   />
 
-  <!-- <img :src="`/img/map/${category}.svg`" :alt="t(`category.${category}`)" /> -->
+  <!-- <img :src="`/img/icons/${category}.svg`" :alt="t(`category.${category}`)" /> -->
 </template>
 
 <script setup lang="ts">
@@ -31,7 +31,7 @@ const { categoryToColor } = useColorUtil()
 /**
  * URL to the icon image based on the category prop.
  */
-const imgUrl = computed(() => `/img/map/${props.category}.svg`)
+const imgUrl = computed(() => `/img/icons/${props.category}.svg`)
 
 /**
  * Color of the icon, either from the color prop or derived from the category.

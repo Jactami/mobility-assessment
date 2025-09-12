@@ -7,7 +7,7 @@
           <OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
           <OlStyle>
             <!-- <Styles.OlStyleIcon
-              src="/img/map/marker.svg"
+              src="/img/icons/marker.svg"
               :anchor="[0.5, 0.9]"
               :color="categoryToColor(poi.category)"
             /> -->
@@ -23,7 +23,7 @@
           <OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
           <OlStyle>
             <OlStyleIcon
-              :src="`/img/map/${poi.category}.svg`"
+              :src="`/img/icons/${poi.category}.svg`"
               :scale="0.45"
               :color="categoryToColor(poi.category)"
             />
