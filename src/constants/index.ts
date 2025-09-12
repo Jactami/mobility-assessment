@@ -8,7 +8,6 @@ export const DOMAINS: AreaDomain[] = [
   {
     name: 'education',
     color: '#1b9e77',
-    icon: '',
     categories: [
       {
         name: 'school',
@@ -36,7 +35,6 @@ export const DOMAINS: AreaDomain[] = [
   {
     name: 'leisure',
     color: '#d95f02',
-    icon: '',
     categories: [
       {
         name: 'restaurant',
@@ -129,7 +127,6 @@ export const DOMAINS: AreaDomain[] = [
   {
     name: 'health',
     color: '#7570b3',
-    icon: '',
     categories: [
       {
         name: 'hospital',
@@ -164,7 +161,6 @@ export const DOMAINS: AreaDomain[] = [
   {
     name: 'mobility',
     color: '#e7298a',
-    icon: '',
     categories: [
       {
         // TODO: add: railway and tram
@@ -226,7 +222,6 @@ export const DOMAINS: AreaDomain[] = [
   {
     name: 'recreation',
     color: '#66a61e',
-    icon: '',
     categories: [
       {
         name: 'park',
@@ -249,7 +244,6 @@ export const DOMAINS: AreaDomain[] = [
   {
     name: 'supply',
     color: '#e6ab02',
-    icon: '',
     categories: [
       {
         name: 'supermarket',
