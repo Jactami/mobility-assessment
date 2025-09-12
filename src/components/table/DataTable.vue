@@ -102,6 +102,7 @@
                         :key="i"
                         :icon="action.icon"
                         :title="action.label"
+                        :tooltip="{ content: action.label }"
                         @click="action.handler(row.original)"
                       />
                     </div>
@@ -146,7 +147,7 @@
 
       <!-- Add new item button -->
       <div v-if="config.add" class="self-end">
-        <UIButton flavor="secondary" class="size-10 text-xl" @click="config.add">+</UIButton>
+        <UIButton variant="primary" class="size-10 text-xl" @click="config.add">+</UIButton>
       </div>
     </div>
   </div>

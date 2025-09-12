@@ -56,7 +56,7 @@
       </div>
       <div class="mt-4 flex justify-center gap-2">
         <UIButton type="submit" :disabled="!valid">{{ t('common.save') }}</UIButton>
-        <UIButton flavor="secondary" @click="open = false">
+        <UIButton variant="secondary" @click="open = false">
           {{ t('common.cancel') }}
         </UIButton>
       </div>

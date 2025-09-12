@@ -44,7 +44,7 @@ const sizeClass: Record<Exclude<Props['size'], undefined>, string> = {
 }
 
 /**
- * Generated button classes based on the flavor and size props and passed classes.
+ * Generated button classes based on the variant and size props and passed classes.
  */
 const btnClass = computed(() => {
   return twMerge([
