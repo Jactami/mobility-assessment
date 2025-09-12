@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-screen flex-col">
     <AppHeader />
-    <main class="relative container mx-auto flex grow flex-col px-4 pt-6 pb-24 lg:px-10 lg:pb-10">
+    <main class="relative container mx-auto flex grow flex-col px-4 pt-6 pb-10 lg:px-10">
       <AppBreadcrumb />
       <RouterView />
     </main>

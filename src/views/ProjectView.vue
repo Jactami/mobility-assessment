@@ -1,64 +1,66 @@
 <template>
-  <div class="pb-16">
-    <UISection>
-      <div ref="mapSection" class="scroll-mt-4">
-        <MapSearchInput
-          @search-initiated="geodataLoading = true"
-          @search-completed="geodataLoading = false"
-        />
-        <MapPanel
-          v-model="selectedPoi"
-          :project="projectStore.project"
-          :pois="projectStore.pois"
-          :disabled="geodataLoading"
-        />
+  <UISection>
+    <div ref="mapSection" class="scroll-mt-4">
+      <MapSearchInput
+        @search-initiated="geodataLoading = true"
+        @search-completed="geodataLoading = false"
+      />
+      <MapPanel
+        v-model="selectedPoi"
+        :project="projectStore.project"
+        :pois="projectStore.pois"
+        :disabled="geodataLoading"
+      />
+    </div>
+  </UISection>
+
+  <template v-if="!geodataLoading">
+    <UISection v-if="projectStore.project?.score">
+      <ProjectTotalScore :scores="scores" />
+      <ProjectCategoryScores :scores="scores" class="mt-16" />
+    </UISection>
+
+    <UISection v-if="scores">
+      <div class="mx-auto max-w-xl">
+        <ProjectScoreChart ref="chartRef" :scores="scores" />
       </div>
     </UISection>
 
-    <template v-if="!geodataLoading">
-      <UISection v-if="projectStore.project?.score">
-        <ProjectTotalScore :scores="scores" />
-        <ProjectCategoryScores :scores="scores" class="mt-16" />
-      </UISection>
-
-      <UISection v-if="scores">
-        <div class="mx-auto max-w-xl">
-          <ProjectScoreChart ref="chartRef" :scores="scores" />
-        </div>
-      </UISection>
-
-      <UISection v-if="projectStore.pois && projectStore.pois.length">
-        <div class="flex flex-wrap justify-center gap-2">
-          <template v-for="domain in DOMAINS" :key="domain.name">
-            <ProjectCategoryPill
-              v-for="category in domain.categories"
-              :key="category.name"
-              :category="category.name"
-              :count="getPoisByCategory(projectStore.pois, category.name).length"
-            />
-          </template>
-        </div>
-      </UISection>
-
-      <UISection>
-        <ProjectPoiTable @poi-selected="handlePoiSelected" />
-      </UISection>
-
-      <DebugPanel title="Project Store" :value="projectStore.project" />
-
-      <!-- Hidden Maps to produce map image exports -->
-      <div class="invisible">
-        <MapPanel
-          v-for="domain in DOMAINS"
-          :key="domain.name"
-          ref="maps"
-          :project="project"
-          :pois="getPoisByDomain(projectStore.pois || [], domain.name)"
-          :height="1"
-        />
+    <UISection v-if="projectStore.pois && projectStore.pois.length">
+      <div class="flex flex-wrap justify-center gap-2">
+        <template v-for="domain in DOMAINS" :key="domain.name">
+          <ProjectCategoryPill
+            v-for="category in domain.categories"
+            :key="category.name"
+            :category="category.name"
+            :count="getPoisByCategory(projectStore.pois, category.name).length"
+          />
+        </template>
       </div>
-    </template>
-  </div>
+    </UISection>
+
+    <UISection>
+      <ProjectPoiTable @poi-selected="handlePoiSelected" />
+    </UISection>
+
+    <DebugPanel title="Project Store" :value="projectStore.project" />
+
+    <!-- Hidden Maps to produce map image exports -->
+    <div class="invisible">
+      <MapPanel
+        v-for="domain in DOMAINS"
+        :key="domain.name"
+        ref="maps"
+        :project="project"
+        :pois="getPoisByDomain(projectStore.pois || [], domain.name)"
+        :height="1"
+      />
+    </div>
+  </template>
+
+  <!-- Padding for Action Bar -->
+  <div class="pb-16" />
+
   <!-- Action Bar -->
   <div class="fixed bottom-8 left-1/2 z-10 -translate-x-1/2">
     <UIMenuActionBar :items="actionItems" />
