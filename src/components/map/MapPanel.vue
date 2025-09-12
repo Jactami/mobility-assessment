@@ -5,12 +5,7 @@
     :class="{ 'opacity-60': disabled }"
     :style="{ height: `${height}px` }"
   >
-    <OlView
-      :center="center"
-      :zoom="zoom"
-      @change:resolution="handleResolutionChange"
-      @change:center="(e) => (center = e.target.getCenter())"
-    />
+    <OlView :center="center" :zoom="zoom" @change:resolution="handleResolutionChange" />
 
     <!-- Openstreetmap Layer -->
     <OlTileLayer>
