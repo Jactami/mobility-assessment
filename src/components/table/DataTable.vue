@@ -25,86 +25,92 @@
     <!-- Data Table -->
     <div class="overflow-hidden rounded-border border border-outline-variant">
       <div class="overflow-x-auto">
-        <table class="w-full border-collapse">
-          <!-- Table Head -->
-          <thead class="border-b border-outline-variant">
-            <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-              <th
-                v-for="header in headerGroup.headers"
-                :key="header.id"
-                :colSpan="header.colSpan"
-                class="px-3 py-2.5 text-left"
-                :class="header.column.getCanSort() ? 'cursor-pointer select-none' : ''"
-                @click="header.column.getToggleSortingHandler()?.($event)"
-              >
-                <div v-if="!header.isPlaceholder" class="flex items-center gap-1">
-                  <FlexRender
-                    v-if="!header.isPlaceholder"
-                    :render="header.column.columnDef.header"
-                    :props="header.getContext()"
-                  />
-                  <span v-if="header.column.getCanSort()" class="text-lg">
-                    <UIIcon
-                      icon="up"
-                      class="-mb-3.5"
-                      :class="header.column.getIsSorted() === 'asc' ? 'opacity-100' : 'opacity-40'"
-                    />
-                    <UIIcon
-                      icon="down"
-                      :class="header.column.getIsSorted() === 'desc' ? 'opacity-100' : 'opacity-40'"
-                    />
-                  </span>
-                </div>
-              </th>
-              <th v-if="config.actions" class="px-3 py-2.5 text-right">
-                <span class="sr-only">{{ t('table.actions') }}</span>
-              </th>
-            </tr>
-          </thead>
-          <!-- Table Body -->
-          <tbody>
-            <template v-if="table.getRowModel().rows.length === 0">
-              <tr>
-                <td
-                  :colspan="columns.length"
-                  class="p-4 text-center text-sm text-on-surface-variant italic"
-                >
-                  {{ t('table.noData') }}
-                </td>
-              </tr>
-            </template>
-
-            <template v-else>
-              <tr
-                v-for="row in table.getRowModel().rows"
-                :key="row.id"
-                class="odd:bg-surface-container-low hover:bg-surface-container"
-              >
-                <td
-                  v-for="cell in row.getVisibleCells()"
-                  :key="cell.id"
+        <div class="inline-block min-w-full">
+          <table class="relative min-w-full border-collapse">
+            <!-- Table Head -->
+            <thead class="border-b border-outline-variant">
+              <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+                <th
+                  v-for="header in headerGroup.headers"
+                  :key="header.id"
+                  :colSpan="header.colSpan"
                   class="px-3 py-2.5 text-left"
-                  :style="`width: ${cell.column.columnDef.size}%`"
+                  :class="header.column.getCanSort() ? 'cursor-pointer select-none' : ''"
+                  @click="header.column.getToggleSortingHandler()?.($event)"
                 >
-                  <slot :name="`item-${cell.column.id}`" :value="cell.getValue()">
-                    <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
-                  </slot>
-                </td>
-                <td v-if="config.actions" class="px-2 text-right">
-                  <div class="flex items-center gap-x-1">
-                    <UIButtonIcon
-                      v-for="(action, i) in config.actions"
-                      :key="i"
-                      :icon="action.icon"
-                      :title="action.label"
-                      @click="action.handler(row.original)"
+                  <div v-if="!header.isPlaceholder" class="flex items-center gap-1">
+                    <FlexRender
+                      v-if="!header.isPlaceholder"
+                      :render="header.column.columnDef.header"
+                      :props="header.getContext()"
                     />
+                    <span v-if="header.column.getCanSort()" class="text-lg">
+                      <UIIcon
+                        icon="up"
+                        class="-mb-3.5"
+                        :class="
+                          header.column.getIsSorted() === 'asc' ? 'opacity-100' : 'opacity-40'
+                        "
+                      />
+                      <UIIcon
+                        icon="down"
+                        :class="
+                          header.column.getIsSorted() === 'desc' ? 'opacity-100' : 'opacity-40'
+                        "
+                      />
+                    </span>
                   </div>
-                </td>
+                </th>
+                <th v-if="config.actions" class="px-3 py-2.5 text-right">
+                  <span class="sr-only">{{ t('table.actions') }}</span>
+                </th>
               </tr>
-            </template>
-          </tbody>
-        </table>
+            </thead>
+            <!-- Table Body -->
+            <tbody>
+              <template v-if="table.getRowModel().rows.length === 0">
+                <tr>
+                  <td
+                    :colspan="columns.length"
+                    class="p-4 text-center text-sm text-on-surface-variant italic"
+                  >
+                    {{ t('table.noData') }}
+                  </td>
+                </tr>
+              </template>
+
+              <template v-else>
+                <tr
+                  v-for="row in table.getRowModel().rows"
+                  :key="row.id"
+                  class="odd:bg-surface-container-low hover:bg-surface-container"
+                >
+                  <td
+                    v-for="cell in row.getVisibleCells()"
+                    :key="cell.id"
+                    class="px-3 py-2.5 text-left"
+                    :style="`width: ${cell.column.columnDef.size}%`"
+                  >
+                    <slot :name="`item-${cell.column.id}`" :value="cell.getValue()">
+                      <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+                    </slot>
+                  </td>
+                  <td v-if="config.actions" class="px-2 text-right">
+                    <div class="flex items-center gap-x-1">
+                      <UIButtonIcon
+                        v-for="(action, i) in config.actions"
+                        :key="i"
+                        :icon="action.icon"
+                        :title="action.label"
+                        @click="action.handler(row.original)"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
