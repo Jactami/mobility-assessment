@@ -22,7 +22,9 @@
       >
         {{ n(props.scores?.total * 100, 'rounded') }}
       </div>
-      <div class="mt-2 -mb-1 text-xl text-on-surface-variant">{{ t('project.score') }}</div>
+      <div class="mt-2 -mb-1 text-xl font-semibold text-on-surface-variant">
+        {{ t('project.score') }}
+      </div>
     </div>
   </div>
 </template>
