@@ -1,4 +1,4 @@
-import type { Icon } from '@/components/icon/types'
+import type { Icon } from '@/components/ui/icon/types'
 
 /**
  * Defines the structure of a column in a generic table component.
