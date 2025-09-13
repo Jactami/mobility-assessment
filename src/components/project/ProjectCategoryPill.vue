@@ -12,7 +12,8 @@
 
 <script setup lang="ts">
 import { useColorUtil } from '@/composables/util/color'
-import { computed } from 'vue'
+import { useDark } from '@vueuse/core'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProjectCategoryIcon from './ProjectCategoryIcon.vue'
 
@@ -23,10 +24,22 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const { categoryToColor } = useColorUtil()
+const isDark = useDark()
+
+const color = ref()
 
 const ALPHA = 'CC' // 80% opacity
 
 const bgColor = computed(() => categoryToColor(props.category) + ALPHA)
 
-const color = getComputedStyle(document.body).getPropertyValue('--color-on-surface-inverse')
+// observe dark mode changes to update icon color
+// not happy with this, but works for now
+watch(
+  isDark,
+  async () => {
+    await nextTick()
+    color.value = getComputedStyle(document.body).getPropertyValue('--color-on-surface-inverse')
+  },
+  { immediate: true },
+)
 </script>
