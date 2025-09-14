@@ -9,7 +9,7 @@
         :title="item.label"
         :disabled="item.disabled"
         :tooltip="{ content: item.label }"
-        class="p-2.5 text-lg"
+        class="p-2.5 text-lg hover:bg-primary-container hover:text-on-primary-container"
         @click="item.action"
       />
       <div v-if="item.divider" class="my-2 w-px self-stretch bg-outline-variant" />
