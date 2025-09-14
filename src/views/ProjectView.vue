@@ -263,7 +263,7 @@ async function generateReport() {
   // If there is an error in creating the PDF, show error
   if (error.value) {
     console.error(error.value)
-    errorToast('TODO: error creating PDF')
+    errorToast(t('project.reportError'))
     return
   }
 
@@ -272,7 +272,7 @@ async function generateReport() {
     const url = URL.createObjectURL(blob)
 
     // Uncomment the following line to open the PDF in a new tab
-    window.open(url)
+    // window.open(url)
 
     // Download the PDF
     const link = document.createElement('a')

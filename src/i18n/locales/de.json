@@ -91,6 +91,7 @@
     "removeFavorite": "Von Favoriten entfernen",
     "projectCopy": "Kopie",
     "report": "PDF",
+    "reportError": "Fehler beim Erstellen des PDF-Berichts",
     "score": "Gesamtbewertung",
     "scoreDescription": "Es wurden alle Daten ausgewertet.",
     "saveError": "Fehler beim Speichern des Projekts",
