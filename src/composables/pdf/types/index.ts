@@ -61,7 +61,7 @@ export interface PdfTextOptions extends PdfElementOptions {
   // TODO: Add more options like opacity, rotation, background color, etc.
 }
 
-export interface PdfImageOptions extends PdfElementOptions {
+export interface PdfGraphicsOptions extends PdfElementOptions {
   width: number
   height: number
 }

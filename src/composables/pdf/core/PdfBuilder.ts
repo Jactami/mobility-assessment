@@ -6,10 +6,10 @@ import {
   type Schema,
 } from '@pdfme/common'
 import { generate } from '@pdfme/generator'
-import { image, line, rectangle, table, text } from '@pdfme/schemas'
+import { image, line, rectangle, svg, table, text } from '@pdfme/schemas'
 import type {
   PdfConfig,
-  PdfImageOptions,
+  PdfGraphicsOptions,
   PdfLineOptions,
   PdfRectOptions,
   PdfTableOptions,
@@ -227,18 +227,23 @@ export class PdfBuilder {
   }
 
   /**
-   * Creates a image element in the PDF document.
-   * @param data - The image data to be added to the PDF document as a base64 string.
-   * @param options - The layout and styling options for the image.
+   * Creates a graphics element in the PDF document.
+   * @param type - The type of the graphics element (image or svg).
+   * @param data - The graphic data to be added to the PDF document.
+   * @param options - The layout and styling options for the graphics element.
    * @returns The instance itself, allowing for method chaining.
    */
-  createImage(data: string, options: PdfImageOptions): this {
-    // Add image plugin
-    this._plugins.image = image
+  private _createGraphics(type: 'image' | 'svg', data: string, options: PdfGraphicsOptions): this {
+    // Add plugin
+    if (type === 'svg') {
+      this._plugins.svg = svg
+    } else {
+      this._plugins.image = image
+    }
 
-    // Create schema for the image element
+    // Create schema for the graphics element
     const schema: Schema = {
-      type: 'image',
+      type,
       name: this._id,
       position: {
         x: options.x ?? this._config.padding.left,
@@ -250,6 +255,26 @@ export class PdfBuilder {
 
     // Append the image element to the current page
     return this.addToPage(data, schema, options?.static)
+  }
+
+  /**
+   * Creates a image element in the PDF document.
+   * @param data - The image data to be added to the PDF document as a base64 string.
+   * @param options - The layout and styling options for the image.
+   * @returns The instance itself, allowing for method chaining.
+   */
+  createImage(data: string, options: PdfGraphicsOptions): this {
+    return this._createGraphics('image', data, options)
+  }
+
+  /**
+   * Creates a svg element in the PDF document.
+   * @param data - The svg data to be added to the PDF document as a string.
+   * @param options - The layout and styling options for the svg.
+   * @returns The instance itself, allowing for method chaining.
+   */
+  createSVG(data: string, options: PdfGraphicsOptions): this {
+    return this._createGraphics('svg', data, options)
   }
 
   createLine(options: PdfLineOptions): this {
