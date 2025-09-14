@@ -20,6 +20,7 @@ export function useNotification() {
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-success'),
       customClass: {
+        popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
         timerProgressBar: '!bg-success',
       },
     })
@@ -33,6 +34,7 @@ export function useNotification() {
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-error'),
       customClass: {
+        popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
         timerProgressBar: '!bg-error',
       },
     })
@@ -46,6 +48,7 @@ export function useNotification() {
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-secondary'),
       customClass: {
+        popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
         timerProgressBar: '!bg-secondary',
       },
     })
@@ -65,6 +68,9 @@ export function useNotification() {
         Swal.showLoading()
       },
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-secondary'),
+      customClass: {
+        popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
+      },
     })
 
     const dismiss = () => Swal.close()
