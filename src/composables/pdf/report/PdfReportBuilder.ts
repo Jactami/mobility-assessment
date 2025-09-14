@@ -398,11 +398,12 @@ export class PdfReportBuilder extends PdfBuilder {
 
     // Create separator page with title
     return this.createRect({
-      x: 0,
+      x: -1, // avoid rounded corners on the right side
       y,
       width: this._config.format.width * 0.75,
       height: h,
       color: 'primary',
+      radius: 1,
     })
       .createText(title, {
         y,
