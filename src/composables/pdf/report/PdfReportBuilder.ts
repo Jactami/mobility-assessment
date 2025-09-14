@@ -109,6 +109,7 @@ export class PdfReportBuilder extends PdfBuilder {
       height: options.height,
       borderColor: options.color,
       borderWidth: 0.5,
+      radius: 1,
     })
       .createText(value, {
         x: options.x,
@@ -150,6 +151,7 @@ export class PdfReportBuilder extends PdfBuilder {
       width: this._innerWidth,
       height: 40,
       color: scoreToColor(score),
+      radius: 1,
     })
       .createText(i18n.global.n(score * 100, 'rounded'), {
         y,
@@ -189,6 +191,7 @@ export class PdfReportBuilder extends PdfBuilder {
       width: 1,
       height: 5,
       color: 'text',
+      radius: 0.5,
     })
 
     this.createText('0', {

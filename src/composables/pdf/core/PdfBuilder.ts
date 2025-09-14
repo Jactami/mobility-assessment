@@ -316,6 +316,7 @@ export class PdfBuilder {
         this._config.color[options?.borderColor as keyof PdfConfig['color']] ||
         options?.borderColor,
       borderWidth: options?.borderWidth || 0,
+      radius: options?.radius || 0,
     }
 
     return this.addToPage('', schema, options?.static)

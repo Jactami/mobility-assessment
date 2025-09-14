@@ -82,6 +82,7 @@ export interface PdfRectOptions extends PdfElementOptions {
   color?: string
   borderColor?: string
   borderWidth?: number // in mm
+  radius?: number // corner radius in mm
 }
 
 export interface PdfTableOptions extends PdfElementOptions {
