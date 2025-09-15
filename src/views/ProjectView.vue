@@ -49,11 +49,13 @@
   </div>
 
   <!-- Padding for Action Bar -->
-  <div class="pb-16" />
+  <div class="pb-20" />
 
   <!-- Action Bar -->
-  <div class="fixed bottom-8 left-1/2 z-10 -translate-x-1/2">
-    <UIMenuActionBar :items="actionItems" />
+  <div class="fixed bottom-0 left-1/2 z-10 -translate-x-1/2">
+    <div class="pb-10">
+      <UIMenuActionBar :items="actionItems" />
+    </div>
   </div>
 
   <!-- Hidden content to produce map and chart exports -->
@@ -133,8 +135,8 @@ const isProjectDirty = computed(
 
 const actionItems: MenuListItem[] = [
   {
-    label: t('common.back'),
-    icon: 'back',
+    label: t('project.overview'),
+    icon: 'home',
     action: () => router.push('/'),
     divider: true,
   },
