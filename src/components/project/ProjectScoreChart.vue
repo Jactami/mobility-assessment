@@ -102,11 +102,11 @@ const chartOptions = computed<ChartOptions<'radar'>>(() => ({
     legend: {
       display: false,
     },
-    tooltip: {
-      callbacks: {
-        label: (context) => `${context.formattedValue}%`,
-      },
-    },
+    // tooltip: {
+    //   callbacks: {
+    //     label: (context) => `${context.formattedValue}%`,
+    //   },
+    // },
   },
 }))
 
