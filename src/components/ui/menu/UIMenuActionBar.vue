@@ -1,7 +1,7 @@
 <template>
   <!-- https://excalidraw.com/ -->
   <div
-    class="flex items-center gap-2 rounded-full border border-outline bg-surface p-1.5 shadow-md"
+    class="flex items-center gap-2 rounded-full border border-outline bg-surface-container-lowest p-1.5 shadow-md"
   >
     <template v-for="item in items" :key="item.label">
       <UIButtonIcon
