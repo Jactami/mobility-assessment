@@ -1,5 +1,4 @@
 <template>
-  <pre>{{ zoom }}</pre>
   <OlMap
     ref="mapRef"
     class="overflow-hidden rounded-border"
