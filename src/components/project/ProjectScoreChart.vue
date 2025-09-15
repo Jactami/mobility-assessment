@@ -70,7 +70,7 @@ const chartData = computed<ChartData<'radar'>>(() => ({
 
 const chartOptions = computed<ChartOptions<'radar'>>(() => ({
   responsive: true,
-  maintainAspectRatio: true,
+  maintainAspectRatio: false,
   scales: {
     r: {
       beginAtZero: true,
