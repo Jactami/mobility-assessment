@@ -3,6 +3,7 @@ import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop'
 import MaterialSymbolsAdd2Rounded from '~icons/material-symbols/add-2-rounded'
 import MaterialSymbolsArrowDropDownRounded from '~icons/material-symbols/arrow-drop-down-rounded'
 import MaterialSymbolsArrowDropUpRounded from '~icons/material-symbols/arrow-drop-up-rounded'
+import MaterialSymbolsBarChartRounded from '~icons/material-symbols/bar-chart-rounded'
 import MaterialSymbolsCheckRounded from '~icons/material-symbols/check-rounded'
 import MaterialSymbolsChevronLeft from '~icons/material-symbols/chevron-left-rounded'
 import MaterialSymbolsChevronRight from '~icons/material-symbols/chevron-right'
@@ -12,6 +13,7 @@ import MaterialSymbolsDarkModeRounded from '~icons/material-symbols/dark-mode-ro
 import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
 import MaterialSymbolsEditRounded from '~icons/material-symbols/edit-rounded'
 import MaterialSymbolsHome from '~icons/material-symbols/home'
+import MaterialSymbolsLocationOnRounded from '~icons/material-symbols/location-on-rounded'
 import MaterialSymbolsLoginRounded from '~icons/material-symbols/login-rounded'
 import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded'
 import MaterialSymbolsMapOutlineRounded from '~icons/material-symbols/map-outline-rounded'
@@ -36,6 +38,7 @@ import TablerExternalLink from '~icons/tabler/external-link'
  */
 export const icons = {
   add: MaterialSymbolsAdd2Rounded,
+  analytics: MaterialSymbolsBarChartRounded,
   back: TablerArrowBackUp,
   check: MaterialSymbolsCheckRounded,
   clear: MaterialSymbolsCloseRounded,
@@ -57,6 +60,7 @@ export const icons = {
   more: MaterialSymbolsMoreVert,
   next: MaterialSymbolsChevronRight,
   noFavorite: MaterialSymbolsStarOutlineRounded,
+  poi: MaterialSymbolsLocationOnRounded,
   previous: MaterialSymbolsChevronLeft,
   report: MdiFilePdfOutline,
   save: MaterialSymbolsSaveOutlineRounded,

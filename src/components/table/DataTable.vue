@@ -26,7 +26,7 @@
     <div class="overflow-hidden rounded-border border border-outline-variant">
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full">
-          <table class="relative min-w-full border-collapse">
+          <table class="relative min-w-full border-collapse text-sm">
             <!-- Table Head -->
             <thead class="border-b border-outline-variant">
               <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -196,7 +196,7 @@ const sorting = ref<SortingState>(
 /** Pagination state, if enabled via config */
 const pagination = ref<PaginationState | undefined>(
   // TODO: Decide if page size should be configurable
-  props.config.pagination ? { pageIndex: 0, pageSize: 25 } : undefined,
+  props.config.pagination ? { pageIndex: 0, pageSize: 15 } : undefined,
 )
 
 /** Global filter string for search input */

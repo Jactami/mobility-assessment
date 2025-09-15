@@ -1,36 +1,48 @@
 <template>
-  <div class="relative mx-auto h-auto w-full max-w-sm">
-    <!-- Progress Bar -->
-    <svg viewBox="0 0 100 50">
-      <path class="fill-none stroke-surface-container stroke-[5]" :d="arcPath" />
-      <path
-        :d="arcPath"
-        class="fill-none stroke-[5] transition-all duration-500"
-        :style="{
-          strokeDasharray: circumference,
-          strokeDashoffset: dashOffset,
-          stroke: scoreToColor(props.scores?.total || 0),
-        }"
-      />
-    </svg>
+  <svg viewBox="0 5 100 50" class="h-auto w-full">
+    <!-- Background Arc -->
+    <path class="fill-none stroke-surface-container stroke-[5]" :d="arcPath" />
 
-    <!-- Raw score value -->
-    <div v-if="props.scores" class="absolute bottom-0 left-1/2 -translate-x-1/2 text-center">
-      <div
-        class="transition-color text-7xl font-bold duration-500"
-        :style="{ color: scoreToColor(props.scores?.total || 0) }"
-      >
-        {{ n(props.scores?.total * 100, 'rounded') }}
-      </div>
-      <div class="mt-2 -mb-1 text-xl font-semibold text-on-surface-variant">
-        {{ t('project.score') }}
-      </div>
-    </div>
-  </div>
+    <!-- Foreground Arc -->
+    <path
+      :d="arcPath"
+      class="fill-none stroke-[5] transition-all duration-500"
+      :style="{
+        strokeDasharray: circumference,
+        strokeDashoffset: dashOffset,
+        stroke: scoreToColor(props.score || 0),
+      }"
+    />
+
+    <!-- Score Text -->
+    <text
+      v-if="props.score"
+      x="50"
+      y="38"
+      text-anchor="middle"
+      class="transition-color font-bold"
+      :fill="scoreToColor(props.score || 0)"
+      font-size="16"
+    >
+      {{ n(props.score * 100, 'rounded') }}
+    </text>
+
+    <!-- Label Text -->
+    <text
+      v-if="props.score"
+      x="50"
+      y="48"
+      text-anchor="middle"
+      class="font-semibold text-on-surface-variant"
+      fill="currentColor"
+      font-size="6"
+    >
+      {{ t('project.score') }}
+    </text>
+  </svg>
 </template>
 
 <script setup lang="ts">
-import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useColorUtil } from '@/composables/util/color'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -39,12 +51,12 @@ const { n, t } = useI18n()
 const { scoreToColor } = useColorUtil()
 
 const props = defineProps<{
-  scores?: EvaluationScores | null
+  score?: number | null
 }>()
 
 const radius = 40
 const arcPath = `M10,50 A${radius},${radius} 0 0,1 90,50`
 
 const circumference = Math.PI * radius
-const dashOffset = computed(() => `${circumference * (1 - (props.scores?.total || 0))}`)
+const dashOffset = computed(() => `${circumference * (1 - (props.score || 0))}`)
 </script>

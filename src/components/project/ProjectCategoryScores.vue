@@ -1,42 +1,41 @@
 <template>
-  <dl class="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 md:grid-cols-3">
-    <div v-for="domain in DOMAINS" :key="domain.name" class="space-y-2">
-      <div class="flex justify-between gap-1 font-semibold">
-        <dt>
-          <span>{{ t(`domain.${domain.name}`) }}</span>
-        </dt>
-        <dd
-          v-if="scores?.domain[domain.name]"
-          class="transition-color duration-500"
-          :style="{ color: scoreToColor(scores.domain[domain.name]) }"
-        >
-          {{ n(scores?.domain[domain.name] * 100, 'rounded') }}
-        </dd>
-      </div>
-      <div class="flex h-2 overflow-hidden rounded-border bg-surface-container">
-        <div
-          v-if="scores?.domain[domain.name]"
-          class="h-full rounded-border transition-all duration-500"
-          :style="{
-            backgroundColor: scoreToColor(scores.domain[domain.name]),
-            width: `${scores.domain[domain.name] * 100}%`,
-          }"
-        />
-      </div>
+  <div>
+    <div class="flex justify-between gap-2 text-sm font-semibold text-on-surface-variant">
+      <dt class="flex items-center gap-1.5">
+        <div class="size-2 rounded-full" :style="{ backgroundColor: domain.color }" />
+        <span>{{ t(`domain.${domain.name}`) }}</span>
+      </dt>
+      <dd
+        v-if="score"
+        class="transition-color duration-500"
+        :style="{ color: scoreToColor(score) }"
+      >
+        {{ n(score * 100, 'rounded') }}
+      </dd>
     </div>
-  </dl>
+    <div class="mt-1.5 flex h-2 overflow-hidden rounded-border bg-surface-container">
+      <div
+        v-if="score"
+        class="h-full rounded-border transition-all duration-500"
+        :style="{
+          backgroundColor: scoreToColor(score),
+          width: `${score * 100}%`,
+        }"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useColorUtil } from '@/composables/util/color'
-import { DOMAINS } from '@/constants'
+import type { AreaDomain } from '@/types'
 import { useI18n } from 'vue-i18n'
 
 const { n, t } = useI18n()
 const { scoreToColor } = useColorUtil()
 
 defineProps<{
-  scores?: EvaluationScores | null
+  domain: AreaDomain
+  score?: number | null
 }>()
 </script>

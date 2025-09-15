@@ -1,51 +1,63 @@
 <template>
-  <UISection>
-    <div ref="mapSection" class="scroll-mt-4">
-      <MapSearchInput
-        @search-initiated="geodataLoading = true"
-        @search-completed="geodataLoading = false"
-      />
+  <div class="max-w-8xl mx-auto grid grid-cols-1 gap-4 p-6 xl:grid-cols-2">
+    <div class="col-span-full">
+      <div class="mx-auto mb-3 w-full max-w-2xl">
+        <MapSearchInput
+          @search-initiated="geodataLoading = true"
+          @search-completed="geodataLoading = false"
+        />
+      </div>
+    </div>
+    <UIPanel ref="mapPanelRef" :title="t('project.map')" icon="map">
       <MapPanel
         v-model="selectedPoi"
         :project="projectStore.project"
         :pois="projectStore.pois"
         :disabled="geodataLoading"
+        :height="600"
       />
-    </div>
-  </UISection>
-
-  <template v-if="!geodataLoading">
-    <UISection v-if="projectStore.project?.score">
-      <ProjectTotalScore :scores="scores" />
-      <ProjectCategoryScores :scores="scores" class="mt-16" />
-    </UISection>
-
-    <UISection v-if="scores">
-      <div class="mx-auto max-w-xl">
-        <ProjectScoreChart ref="chartRef" :scores="scores" />
+    </UIPanel>
+    <UIPanel :title="t('project.analytics')" icon="analytics">
+      <div class="mx-auto max-w-xs">
+        <ProjectTotalScore :score="scores?.total" />
       </div>
-    </UISection>
-
-    <UISection v-if="projectStore.pois && projectStore.pois.length">
-      <div class="flex flex-wrap justify-center gap-2">
+      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
+        <ProjectCategoryScores
+          v-for="domain in DOMAINS"
+          :key="domain.name"
+          :domain="domain"
+          :score="scores?.domain[domain.name]"
+        />
+      </div>
+      <div class="mx-auto mt-3 h-auto max-w-sm">
+        <ProjectScoreChart v-if="scores" :scores="scores" />
+      </div>
+    </UIPanel>
+    <UIPanel :title="t('project.poi', 2)" icon="poi" class="col-span-full">
+      <div class="mb-6 flex flex-wrap justify-center gap-2">
         <template v-for="domain in DOMAINS" :key="domain.name">
           <ProjectCategoryPill
             v-for="category in domain.categories"
             :key="category.name"
             :category="category.name"
-            :count="getPoisByCategory(projectStore.pois, category.name).length"
+            :count="getPoisByCategory(projectStore.pois ?? [], category.name).length"
           />
         </template>
       </div>
-    </UISection>
-
-    <UISection>
       <ProjectPoiTable @poi-selected="handlePoiSelected" />
-    </UISection>
+    </UIPanel>
+  </div>
 
-    <DebugPanel title="Project Store" :value="projectStore.project" />
+  <!-- Padding for Action Bar -->
+  <div class="pb-16" />
 
-    <!-- Hidden Maps to produce map image exports -->
+  <!-- Action Bar -->
+  <div class="fixed bottom-8 left-1/2 z-10 -translate-x-1/2">
+    <UIMenuActionBar :items="actionItems" />
+  </div>
+
+  <!-- Hidden content to produce map and chart exports -->
+  <template v-if="!geodataLoading">
     <div class="invisible">
       <MapPanel
         v-for="domain in DOMAINS"
@@ -56,19 +68,13 @@
         :height="1"
       />
     </div>
+    <div class="hidden h-1">
+      <ProjectScoreChart v-if="scores" ref="chartRef" :scores="scores" />
+    </div>
   </template>
-
-  <!-- Padding for Action Bar -->
-  <div class="pb-16" />
-
-  <!-- Action Bar -->
-  <div class="fixed bottom-8 left-1/2 z-10 -translate-x-1/2">
-    <UIMenuActionBar :items="actionItems" />
-  </div>
 </template>
 
 <script setup lang="ts">
-import DebugPanel from '@/components/debug/DebugPanel.vue'
 import MapPanel from '@/components/map/MapPanel.vue'
 import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
@@ -78,7 +84,7 @@ import ProjectScoreChart from '@/components/project/ProjectScoreChart.vue'
 import ProjectTotalScore from '@/components/project/ProjectTotalScore.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenuActionBar from '@/components/ui/menu/UIMenuActionBar.vue'
-import UISection from '@/components/ui/UISection.vue'
+import UIPanel from '@/components/ui/UIPanel.vue'
 import useDB from '@/composables/db'
 import { useEvaluation } from '@/composables/evaluation'
 import type { EvaluationScores } from '@/composables/evaluation/types'
@@ -111,7 +117,7 @@ const scores = ref<EvaluationScores | null>(null)
 
 const selectedPoi = ref<Poi | null>(null)
 
-const mapSection = ref<HTMLDivElement | null>(null)
+const mapPanelRef = ref<InstanceType<typeof UIPanel> | null>(null)
 const chartRef = ref<InstanceType<typeof ProjectScoreChart> | null>(null)
 const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[] | null>('maps')
 
@@ -294,7 +300,7 @@ async function generateReport() {
 function handlePoiSelected(poi: Poi) {
   selectedPoi.value = poi
   // scroll to the map section
-  mapSection.value?.scrollIntoView({
+  mapPanelRef.value?.$el.scrollIntoView({
     behavior: 'smooth',
     block: 'center',
   })
