@@ -18,7 +18,12 @@ export default defineConfig(async () => ({
     Icons({ compiler: 'vue3' }),
     Unfonts({
       fontsource: {
-        families: ['Open Sans'],
+        families: [
+          {
+            name: 'Open Sans',
+            weights: [300, 400, 500, 600, 700],
+          },
+        ],
       },
       custom: {
         families: [
