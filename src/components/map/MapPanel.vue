@@ -1,11 +1,12 @@
 <template>
+  <pre>{{ zoom }}</pre>
   <OlMap
     ref="mapRef"
     class="overflow-hidden rounded-border"
     :class="{ 'opacity-60': disabled }"
     :style="{ height: `${height}px` }"
   >
-    <OlView :center="center" :zoom="zoom" @change:resolution="handleResolutionChange" />
+    <OlView :center="center" :zoom="zoom" :min-zoom="3" :max-zoom="20" />
 
     <!-- Openstreetmap Layer -->
     <OlTileLayer>
@@ -61,7 +62,6 @@ import type { Poi, Project } from '@/db/types'
 import { useGeolocation } from '@vueuse/core'
 import type { Extent } from 'ol/extent'
 import type Map from 'ol/Map'
-import type { ObjectEvent } from 'ol/Object'
 import { fromLonLat } from 'ol/proj'
 import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -112,9 +112,6 @@ const lon = ref(10.4477)
 const center = ref(fromLonLat([lon.value, lat.value]))
 const zoom = ref(5.7)
 
-const maxZoom = 20
-const minZoom = 2
-
 // Attribution text for the exported map image
 const attributions: string[] = [
   `© ${new Date().getFullYear()} by BGW Digital`,
@@ -134,16 +131,6 @@ function resetMap(longitude: number, latitude: number, radius: number) {
   center.value = fromLonLat([longitude, latitude])
   const offset = radius * 0.1
   zoom.value = zoomFromMeters(mapRef.value?.map as Map, location.value, (radius + offset) * 2)
-}
-
-/**
- * Handles changes to the map resolution.
- * @param event The resolution change event.
- */
-function handleResolutionChange(event: ObjectEvent) {
-  const newZoom = event.target.getZoom()
-  // Constrain zoom level to avoid recursive update calls
-  zoom.value = Math.max(minZoom, Math.min(maxZoom, newZoom))
 }
 
 /**
