@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-8xl mx-auto grid grid-cols-1 gap-4 p-6 xl:grid-cols-2">
+  <div class="max-w-8xl mx-auto grid grid-cols-1 gap-4 xl:grid-cols-2">
     <div class="col-span-full">
       <div class="mx-auto mb-3 w-full max-w-2xl">
         <MapSearchInput
