@@ -37,11 +37,7 @@
         </div>
         <div class="mt-4 text-sm text-on-surface-variant">
           <div class="flex items-center gap-x-1">
-            <img
-              :src="`/img/icons/${selectedPoi.category}.svg`"
-              :alt="t(`category.${selectedPoi.category}`)"
-              class="inline-block h-5 w-5"
-            />
+            <ProjectCategoryIcon :category="selectedPoi.category" class="size-5" />
             <span>{{ t(`category.${selectedPoi.category}`) }}</span>
           </div>
           <div class="mt-2 flex items-center justify-between">
@@ -65,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+import ProjectCategoryIcon from '@/components/project/ProjectCategoryIcon.vue'
 import ProjectPoiForm from '@/components/project/ProjectPoiForm.vue'
 import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import { useNotification } from '@/composables/notification'
