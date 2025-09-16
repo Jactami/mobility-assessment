@@ -8,7 +8,11 @@
           :style="{ backgroundColor: bgColor }"
         >
           <div class="text-5xl font-semibold">
-            {{ project.score ? n(project.score * 100, 'rounded') : t('common.notAvailable') }}
+            {{
+              typeof project.score === 'number'
+                ? n(project.score * 100, 'rounded')
+                : t('common.notAvailable')
+            }}
           </div>
         </div>
         <span
@@ -76,7 +80,9 @@ const address = computed(() => {
   return address.split(',').map((part) => part.trim())
 })
 
-const bgColor = computed(() => (props.project.score ? scoreToColor(props.project.score) : ''))
+const bgColor = computed(() =>
+  typeof props.project.score === 'number' ? scoreToColor(props.project.score) : '',
+)
 
 const menu = computed<MenuListItem[]>(() => [
   {
