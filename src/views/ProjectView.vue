@@ -49,11 +49,7 @@
       <div class="mb-6 flex flex-wrap justify-center gap-2">
         <template v-for="domain in DOMAINS" :key="domain.name">
           <template v-for="(category, i) in domain.categories" :key="category.name">
-            <UISkeletonLoader
-              :loading="isLoading"
-              height="1.5rem"
-              :width="i % 2 === 0 ? '12rem' : '8rem'"
-            >
+            <UISkeletonLoader :loading="isLoading" height="1.5rem" :width="`${7 + (i % 3) * 2}rem`">
               <ProjectCategoryPill
                 v-if="projectStore.project?.latitude && projectStore.project?.longitude"
                 :category="category.name"
