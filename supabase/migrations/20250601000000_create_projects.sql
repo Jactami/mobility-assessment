@@ -30,6 +30,8 @@ ALTER TABLE ONLY public.projects
 ALTER TABLE ONLY public.projects
     ADD CONSTRAINT projects_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES auth.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
+CREATE INDEX projects_owner_id_idx ON projects(owner_id);
+
 -- Moddatetime extension
 CREATE TRIGGER handle_updated_at_projects
     BEFORE UPDATE ON public.projects

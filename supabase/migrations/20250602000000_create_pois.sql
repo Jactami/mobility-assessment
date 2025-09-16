@@ -31,6 +31,8 @@ ALTER TABLE ONLY public.pois
 ALTER TABLE ONLY public.pois
   ADD CONSTRAINT pois_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
+CREATE INDEX pois_project_id_idx ON pois(project_id);
+
 -- Moddatetime extension
 CREATE TRIGGER handle_updated_at_pois
   BEFORE UPDATE ON public.pois
