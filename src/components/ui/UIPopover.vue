@@ -4,7 +4,6 @@
     <PopoverButton
       ref="referenceEl"
       as="div"
-      class="inline-block"
       @mouseenter="isHovered = true"
       @mouseleave="isHovered = false"
     >
