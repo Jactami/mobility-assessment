@@ -39,7 +39,7 @@
   <UISection :title="t('project.myProjects')">
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
       <template v-if="!loading">
-        <button class="cursor-pointer" title="Neues Projekt" @click="createProject">
+        <button class="cursor-pointer" :title="t('project.create')" @click="createProject">
           <UICard :animation="true" class="min-h-64">
             <div
               class="flex h-full flex-col items-center justify-center gap-y-4 bg-surface-container-low p-2 text-on-surface-variant"
@@ -71,9 +71,9 @@
 import ProjectCard from '@/components/project/ProjectCard.vue'
 import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import UIIcon from '@/components/ui/icon/UIIcon.vue'
+import UISkeleton from '@/components/ui/skeleton/UISkeleton.vue'
 import UICard from '@/components/ui/UICard.vue'
 import UISection from '@/components/ui/UISection.vue'
-import UISkeleton from '@/components/ui/UISkeleton.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
 import type { Project } from '@/db/types'

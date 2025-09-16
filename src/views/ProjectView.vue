@@ -1,5 +1,6 @@
 <template>
   <div class="max-w-8xl mx-auto grid w-full grid-cols-1 gap-4 xl:grid-cols-2">
+    <!-- Search Bar -->
     <div class="col-span-full">
       <div class="mx-auto mb-3 w-full max-w-2xl">
         <MapSearchInput
@@ -8,46 +9,63 @@
         />
       </div>
     </div>
+
+    <!-- Map -->
     <UIPanel ref="mapPanelRef" :title="t('project.map')" icon="map">
-      <MapPanel
-        v-model="selectedPoi"
-        :project="projectStore.project"
-        :pois="projectStore.pois"
-        :disabled="geodataLoading"
-        :height="600"
-      />
+      <UISkeletonLoader :loading="isLoading" :height="`${mapHeight}px`">
+        <MapPanel
+          v-model="selectedPoi"
+          :project="projectStore.project"
+          :pois="projectStore.pois"
+          :disabled="isLoading"
+          :height="mapHeight"
+        />
+      </UISkeletonLoader>
     </UIPanel>
+
+    <!-- Analytics -->
     <UIPanel :title="t('project.analytics')" icon="analytics">
       <div class="mx-auto max-w-xs">
-        <ProjectTotalScore :score="scores?.total" />
+        <UISkeletonLoader :loading="isLoading" height="10rem">
+          <ProjectTotalScore :score="scores?.total" />
+        </UISkeletonLoader>
       </div>
       <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
-        <ProjectCategoryScores
-          v-for="domain in DOMAINS"
-          :key="domain.name"
-          :domain="domain"
-          :score="scores?.domain[domain.name]"
-        />
-      </div>
-      <div class="mx-auto mt-3 h-auto max-w-sm">
-        <ProjectScoreChart :scores="scores" />
-      </div>
-    </UIPanel>
-    <UIPanel :title="t('project.poi', 2)" icon="poi" class="col-span-full">
-      <div
-        v-if="projectStore.project?.latitude && projectStore.project?.longitude"
-        class="mb-6 flex flex-wrap justify-center gap-2"
-      >
         <template v-for="domain in DOMAINS" :key="domain.name">
-          <ProjectCategoryPill
-            v-for="category in domain.categories"
-            :key="category.name"
-            :category="category.name"
-            :count="getPoisByCategory(projectStore.pois ?? [], category.name).length"
-          />
+          <UISkeletonLoader :loading="isLoading" height="2rem">
+            <ProjectCategoryScores :domain="domain" :score="scores?.domain[domain.name]" />
+          </UISkeletonLoader>
         </template>
       </div>
-      <ProjectPoiTable @poi-selected="handlePoiSelected" />
+      <div class="mx-auto mt-3 h-auto max-w-sm">
+        <UISkeletonLoader :loading="isLoading" height="18rem">
+          <ProjectScoreChart :scores="scores" />
+        </UISkeletonLoader>
+      </div>
+    </UIPanel>
+
+    <!-- POI table -->
+    <UIPanel :title="t('project.poi', 2)" icon="poi" class="col-span-full">
+      <div class="mb-6 flex flex-wrap justify-center gap-2">
+        <template v-for="domain in DOMAINS" :key="domain.name">
+          <template v-for="(category, i) in domain.categories" :key="category.name">
+            <UISkeletonLoader
+              :loading="isLoading"
+              height="1.5rem"
+              :width="i % 2 === 0 ? '12rem' : '8rem'"
+            >
+              <ProjectCategoryPill
+                v-if="projectStore.project?.latitude && projectStore.project?.longitude"
+                :category="category.name"
+                :count="getPoisByCategory(projectStore.pois ?? [], category.name).length"
+              />
+            </UISkeletonLoader>
+          </template>
+        </template>
+      </div>
+      <UISkeletonLoader :loading="isLoading" height="10rem">
+        <ProjectPoiTable @poi-selected="handlePoiSelected" />
+      </UISkeletonLoader>
     </UIPanel>
   </div>
 
@@ -89,6 +107,7 @@ import ProjectScoreChart from '@/components/project/ProjectScoreChart.vue'
 import ProjectTotalScore from '@/components/project/ProjectTotalScore.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenuActionBar from '@/components/ui/menu/UIMenuActionBar.vue'
+import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import UIPanel from '@/components/ui/UIPanel.vue'
 import useDB from '@/composables/db'
 import { useEvaluation } from '@/composables/evaluation'
@@ -114,6 +133,8 @@ const { pdf, error, loading, createReport } = usePdf()
 const { calcScores } = useEvaluation()
 const { getPoisByDomain, getPoisByCategory } = useProjectUtil()
 
+const mapHeight = 600 // px
+
 // Original project and POIs from database to compare with store
 const project = ref<Project | null>(null)
 const pois = ref<Poi[] | null>(null)
@@ -126,8 +147,10 @@ const mapPanelRef = ref<InstanceType<typeof UIPanel> | null>(null)
 const chartRef = ref<InstanceType<typeof ProjectScoreChart> | null>(null)
 const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[] | null>('maps')
 
-// Loading flag to indicate if geodata is being fetched
+// Loading flags to indicate if data is being fetched
 const geodataLoading = ref(false)
+const projectLoading = ref(false)
+const isLoading = computed(() => geodataLoading.value || projectLoading.value)
 
 // Checks if the project has unsaved changes in a simple way
 const isProjectDirty = computed(
@@ -180,12 +203,16 @@ onBeforeRouteLeave(async (_, __, next) => {
 })
 
 async function loadProject() {
+  projectLoading.value = true
+
   // Fetch the project and POIs from the database
   const projectId = route.params.projectId as string
   const [projectResponse, poisResponse] = await Promise.all([
     db.getProject(projectId),
     db.getPois(projectId),
   ])
+
+  projectLoading.value = false
 
   // If there is an error in the database, show error
   if (projectResponse.error || poisResponse.error) {

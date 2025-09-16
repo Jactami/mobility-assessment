@@ -1,5 +1,9 @@
 <template>
-  <div class="animate-pulse rounded-border bg-surface-container-high" :style="style" />
+  <div
+    class="animate-pulse rounded-border bg-surface-container-high"
+    :style="style"
+    aria-busy="true"
+  />
 </template>
 
 <script setup lang="ts">
