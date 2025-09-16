@@ -10,26 +10,25 @@
       :style="{
         strokeDasharray: circumference,
         strokeDashoffset: dashOffset,
-        stroke: scoreToColor(props.score || 0),
+        stroke: scoreToColor(score || 0),
       }"
     />
 
     <!-- Score Text -->
     <text
-      v-if="props.score"
+      v-if="typeof score === 'number'"
       x="50"
       y="38"
       text-anchor="middle"
       class="transition-color font-bold"
-      :fill="scoreToColor(props.score || 0)"
+      :fill="scoreToColor(score)"
       font-size="16"
     >
-      {{ n(props.score * 100, 'rounded') }}
+      {{ n(score * 100, 'rounded') }}
     </text>
 
     <!-- Label Text -->
     <text
-      v-if="props.score"
       x="50"
       y="48"
       text-anchor="middle"

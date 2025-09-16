@@ -100,7 +100,7 @@ const config: TableConfig<Poi> = {
       handler: deletePoi,
     },
   ],
-  add: addPoi,
+  add: projectStore.project?.latitude && projectStore.project?.longitude ? addPoi : undefined,
 }
 
 async function deletePoi(poi: Poi) {
@@ -118,6 +118,8 @@ async function deletePoi(poi: Poi) {
 }
 
 function addPoi() {
+  if (!projectStore.project?.latitude || !projectStore.project?.longitude) return
+
   modalOpen.value = true
   editPoi.value = {
     id: undefined,

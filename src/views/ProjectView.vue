@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-8xl mx-auto grid grid-cols-1 gap-4 xl:grid-cols-2">
+  <div class="max-w-8xl mx-auto grid w-full grid-cols-1 gap-4 xl:grid-cols-2">
     <div class="col-span-full">
       <div class="mx-auto mb-3 w-full max-w-2xl">
         <MapSearchInput
@@ -30,11 +30,14 @@
         />
       </div>
       <div class="mx-auto mt-3 h-auto max-w-sm">
-        <ProjectScoreChart v-if="scores" :scores="scores" />
+        <ProjectScoreChart :scores="scores" />
       </div>
     </UIPanel>
     <UIPanel :title="t('project.poi', 2)" icon="poi" class="col-span-full">
-      <div class="mb-6 flex flex-wrap justify-center gap-2">
+      <div
+        v-if="projectStore.project?.latitude && projectStore.project?.longitude"
+        class="mb-6 flex flex-wrap justify-center gap-2"
+      >
         <template v-for="domain in DOMAINS" :key="domain.name">
           <ProjectCategoryPill
             v-for="category in domain.categories"
@@ -317,7 +320,12 @@ watch(
     }
 
     // Recalculate scores whenever POIs change
-    if (projectStore.pois && projectStore.project?.radius) {
+    if (
+      projectStore.pois &&
+      projectStore.project?.radius &&
+      projectStore.project.latitude &&
+      projectStore.project.longitude
+    ) {
       scores.value = calcScores(projectStore.pois, projectStore.project.radius)
       projectStore.updateProject({
         ...projectStore.project,

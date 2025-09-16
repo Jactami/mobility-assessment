@@ -6,7 +6,7 @@
         <span>{{ t(`domain.${domain.name}`) }}</span>
       </dt>
       <dd
-        v-if="score"
+        v-if="typeof score === 'number'"
         class="transition-color duration-500"
         :style="{ color: scoreToColor(score) }"
       >
