@@ -74,7 +74,7 @@
       />
     </div>
     <div class="hidden h-1">
-      <ProjectScoreChart v-if="scores" ref="chartRef" :scores="scores" />
+      <ProjectScoreChart ref="chartRef" :scores="scores" />
     </div>
   </template>
 </template>
