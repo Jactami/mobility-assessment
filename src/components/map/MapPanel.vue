@@ -1,7 +1,7 @@
 <template>
   <OlMap
     ref="mapRef"
-    class="overflow-hidden rounded-border"
+    class="block overflow-hidden rounded-border"
     :class="{ 'opacity-60': disabled }"
     :style="{ height: `${height}px` }"
   >
@@ -62,7 +62,7 @@ import { useGeolocation } from '@vueuse/core'
 import type { Extent } from 'ol/extent'
 import type Map from 'ol/Map'
 import { fromLonLat } from 'ol/proj'
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   OlFullScreenControl,
@@ -103,6 +103,7 @@ const { exportMapToImage, metersToPixels, zoomFromMeters } = useMapUtils()
 const selectedPoi = defineModel<Poi | null>()
 
 const mapRef = ref<{ map: Map } | null>(null)
+const map = computed(() => mapRef.value?.map)
 
 // Default coordinates and zoom level centered on Germany
 const lat = ref(51.1634)
@@ -124,12 +125,20 @@ const extent = ref<Extent>([])
 // Computed location center for the map view based on current location
 const location = computed(() => fromLonLat([lon.value, lat.value]))
 
-function resetMap(longitude: number, latitude: number, radius: number) {
-  lon.value = longitude
-  lat.value = latitude
-  center.value = fromLonLat([longitude, latitude])
-  const offset = radius * 0.1
-  zoom.value = zoomFromMeters(mapRef.value?.map as Map, location.value, (radius + offset) * 2)
+async function resetMap() {
+  if (!props.project?.longitude || !props.project?.latitude || !props.project?.radius || !map.value)
+    return
+
+  // Update center and zoom based on project location
+  lon.value = props.project.longitude
+  lat.value = props.project.latitude
+  center.value = fromLonLat([lon.value, lat.value])
+  const offset = props.project.radius * 0.1
+  zoom.value = zoomFromMeters(map.value as Map, location.value, (props.project.radius + offset) * 2)
+
+  // await next render to save current extent
+  await nextTick()
+  extent.value = map.value.getView().calculateExtent(map.value.getSize())
 }
 
 /**
@@ -137,32 +146,19 @@ function resetMap(longitude: number, latitude: number, radius: number) {
  * @returns A promise that resolves to the exported image data URL.
  */
 async function exportMap() {
-  if (!mapRef.value) return
+  if (!map.value) return
 
-  const map = mapRef.value.map as Map
   const size = 200 // 4:3
   const attribution = { text: attributions.join(' '), size: 22 }
 
-  const img = await exportMapToImage(map, [size, size * 0.75], 192, 0.8, attribution)
+  const img = await exportMapToImage(map.value as Map, [size, size * 0.75], 192, 0.8, attribution)
   return img
 }
 
-// Update and initialize map view when the project location changes
-watch(
-  () => props.project,
-  async (newProject) => {
-    const { longitude, latitude, radius } = newProject || {}
-    if (longitude && latitude && radius && mapRef.value) {
-      // Update map center and zoom based on project location
-      resetMap(longitude, latitude, radius)
+onMounted(resetMap)
 
-      // save extent based on the new project location
-      await nextTick()
-      extent.value = mapRef.value.map.getView().calculateExtent(mapRef.value.map.getSize())
-    }
-  },
-  { immediate: true },
-)
+// Update and initialize map view when the project location changes
+watch(() => props.project, resetMap)
 
 // Watch for geolocation updates and center the map on the user's location
 watch(coords, ({ latitude, longitude }) => {
