@@ -138,7 +138,7 @@ async function resetMap() {
 
   // await next render to save current extent
   await nextTick()
-  extent.value = map.value.getView().calculateExtent(map.value.getSize())
+  if (map.value) extent.value = map.value.getView().calculateExtent(map.value.getSize())
 }
 
 /**
