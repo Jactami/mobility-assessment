@@ -27,11 +27,11 @@ describe('useEvaluation', () => {
   const DOMAIN = DOMAINS[0]
   if (!DOMAIN) throw new Error('No domain found for testing')
 
-  const CATEGORY = DOMAIN.categories[0]?.name
+  const CATEGORY = DOMAIN.categories[0]
   if (!CATEGORY) throw new Error('No category found for testing')
 
   const radius = 1000 // 1000m
-  const { calcScores, SATURATION_THRESHOLD } = useEvaluation()
+  const { calcScores } = useEvaluation()
 
   it('returns 0 scores when no POIs', () => {
     const scores = calcScores([], radius)
@@ -43,11 +43,12 @@ describe('useEvaluation', () => {
   })
 
   it('returns maximal score when POI at distance 0', () => {
-    const categories = DOMAIN.categories.map((c) => c.name)
+    const categories = DOMAIN.categories.map((c) => c)
     const pois: Poi[] = []
     for (const category of categories) {
-      for (let i = 0; i < SATURATION_THRESHOLD; i++) {
-        pois.push(mockPoi(category, 0))
+      const saturation = category.saturation || 1
+      for (let i = 0; i < saturation; i++) {
+        pois.push(mockPoi(category.name, 0))
       }
     }
 
@@ -58,8 +59,8 @@ describe('useEvaluation', () => {
   })
 
   it('scores decrease as distance increases', () => {
-    const closePoi = mockPoi(CATEGORY, 100)
-    const farPoi = mockPoi(CATEGORY, 900)
+    const closePoi = mockPoi(CATEGORY.name, 100)
+    const farPoi = mockPoi(CATEGORY.name, 900)
 
     const closeScore = calcScores([closePoi], radius).domain[DOMAIN.name]
     const farScore = calcScores([farPoi], radius).domain[DOMAIN.name]
@@ -68,7 +69,9 @@ describe('useEvaluation', () => {
   })
 
   it('scores saturate when many POIs in same category', () => {
-    const pois = Array.from({ length: SATURATION_THRESHOLD * 2 }, () => mockPoi(CATEGORY, 100))
+    const pois = Array.from({ length: (CATEGORY.saturation || 1) * 2 }, () =>
+      mockPoi(CATEGORY.name, 100),
+    )
 
     const score = calcScores(pois, radius).domain[DOMAIN.name]
 
