@@ -101,6 +101,7 @@ const config: TableConfig<Poi> = {
     },
   ],
   add: projectStore.project?.latitude && projectStore.project?.longitude ? addPoi : undefined,
+  export: true,
 }
 
 async function deletePoi(poi: Poi) {

@@ -1,31 +1,49 @@
 <template>
   <div>
-    <!-- Global Search -->
-    <div v-if="config.searchable" class="mb-2 w-full max-w-sm">
-      <FormKit
-        v-model="globalFilter"
-        type="text"
-        name="search"
-        :label="t('table.search')"
-        :placeholder="t('table.searchPlaceholder')"
-        autocomplete="off"
-        :spellcheck="false"
-      >
-        <template #prefixIcon>
-          <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
-        </template>
-        <template #suffixIcon>
-          <div class="relative w-6">
-            <div class="absolute inset-y-0 -right-2 flex items-center">
-              <UIButtonIcon v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
+    <!-- Toolbar -->
+    <div class="flex flex-col items-baseline gap-x-5 sm:flex-row sm:justify-between">
+      <!-- Global Search -->
+      <div v-if="config.searchable" class="w-full max-w-full sm:max-w-sm">
+        <FormKit
+          v-model="globalFilter"
+          type="text"
+          name="search"
+          :label="t('table.search')"
+          label-class="sr-only"
+          :placeholder="t('table.searchPlaceholder')"
+          autocomplete="off"
+          :spellcheck="false"
+        >
+          <template #prefixIcon>
+            <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
+          </template>
+          <template #suffixIcon>
+            <div class="relative w-6">
+              <div class="absolute inset-y-0 -right-2 flex items-center">
+                <UIButtonIcon v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
+              </div>
             </div>
-          </div>
-        </template>
-      </FormKit>
+          </template>
+        </FormKit>
+      </div>
+
+      <div class="flex gap-x-2">
+        <!-- Button Export -->
+        <UIButton v-if="config.export" variant="secondary" @click="exportData">
+          <UIIcon icon="download" />
+          <span>{{ t('table.export') }}</span>
+        </UIButton>
+
+        <!-- Button New -->
+        <UIButton v-if="config.add" variant="primary" @click="config.add">
+          <UIIcon icon="add" />
+          <span>{{ t('table.add') }}</span>
+        </UIButton>
+      </div>
     </div>
 
     <!-- Data Table -->
-    <div class="overflow-hidden rounded-border border border-outline-variant">
+    <div class="mt-5 overflow-hidden rounded-border border border-outline-variant sm:mt-0">
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full">
           <table class="relative min-w-full border-collapse text-sm">
@@ -97,8 +115,8 @@
                       <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
                     </slot>
                   </td>
-                  <td v-if="config.actions" class="px-2 text-right">
-                    <div class="flex items-center gap-x-1">
+                  <td v-if="config.actions" class="px-1.5 text-right">
+                    <div class="flex items-center gap-x-0.5 sm:gap-x-1">
                       <UIButtonIcon
                         v-for="(action, i) in config.actions"
                         :key="i"
@@ -118,10 +136,8 @@
     </div>
 
     <div class="mt-2 flex justify-between gap-x-3">
-      <!-- Placeholder to balance add button -->
-      <div v-if="config.add" class="w-10" />
       <!-- Pagination -->
-      <div
+      <nav
         v-if="table.getPageCount() > 1"
         class="flex grow items-center justify-center gap-x-0 text-sm sm:gap-x-2"
       >
@@ -136,11 +152,10 @@
           @click="table.previousPage()"
         />
         <div class="px-2 text-center">
-          <span class="hidden sm:inline-block">{{ t('table.page') }}</span>
-          <!-- <span>
+          <span class="hidden sm:inline-block">{{ t('table.page') }}&nbsp;</span>
+          <span>
             {{ table.getState().pagination.pageIndex + 1 }} / {{ table.getPageCount() }}
-          </span> -->
-          <span> {{ table.getState().pagination.pageIndex + 1 }} / 300</span>
+          </span>
         </div>
         <UIButtonIcon icon="next" :disabled="!table.getCanNextPage()" @click="table.nextPage()" />
         <UIButtonIcon
@@ -148,20 +163,17 @@
           :disabled="!table.getCanNextPage()"
           @click="table.setPageIndex(table.getPageCount() - 1)"
         />
-      </div>
-
-      <!-- Add new item button -->
-      <div v-if="config.add" class="my-auto self-end">
-        <UIButton variant="primary" class="size-10 text-xl" @click="config.add">+</UIButton>
-      </div>
+      </nav>
     </div>
   </div>
 </template>
 
-<script setup lang="ts" generic="T">
+<script setup lang="ts" generic="T extends Record<string, unknown>">
 import UIButton from '@/components/ui/button/UIButton.vue'
 import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import UIIcon from '@/components/ui/icon/UIIcon.vue'
+import { useCSV } from '@/composables/csv'
+import { useDownload } from '@/composables/download'
 import {
   createColumnHelper,
   FlexRender,
@@ -190,6 +202,8 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const { convertToCSV } = useCSV()
+const { downloadCSV } = useDownload()
 
 /** Current sorting state for the table */
 const sorting = ref<SortingState>(
@@ -284,4 +298,26 @@ const table = useVueTable({
     return String(formatted).toLowerCase().includes(filterValue.toLowerCase())
   },
 })
+
+// TODO: Decide whether to export raw data or formatted data
+function exportData() {
+  if (!props.config.export) return
+
+  // Formatted data export
+  // const formattedData = props.data.map((row) => {
+  //   const newRow: Record<string, unknown> = {}
+  //   props.config.columns.forEach((col) => {
+  //     const raw = row[col.key]
+  //     newRow[col.label] = col.formatter ? col.formatter(raw, row) : raw
+  //   })
+  //   return newRow
+  // })
+  // const csv = convertToCSV(formattedData)
+
+  // Raw data export
+  const csv = convertToCSV(props.data)
+
+  // Trigger download
+  downloadCSV(csv, 'export.csv')
+}
 </script>

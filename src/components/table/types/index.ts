@@ -52,4 +52,7 @@ export default interface TableConfig<T> {
 
   /** Optional action to handle adding a new item to the table. */
   add?: () => unknown
+
+  /** Enables exporting the table data as a CSV file. */
+  export?: boolean
 }

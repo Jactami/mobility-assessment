@@ -11,6 +11,7 @@ import MaterialSymbolsCloseRounded from '~icons/material-symbols/close-rounded'
 import MaterialSymbolsContentCopyOutlineRounded from '~icons/material-symbols/content-copy-outline-rounded'
 import MaterialSymbolsDarkModeRounded from '~icons/material-symbols/dark-mode-rounded'
 import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
+import MaterialSymbolsDownload from '~icons/material-symbols/download'
 import MaterialSymbolsEditRounded from '~icons/material-symbols/edit-rounded'
 import MaterialSymbolsHome from '~icons/material-symbols/home'
 import MaterialSymbolsLocationOnRounded from '~icons/material-symbols/location-on-rounded'
@@ -47,6 +48,7 @@ export const icons = {
   dark: MaterialSymbolsDarkModeRounded,
   delete: MaterialSymbolsDeleteOutlineRounded,
   down: MaterialSymbolsArrowDropDownRounded,
+  download: MaterialSymbolsDownload,
   edit: MaterialSymbolsEditRounded,
   favorite: MaterialSymbolsStarRounded,
   first: MdiChevronDoubleLeft,

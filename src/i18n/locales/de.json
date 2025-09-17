@@ -154,7 +154,9 @@
   },
   "table": {
     "actions": "Aktionen",
+    "add": "Hinzufügen",
     "confirmDelete": "Möchten Sie den Eintrag \"{object}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "export": "Export",
     "noData": "Keine Daten verfügbar",
     "page": "Seite",
     "search": "Suchen",
