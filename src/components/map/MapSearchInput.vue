@@ -15,9 +15,11 @@
       @keydown.enter="search"
     >
       <template #suffixIcon>
-        <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-          <UIButtonIcon v-if="query && !loading" icon="close" @click="resetQuery" />
-          <UIIcon v-else-if="loading" icon="loading" />
+        <div class="relative w-6">
+          <div class="absolute inset-y-0 -right-2 flex items-center">
+            <UIButtonIcon v-if="query && !loading" icon="close" @click="resetQuery" />
+            <UIIcon v-else-if="loading" icon="loading" />
+          </div>
         </div>
       </template>
     </FormKit>

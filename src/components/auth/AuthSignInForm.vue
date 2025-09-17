@@ -27,13 +27,15 @@
         validation="required"
       >
         <template #suffix>
-          <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-            <UIButtonIcon
-              tabindex="-1"
-              :icon="passwordVisible ? 'hide' : 'show'"
-              @mousedown="passwordVisible = true"
-              @mouseup="passwordVisible = false"
-            />
+          <div class="relative w-6">
+            <div class="absolute inset-y-0 -right-2 flex items-center">
+              <UIButtonIcon
+                tabindex="-1"
+                :icon="passwordVisible ? 'hide' : 'show'"
+                @mousedown="passwordVisible = true"
+                @mouseup="passwordVisible = false"
+              />
+            </div>
           </div>
         </template>
       </FormKit>

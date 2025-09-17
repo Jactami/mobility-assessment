@@ -18,13 +18,15 @@
         validation="required"
       >
         <template #suffix>
-          <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-            <UIButtonIcon
-              tabindex="-1"
-              :icon="oldPasswordVisible ? 'hide' : 'show'"
-              @mousedown="oldPasswordVisible = true"
-              @mouseup="oldPasswordVisible = false"
-            />
+          <div class="relative w-6">
+            <div class="absolute inset-y-0 -right-2 flex items-center">
+              <UIButtonIcon
+                tabindex="-1"
+                :icon="oldPasswordVisible ? 'hide' : 'show'"
+                @mousedown="oldPasswordVisible = true"
+                @mouseup="oldPasswordVisible = false"
+              />
+            </div>
           </div>
         </template>
       </FormKit>

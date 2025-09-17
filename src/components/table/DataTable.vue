@@ -15,8 +15,10 @@
           <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
         </template>
         <template #suffixIcon>
-          <div class="absolute right-0 bottom-1 flex items-center pr-2">
-            <UIButtonIcon v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
+          <div class="relative w-6">
+            <div class="absolute inset-y-0 -right-2 flex items-center">
+              <UIButtonIcon v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
+            </div>
           </div>
         </template>
       </FormKit>
