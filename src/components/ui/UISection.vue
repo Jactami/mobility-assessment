@@ -1,7 +1,9 @@
 <template>
-  <section>
-    <h2 v-if="title" class="mt-6 text-xl font-bold">{{ title }}</h2>
-    <div class="pt-4 pb-8">
+  <section class="my-8">
+    <header v-if="title" class="mt-4 mb-6">
+      <h2 class="text-2xl leading-tight font-bold text-pretty">{{ title }}</h2>
+    </header>
+    <div>
       <slot>
         <!-- Section content goes here. -->
       </slot>

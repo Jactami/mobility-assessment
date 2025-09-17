@@ -1,5 +1,7 @@
 <template>
-  <div class="overflow-hidden rounded-border border border-outline bg-surface p-4 shadow-sm">
+  <div
+    class="overflow-hidden rounded-border border border-outline bg-surface p-2.5 shadow-sm sm:p-4"
+  >
     <div v-if="title || icon">
       <div class="flex items-center gap-x-1 text-base font-bold text-on-surface-variant">
         <UIIcon v-if="icon" :icon="icon" class="text-lg" />

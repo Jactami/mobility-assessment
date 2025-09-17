@@ -1,6 +1,6 @@
 <template>
   <UIPageHeader
-    title="Playground"
+    :title="t('meta.playground')"
     subtitle="A place to develop and test new components and features."
   />
 
@@ -261,8 +261,10 @@ import UISection from '@/components/ui/UISection.vue'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const logger = useLogger('playground')
+const { t } = useI18n()
+const logger = useLogger('Logger running...')
 const notification = useNotification()
 
 logger.log('Logger running...')

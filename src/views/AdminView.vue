@@ -1,4 +1,6 @@
 <template>
+  <UIPageHeader :title="t('meta.admin')" />
+
   <UISection title="Nutzer">
     <DataTable v-if="profiles" :data="profiles" :config="tableConfig" />
   </UISection>
@@ -67,6 +69,7 @@ import DataTable from '@/components/table/DataTable.vue'
 import type TableConfig from '@/components/table/types'
 import UIButton from '@/components/ui/button/UIButton.vue'
 import UIModal from '@/components/ui/UIModal.vue'
+import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UISection from '@/components/ui/UISection.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'

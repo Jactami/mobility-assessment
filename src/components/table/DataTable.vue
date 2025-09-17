@@ -115,13 +115,13 @@
       </div>
     </div>
 
-    <div class="mt-2 flex items-center justify-between gap-x-6">
+    <div class="mt-2 flex justify-between gap-x-3">
       <!-- Placeholder to balance add button -->
       <div v-if="config.add" class="w-10" />
       <!-- Pagination -->
       <div
         v-if="table.getPageCount() > 1"
-        class="flex grow items-center justify-center gap-x-2 text-sm"
+        class="flex grow items-center justify-center gap-x-0 text-sm sm:gap-x-2"
       >
         <UIButtonIcon
           icon="first"
@@ -133,9 +133,12 @@
           :disabled="!table.getCanPreviousPage()"
           @click="table.previousPage()"
         />
-        <div class="px-2">
-          {{ t('table.page') }} {{ table.getState().pagination.pageIndex + 1 }} /
-          {{ table.getPageCount() }}
+        <div class="px-2 text-center">
+          <span class="hidden sm:inline-block">{{ t('table.page') }}</span>
+          <!-- <span>
+            {{ table.getState().pagination.pageIndex + 1 }} / {{ table.getPageCount() }}
+          </span> -->
+          <span> {{ table.getState().pagination.pageIndex + 1 }} / 300</span>
         </div>
         <UIButtonIcon icon="next" :disabled="!table.getCanNextPage()" @click="table.nextPage()" />
         <UIButtonIcon
@@ -146,7 +149,7 @@
       </div>
 
       <!-- Add new item button -->
-      <div v-if="config.add" class="self-end">
+      <div v-if="config.add" class="my-auto self-end">
         <UIButton variant="primary" class="size-10 text-xl" @click="config.add">+</UIButton>
       </div>
     </div>

@@ -1,6 +1,10 @@
 <template>
-  <h1 class="text-4xl font-medium" :class="{ 'mb-10': !subtitle }">{{ title }}</h1>
-  <p v-if="subtitle" class="mt-6 mb-10 text-lg text-on-surface-variant">{{ subtitle }}</p>
+  <header class="my-6">
+    <h1 class="text-3xl leading-tight font-bold text-pretty sm:text-4xl">{{ title }}</h1>
+    <div v-if="subtitle" class="mt-4 text-lg text-pretty text-on-surface-variant">
+      {{ subtitle }}
+    </div>
+  </header>
 </template>
 
 <script setup lang="ts">

@@ -1,4 +1,6 @@
 <template>
+  <UIPageHeader :title="t('meta.home')" />
+
   <!-- Action Bar -->
   <div class="max-w-sm">
     <FormKit
@@ -73,6 +75,7 @@ import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import UIIcon from '@/components/ui/icon/UIIcon.vue'
 import UISkeleton from '@/components/ui/skeleton/UISkeleton.vue'
 import UICard from '@/components/ui/UICard.vue'
+import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UISection from '@/components/ui/UISection.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'

@@ -1,12 +1,18 @@
 <template>
-  <div class="max-w-8xl mx-auto grid w-full grid-cols-1 gap-4 pb-16 xl:grid-cols-2">
+  <UISkeletonLoader :loading="isLoading" height="3rem" width="40%" class="my-6">
+    <UIPageHeader v-if="projectStore.project?.title" :title="projectStore.project.title" />
+  </UISkeletonLoader>
+
+  <div class="max-w-8xl mx-auto grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
     <!-- Search Bar -->
     <div class="col-span-full">
       <div class="mx-auto mb-3 w-full max-w-2xl">
-        <MapSearchInput
-          @search-initiated="geodataLoading = true"
-          @search-completed="geodataLoading = false"
-        />
+        <UISkeletonLoader :loading="isLoading" height="2.5rem">
+          <MapSearchInput
+            @search-initiated="geodataLoading = true"
+            @search-completed="geodataLoading = false"
+          />
+        </UISkeletonLoader>
       </div>
     </div>
 
@@ -37,7 +43,7 @@
           </UISkeletonLoader>
         </template>
       </div>
-      <div class="mx-auto mt-3 h-auto max-w-sm">
+      <div class="mx-auto mt-3 h-auto w-full max-w-sm">
         <UISkeletonLoader :loading="isLoading" height="18rem">
           <ProjectScoreChart :scores="scores" />
         </UISkeletonLoader>
@@ -97,6 +103,7 @@ import ProjectTotalScore from '@/components/project/ProjectTotalScore.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenuActionBar from '@/components/ui/menu/UIMenuActionBar.vue'
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
+import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UIPanel from '@/components/ui/UIPanel.vue'
 import useDB from '@/composables/db'
 import { useEvaluation } from '@/composables/evaluation'
