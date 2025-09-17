@@ -48,7 +48,7 @@ const sizeClass: Record<Exclude<Props['size'], undefined>, string> = {
  */
 const btnClass = computed(() => {
   return twMerge([
-    'relative inline-flex w-fit cursor-pointer items-center justify-center gap-x-2 rounded-border shadow-sm hover:shadow-md hover:brightness-120 dark:hover:brightness-80 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:brightness-100',
+    'relative inline-flex h-fit w-fit cursor-pointer items-center justify-center gap-x-2 rounded-border shadow-sm hover:shadow-md hover:brightness-120 dark:hover:brightness-80 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:brightness-100',
     variantClass[props.variant],
     sizeClass[props.size],
     props.class,
