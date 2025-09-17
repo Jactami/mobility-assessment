@@ -1,5 +1,5 @@
 <template>
-  <UISkeleton v-if="loading" :width="width" :height="height" />
+  <UISkeleton v-if="loading" :width="width" :height="height" v-bind="$attrs" />
   <slot v-else>
     <!-- Loaded content goes here... -->
   </slot>
@@ -13,4 +13,6 @@ defineProps<{
   height?: string
   loading: boolean
 }>()
+
+defineOptions({ inheritAttrs: false })
 </script>
