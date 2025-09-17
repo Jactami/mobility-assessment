@@ -9,7 +9,7 @@
       </div>
       <hr class="mt-2 mb-4 border border-outline-variant" />
     </div>
-    <div class="overflow-hidden">
+    <div>
       <slot>
         <!-- Panel content goes here... -->
       </slot>
