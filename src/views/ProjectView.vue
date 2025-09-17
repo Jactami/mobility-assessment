@@ -52,7 +52,7 @@
 
     <!-- POI table -->
     <UIPanel :title="t('project.poi', 2)" icon="poi" class="col-span-full">
-      <div class="mb-6 flex flex-wrap justify-center gap-2">
+      <div class="flex flex-wrap justify-center gap-2">
         <template v-for="domain in DOMAINS" :key="domain.name">
           <template v-for="(category, i) in domain.categories" :key="category.name">
             <UISkeletonLoader :loading="isLoading" height="1.5rem" :width="`${7 + (i % 3) * 2}rem`">
@@ -65,9 +65,11 @@
           </template>
         </template>
       </div>
-      <UISkeletonLoader :loading="isLoading" height="10rem">
-        <ProjectPoiTable @poi-selected="handlePoiSelected" />
-      </UISkeletonLoader>
+      <div class="mt-12">
+        <UISkeletonLoader :loading="isLoading" height="10rem">
+          <ProjectPoiTable @poi-selected="handlePoiSelected" />
+        </UISkeletonLoader>
+      </div>
     </UIPanel>
   </div>
 
@@ -106,11 +108,12 @@ import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UIPanel from '@/components/ui/UIPanel.vue'
 import useDB from '@/composables/db'
+import { useDownload } from '@/composables/download'
 import { useEvaluation } from '@/composables/evaluation'
 import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
-import { usePdf } from '@/composables/pdf'
+import { usePDF } from '@/composables/pdf'
 import { useProjectUtil } from '@/composables/util/project'
 import { DOMAINS } from '@/constants'
 import type { Poi, Project } from '@/db/types'
@@ -125,7 +128,8 @@ const projectStore = useProjectStore()
 const route = useRoute()
 const router = useRouter()
 const { errorToast, loadingToast, successToast, confirmDialog } = useNotification()
-const { pdf, error, loading, createReport } = usePdf()
+const { pdf, error, loading, createReport } = usePDF()
+const { downloadPDF } = useDownload()
 const { calcScores } = useEvaluation()
 const { getPoisByDomain, getPoisByCategory } = useProjectUtil()
 
@@ -302,22 +306,8 @@ async function generateReport() {
   }
 
   if (pdf.value) {
-    const blob = new Blob([new Uint8Array(pdf.value)], { type: 'application/pdf' })
-    const url = URL.createObjectURL(blob)
-
-    // Uncomment the following line to open the PDF in a new tab
-    // window.open(url)
-
-    // Download the PDF
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `${projectStore.project.title}.pdf`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-
-    // Revoke the object URL to free up memory
-    URL.revokeObjectURL(url)
+    // Finally download the PDF
+    downloadPDF(new Blob([new Uint8Array(pdf.value)]), `${projectStore.project.title}.pdf`)
 
     // Reset loading state
     toast.dismiss()

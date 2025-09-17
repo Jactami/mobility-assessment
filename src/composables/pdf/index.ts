@@ -7,7 +7,7 @@ import { useI18n } from 'vue-i18n'
 import { config, fonts } from './config'
 import { PdfReportBuilder } from './report/PdfReportBuilder'
 
-export function usePdf() {
+export function usePDF() {
   const pdf = ref<Uint8Array | null>(null)
   const error = ref<Error | null>(null)
   const loading = ref<boolean>(false)
