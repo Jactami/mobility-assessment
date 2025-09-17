@@ -20,7 +20,7 @@ import {
   type ChartData,
   type ChartOptions,
 } from 'chart.js'
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { Radar, type ChartComponentRef } from 'vue-chartjs'
 import { useI18n } from 'vue-i18n'
 
@@ -40,6 +40,8 @@ const isDark = useDark()
 const chartContainer = ref<HTMLDivElement | null>(null)
 const chartRef = ref<ChartComponentRef | null>(null)
 
+const data = ref<number[]>([])
+
 const chartColors = computed(() => ({
   text: isDark.value ? '#f9fafb' : '#111827',
   grid: isDark.value ? '#374151' : '#d1d5db',
@@ -56,7 +58,7 @@ const chartData = computed<ChartData<'radar'>>(() => ({
   labels: DOMAINS.map((domain) => t(`domain.${domain.name}`)),
   datasets: [
     {
-      data: DOMAINS.map((domain) => (props.scores?.domain?.[domain.name] ?? 0) * 100),
+      data: data.value,
       fill: true,
       backgroundColor: chartColors.value.background,
       borderColor: chartColors.value.border,
@@ -92,6 +94,10 @@ const chartOptions = computed<ChartOptions<'radar'>>(() => ({
         backdropColor: 'transparent',
       },
     },
+  },
+  animation: {
+    duration: 1000,
+    easing: 'easeInOutQuad',
   },
   plugins: {
     title: {
@@ -153,4 +159,18 @@ function exportChart() {
     })
   })
 }
+
+// Delay the data update to force animation on initial render
+watch(
+  () => props.scores,
+  async (newScores) => {
+    if (newScores) {
+      await nextTick()
+      data.value = DOMAINS.map((domain) => (newScores.domain?.[domain.name] ?? 0) * 100)
+    } else {
+      data.value = []
+    }
+  },
+  { immediate: true },
+)
 </script>

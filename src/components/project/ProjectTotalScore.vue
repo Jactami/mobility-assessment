@@ -6,7 +6,7 @@
     <!-- Foreground Arc -->
     <path
       :d="arcPath"
-      class="fill-none stroke-[5] transition-all duration-500"
+      class="fill-none stroke-[5] transition-all duration-1000"
       :style="{
         strokeDasharray: circumference,
         strokeDashoffset: dashOffset,
@@ -43,19 +43,29 @@
 
 <script setup lang="ts">
 import { useColorUtil } from '@/composables/util/color'
-import { computed } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-
-const { n, t } = useI18n()
-const { scoreToColor } = useColorUtil()
 
 const props = defineProps<{
   score?: number | null
 }>()
 
+const { n, t } = useI18n()
+const { scoreToColor } = useColorUtil()
+
 const radius = 40
 const arcPath = `M10,50 A${radius},${radius} 0 0,1 90,50`
 
 const circumference = Math.PI * radius
-const dashOffset = computed(() => `${circumference * (1 - (props.score || 0))}`)
+const dashOffset = ref(circumference.toString())
+
+// Delay the dash offset update to force animation on initial render
+watch(
+  () => props.score,
+  async (newScore) => {
+    await nextTick()
+    dashOffset.value = `${circumference * (1 - (newScore || 0))}`
+  },
+  { immediate: true },
+)
 </script>
