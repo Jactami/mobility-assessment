@@ -4,7 +4,7 @@
   <!-- Action Bar -->
   <div class="max-w-sm">
     <FormKit
-      v-model="searchQuery"
+      v-model="search"
       type="text"
       name="search"
       :label="t('common.search')"
@@ -17,7 +17,7 @@
       </template>
       <template #suffixIcon>
         <div class="absolute right-0 bottom-1 flex items-center pr-2">
-          <UIButtonIcon v-if="searchQuery" icon="clear" @click="searchQuery = ''" />
+          <UIButtonIcon v-if="search" icon="clear" @click="search = ''" />
         </div>
       </template>
     </FormKit>
@@ -30,6 +30,7 @@
         v-for="project in favoriteProjects"
         :key="project.id"
         :project="project"
+        :search="search"
         @delete="deleteProject(project)"
         @copy="copyProject(project)"
         @favorite="toggleFavorite(project)"
@@ -55,6 +56,7 @@
           v-for="project in filteredProjects"
           :key="project.id"
           :project="project"
+          :search="search"
           @delete="deleteProject(project)"
           @copy="copyProject(project)"
           @favorite="toggleFavorite(project)"
@@ -79,6 +81,7 @@ import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UISection from '@/components/ui/UISection.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
+import { useUtil } from '@/composables/util/misc'
 import type { Project } from '@/db/types'
 import { useAuthStore } from '@/stores/Auth'
 import { computed, onMounted, ref } from 'vue'
@@ -90,22 +93,25 @@ const db = useDB()
 const authStore = useAuthStore()
 const { successToast, errorToast, confirmDialog } = useNotification()
 const { t } = useI18n()
+const { createAddress } = useUtil()
 
-const searchQuery = ref('')
+const search = ref('')
 
 const loading = ref(false)
 const projects = ref<Project[] | null>(null)
 
-/** Filter projects based on the search query. */
+/** Filtered projects based on the search query. */
 const filteredProjects = computed(() => {
-  const query = searchQuery.value.trim().toLowerCase()
-  // TODO: Decide whether to filter by more fields or even allow composite queries (e.g. full address)
-  return projects.value?.filter(
-    (project) =>
-      project.title.toLowerCase().includes(query) ||
-      project.city?.toLowerCase().includes(query) ||
-      project.street?.toLowerCase().includes(query),
-  )
+  return projects.value?.filter((project) => {
+    // Create address
+    const address = createAddress(project)
+
+    // Check if search query is in title or address
+    return (
+      project.title.toLowerCase().includes(search.value) ||
+      address.toLowerCase().includes(search.value)
+    )
+  })
 })
 
 /** Projects marked as favorites within the filtered projects. */

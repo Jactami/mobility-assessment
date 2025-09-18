@@ -107,6 +107,7 @@
                 >
                   <td
                     v-for="cell in row.getVisibleCells()"
+                    v-mark="config.searchable ? globalFilter : undefined"
                     :key="cell.id"
                     class="px-3 py-2.5 text-left"
                     :style="`width: ${cell.column.columnDef.size}%`"

@@ -241,6 +241,28 @@
       delectus ipsum voluptatem temporibus velit laboriosam.
     </UIModal>
   </UISection>
+
+  <UISection title="Mark Directive">
+    <p>
+      The mark directive is a custom directive that can be used to highlight text. It is defined in
+      the <code>src/directives/mark/index.ts</code> file.
+    </p>
+    <div class="mt-10">
+      <div class="max-w-sm">
+        <FormKit v-model="search" name="highlight_search" label="Search" />
+      </div>
+      <div v-mark="search">
+        <p>
+          It is only with the heart that one can see rightly; what is essential is invisible to the
+          eye.
+        </p>
+        <p>
+          Grown-ups like numbers. When you tell them about a new friend, they never ask questions
+          about what really matters.
+        </p>
+      </div>
+    </div>
+  </UISection>
 </template>
 
 <script setup lang="ts">
@@ -270,6 +292,8 @@ const notification = useNotification()
 logger.log('Logger running...')
 
 const modalOpen = ref(false)
+
+const search = ref('')
 
 const quiz = {
   sport: {

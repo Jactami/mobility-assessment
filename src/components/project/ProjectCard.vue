@@ -27,8 +27,10 @@
 
       <!-- Card Body -->
       <div class="grow p-4">
-        <h2 class="line-clamp-2 h-[3rem] text-xl leading-tight font-medium">{{ project.title }}</h2>
-        <div class="mt-4 text-on-surface-variant">
+        <h2 v-mark="search" class="line-clamp-2 h-[3rem] text-xl leading-tight font-medium">
+          {{ project.title }}
+        </h2>
+        <div v-mark="search" class="mt-4 text-on-surface-variant">
           <div v-for="(part, i) in address" :key="i" class="truncate">{{ part }}</div>
         </div>
       </div>
@@ -57,6 +59,7 @@ import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
   project: Project
+  search?: string
 }>()
 
 const emit = defineEmits<{
@@ -70,13 +73,7 @@ const { scoreToColor } = useColorUtil()
 const { createAddress } = useUtil()
 
 const address = computed(() => {
-  const address = createAddress({
-    name: props.project.name,
-    street: props.project.street,
-    housenumber: props.project.housenumber,
-    postcode: props.project.postcode,
-    city: props.project.city,
-  })
+  const address = createAddress(props.project)
   return address.split(',').map((part) => part.trim())
 })
 
