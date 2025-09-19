@@ -4,7 +4,7 @@
       <OlFeature>
         <OlGeomPoint :coordinates="location" />
         <OlStyle>
-          <OlStyleIcon src="/img/icons/center.svg" color="#be0030" />
+          <OlStyleIcon :src="useIcon().getUrl('center', '#BE0030')" />
         </OlStyle>
       </OlFeature>
     </OlSourceVector>
@@ -12,6 +12,7 @@
 </template>
 
 <script setup lang="ts">
+import { useIcon } from '@/composables/icon'
 import type { Coordinate } from 'ol/coordinate'
 import { OlGeomPoint } from 'vue3-openlayers/geometries'
 import { OlVectorLayer } from 'vue3-openlayers/layers'
