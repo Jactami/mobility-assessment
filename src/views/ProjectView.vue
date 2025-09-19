@@ -1,5 +1,5 @@
 <template>
-  <UISkeletonLoader :loading="isLoading" height="3rem" width="40%" class="my-6">
+  <UISkeletonLoader :loading="projectLoading" height="3rem" width="40%" class="my-6">
     <UIPageHeader v-if="projectStore.project?.title" :title="projectStore.project.title" />
   </UISkeletonLoader>
 
@@ -7,7 +7,7 @@
     <!-- Search Bar -->
     <div class="col-span-full">
       <div class="mx-auto mb-3 w-full max-w-2xl">
-        <UISkeletonLoader :loading="isLoading" height="2.5rem">
+        <UISkeletonLoader :loading="projectLoading" height="2.5rem">
           <MapSearchInput
             @search-initiated="geodataLoading = true"
             @search-completed="geodataLoading = false"
