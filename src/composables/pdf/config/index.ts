@@ -1,4 +1,6 @@
 import type { Fonts, PdfConfig } from '../types'
+import robotoBold from './../assets/fonts/Roboto-Bold.ttf?url'
+import robotoRegular from './../assets/fonts/Roboto-Regular.ttf?url'
 
 export const config: PdfConfig = {
   format: {
@@ -37,10 +39,10 @@ export const config: PdfConfig = {
 
 export const fonts: Fonts = {
   regular: {
-    data: '/fonts/Roboto-Regular.ttf',
+    data: robotoRegular,
     fallback: true,
   },
   bold: {
-    data: '/fonts/Roboto-Bold.ttf',
+    data: robotoBold,
   },
 }
