@@ -18,14 +18,13 @@
           </OlStyle>
         </OlFeature>
 
-        <!-- Icon; TODO: Add white background -->
+        <!-- Icon -->
         <OlFeature>
           <OlGeomPoint :coordinates="fromLonLat([poi.longitude, poi.latitude])" />
           <OlStyle>
             <OlStyleIcon
-              :src="`/img/icons/${poi.category}.svg`"
+              :src="useIcon().getUrl(poi.category, categoryToColor(poi.category))"
               :scale="0.45"
-              :color="categoryToColor(poi.category)"
             />
           </OlStyle>
         </OlFeature>
@@ -35,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+import { useIcon } from '@/composables/icon'
 import { useColorUtil } from '@/composables/util/color'
 import type { Poi } from '@/db/types'
 import { fromLonLat } from 'ol/proj'
