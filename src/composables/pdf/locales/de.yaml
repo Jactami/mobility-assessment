@@ -22,7 +22,7 @@ pdf:
     microLocationTitle: 'Mikrostandort'
     microLocationText: >
       Im Rahmen dieser Analyse wurde der Mikrostandort untersucht. 
-      Die Bewertung bezieht sich auf die unmittelbare Umgebung des Standorts und berücksichtigt relevante Angebote und Einrichtungen innerhalb eines definierten Radius zum  untersuchten Zeitpunkt.
+      Die Bewertung bezieht sich auf die unmittelbare Umgebung des Standorts und berücksichtigt alle relevanten Angebote und Einrichtungen innerhalb eines definierten Radius zum  untersuchten Zeitpunkt.
     totalScoreTitle: 'Gesamtbewertung'
     totalScoreText: >
       Der Standort erreicht in der Analyse {score} von 100 möglichen Punkten.

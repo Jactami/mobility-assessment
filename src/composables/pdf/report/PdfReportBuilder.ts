@@ -142,7 +142,7 @@ export class PdfReportBuilder extends PdfBuilder {
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
   createScoreMeter(score: number, label: string, y: number): this {
-    const { scoreToColor, scoreColorThresholds } = useColorUtil()
+    const { scoreToColor } = useColorUtil()
 
     // Score Box
     this.createRect({
@@ -156,6 +156,7 @@ export class PdfReportBuilder extends PdfBuilder {
       .createText(i18n.global.n(score * 100, 'rounded'), {
         y,
         height: 30,
+        font: 'bold',
         fontSize: 'xl5',
         color: 'neutral',
         alignment: 'center',
@@ -164,59 +165,45 @@ export class PdfReportBuilder extends PdfBuilder {
       .createText(label, {
         y: y + 25,
         height: 15,
-        fontSize: 'xl2',
+        fontSize: 'xl',
         color: 'neutral',
         alignment: 'center',
         verticalAlignment: 'middle',
       })
 
     // Score scale line
-    let x = this._config.padding.left
-    scoreColorThresholds.forEach((threshold, index) => {
-      const range = threshold.max - (scoreColorThresholds[index - 1]?.max || 0)
-      const width = this._innerWidth * range
-      this.createRect({
-        x,
-        y: y + 47,
-        width,
-        height: 3,
-        color: threshold.color,
-      })
-      x += width
-    })
+    const lineY = y + 45
+    const lineHeight = 3
+    const lineRadius = 1
 
     this.createRect({
-      x: this._config.padding.left + this._innerWidth * score - 0.5,
-      y: y + 46,
-      width: 1,
-      height: 5,
-      color: 'text',
-      radius: 0.5,
+      x: this._config.padding.left,
+      width: this._innerWidth,
+      y: lineY,
+      height: lineHeight,
+      color: 'muted',
+      radius: lineRadius,
+    }).createRect({
+      x: this._config.padding.left,
+      y: lineY,
+      width: this._innerWidth * score,
+      height: lineHeight,
+      color: scoreToColor(score),
+      radius: lineRadius,
     })
 
-    this.createText('0', {
-      x: this._config.padding.left,
-      y: y + 51,
-      fontSize: 'xs',
-      color: 'muted',
-      alignment: 'left',
-    }).createText('100', {
-      x: this._config.padding.left,
-      y: y + 51,
-      fontSize: 'xs',
-      color: 'muted',
-      alignment: 'right',
-    })
+    // Score scale labels
+    for (let i = 0; i <= 10; i++) {
+      const width = this._innerWidth / 10
+      const x = this._config.padding.left + width * Math.max(i - 1, 0)
 
-    for (let i = 1; i < 10; i++) {
-      const xPos = this._config.padding.left + (i * this._innerWidth) / 10
       this.createText((i * 10).toString(), {
-        x: xPos - 10,
-        y: y + 51,
-        width: 20,
+        x: x + (i % 10 === 0 ? 0 : 0.5 * width), // center text except for first and last
+        y: lineY + 4,
+        width,
         fontSize: 'xs',
         color: 'muted',
-        alignment: 'center',
+        alignment: i === 0 ? 'left' : i === 10 ? 'right' : 'center',
       })
     }
 
@@ -259,7 +246,7 @@ export class PdfReportBuilder extends PdfBuilder {
         columnWidths: [30, 50, 20],
         head: { font: 'bold', fontSize: 'sm' },
         body: { fontSize: 'xs' },
-        stripedColor: this._config.color.light,
+        stripedColor: 'light',
       },
     )
   }
@@ -520,16 +507,16 @@ export class PdfReportBuilder extends PdfBuilder {
   createDomainPages(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
     DOMAINS.forEach((domain, i) => {
       this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
+        // Show description
+        .createText(i18n.global.t(`pdf.analysis.description.${domain.name}`), {
+          y: this._config.padding.top + 10,
+        })
         // Show score evaluation
         .createScoreMeter(
           scores.domain[domain.name] ?? 0,
           `${i18n.global.t('pdf.analysis.score')} ${i18n.global.t(`domain.${domain.name}`)}`,
-          this._config.padding.top + 10,
+          this._config.padding.top + 35,
         )
-        // Show description
-        .createText(i18n.global.t(`pdf.analysis.description.${domain.name}`), {
-          y: this._config.padding.top + 75,
-        })
         // Show map with POIs
         .createImage(maps[domain.name] ?? '', {
           x: this._config.padding.left,

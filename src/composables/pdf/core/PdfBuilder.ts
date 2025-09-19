@@ -389,7 +389,9 @@ export class PdfBuilder {
           this._config.color.text,
         borderColor: '#000',
         backgroundColor: '',
-        alternateBackgroundColor: options?.stripedColor,
+        alternateBackgroundColor:
+          this._config.color[options?.stripedColor as keyof PdfConfig['color']] ||
+          options?.stripedColor,
         borderWidth: {
           top: borderWidth,
           right: borderWidth,
