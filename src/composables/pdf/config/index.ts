@@ -13,7 +13,7 @@ export const config: PdfConfig = {
     left: 20,
   },
   color: {
-    primary: '#3F51B5',
+    primary: '#367588',
     text: '#020618',
     muted: '#6B7280',
     light: '#F5F5F5',
