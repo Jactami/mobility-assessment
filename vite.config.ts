@@ -29,7 +29,7 @@ export default defineConfig(async () => ({
         families: [
           {
             name: 'MontserratAlt1',
-            src: './public/fonts/MontserratAlt1-*.ttf',
+            src: './src/assets/fonts/MontserratAlt1-*.ttf',
           },
         ],
         injectTo: 'head-prepend',
