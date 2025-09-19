@@ -1,4 +1,5 @@
 import type { EvaluationScores } from '@/composables/evaluation/types'
+import { useIcon } from '@/composables/icon'
 import { useLegal } from '@/composables/legal'
 import { useColorUtil } from '@/composables/util/color'
 import { useUtil } from '@/composables/util/misc'
@@ -94,6 +95,7 @@ export class PdfReportBuilder extends PdfBuilder {
   createCard(
     key: string,
     value: string,
+    icon: string,
     options: {
       x: number
       y: number
@@ -131,6 +133,12 @@ export class PdfReportBuilder extends PdfBuilder {
         color: 'muted',
         verticalAlignment: 'middle',
         alignment: 'center',
+      })
+      .createSVG(icon, {
+        x: options.x + options.width - 5,
+        y: options.y + 1.5,
+        width: 3.5,
+        height: 3.5,
       })
   }
 
@@ -273,7 +281,8 @@ export class PdfReportBuilder extends PdfBuilder {
     )
     categories?.forEach((category, i) => {
       const count = getPoisByCategory(pois, category).length
-      this.createCard(i18n.global.t(`category.${category}`), count ? count.toString() : '-', {
+      const icon = useIcon().getIcon(category, domain.color)
+      this.createCard(i18n.global.t(`category.${category}`), count ? count.toString() : '-', icon, {
         x: this._config.padding.left + (i % cardsPerRow) * (CardW + padding),
         y: y + 10 + Math.floor(i / cardsPerRow) * (cardH + padding),
         width: CardW,
