@@ -136,12 +136,9 @@
       </div>
     </div>
 
-    <div class="mt-2 flex justify-between gap-x-3">
-      <!-- Pagination -->
-      <nav
-        v-if="table.getPageCount() > 1"
-        class="flex grow items-center justify-center gap-x-0 text-sm sm:gap-x-2"
-      >
+    <!-- Pagination -->
+    <div v-if="config.pagination && table.getPageCount() > 1" class="mt-2">
+      <nav class="flex grow items-center justify-center gap-x-0 text-sm sm:gap-x-2">
         <UIButtonIcon
           icon="first"
           :disabled="!table.getCanPreviousPage()"
