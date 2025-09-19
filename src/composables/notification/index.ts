@@ -46,10 +46,10 @@ export function useNotification() {
       icon: 'info',
       text: message,
       ...options,
-      iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-secondary'),
+      iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-tertiary'),
       customClass: {
         popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
-        timerProgressBar: '!bg-secondary',
+        timerProgressBar: '!bg-tertiary',
       },
     })
 
@@ -67,9 +67,9 @@ export function useNotification() {
       didOpen: () => {
         Swal.showLoading()
       },
-      iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-secondary'),
       customClass: {
         popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
+        loader: '!border-t-tertiary border-b-tertiary',
       },
     })
 
