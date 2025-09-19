@@ -16,7 +16,7 @@ export const config: PdfConfig = {
     primary: '#367588',
     text: '#020618',
     muted: '#6B7280',
-    light: '#F5F5F5',
+    light: '#E5E5E5',
     neutral: '#FFF',
   },
   fontSize: {

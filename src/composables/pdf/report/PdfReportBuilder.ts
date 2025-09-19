@@ -189,7 +189,7 @@ export class PdfReportBuilder extends PdfBuilder {
       width: this._innerWidth,
       y: lineY,
       height: lineHeight,
-      color: 'muted',
+      color: 'light',
       radius: lineRadius,
     }).createRect({
       x: this._config.padding.left,
