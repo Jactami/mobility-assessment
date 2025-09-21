@@ -35,6 +35,7 @@ export const config: PdfConfig = {
     xl7: 64,
   },
   alignment: 'justify',
+  borderRadius: 1,
 }
 
 export const fonts: Fonts = {

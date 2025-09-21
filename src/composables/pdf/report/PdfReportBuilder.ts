@@ -111,7 +111,6 @@ export class PdfReportBuilder extends PdfBuilder {
       height: options.height,
       borderColor: options.color,
       borderWidth: 0.5,
-      radius: 1,
     })
       .createText(value, {
         x: options.x,
@@ -159,7 +158,6 @@ export class PdfReportBuilder extends PdfBuilder {
       width: this._innerWidth,
       height: 40,
       color: scoreToColor(score),
-      radius: 1,
     })
       .createText(i18n.global.n(score * 100, 'rounded'), {
         y,
@@ -182,7 +180,6 @@ export class PdfReportBuilder extends PdfBuilder {
     // Score scale line
     const lineY = y + 45
     const lineHeight = 3
-    const lineRadius = 1
 
     this.createRect({
       x: this._config.padding.left,
@@ -190,14 +187,12 @@ export class PdfReportBuilder extends PdfBuilder {
       y: lineY,
       height: lineHeight,
       color: 'light',
-      radius: lineRadius,
     }).createRect({
       x: this._config.padding.left,
       y: lineY,
       width: this._innerWidth * score,
       height: lineHeight,
       color: scoreToColor(score),
-      radius: lineRadius,
     })
 
     // Score scale labels
@@ -394,12 +389,11 @@ export class PdfReportBuilder extends PdfBuilder {
 
     // Create separator page with title
     return this.createRect({
-      x: -1, // avoid rounded corners on the right side
+      x: -(this._config.borderRadius ?? 0), // avoid rounded corners on the right side
       y,
       width: this._config.format.width * 0.75,
       height: h,
       color: 'primary',
-      radius: 1,
     })
       .createText(title, {
         y,

@@ -34,6 +34,7 @@ export interface PdfConfig {
     // TODO: Add more sizes if needed
   }
   alignment?: 'left' | 'center' | 'right' | 'justify' // Default alignment for text
+  borderRadius?: number
 }
 
 type FontKeys = 'regular' | 'bold'
