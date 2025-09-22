@@ -1,96 +1,109 @@
 <template>
-  <UISkeletonLoader :loading="projectLoading" height="3rem" width="40%" class="my-6">
-    <UIPageHeader v-if="projectStore.project?.title" :title="projectStore.project.title" />
-  </UISkeletonLoader>
+  <UIErrorPage
+    v-if="loadingError"
+    :title="t('common.error')"
+    :message="t('project.loadError')"
+    @retry="loadProject"
+  />
 
-  <div class="max-w-8xl mx-auto grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
-    <!-- Search Bar -->
-    <div class="col-span-full">
-      <div class="mx-auto mb-3 w-full max-w-2xl">
-        <UISkeletonLoader :loading="projectLoading" height="2.5rem">
-          <MapSearchInput
-            @search-initiated="geodataLoading = true"
-            @search-completed="geodataLoading = false"
+  <template v-else>
+    <UISkeletonLoader :loading="projectLoading" height="3rem" width="40%" class="my-6">
+      <UIPageHeader v-if="projectStore.project?.title" :title="projectStore.project.title" />
+    </UISkeletonLoader>
+
+    <div class="max-w-8xl mx-auto grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
+      <!-- Search Bar -->
+      <div class="col-span-full">
+        <div class="mx-auto mb-3 w-full max-w-2xl">
+          <UISkeletonLoader :loading="projectLoading" height="2.5rem">
+            <MapSearchInput
+              @search-initiated="geodataLoading = true"
+              @search-completed="geodataLoading = false"
+            />
+          </UISkeletonLoader>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <UIPanel ref="mapPanelRef" :title="t('project.map')" icon="map">
+        <UISkeletonLoader :loading="isLoading" :height="`${mapHeight}px`">
+          <MapPanel
+            v-model="selectedPoi"
+            :project="projectStore.project"
+            :pois="projectStore.pois"
+            :disabled="isLoading"
+            :height="mapHeight"
           />
         </UISkeletonLoader>
-      </div>
-    </div>
+      </UIPanel>
 
-    <!-- Map -->
-    <UIPanel ref="mapPanelRef" :title="t('project.map')" icon="map">
-      <UISkeletonLoader :loading="isLoading" :height="`${mapHeight}px`">
-        <MapPanel
-          v-model="selectedPoi"
-          :project="projectStore.project"
-          :pois="projectStore.pois"
-          :disabled="isLoading"
-          :height="mapHeight"
-        />
-      </UISkeletonLoader>
-    </UIPanel>
-
-    <!-- Analytics -->
-    <UIPanel :title="t('project.analytics')" icon="analytics">
-      <div class="mx-auto max-w-xs">
-        <UISkeletonLoader :loading="isLoading" height="10rem">
-          <ProjectTotalScore :score="scores?.total" />
-        </UISkeletonLoader>
-      </div>
-      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
-        <template v-for="domain in DOMAINS" :key="domain.name">
-          <UISkeletonLoader :loading="isLoading" height="2rem">
-            <ProjectCategoryScores :domain="domain" :score="scores?.domain[domain.name]" />
+      <!-- Analytics -->
+      <UIPanel :title="t('project.analytics')" icon="analytics">
+        <div class="mx-auto max-w-xs">
+          <UISkeletonLoader :loading="isLoading" height="10rem">
+            <ProjectTotalScore :score="scores?.total" />
           </UISkeletonLoader>
-        </template>
-      </div>
-      <div class="mx-auto mt-3 h-auto w-full max-w-sm">
-        <UISkeletonLoader :loading="isLoading" height="18rem">
-          <ProjectScoreChart :scores="scores" />
-        </UISkeletonLoader>
-      </div>
-    </UIPanel>
-
-    <!-- POI table -->
-    <UIPanel :title="t('project.poi', 2)" icon="poi" class="col-span-full">
-      <div class="flex flex-wrap justify-center gap-2">
-        <template v-for="domain in DOMAINS" :key="domain.name">
-          <template v-for="(category, i) in domain.categories" :key="category.name">
-            <UISkeletonLoader :loading="isLoading" height="1.5rem" :width="`${7 + (i % 3) * 2}rem`">
-              <ProjectCategoryPill
-                v-if="projectStore.project?.latitude && projectStore.project?.longitude"
-                :category="category.name"
-                :count="getPoisByCategory(projectStore.pois ?? [], category.name).length"
-              />
+        </div>
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
+          <template v-for="domain in DOMAINS" :key="domain.name">
+            <UISkeletonLoader :loading="isLoading" height="2rem">
+              <ProjectCategoryScores :domain="domain" :score="scores?.domain[domain.name]" />
             </UISkeletonLoader>
           </template>
-        </template>
-      </div>
-      <div class="mt-12">
-        <UISkeletonLoader :loading="isLoading" height="10rem">
-          <ProjectPoiTable @poi-selected="handlePoiSelected" />
-        </UISkeletonLoader>
-      </div>
-    </UIPanel>
-  </div>
+        </div>
+        <div class="mx-auto mt-3 h-auto w-full max-w-sm">
+          <UISkeletonLoader :loading="isLoading" height="18rem">
+            <ProjectScoreChart :scores="scores" />
+          </UISkeletonLoader>
+        </div>
+      </UIPanel>
 
-  <!-- Action Bar -->
-  <UIMenuActionBar :items="actionItems" />
+      <!-- POI table -->
+      <UIPanel :title="t('project.poi', 2)" icon="poi" class="col-span-full">
+        <div class="flex flex-wrap justify-center gap-2">
+          <template v-for="domain in DOMAINS" :key="domain.name">
+            <template v-for="(category, i) in domain.categories" :key="category.name">
+              <UISkeletonLoader
+                :loading="isLoading"
+                height="1.5rem"
+                :width="`${7 + (i % 3) * 2}rem`"
+              >
+                <ProjectCategoryPill
+                  v-if="projectStore.project?.latitude && projectStore.project?.longitude"
+                  :category="category.name"
+                  :count="getPoisByCategory(projectStore.pois ?? [], category.name).length"
+                />
+              </UISkeletonLoader>
+            </template>
+          </template>
+        </div>
+        <div class="mt-12">
+          <UISkeletonLoader :loading="isLoading" height="10rem">
+            <ProjectPoiTable @poi-selected="handlePoiSelected" />
+          </UISkeletonLoader>
+        </div>
+      </UIPanel>
+    </div>
 
-  <!-- Hidden content to produce map and chart exports -->
-  <template v-if="!geodataLoading">
-    <div class="invisible">
-      <MapPanel
-        v-for="domain in DOMAINS"
-        :key="domain.name"
-        ref="maps"
-        :project="project"
-        :pois="getPoisByDomain(projectStore.pois || [], domain.name)"
-        :height="1"
-      />
-    </div>
-    <div class="hidden h-1">
-      <ProjectScoreChart ref="chartRef" :scores="scores" />
-    </div>
+    <!-- Action Bar -->
+    <UIMenuActionBar :items="actionItems" />
+
+    <!-- Hidden content to produce map and chart exports -->
+    <template v-if="!geodataLoading">
+      <div class="invisible">
+        <MapPanel
+          v-for="domain in DOMAINS"
+          :key="domain.name"
+          ref="maps"
+          :project="project"
+          :pois="getPoisByDomain(projectStore.pois || [], domain.name)"
+          :height="1"
+        />
+      </div>
+      <div class="hidden h-1">
+        <ProjectScoreChart ref="chartRef" :scores="scores" />
+      </div>
+    </template>
   </template>
 </template>
 
@@ -105,6 +118,7 @@ import ProjectTotalScore from '@/components/project/ProjectTotalScore.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenuActionBar from '@/components/ui/menu/UIMenuActionBar.vue'
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
+import UIErrorPage from '@/components/ui/UIErrorPage.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UIPanel from '@/components/ui/UIPanel.vue'
 import useDB from '@/composables/db'
@@ -146,6 +160,8 @@ const selectedPoi = ref<Poi | null>(null)
 const mapPanelRef = ref<InstanceType<typeof UIPanel> | null>(null)
 const chartRef = ref<InstanceType<typeof ProjectScoreChart> | null>(null)
 const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[] | null>('maps')
+
+const loadingError = ref(false)
 
 // Loading flags to indicate if data is being fetched
 const geodataLoading = ref(false)
@@ -213,10 +229,12 @@ async function loadProject() {
   ])
 
   projectLoading.value = false
+  loadingError.value = false
 
   // If there is an error in the database, show error
   if (projectResponse.error || poisResponse.error) {
     errorToast(t('project.loadError'))
+    loadingError.value = true
     return
   }
 

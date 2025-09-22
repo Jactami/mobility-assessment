@@ -13,6 +13,7 @@ import MaterialSymbolsDarkModeRounded from '~icons/material-symbols/dark-mode-ro
 import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-outline-rounded'
 import MaterialSymbolsDownload from '~icons/material-symbols/download'
 import MaterialSymbolsEditRounded from '~icons/material-symbols/edit-rounded'
+import MaterialSymbolsErrorOutlineRounded from '~icons/material-symbols/error-outline-rounded'
 import MaterialSymbolsHome from '~icons/material-symbols/home'
 import MaterialSymbolsLocationOnRounded from '~icons/material-symbols/location-on-rounded'
 import MaterialSymbolsLoginRounded from '~icons/material-symbols/login-rounded'
@@ -50,6 +51,7 @@ export const icons = {
   down: MaterialSymbolsArrowDropDownRounded,
   download: MaterialSymbolsDownload,
   edit: MaterialSymbolsEditRounded,
+  error: MaterialSymbolsErrorOutlineRounded,
   favorite: MaterialSymbolsStarRounded,
   first: MdiChevronDoubleLeft,
   hide: MaterialSymbolsVisibilityOffOutlineRounded,

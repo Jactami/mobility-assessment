@@ -20,7 +20,7 @@ import type { ButtonProps } from './types'
 
 type Props = ButtonProps & {
   size?: 'small' | 'normal' | 'large'
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'custom'
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'error' | 'custom'
   class?: string // additional (tailwind) classes
 }
 
@@ -34,6 +34,7 @@ const variantClass: Record<Exclude<Props['variant'], undefined>, string> = {
   primary: 'bg-primary text-on-primary focus:outline-primary',
   secondary: 'bg-secondary text-on-secondary focus-visible:outline-secondary',
   tertiary: 'bg-tertiary text-on-tertiary focus-visible:outline-tertiary',
+  error: 'bg-error text-on-error focus-visible:outline-error',
   custom: '',
 }
 
