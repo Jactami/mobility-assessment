@@ -6,12 +6,12 @@
   --color-primary-container: var(--color-teal-100);
   --color-on-primary-container: var(--color-teal-900);
 
-  --color-secondary: var(--color-slate-600);
+  --color-secondary: var(--color-slate-500);
   --color-on-secondary: var(--color-white);
   --color-secondary-container: var(--color-slate-200);
   --color-on-secondary-container: var(--color-slate-900);
 
-  --color-tertiary: var(--color-sky-600);
+  --color-tertiary: var(--color-sky-500);
   --color-on-tertiary: var(--color-white);
   --color-tertiary-container: var(--color-sky-100);
   --color-on-tertiary-container: var(--color-sky-900);
@@ -57,17 +57,17 @@
   * {
     @variant dark {
       /* Base colors */
-      --color-primary: var(--color-teal-400);
+      --color-primary: var(--color-teal-600);
       --color-on-primary: var(--color-zinc-900);
       --color-primary-container: var(--color-teal-700);
       --color-on-primary-container: var(--color-teal-100);
 
-      --color-secondary: var(--color-slate-400);
+      --color-secondary: var(--color-slate-500);
       --color-on-secondary: var(--color-zinc-900);
       --color-secondary-container: var(--color-slate-700);
       --color-on-secondary-container: var(--color-slate-100);
 
-      --color-tertiary: var(--color-sky-400);
+      --color-tertiary: var(--color-sky-500);
       --color-on-tertiary: var(--color-zinc-900);
       --color-tertiary-container: var(--color-sky-700);
       --color-on-tertiary-container: var(--color-sky-100);
