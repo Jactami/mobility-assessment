@@ -3,7 +3,7 @@
     <template #item-category="{ value }">
       <div class="flex items-center gap-2">
         <div
-          class="flex size-5 items-center justify-center rounded-full border-2 bg-surface p-0.5"
+          class="bg-surface flex size-5 items-center justify-center rounded-full border-2 p-0.5"
           :style="{ borderColor: categoryToColor(String(value)) }"
         >
           <ProjectCategoryIcon :category="String(value)" class="size-full" />

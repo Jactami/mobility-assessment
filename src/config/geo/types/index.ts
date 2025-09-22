@@ -1,19 +1,19 @@
 /**
  * Organizes categories into semantic groups such as leisure, education, medical, etc.
  */
-export interface AreaDomain {
-  /** The name of the domain.*/
-  name: 'education' | 'leisure' | 'health' | 'supply' | 'recreation' | 'mobility'
-  /** Hex color code representing the domain.*/
+export interface GeoDimension {
+  /** The name of the dimension. */
+  name: string
+  /** Hex color code representing the dimension. */
   color: string
-  /** List of categories within the domain. */
-  categories: AreaCategory[]
+  /** List of categories within the dimension. */
+  categories: GeoCategory[]
 }
 
 /**
  * Tag associated with a category.
  */
-interface AreaCategoryTag {
+interface GeoCategoryTag {
   /** Openstreetmap tag key. */
   key: string
   /** Openstreetmap tag value. */
@@ -21,17 +21,17 @@ interface AreaCategoryTag {
 }
 
 /**
- * Represents a point of interest within a domain, such as supermarkets, doctors, restaurants, etc.
+ * Represents a point of interest within a dimension, such as supermarkets, doctors, restaurants, etc.
  */
-export interface AreaCategory {
+export interface GeoCategory {
   /** The name of the category. */
   name: string
   /** List of tags associated with the category. */
-  tags: AreaCategoryTag[]
+  tags: GeoCategoryTag[]
   /** List of optional rules for labeling. */
   labelRules?: {
     /** Tags that must match for this rule to apply. */
-    matches: AreaCategoryTag[]
+    matches: GeoCategoryTag[]
     /** Fallback tag to use if no name tag is found. */
     fallback?: string
     /** Label to use instead of the name tag. */

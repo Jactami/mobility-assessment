@@ -1,6 +1,5 @@
-import { DOMAINS } from '@/constants'
+import { geoConfig } from '@/config/geo'
 import type { Poi } from '@/db/types'
-import type { AreaDomain } from '@/types'
 import { useProjectUtil } from '../util/project'
 import type { EvaluationScores } from './types'
 
@@ -49,15 +48,15 @@ function calcScores(pois: Poi[], radius: number): EvaluationScores {
   // Init empty scores
   const scores: EvaluationScores = {
     total: 0,
-    domain: {} as Record<AreaDomain['name'], number>,
+    partial: {} as Record<string, number>,
   }
 
-  // Iterate over all domains
-  for (const domain of DOMAINS) {
+  // Iterate over all dimensions
+  for (const dimension of geoConfig) {
     const scoresCategory: number[] = []
 
-    // Calculate the score for each category in the current domain
-    for (const category of domain.categories) {
+    // Calculate the score for each category in the current dimension
+    for (const category of dimension.categories) {
       const categoryPois = getPoisByCategory(pois, category.name)
       const saturation = category.saturation ?? 1
 
@@ -65,18 +64,18 @@ function calcScores(pois: Poi[], radius: number): EvaluationScores {
       scoresCategory.push(score)
     }
 
-    // Calculate the domain score as the average of the category scores
+    // Calculate the dimension score as the average of the category scores
     // TODO: Consider using a weighted average if some categories are more important than others
-    const scoreDomain = scoresCategory.length
+    const scoreDimension = scoresCategory.length
       ? scoresCategory.reduce((a, b) => a + b, 0) / scoresCategory.length
       : 0
 
-    scores.domain[domain.name] = Math.round(scoreDomain * 100) / 100
+    scores.partial[dimension.name] = Math.round(scoreDimension * 100) / 100
   }
 
-  // Calculate the total score as the average of all domain scores
-  // TODO: Consider using a weighted average if some domains are more important than others
-  const scoreTotal = Object.values(scores.domain).reduce((a, b) => a + b, 0) / DOMAINS.length
+  // Calculate the total score as the average of all dimension scores
+  // TODO: Consider using a weighted average if some dimensions are more important than others
+  const scoreTotal = Object.values(scores.partial).reduce((a, b) => a + b, 0) / geoConfig.length
   scores.total = Math.round(scoreTotal * 100) / 100
 
   return scores

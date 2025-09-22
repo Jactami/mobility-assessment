@@ -15,7 +15,7 @@
           :spellcheck="false"
         >
           <template #prefixIcon>
-            <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
+            <UIIcon icon="search" class="text-on-surface-variant mr-2" />
           </template>
           <template #suffixIcon>
             <div class="relative w-6">
@@ -43,12 +43,12 @@
     </div>
 
     <!-- Data Table -->
-    <div class="mt-5 overflow-hidden rounded-border border border-outline-variant sm:mt-0">
+    <div class="rounded-border border-outline-variant mt-5 overflow-hidden border sm:mt-0">
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full">
           <table class="relative min-w-full border-collapse text-sm">
             <!-- Table Head -->
-            <thead class="border-b border-outline-variant">
+            <thead class="border-outline-variant border-b">
               <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
                 <th
                   v-for="header in headerGroup.headers"
@@ -92,7 +92,7 @@
                 <tr>
                   <td
                     :colspan="columns.length"
-                    class="p-4 text-center text-sm text-on-surface-variant italic"
+                    class="text-on-surface-variant p-4 text-center text-sm italic"
                   >
                     {{ t('table.noData') }}
                   </td>

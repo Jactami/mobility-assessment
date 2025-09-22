@@ -1,9 +1,9 @@
-import type { AreaDomain } from '@/types'
+import type { GeoDimension } from './types'
 
 // Colors are taken from ColorBrewer's Dark2 scheme:
 // https://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=6
 
-export const DOMAINS: AreaDomain[] = [
+export const geoConfig: readonly GeoDimension[] = [
   // Bildung + Erziehung
   {
     name: 'education',
@@ -321,4 +321,4 @@ export const DOMAINS: AreaDomain[] = [
       },
     ],
   },
-] as const
+]

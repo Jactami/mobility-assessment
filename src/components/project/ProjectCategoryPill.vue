@@ -1,11 +1,11 @@
 <template>
   <div
-    class="flex items-center gap-x-2 rounded-full px-3 py-1 text-xs text-on-surface-inverse shadow-sm sm:text-sm"
+    class="text-on-surface-inverse flex items-center gap-x-2 rounded-full px-3 py-1 text-xs shadow-sm sm:text-sm"
     :style="{ backgroundColor: bgColor }"
   >
     <ProjectCategoryIcon :category="category" :color="color" class="size-3.5" />
     <span>{{ t(`category.${category}`) }}</span>
-    <div class="my-0.5 self-stretch border border-on-surface-inverse"></div>
+    <div class="border-on-surface-inverse my-0.5 self-stretch border"></div>
     <span>{{ count }}</span>
   </div>
 </template>

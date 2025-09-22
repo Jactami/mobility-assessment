@@ -110,7 +110,7 @@
     "longitude": "Längengrad",
     "viewOnMap": "Auf Karte anzeigen"
   },
-  "domain": {
+  "dimension": {
     "education": "Bildung",
     "health": "Gesundheit",
     "leisure": "Freizeit",

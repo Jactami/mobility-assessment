@@ -4,7 +4,7 @@
       <!-- Card Header -->
       <div class="relative overflow-hidden">
         <div
-          class="flex aspect-[3/1] items-center justify-center bg-surface-container-high p-4 text-on-surface-inverse transition-transform duration-300 group-hover:scale-110"
+          class="bg-surface-container-high text-on-surface-inverse flex aspect-[3/1] items-center justify-center p-4 transition-transform duration-300 group-hover:scale-110"
           :style="{ backgroundColor: bgColor }"
         >
           <div class="text-5xl font-semibold">
@@ -16,7 +16,7 @@
           </div>
         </div>
         <span
-          class="absolute top-2 right-2 text-2xl text-secondary transition-transform hover:scale-125"
+          class="text-secondary absolute right-2 top-2 text-2xl transition-transform hover:scale-125"
           :title="project.favorite ? t('project.removeFavorite') : t('project.addFavorite')"
           @click.prevent="emit('favorite')"
         >
@@ -27,17 +27,17 @@
 
       <!-- Card Body -->
       <div class="grow p-4">
-        <h2 v-mark="search" class="line-clamp-2 h-[3rem] text-xl leading-tight font-medium">
+        <h2 v-mark="search" class="line-clamp-2 h-[3rem] text-xl font-medium leading-tight">
           {{ project.title }}
         </h2>
-        <div v-mark="search" class="mt-4 text-on-surface-variant">
+        <div v-mark="search" class="text-on-surface-variant mt-4">
           <div v-for="(part, i) in address" :key="i" class="truncate">{{ part }}</div>
         </div>
       </div>
 
       <!-- Card Footer -->
       <div
-        class="relative flex items-center justify-between gap-x-1 bg-surface-container-lowest py-1 pr-1 pl-4 text-on-surface-variant"
+        class="bg-surface-container-lowest text-on-surface-variant relative flex items-center justify-between gap-x-1 py-1 pl-4 pr-1"
       >
         <time class="text-xs" :datetime="project.created_at">{{ d(project.created_at) }}</time>
         <UIMenu :items="menu" />

@@ -1,43 +1,43 @@
-import { DOMAINS } from '@/constants'
+import { geoConfig } from '@/config/geo'
 import type { Poi } from '@/db/types'
 
 export function useProjectUtil() {
   return {
-    getCategoriesByDomain,
+    getCategoriesByDimension,
     getClosestPois,
-    getDomainByName,
+    getDimensionByName,
     getPoisByCategory,
-    getPoisByDomain,
+    getPoisByDimension,
     sortPoisByDistance,
   }
 }
 
 /**
- * Gets a domain by its name.
- * @param name - The name of the domain to search for.
- * @returns The domain object if found, or null.
+ * Gets a dimension by its name.
+ * @param name - The name of the dimension to search for.
+ * @returns The dimension object if found, or null.
  */
-function getDomainByName(name: string) {
-  return DOMAINS.find((domain) => domain.name === name) || null
+function getDimensionByName(name: string) {
+  return geoConfig.find((dimension) => dimension.name === name) || null
 }
 
 /**
- * Gets the categories for a specific domain.
- * @param domain - The name of the domain to get categories for.
- * @returns An array of category names for the specified domain.
+ * Gets the categories for a specific dimension.
+ * @param dimension - The name of the dimension to get categories for.
+ * @returns An array of category names for the specified dimension.
  */
-function getCategoriesByDomain(domain: string) {
-  return getDomainByName(domain)?.categories.map((category) => category.name)
+function getCategoriesByDimension(dimension: string) {
+  return getDimensionByName(dimension)?.categories.map((category) => category.name)
 }
 
 /**
- * Filters POIs by a specific domain.
+ * Filters POIs by a specific dimension.
  * @param pois - The list of POIs to filter.
- * @param domain - The name of the domain to filter by.
- * @returns An array of POIs that belong to the specified domain.
+ * @param dimension - The name of the dimension to filter by.
+ * @returns An array of POIs that belong to the specified dimension.
  */
-function getPoisByDomain(pois: Poi[], domain: string): Poi[] {
-  const categories = getCategoriesByDomain(domain)
+function getPoisByDimension(pois: Poi[], dimension: string): Poi[] {
+  const categories = getCategoriesByDimension(dimension) ?? []
   return pois.filter((poi) => categories?.includes(poi.category))
 }
 

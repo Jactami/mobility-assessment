@@ -1,4 +1,4 @@
-import { DOMAINS } from '@/constants'
+import { geoConfig } from '@/config/geo'
 import type { Poi } from '@/db/types'
 import axios from 'axios'
 import { getDistance } from 'ol/sphere'
@@ -100,9 +100,10 @@ export function usePoiService() {
    */
   function getPoiCategory(element: OverpassElement) {
     return (
-      DOMAINS.flatMap((domain) => domain.categories).find((category) =>
-        category.tags.some((tag) => tag.value === element.tags?.[tag.key]),
-      )?.name ?? 'unknown'
+      geoConfig
+        .flatMap((dimension) => dimension.categories)
+        .find((category) => category.tags.some((tag) => tag.value === element.tags?.[tag.key]))
+        ?.name ?? 'unknown'
     )
   }
 
@@ -112,8 +113,8 @@ export function usePoiService() {
    * @returns The label for the POI, or null if no label can be determined.
    */
   function getPoiLabel(element: OverpassElement): string | null {
-    for (const domain of DOMAINS) {
-      for (const category of domain.categories) {
+    for (const dimension of geoConfig) {
+      for (const category of dimension.categories) {
         const matchesTag = category.tags.some((tag) => element.tags?.[tag.key] === tag.value)
 
         if (!matchesTag) continue

@@ -16,7 +16,7 @@
       <div class="col-span-full">
         <div class="mx-auto mb-3 w-full max-w-2xl">
           <UISkeletonLoader :loading="projectLoading" height="2.5rem">
-            <MapSearchInput
+            <ProjectLocationSearch
               @search-initiated="geodataLoading = true"
               @search-completed="geodataLoading = false"
             />
@@ -45,9 +45,12 @@
           </UISkeletonLoader>
         </div>
         <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
-          <template v-for="domain in DOMAINS" :key="domain.name">
+          <template v-for="dimension in geoConfig" :key="dimension.name">
             <UISkeletonLoader :loading="isLoading" height="2rem">
-              <ProjectCategoryScores :domain="domain" :score="scores?.domain[domain.name]" />
+              <ProjectPartialScore
+                :dimension="dimension"
+                :score="scores?.partial[dimension.name]"
+              />
             </UISkeletonLoader>
           </template>
         </div>
@@ -61,8 +64,8 @@
       <!-- POI table -->
       <UIPanel :title="t('project.poi', 2)" icon="poi" class="col-span-full">
         <div class="flex flex-wrap justify-center gap-2">
-          <template v-for="domain in DOMAINS" :key="domain.name">
-            <template v-for="(category, i) in domain.categories" :key="category.name">
+          <template v-for="dimension in geoConfig" :key="dimension.name">
+            <template v-for="(category, i) in dimension.categories" :key="category.name">
               <UISkeletonLoader
                 :loading="isLoading"
                 height="1.5rem"
@@ -92,11 +95,11 @@
     <template v-if="!geodataLoading">
       <div class="invisible">
         <MapPanel
-          v-for="domain in DOMAINS"
-          :key="domain.name"
+          v-for="dimension in geoConfig"
+          :key="dimension.name"
           ref="maps"
           :project="project"
-          :pois="getPoisByDomain(projectStore.pois || [], domain.name)"
+          :pois="getPoisByDimension(projectStore.pois || [], dimension.name)"
           :height="1"
         />
       </div>
@@ -109,9 +112,9 @@
 
 <script setup lang="ts">
 import MapPanel from '@/components/map/MapPanel.vue'
-import MapSearchInput from '@/components/map/MapSearchInput.vue'
 import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
-import ProjectCategoryScores from '@/components/project/ProjectCategoryScores.vue'
+import ProjectLocationSearch from '@/components/project/ProjectLocationSearch.vue'
+import ProjectPartialScore from '@/components/project/ProjectPartialScore.vue'
 import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
 import ProjectScoreChart from '@/components/project/ProjectScoreChart.vue'
 import ProjectTotalScore from '@/components/project/ProjectTotalScore.vue'
@@ -129,7 +132,7 @@ import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { usePDF } from '@/composables/pdf'
 import { useProjectUtil } from '@/composables/util/project'
-import { DOMAINS } from '@/constants'
+import { geoConfig } from '@/config/geo'
 import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
@@ -145,7 +148,7 @@ const { errorToast, loadingToast, successToast, confirmDialog } = useNotificatio
 const { pdf, error, loading, createReport } = usePDF()
 const { downloadPDF } = useDownload()
 const { calcScores } = useEvaluation()
-const { getPoisByDomain, getPoisByCategory } = useProjectUtil()
+const { getPoisByDimension, getPoisByCategory } = useProjectUtil()
 
 const mapHeight = 600 // px
 
@@ -295,12 +298,12 @@ async function generateReport() {
   // Manually set loading state for PDF generation because we have to await image exports
   loading.value = true
 
-  // Generate map images for each domain
+  // Generate map images for each dimension
   const maps: Record<string, string> = {}
   await Promise.all(
     mapRefs.value?.map(async (mapRef, i) => {
       const img = await mapRef.exportMap()
-      if (img && DOMAINS[i]?.name) maps[DOMAINS[i].name] = img
+      if (img && geoConfig[i]?.name) maps[geoConfig[i].name] = img
     }) || [],
   )
 

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="flex justify-between gap-2 text-sm font-semibold text-on-surface-variant">
+    <div class="text-on-surface-variant flex justify-between gap-2 text-sm font-semibold">
       <dt class="flex items-center gap-1.5">
-        <div class="size-2 rounded-full" :style="{ backgroundColor: domain.color }" />
-        <span>{{ t(`domain.${domain.name}`) }}</span>
+        <div class="size-2 rounded-full" :style="{ backgroundColor: dimension.color }" />
+        <span>{{ t(`dimension.${dimension.name}`) }}</span>
       </dt>
       <dd
         v-if="typeof score === 'number'"
@@ -13,10 +13,10 @@
         {{ n(score * 100, 'rounded') }}
       </dd>
     </div>
-    <div class="mt-1.5 flex h-2 overflow-hidden rounded-border bg-surface-container">
+    <div class="rounded-border bg-surface-container mt-1.5 flex h-2 overflow-hidden">
       <div
         v-if="typeof score === 'number'"
-        class="h-full rounded-border transition-all duration-1000"
+        class="rounded-border h-full transition-all duration-1000"
         :style="{
           backgroundColor: scoreToColor(score),
           width: `${barWidth}%`,
@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { useColorUtil } from '@/composables/util/color'
-import type { AreaDomain } from '@/types'
+import type { GeoDimension } from '@/config/geo/types'
 import { nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -36,7 +36,7 @@ const { n, t } = useI18n()
 const { scoreToColor } = useColorUtil()
 
 const props = defineProps<{
-  domain: AreaDomain
+  dimension: GeoDimension
   score?: number | null
 }>()
 

@@ -1,4 +1,4 @@
-import { DOMAINS } from '@/constants'
+import { geoConfig } from '@/config/geo'
 
 export function useColorUtil() {
   return {
@@ -41,15 +41,17 @@ function scoreToColor(score: number): string {
       return t.color
     }
   }
-  return '#d9d9d9' // fallback
+  return '#FFF' // fallback
 }
 
 /**
- * Get the color representation of the domain of a category.
+ * Get the color representation of the dimension of a category.
  * @param category - The category name to find the corresponding color.
  * @returns A color string representing the category.
  */
 function categoryToColor(category: string): string {
-  const domain = DOMAINS.find((domain) => domain.categories.some((cat) => cat.name === category))
-  return domain ? domain.color : '#FFFFFF'
+  const dimension = geoConfig.find((dimension) =>
+    dimension.categories.some((cat) => cat.name === category),
+  )
+  return dimension ? dimension.color : '#FFF'
 }

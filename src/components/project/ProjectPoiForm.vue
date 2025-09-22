@@ -18,12 +18,12 @@
           validation="required"
         >
           <optgroup
-            v-for="domain in DOMAINS"
-            :key="domain.name"
-            :label="t(`domain.${domain.name}`)"
+            v-for="dimension in geoConfig"
+            :key="dimension.name"
+            :label="t(`dimension.${dimension.name}`)"
           >
             <option
-              v-for="category in domain.categories.map((c) => c.name)"
+              v-for="category in dimension.categories.map((c) => c.name)"
               :key="category"
               :value="category"
             >
@@ -68,7 +68,7 @@
 import UIModal from '@/components/ui/UIModal.vue'
 import UIButton from '@/components/ui/button/UIButton.vue'
 import { usePoiService } from '@/composables/api/poi'
-import { DOMAINS } from '@/constants'
+import { geoConfig } from '@/config/geo'
 import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { useI18n } from 'vue-i18n'

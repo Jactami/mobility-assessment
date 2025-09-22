@@ -4,10 +4,10 @@ import { useLegal } from '@/composables/legal'
 import { useColorUtil } from '@/composables/util/color'
 import { useUtil } from '@/composables/util/misc'
 import { useProjectUtil } from '@/composables/util/project'
-import { DOMAINS } from '@/constants'
+import { geoConfig } from '@/config/geo'
+import type { GeoDimension } from '@/config/geo/types'
 import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
-import type { AreaDomain } from '@/types'
 import logoBgw from '../assets/images/logo-bgw'
 import methodic from '../assets/images/methodic'
 import { PdfBuilder } from '../core/PdfBuilder'
@@ -213,23 +213,25 @@ export class PdfReportBuilder extends PdfBuilder {
     return this
   }
 
-  createClosestPoisTable(pois: Poi[], domain: AreaDomain, y: number): this {
-    const { getClosestPois, sortPoisByDistance, getPoisByDomain } = useProjectUtil()
+  createClosestPoisTable(pois: Poi[], dimension: GeoDimension, y: number): this {
+    const { getClosestPois, sortPoisByDistance, getPoisByDimension } = useProjectUtil()
 
-    // Filter POIs that belong to the current domain's categories
-    const domainPois = getPoisByDomain(pois, domain.name)
+    // Filter POIs that belong to the current dimension's categories
+    const dimensionPois = getPoisByDimension(pois, dimension.name)
 
     // Abort if no POIs are found
-    if (domainPois.length === 0) return this
+    if (dimensionPois.length === 0) return this
 
     // Find the closest POI for each category
-    let closestPois = getClosestPois(domainPois)
+    let closestPois = getClosestPois(dimensionPois)
 
     // Sort the closest POIs by distance
     closestPois = sortPoisByDistance(closestPois)
 
     return this.createText(
-      i18n.global.t('pdf.analysis.tableIntro', { domain: i18n.global.t(`domain.${domain.name}`) }),
+      i18n.global.t('pdf.analysis.tableIntro', {
+        dimension: i18n.global.t(`dimension.${dimension.name}`),
+      }),
       { y },
     ).createTable(
       [
@@ -254,9 +256,9 @@ export class PdfReportBuilder extends PdfBuilder {
     )
   }
 
-  createDomainCards(pois: Poi[], domain: AreaDomain, y: number): this {
-    const { getCategoriesByDomain, getPoisByCategory } = useProjectUtil()
-    const categories = getCategoriesByDomain(domain.name)
+  createDimensionCards(pois: Poi[], dimension: GeoDimension, y: number): this {
+    const { getCategoriesByDimension, getPoisByCategory } = useProjectUtil()
+    const categories = getCategoriesByDimension(dimension.name)
 
     // Card configuration
     const padding = 2
@@ -269,20 +271,22 @@ export class PdfReportBuilder extends PdfBuilder {
         padding * (cardsPerRow - 1)) /
       cardsPerRow
 
-    // Create cards for each category in the domain
+    // Create cards for each category in the dimension
     this.createText(
-      i18n.global.t(`pdf.analysis.cardIntro`, { domain: i18n.global.t(`domain.${domain.name}`) }),
+      i18n.global.t(`pdf.analysis.cardIntro`, {
+        dimension: i18n.global.t(`dimension.${dimension.name}`),
+      }),
       { y },
     )
     categories?.forEach((category, i) => {
       const count = getPoisByCategory(pois, category).length
-      const icon = useIcon().getIcon(category, domain.color)
+      const icon = useIcon().getIcon(category, dimension.color)
       this.createCard(i18n.global.t(`category.${category}`), count ? count.toString() : '-', icon, {
         x: this._config.padding.left + (i % cardsPerRow) * (CardW + padding),
         y: y + 10 + Math.floor(i / cardsPerRow) * (cardH + padding),
         width: CardW,
         height: cardH,
-        color: domain.color,
+        color: dimension.color,
       })
     })
 
@@ -501,27 +505,27 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   /**
-   * Creates a domain page in the PDF document.
-   * @param pois - The list of points of interest (POIs) to include in the domain page.
-   * @param scores - The evaluation scores for the domain.
-   * @param maps - A record of map images for each domain.
+   * Creates a dimension page in the PDF document.
+   * @param pois - The list of points of interest (POIs) to include in the dimension page.
+   * @param scores - The evaluation scores for the dimension.
+   * @param maps - A record of map images for each dimension.
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
-  createDomainPages(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
-    DOMAINS.forEach((domain, i) => {
-      this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
+  createDimensionPages(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
+    geoConfig.forEach((dimension, i) => {
+      this.createSectionHeader(i18n.global.t(`dimension.${dimension.name}`))
         // Show description
-        .createText(i18n.global.t(`pdf.analysis.description.${domain.name}`), {
+        .createText(i18n.global.t(`pdf.analysis.description.${dimension.name}`), {
           y: this._config.padding.top + 10,
         })
         // Show score evaluation
         .createScoreMeter(
-          scores.domain[domain.name] ?? 0,
-          `${i18n.global.t('pdf.analysis.score')} ${i18n.global.t(`domain.${domain.name}`)}`,
+          scores.partial[dimension.name] ?? 0,
+          `${i18n.global.t('pdf.analysis.score')} ${i18n.global.t(`dimension.${dimension.name}`)}`,
           this._config.padding.top + 35,
         )
         // Show map with POIs
-        .createImage(maps[domain.name] ?? '', {
+        .createImage(maps[dimension.name] ?? '', {
           x: this._config.padding.left,
           y: this._config.padding.top + 100,
           width: this._innerWidth,
@@ -529,7 +533,7 @@ export class PdfReportBuilder extends PdfBuilder {
         })
         .createText(
           i18n.global.t('pdf.analysis.mapCaption', {
-            domain: i18n.global.t(`domain.${domain.name}`),
+            dimension: i18n.global.t(`dimension.${dimension.name}`),
           }),
           {
             y: this._config.padding.top + 100 + this._innerWidth * 0.75 + 2,
@@ -539,13 +543,13 @@ export class PdfReportBuilder extends PdfBuilder {
           },
         )
         .newPage()
-        // Create domain cards
-        .createDomainCards(pois, domain, this._config.padding.top)
+        // Create dimension cards
+        .createDimensionCards(pois, dimension, this._config.padding.top)
         // Create closest POIs table
-        .createClosestPoisTable(pois, domain, this._config.padding.top + 90)
+        .createClosestPoisTable(pois, dimension, this._config.padding.top + 90)
 
-      // Create a new page after each domain section except the last one
-      if (i < DOMAINS.length - 1) this.newPage()
+      // Create a new page after each dimension section except the last one
+      if (i < geoConfig.length - 1) this.newPage()
     })
 
     return this
@@ -598,23 +602,23 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   /**
-   * Creates domain tables for the PDF document.
-   * @param pois - The list of Points of Interest (POIs) to be categorized and displayed in domain tables.
+   * Creates dimension tables for the PDF document.
+   * @param pois - The list of Points of Interest (POIs) to be categorized and displayed in dimension tables.
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
-  createDomainTables(pois: Poi[]): this {
-    const { getPoisByDomain, sortPoisByDistance } = useProjectUtil()
+  createDimensionTables(pois: Poi[]): this {
+    const { getPoisByDimension, sortPoisByDistance } = useProjectUtil()
 
-    DOMAINS.forEach((domain, i) => {
-      // Filter POIs that belong to the current domain's categories
-      let domainPois = getPoisByDomain(pois, domain.name)
+    geoConfig.forEach((dimension, i) => {
+      // Filter POIs that belong to the current dimension's categories
+      let dimensionPois = getPoisByDimension(pois, dimension.name)
 
       // Sort the POIs by distance
-      domainPois = sortPoisByDistance(domainPois)
+      dimensionPois = sortPoisByDistance(dimensionPois)
 
-      this.createSectionHeader(i18n.global.t(`domain.${domain.name}`))
+      this.createSectionHeader(i18n.global.t(`dimension.${dimension.name}`))
 
-      if (domainPois.length > 0) {
+      if (dimensionPois.length > 0) {
         // Show POIs in a table
         this.createTable(
           [
@@ -622,7 +626,7 @@ export class PdfReportBuilder extends PdfBuilder {
             i18n.global.t('poi.category'),
             i18n.global.t('poi.distance'),
           ],
-          domainPois.map((poi) => [
+          dimensionPois.map((poi) => [
             poi.label || i18n.global.t(`category.${poi.category}`),
             i18n.global.t(`category.${poi.category}`),
             i18n.global.n(poi.distance, 'meter'),
@@ -639,7 +643,7 @@ export class PdfReportBuilder extends PdfBuilder {
         )
       } else {
         // Show a message if no POIs are found
-        this.createText(i18n.global.t('pdf.appendix.noEntries', { domain: domain.name }), {
+        this.createText(i18n.global.t('pdf.appendix.noEntries', { dimension: dimension.name }), {
           y: this._config.padding.top + 10,
           alignment: 'left',
           color: 'muted',
@@ -647,8 +651,8 @@ export class PdfReportBuilder extends PdfBuilder {
         })
       }
 
-      // Start a new page after each domain table except the last one
-      if (i < DOMAINS.length - 1) this.newPage()
+      // Start a new page after each dimension table except the last one
+      if (i < geoConfig.length - 1) this.newPage()
     })
 
     return this
