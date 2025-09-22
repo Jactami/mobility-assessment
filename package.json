@@ -14,7 +14,7 @@
     "format": "prettier --write src/",
     "test:unit": "vitest",
     "typecheck": "vue-tsc -b --noEmit",
-    "pwa": "pwa-assets-generator --preset minimal-2023 public/logo.svg",
+    "icons": "pwa-assets-generator --preset minimal-2023 public/logo.svg && tauri icon public/logo.svg",
     "db:types": "pnpx supabase gen types --lang=typescript --local > ./src/db/types/supabase.ts --schema public && prettier --write ./src/db/types/supabase.ts"
   },
   "dependencies": {
