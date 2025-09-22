@@ -9,30 +9,45 @@
       The color palette is based on the Material Design 3 guidelines. The colors are defined in the
       <code>assets/main.css</code>file and can be used throughout the application.
     </p>
-    <div
-      class="mt-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row [&>div>div]:flex [&>div>div]:size-24 [&>div>div]:items-center [&>div>div]:justify-center"
-    >
-      <div>
-        <div class="bg-primary text-on-primary">Primary</div>
-        <div class="bg-primary-container text-on-primary-container">Primary Container</div>
+    <div class="font-medium">
+      <div
+        class="mt-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row [&>div>div]:flex [&>div>div]:size-24 [&>div>div]:items-center [&>div>div]:justify-center"
+      >
+        <div>
+          <div class="bg-primary text-on-primary">Primary</div>
+          <div class="bg-primary-container text-on-primary-container">Primary Container</div>
+        </div>
+        <div>
+          <div class="bg-secondary text-on-secondary">Secondary</div>
+          <div class="bg-secondary-container text-on-secondary-container">Secondary Container</div>
+        </div>
+        <div>
+          <div class="bg-tertiary text-on-tertiary">Tertiary</div>
+          <div class="bg-tertiary-container text-on-tertiary-container">Tertiary Container</div>
+        </div>
       </div>
-      <div>
-        <div class="bg-secondary text-on-secondary">Secondary</div>
-        <div class="bg-secondary-container text-on-secondary-container">Secondary Container</div>
+      <div
+        class="mt-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row [&>div]:flex [&>div]:size-24 [&>div]:items-center [&>div]:justify-center"
+      >
+        <div class="bg-surface-container-lowest text-on-surface">Container lowest</div>
+        <div class="bg-surface-container-low text-on-surface">Container low</div>
+        <div class="bg-surface-container text-on-surface">Container</div>
+        <div class="bg-surface-container-high text-on-surface">Container high</div>
+        <div class="bg-surface-container-highest text-on-surface">Container highest</div>
       </div>
-      <div>
-        <div class="bg-tertiary text-on-tertiary">Tertiary</div>
-        <div class="bg-tertiary-container text-on-tertiary-container">Tertiary Container</div>
+
+      <div
+        class="mt-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row [&>div>div]:flex [&>div>div]:size-24 [&>div>div]:items-center [&>div>div]:justify-center"
+      >
+        <div>
+          <div class="bg-success text-on-success">Success</div>
+          <div class="bg-success-container text-on-success-container">Success Container</div>
+        </div>
+        <div>
+          <div class="bg-error text-on-error">Error</div>
+          <div class="bg-error-container text-on-error-container">Error Container</div>
+        </div>
       </div>
-    </div>
-    <div
-      class="mt-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row [&>div]:flex [&>div]:size-24 [&>div]:items-center [&>div]:justify-center"
-    >
-      <div class="bg-surface-container-lowest text-on-surface">Container lowest</div>
-      <div class="bg-surface-container-low text-on-surface">Container low</div>
-      <div class="bg-surface-container text-on-surface">Container</div>
-      <div class="bg-surface-container-high text-on-surface">Container high</div>
-      <div class="bg-surface-container-highest text-on-surface">Container highest</div>
     </div>
   </UISection>
 
@@ -80,7 +95,7 @@
     <div class="mt-10 grid grid-cols-4 gap-x-8 gap-y-10 lg:grid-cols-12">
       <div v-for="icon of Object.keys(icons)" :key="icon" class="flex flex-col items-center gap-2">
         <UIIcon :icon="icon as Icon" />
-        <div class="text-sm text-on-surface-variant">{{ icon }}</div>
+        <div class="text-on-surface-variant text-sm">{{ icon }}</div>
       </div>
     </div>
   </UISection>
@@ -190,7 +205,7 @@
     <div class="mt-10 flex items-center justify-evenly gap-10">
       <UIPopover>
         <template #trigger>
-          <div class="p- bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
+          <div class="p- bg-primary-container text-on-primary-container p-4 text-lg font-semibold">
             Hover me
           </div>
         </template>
@@ -201,7 +216,7 @@
       </UIPopover>
       <UIPopover position="bottom">
         <template #trigger>
-          <div class="p- bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
+          <div class="p- bg-primary-container text-on-primary-container p-4 text-lg font-semibold">
             Hover me
           </div>
         </template>

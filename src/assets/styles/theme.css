@@ -35,15 +35,15 @@
   --color-outline-variant: var(--color-zinc-200);
 
   /* Status colors */
-  --color-error: var(--color-red-600);
+  --color-error: var(--color-red-700);
   --color-on-error: var(--color-white);
   --color-error-container: var(--color-red-200);
-  --color-on-error-container: var(--color-red-800);
+  --color-on-error-container: var(--color-red-900);
 
-  --color-success: var(--color-green-600);
+  --color-success: var(--color-green-700);
   --color-on-success: var(--color-white);
   --color-success-container: var(--color-green-200);
-  --color-on-success-container: var(--color-green-800);
+  --color-on-success-container: var(--color-green-900);
 
   /* Border radius */
   --radius-border: var(--radius-md);
