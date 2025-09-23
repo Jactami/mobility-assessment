@@ -74,9 +74,6 @@
         <UIButton disabled>Disabled Button</UIButton>
       </div>
       <div>
-        <UIButton :tooltip="{ content: 'This is a tooltip!' }">Tooltip Button</UIButton>
-      </div>
-      <div>
         <UIButton variant="custom" class="w-full max-w-96 rounded-full bg-lime-700 text-white">
           Custom Button <UIIcon icon="signIn" />
         </UIButton>
@@ -197,33 +194,25 @@
     </div>
   </UISection>
 
-  <UISection title="Popover">
+  <UISection title="Tooltip">
     <p>
-      The popover is a component that can be used to display additional information. It is defined
-      in the <code>src/components/ui/UIPopover.vue</code> file.
+      The tooltip is a component that can be used to display additional information. It is defined
+      in the <code>src/components/ui/UITooltip.vue</code> file.
     </p>
     <div class="mt-10 flex items-center justify-evenly gap-10">
-      <UIPopover>
-        <template #trigger>
-          <div class="p- bg-primary-container text-on-primary-container p-4 text-lg font-semibold">
-            Hover me
-          </div>
-        </template>
-        <template #popover>
-          This is a popover content that appears on hover. You can put any content here, even
-          <strong>HTML</strong>.
-        </template>
-      </UIPopover>
-      <UIPopover position="bottom">
-        <template #trigger>
-          <div class="p- bg-primary-container text-on-primary-container p-4 text-lg font-semibold">
-            Hover me
-          </div>
-        </template>
-        <template #popover>
-          You can also define the position of the popover. This one is on the bottom.
-        </template>
-      </UIPopover>
+      <UITooltip message="This is a tooltip message that appears on hover.">
+        <div class="bg-primary-container text-on-primary-container p-4 text-lg font-semibold">
+          Hover me
+        </div>
+      </UITooltip>
+      <UITooltip
+        message="You can also define the position of the tooltip. This one is on the bottom."
+        position="bottom"
+      >
+        <div class="bg-primary-container text-on-primary-container p-4 text-lg font-semibold">
+          Hover me
+        </div>
+      </UITooltip>
     </div>
     <div></div>
   </UISection>
@@ -293,8 +282,8 @@ import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenu from '@/components/ui/menu/UIMenu.vue'
 import UIModal from '@/components/ui/UIModal.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
-import UIPopover from '@/components/ui/UIPopover.vue'
 import UISection from '@/components/ui/UISection.vue'
+import UITooltip from '@/components/ui/UITooltip.vue'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { ref } from 'vue'

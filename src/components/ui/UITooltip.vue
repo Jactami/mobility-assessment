@@ -4,10 +4,11 @@
     <PopoverButton
       ref="referenceEl"
       as="div"
+      class="inline-block"
       @mouseenter="isHovered = true"
       @mouseleave="isHovered = false"
     >
-      <slot name="trigger">
+      <slot>
         <!-- Trigger goes here -->
       </slot>
     </PopoverButton>
@@ -16,34 +17,33 @@
     <Teleport v-if="isHovered" to="body">
       <PopoverPanel
         ref="floatingEl"
-        class="absolute z-10 max-w-sm rounded-border bg-surface-inverse p-2 text-xs text-on-surface-inverse shadow-md"
+        as="div"
+        class="rounded-border bg-surface-inverse text-on-surface-inverse pointer-events-none absolute z-10 max-w-sm p-2 text-xs shadow-md"
         :style="floatingStyles"
         static
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
       >
-        <div>
-          <slot name="popover">
-            <!-- Popover content goes here... -->
-          </slot>
+        <div class="whitespace-pre-line text-pretty break-words text-center">
+          {{ message }}
         </div>
 
         <!-- Triangle -->
         <div
           v-if="placement === 'top'"
-          class="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-t-5 border-r-5 border-l-5 border-t-surface-inverse border-r-transparent border-l-transparent"
+          class="border-t-5 border-r-5 border-l-5 border-t-surface-inverse absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-l-transparent border-r-transparent"
         />
         <div
           v-else-if="placement === 'bottom'"
-          class="absolute bottom-full left-1/2 h-0 w-0 -translate-x-1/2 border-r-5 border-b-5 border-l-5 border-r-transparent border-b-surface-inverse border-l-transparent"
+          class="border-r-5 border-b-5 border-l-5 border-b-surface-inverse absolute bottom-full left-1/2 h-0 w-0 -translate-x-1/2 border-l-transparent border-r-transparent"
         />
         <div
           v-else-if="placement === 'left'"
-          class="absolute top-1/2 left-full h-0 w-0 -translate-y-1/2 border-t-5 border-b-5 border-l-5 border-t-transparent border-b-transparent border-l-surface-inverse"
+          class="border-t-5 border-b-5 border-l-5 border-l-surface-inverse absolute left-full top-1/2 h-0 w-0 -translate-y-1/2 border-b-transparent border-t-transparent"
         />
         <div
           v-else-if="placement === 'right'"
-          class="absolute top-1/2 right-full h-0 w-0 -translate-y-1/2 border-t-5 border-r-5 border-b-5 border-t-transparent border-r-surface-inverse border-b-transparent"
+          class="border-t-5 border-r-5 border-b-5 border-r-surface-inverse absolute right-full top-1/2 h-0 w-0 -translate-y-1/2 border-b-transparent border-t-transparent"
         />
       </PopoverPanel>
     </Teleport>
@@ -57,6 +57,7 @@ import { ref } from 'vue'
 
 const props = withDefaults(
   defineProps<{
+    message: string
     position?: 'top' | 'bottom' | 'left' | 'right'
   }>(),
   {

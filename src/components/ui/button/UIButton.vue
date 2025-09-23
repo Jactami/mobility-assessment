@@ -1,11 +1,5 @@
 <template>
-  <UIButtonBase
-    :type="type"
-    :title="title"
-    :disabled="disabled"
-    :tooltip="tooltip"
-    :class="btnClass"
-  >
+  <UIButtonBase :type="type" :title="title" :disabled="disabled" :class="btnClass">
     <slot>
       <!-- Button content goes here... -->
     </slot>

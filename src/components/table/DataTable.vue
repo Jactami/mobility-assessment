@@ -118,14 +118,17 @@
                   </td>
                   <td v-if="config.actions" class="px-1.5 text-right">
                     <div class="flex items-center gap-x-0.5 sm:gap-x-1">
-                      <UIButtonIcon
+                      <UITooltip
                         v-for="(action, i) in config.actions"
                         :key="i"
-                        :icon="action.icon"
-                        :title="action.label"
-                        :tooltip="{ content: action.label }"
-                        @click="action.handler(row.original)"
-                      />
+                        :message="action.label"
+                      >
+                        <UIButtonIcon
+                          :icon="action.icon"
+                          :title="action.label"
+                          @click="action.handler(row.original)"
+                        />
+                      </UITooltip>
                     </div>
                   </td>
                 </tr>
@@ -185,6 +188,7 @@ import {
 } from '@tanstack/vue-table'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import UITooltip from '../ui/UITooltip.vue'
 import type TableConfig from './types'
 
 /**

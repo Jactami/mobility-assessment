@@ -1,6 +1,6 @@
 <template>
   <header
-    class="border-outline-variant bg-surface text-on-surface sticky top-0 z-10 border-b shadow-sm"
+    class="border-outline-variant bg-surface text-on-surface sticky top-0 z-50 border-b shadow-sm"
   >
     <nav class="mx-auto flex h-14 items-center justify-between gap-x-6 px-4 sm:h-16 lg:px-10">
       <div class="flex lg:flex-1">
