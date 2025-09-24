@@ -9,7 +9,7 @@
   --color-secondary: var(--color-slate-500);
   --color-on-secondary: var(--color-white);
   --color-secondary-container: var(--color-slate-200);
-  --color-on-secondary-container: var(--color-slate-900);
+  --color-on-secondary-container: var(--color-slate-700);
 
   --color-tertiary: var(--color-sky-500);
   --color-on-tertiary: var(--color-white);
@@ -58,18 +58,18 @@
     @variant dark {
       /* Base colors */
       --color-primary: var(--color-teal-600);
-      --color-on-primary: var(--color-zinc-900);
-      --color-primary-container: var(--color-teal-700);
+      --color-on-primary: var(--color-zinc-950);
+      --color-primary-container: var(--color-teal-800);
       --color-on-primary-container: var(--color-teal-100);
 
       --color-secondary: var(--color-slate-500);
-      --color-on-secondary: var(--color-zinc-900);
-      --color-secondary-container: var(--color-slate-700);
+      --color-on-secondary: var(--color-zinc-950);
+      --color-secondary-container: var(--color-slate-800);
       --color-on-secondary-container: var(--color-slate-100);
 
       --color-tertiary: var(--color-sky-500);
-      --color-on-tertiary: var(--color-zinc-900);
-      --color-tertiary-container: var(--color-sky-700);
+      --color-on-tertiary: var(--color-zinc-950);
+      --color-tertiary-container: var(--color-sky-800);
       --color-on-tertiary-container: var(--color-sky-100);
 
       /* Neutral colors */
@@ -92,13 +92,13 @@
 
       /* Status colors */
       --color-error: var(--color-red-400);
-      --color-on-error: var(--color-red-900);
-      --color-error-container: var(--color-red-700);
+      --color-on-error: var(--color-red-950);
+      --color-error-container: var(--color-red-800);
       --color-on-error-container: var(--color-red-100);
 
       --color-success: var(--color-green-400);
-      --color-on-success: var(--color-green-900);
-      --color-success-container: var(--color-green-700);
+      --color-on-success: var(--color-green-950);
+      --color-success-container: var(--color-green-800);
       --color-on-success-container: var(--color-green-100);
     }
   }
