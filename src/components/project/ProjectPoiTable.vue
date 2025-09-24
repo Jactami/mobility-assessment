@@ -110,6 +110,7 @@ async function deletePoi(poi: Poi) {
   // Confirm deletion
   const confirmation = await confirmDialog(
     t('table.confirmDelete', { object: poi.label || t(`category.${poi.category}`) }),
+    { confirmText: t('common.delete') },
   )
   if (!confirmation) return
 

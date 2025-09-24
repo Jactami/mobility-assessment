@@ -161,6 +161,7 @@ async function fetchProfiles() {
 async function deleteUser(profile: Profile) {
   const confirmed = await confirmDialog(
     t('table.confirmDelete', { object: `${profile.first_name} ${profile.last_name}` }),
+    { confirmText: t('common.delete') },
   )
   if (!confirmed) return
 

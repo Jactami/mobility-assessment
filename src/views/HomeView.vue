@@ -179,7 +179,9 @@ async function createProject() {
 async function deleteProject(project: Project) {
   if (!authStore.user) return
 
-  const confirmLeave = await confirmDialog(t('project.confirmDelete'))
+  const confirmLeave = await confirmDialog(t('project.confirmDelete'), {
+    confirmText: t('common.delete'),
+  })
   if (!confirmLeave) return
 
   const { error } = await db.deleteProject(project.id)

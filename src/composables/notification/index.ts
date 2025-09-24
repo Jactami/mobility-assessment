@@ -78,17 +78,37 @@ export function useNotification() {
     return { dismiss }
   }
 
-  const confirmDialog = (message: string) => {
+  const confirmDialog = (
+    message: string,
+    {
+      confirmText = t('common.ok'),
+      cancelText = t('common.cancel'),
+    }: { confirmText?: string; cancelText?: string } = {},
+  ) => {
     return new Promise((resolve) => {
       let confirmResult = false
       Swal.fire({
         title: t('common.pleaseConfirm'),
         icon: 'question',
         text: message,
-        confirmButtonText: t('common.ok'),
-        cancelButtonText: t('common.cancel'),
-        showCancelButton: true,
         showConfirmButton: true,
+        confirmButtonText: confirmText,
+        confirmButtonColor: window
+          .getComputedStyle(document.body)
+          .getPropertyValue('--color-error'), // danger action
+        showCancelButton: true,
+        cancelButtonText: cancelText,
+        cancelButtonColor: window
+          .getComputedStyle(document.body)
+          .getPropertyValue('--color-secondary'),
+        customClass: {
+          popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
+          confirmButton: '!text-on-error',
+          cancelButton: '!text-on-secondary',
+        },
+        reverseButtons: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
         didClose: () => resolve(confirmResult),
       }).then((result) => (confirmResult = result.value))
     })

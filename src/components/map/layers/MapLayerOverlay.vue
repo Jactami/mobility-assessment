@@ -27,7 +27,7 @@
   >
     <div
       v-if="selectedPoi"
-      class="relative max-w-96 min-w-64 rounded-border border-2 bg-surface p-2 shadow-md"
+      class="rounded-border bg-surface relative min-w-64 max-w-96 border-2 p-2 shadow-md"
       :style="`border-color: ${color};`"
     >
       <div>
@@ -35,7 +35,7 @@
           <strong>{{ selectedPoi.label || t(`category.${selectedPoi.category}`) }}</strong>
           <UIButtonIcon icon="close" @click="handleClose" />
         </div>
-        <div class="mt-4 text-sm text-on-surface-variant">
+        <div class="text-on-surface-variant mt-4 text-sm">
           <div class="flex items-center gap-x-1">
             <ProjectCategoryIcon :category="selectedPoi.category" class="size-5" />
             <span>{{ t(`category.${selectedPoi.category}`) }}</span>
@@ -51,7 +51,7 @@
       </div>
       <!-- Bottom Triangle -->
       <div
-        class="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-t-8 border-r-8 border-l-8 border-r-transparent border-l-transparent"
+        class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent"
         :style="`border-top-color: ${color};`"
       />
     </div>
@@ -125,6 +125,7 @@ async function deletePoi(poi: Poi) {
   // Confirm deletion
   const confirmation = await confirmDialog(
     t('table.confirmDelete', { object: poi.label || t(`category.${poi.category}`) }),
+    { confirmText: t('common.delete') },
   )
   if (!confirmation) return
 
