@@ -106,7 +106,6 @@ export function useNotification() {
           confirmButton: '!text-on-error',
           cancelButton: '!text-on-secondary',
         },
-        reverseButtons: true,
         allowOutsideClick: false,
         allowEscapeKey: false,
         didClose: () => resolve(confirmResult),
