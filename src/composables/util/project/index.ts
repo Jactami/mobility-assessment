@@ -5,6 +5,7 @@ export function useProjectUtil() {
   return {
     getCategoriesByDimension,
     getClosestPois,
+    getDimensionByCategory,
     getDimensionByName,
     getPoisByCategory,
     getPoisByDimension,
@@ -28,6 +29,17 @@ function getDimensionByName(name: string) {
  */
 function getCategoriesByDimension(dimension: string) {
   return getDimensionByName(dimension)?.categories.map((category) => category.name)
+}
+
+/**
+ * Gets a dimension by a specific category.
+ * @param category - The name of the category to search for.
+ * @returns The dimension object if found, or null.
+ */
+function getDimensionByCategory(category: string) {
+  return (
+    geoConfig.find((dimension) => dimension.categories.some((cat) => cat.name === category)) || null
+  )
 }
 
 /**
