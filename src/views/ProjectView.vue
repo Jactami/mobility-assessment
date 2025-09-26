@@ -11,19 +11,21 @@
       <UIPageHeader v-if="projectStore.project?.title" :title="projectStore.project.title" />
     </UISkeletonLoader>
 
-    <div class="max-w-8xl mx-auto grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
-      <!-- Search Bar -->
-      <div class="col-span-full">
-        <div class="mx-auto mb-3 w-full max-w-2xl">
-          <UISkeletonLoader :loading="projectLoading" height="2.5rem">
-            <ProjectLocationSearch
-              @search-initiated="geodataLoading = true"
-              @search-completed="geodataLoading = false"
-            />
-          </UISkeletonLoader>
-        </div>
-      </div>
+    <!-- Search Bar -->
+    <div class="mx-auto mb-3 w-full max-w-2xl">
+      <UISkeletonLoader :loading="projectLoading" height="2.5rem">
+        <ProjectLocationSearch
+          @search-initiated="geodataLoading = true"
+          @search-completed="geodataLoading = false"
+        />
+      </UISkeletonLoader>
+    </div>
 
+    <div class="mt-10">
+      <ProjectFilter />
+    </div>
+
+    <div class="max-w-8xl mx-auto mt-4 grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
       <!-- Map -->
       <UIPanel ref="mapPanelRef" :title="t('project.map')" icon="map">
         <UISkeletonLoader :loading="isLoading" :height="`${mapHeight}px`">
@@ -113,6 +115,7 @@
 <script setup lang="ts">
 import MapPanel from '@/components/map/MapPanel.vue'
 import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
+import ProjectFilter from '@/components/project/ProjectFilter.vue'
 import ProjectLocationSearch from '@/components/project/ProjectLocationSearch.vue'
 import ProjectPartialScore from '@/components/project/ProjectPartialScore.vue'
 import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
