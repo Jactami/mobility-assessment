@@ -1,6 +1,6 @@
 <template>
   <UIErrorPage
-    v-if="loadingError"
+    v-if="projectError"
     :title="t('common.error')"
     :message="t('project.loadError')"
     @retry="loadProject"
@@ -14,119 +14,65 @@
     <!-- Search Bar -->
     <div class="mx-auto mb-3 w-full max-w-2xl">
       <UISkeletonLoader :loading="projectLoading" height="2.5rem">
-        <ProjectLocationSearch
-          @search-initiated="geodataLoading = true"
-          @search-completed="geodataLoading = false"
-        />
+        <ProjectLocationSearch />
       </UISkeletonLoader>
     </div>
 
     <div class="mt-10">
-      <ProjectFilter />
+      <ProjectFilter :loading="isFetching" />
     </div>
 
+    <!-- Dashboard Panels -->
     <div class="max-w-8xl mx-auto mt-4 grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
       <!-- Map -->
-      <UIPanel ref="mapPanelRef" :title="t('project.map')" icon="map">
-        <UISkeletonLoader :loading="isLoading" :height="`${mapHeight}px`">
-          <MapPanel
-            v-model="selectedPoi"
-            :project="projectStore.project"
-            :pois="projectStore.pois"
-            :disabled="isLoading"
-            :height="mapHeight"
-          />
-        </UISkeletonLoader>
-      </UIPanel>
+      <ProjectMapPanel
+        id="map-panel"
+        :project="projectStore.project"
+        :pois="projectStore.filteredPois"
+        :loading="isFetching"
+      />
 
-      <!-- Analytics -->
-      <UIPanel :title="t('project.analytics')" icon="analytics">
-        <div class="mx-auto max-w-xs">
-          <UISkeletonLoader :loading="isLoading" height="10rem">
-            <ProjectTotalScore :score="scores?.total" />
-          </UISkeletonLoader>
-        </div>
-        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
-          <template v-for="dimension in geoConfig" :key="dimension.name">
-            <UISkeletonLoader :loading="isLoading" height="2rem">
-              <ProjectPartialScore
-                :dimension="dimension"
-                :score="scores?.partial[dimension.name]"
-              />
-            </UISkeletonLoader>
-          </template>
-        </div>
-        <div class="mx-auto mt-3 h-auto w-full max-w-sm">
-          <UISkeletonLoader :loading="isLoading" height="18rem">
-            <ProjectScoreChart :scores="scores" />
-          </UISkeletonLoader>
-        </div>
-      </UIPanel>
+      <!-- Evaluation -->
+      <ProjectEvaluationPanel id="evaluation-panel" :scores="scores" :loading="isFetching" />
 
-      <!-- POI table -->
-      <UIPanel :title="t('project.poi', 2)" icon="poi" class="col-span-full">
-        <div class="flex flex-wrap justify-center gap-2">
-          <template v-for="dimension in geoConfig" :key="dimension.name">
-            <template v-for="(category, i) in dimension.categories" :key="category.name">
-              <UISkeletonLoader
-                :loading="isLoading"
-                height="1.5rem"
-                :width="`${7 + (i % 3) * 2}rem`"
-              >
-                <ProjectCategoryPill
-                  v-if="projectStore.project?.latitude && projectStore.project?.longitude"
-                  :category="category.name"
-                  :count="getPoisByCategory(projectStore.pois ?? [], category.name).length"
-                />
-              </UISkeletonLoader>
-            </template>
-          </template>
-        </div>
-        <div class="mt-12">
-          <UISkeletonLoader :loading="isLoading" height="10rem">
-            <ProjectPoiTable @poi-selected="handlePoiSelected" />
-          </UISkeletonLoader>
-        </div>
-      </UIPanel>
+      <!-- Data Basis/ POIs -->
+      <ProjectPoiPanel
+        id="poi-panel"
+        :project="projectStore.project"
+        :pois="projectStore.filteredPois"
+        :loading="isFetching"
+        class="col-span-full"
+      />
     </div>
 
     <!-- Action Bar -->
     <UIMenuActionBar :items="actionItems" />
 
     <!-- Hidden content to produce map and chart exports -->
-    <template v-if="!geodataLoading">
-      <div class="invisible">
-        <MapPanel
-          v-for="dimension in geoConfig"
-          :key="dimension.name"
-          ref="maps"
-          :project="project"
-          :pois="getPoisByDimension(projectStore.pois || [], dimension.name)"
-          :height="1"
-        />
-      </div>
-      <div class="hidden h-1">
-        <ProjectScoreChart ref="chartRef" :scores="scores" />
-      </div>
-    </template>
+    <ProjectExportAssets
+      v-if="projectStore.project && projectStore.pois && scores"
+      ref="exportAssetsRef"
+      :project="projectStore.project"
+      :pois="projectStore.pois"
+      :scores="scores"
+    />
   </template>
 </template>
 
 <script setup lang="ts">
-import MapPanel from '@/components/map/MapPanel.vue'
-import ProjectCategoryPill from '@/components/project/ProjectCategoryPill.vue'
+import ProjectEvaluationPanel from '@/components/project/panels/ProjectEvaluationPanel.vue'
+import ProjectMapPanel from '@/components/project/panels/ProjectMapPanel.vue'
+import ProjectPoiPanel from '@/components/project/panels/ProjectPoiPanel.vue'
+import ProjectExportAssets from '@/components/project/ProjectExportAssets.vue'
 import ProjectFilter from '@/components/project/ProjectFilter.vue'
 import ProjectLocationSearch from '@/components/project/ProjectLocationSearch.vue'
-import ProjectPartialScore from '@/components/project/ProjectPartialScore.vue'
-import ProjectPoiTable from '@/components/project/ProjectPoiTable.vue'
-import ProjectScoreChart from '@/components/project/ProjectScoreChart.vue'
-import ProjectTotalScore from '@/components/project/ProjectTotalScore.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenuActionBar from '@/components/ui/menu/UIMenuActionBar.vue'
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import UIErrorPage from '@/components/ui/UIErrorPage.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
-import UIPanel from '@/components/ui/UIPanel.vue'
+import { useGeocodingService } from '@/composables/api/geocoding'
+import { usePoiService } from '@/composables/api/poi'
 import useDB from '@/composables/db'
 import { useDownload } from '@/composables/download'
 import { useEvaluation } from '@/composables/evaluation'
@@ -134,9 +80,6 @@ import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { usePDF } from '@/composables/pdf'
-import { useProjectUtil } from '@/composables/util/project'
-import { geoConfig } from '@/config/geo'
-import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -148,38 +91,24 @@ const projectStore = useProjectStore()
 const route = useRoute()
 const router = useRouter()
 const { errorToast, loadingToast, successToast, confirmDialog } = useNotification()
-const { pdf, error, loading, createReport } = usePDF()
+const pdfService = usePDF()
 const { downloadPDF } = useDownload()
 const { calcScores } = useEvaluation()
-const { getPoisByDimension, getPoisByCategory } = useProjectUtil()
+const { loading: geodataLoading } = useGeocodingService()
+const { loading: poiLoading } = usePoiService()
 
-const mapHeight = 600 // px
+const exportAssetsRef = useTemplateRef('exportAssetsRef')
 
-// Original project and POIs from database to compare with store
-const project = ref<Project | null>(null)
-const pois = ref<Poi[] | null>(null)
-
+// TODO: Decide if we should move scores to the store
 const scores = ref<EvaluationScores | null>(null)
 
-const selectedPoi = ref<Poi | null>(null)
-
-const mapPanelRef = ref<InstanceType<typeof UIPanel> | null>(null)
-const chartRef = ref<InstanceType<typeof ProjectScoreChart> | null>(null)
-const mapRefs = useTemplateRef<InstanceType<typeof MapPanel>[] | null>('maps')
-
-const loadingError = ref(false)
-
-// Loading flags to indicate if data is being fetched
-const geodataLoading = ref(false)
+// State flags
 const projectLoading = ref(false)
-const isLoading = computed(() => geodataLoading.value || projectLoading.value)
+const reportLoading = ref(false)
+const projectError = ref(false)
 
-// Checks if the project has unsaved changes in a simple way
-const isProjectDirty = computed(
-  () =>
-    JSON.stringify(projectStore.project) !== JSON.stringify(project.value) ||
-    JSON.stringify(projectStore.pois) !== JSON.stringify(pois.value),
-)
+// Indicates if any data fetching is in progress
+const isFetching = computed(() => geodataLoading.value || poiLoading.value || projectLoading.value)
 
 const actionItems: MenuListItem[] = [
   {
@@ -213,7 +142,7 @@ onUnmounted(projectStore.reset)
 
 // Prompt user if they try to leave the page with unsaved changes
 onBeforeRouteLeave(async (_, __, next) => {
-  if (isProjectDirty.value) {
+  if (projectStore.isDirty) {
     const confirmLeave = await confirmDialog(t('project.confirmLeave'))
     if (confirmLeave) {
       return next()
@@ -226,6 +155,7 @@ onBeforeRouteLeave(async (_, __, next) => {
 
 async function loadProject() {
   projectLoading.value = true
+  projectError.value = false
 
   // Fetch the project and POIs from the database
   const projectId = route.params.projectId as string
@@ -235,29 +165,25 @@ async function loadProject() {
   ])
 
   projectLoading.value = false
-  loadingError.value = false
 
   // If there is an error in the database, show error
   if (projectResponse.error || poisResponse.error) {
+    projectError.value = true
+    console.log(projectResponse.error || poisResponse.error)
     errorToast(t('project.loadError'))
-    loadingError.value = true
     return
   }
 
   // If no project or POIs are found, show error message
   if (!projectResponse.data || !poisResponse.data) {
+    projectError.value = true
     errorToast(t('project.notFound'))
     projectStore.reset()
-    project.value = null
-    pois.value = null
-    router.push('/')
     return
   }
 
   // Set the project and POIs in the store
-  project.value = projectResponse.data
-  pois.value = poisResponse.data
-  projectStore.set(project.value, pois.value)
+  projectStore.syncProjectState({ project: projectResponse.data, pois: poisResponse.data })
 }
 
 async function saveProject() {
@@ -285,36 +211,27 @@ async function saveProject() {
   successToast(t('project.saveSuccess'))
 
   // Update the project and POIs in the store
-  project.value = projectResponse.data
-  pois.value = poisResponse.data
-  projectStore.set(project.value, pois.value)
+  projectStore.syncProjectState({ project: projectResponse.data, pois: poisResponse.data })
 }
 
 async function generateReport() {
-  if (!projectStore.project || !projectStore.pois || !scores.value) {
+  // Skip if already loading
+  if (reportLoading.value) return
+
+  // Ensure we have all necessary data
+  if (!projectStore.project || !projectStore.pois || !scores.value || !exportAssetsRef.value) {
     errorToast(t('common.errorMessage'))
     return
   }
 
+  reportLoading.value = true
   const toast = await loadingToast(t('project.generatingReport'))
 
-  // Manually set loading state for PDF generation because we have to await image exports
-  loading.value = true
-
-  // Generate map images for each dimension
-  const maps: Record<string, string> = {}
-  await Promise.all(
-    mapRefs.value?.map(async (mapRef, i) => {
-      const img = await mapRef.exportMap()
-      if (img && geoConfig[i]?.name) maps[geoConfig[i].name] = img
-    }) || [],
-  )
-
-  // Generate chart image
-  const chart = (await chartRef.value?.exportChart()) || ''
+  // Generate map and chart images
+  const { maps, chart } = await exportAssetsRef.value?.exportAssets()
 
   // Create the PDF report
-  await createReport({
+  await pdfService.createReport({
     project: projectStore.project,
     pois: projectStore.pois,
     scores: scores.value,
@@ -322,51 +239,35 @@ async function generateReport() {
     maps,
   })
 
+  reportLoading.value = false
+
   // If there is an error in creating the PDF, show error
-  if (error.value) {
-    console.error(error.value)
+  if (pdfService.error.value) {
+    console.error(pdfService.error.value)
     errorToast(t('project.reportError'))
     return
   }
 
-  if (pdf.value) {
+  if (pdfService.pdf.value) {
     // Finally download the PDF
-    downloadPDF(new Blob([new Uint8Array(pdf.value)]), `${projectStore.project.title}.pdf`)
+    downloadPDF(
+      new Blob([new Uint8Array(pdfService.pdf.value)]),
+      `${projectStore.project.title}.pdf`,
+    )
 
     // Reset loading state
     toast.dismiss()
   }
 }
 
-// Handle POI selection from the table
-function handlePoiSelected(poi: Poi) {
-  selectedPoi.value = poi
-  // scroll to the map section
-  mapPanelRef.value?.$el.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-  })
-}
-
+// (Re-)calculate scores after POIs are loaded or changed
 watch(
   () => projectStore.pois,
   () => {
-    // Check if selectedPoi is still valid
-    if (selectedPoi.value && !projectStore.pois?.some((poi) => poi.id === selectedPoi.value?.id)) {
-      selectedPoi.value = null // Reset if not found
-    }
-
-    // Recalculate scores whenever POIs change
-    if (
-      projectStore.pois &&
-      projectStore.project?.radius &&
-      projectStore.project.latitude &&
-      projectStore.project.longitude
-    ) {
+    if (projectStore.pois && projectStore.project?.radius) {
       scores.value = calcScores(projectStore.pois, projectStore.project.radius)
-      projectStore.updateProject({
-        ...projectStore.project,
-        score: scores.value.total,
+      projectStore.updateProjectState({
+        project: { ...projectStore.project, score: scores.value.total },
       })
     }
   },

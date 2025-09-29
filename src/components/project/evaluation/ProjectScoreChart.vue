@@ -20,7 +20,7 @@ import {
   type ChartData,
   type ChartOptions,
 } from 'chart.js'
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
 import { Radar, type ChartComponentRef } from 'vue-chartjs'
 import { useI18n } from 'vue-i18n'
 
@@ -37,8 +37,8 @@ defineExpose({ exportChart })
 const { t } = useI18n()
 const isDark = useDark()
 
-const chartContainer = ref<HTMLDivElement | null>(null)
-const chartRef = ref<ChartComponentRef | null>(null)
+const chartContainer = useTemplateRef('chartContainer')
+const chartRef = useTemplateRef<ChartComponentRef<'radar'>>('chartRef')
 
 const data = ref<number[]>([])
 

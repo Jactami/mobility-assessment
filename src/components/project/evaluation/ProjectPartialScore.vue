@@ -32,13 +32,13 @@ import type { GeoDimension } from '@/config/geo/types'
 import { nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const { n, t } = useI18n()
-const { scoreToColor } = useColorUtil()
-
 const props = defineProps<{
   dimension: GeoDimension
   score?: number | null
 }>()
+
+const { n, t } = useI18n()
+const { scoreToColor } = useColorUtil()
 
 const barWidth = ref(0)
 

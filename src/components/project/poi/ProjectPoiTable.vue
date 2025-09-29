@@ -1,5 +1,5 @@
 <template>
-  <DataTable v-if="projectStore.pois" :config="config" :data="projectStore.pois">
+  <DataTable :config="config" :data="pois">
     <template #item-category="{ value }">
       <div class="flex items-center gap-2">
         <div
@@ -25,11 +25,11 @@ import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import ProjectCategoryIcon from './ProjectCategoryIcon.vue'
+import ProjectCategoryIcon from '../category/ProjectCategoryIcon.vue'
 import ProjectPoiForm from './ProjectPoiForm.vue'
 
-const emit = defineEmits<{
-  (e: 'poi-selected', poi: Poi): void
+defineProps<{
+  pois: Poi[]
 }>()
 
 const { n, t } = useI18n()
@@ -84,7 +84,15 @@ const config: TableConfig<Poi> = {
     {
       label: t('poi.viewOnMap'),
       icon: 'map',
-      handler: (poi) => emit('poi-selected', poi),
+      handler: (poi) => {
+        projectStore.selectedPoi = poi
+
+        // Not to happy about this direct DOM access, but works for now
+        document.getElementById('map-panel')?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+      },
     },
     {
       label: t('common.edit'),
@@ -116,7 +124,7 @@ async function deletePoi(poi: Poi) {
 
   // Remove the POI from the store
   const newPois = projectStore.pois.filter((p) => p !== poi)
-  projectStore.updatePois(newPois)
+  projectStore.updateProjectState({ pois: newPois })
 }
 
 function addPoi() {

@@ -69,8 +69,9 @@ const loading = computed(() => geocodingLoading.value || poisLoading.value)
 async function search() {
   if (loading.value) return
   if (!query.value.trim()) return
-  if (!projectStore.project?.id) return
+  if (!projectStore.project) return
 
+  // Get geocoding results for the query
   await getGeocoding(query.value)
 
   // If there is an error in the geocode service, show error
@@ -90,7 +91,7 @@ async function search() {
   const location = geocoding.value[0]
 
   // Update project store
-  projectStore.updateProject({ ...location })
+  projectStore.updateProjectState({ project: { ...projectStore.project, ...location } })
 
   if (
     !projectStore.project?.latitude ||
@@ -114,7 +115,7 @@ async function search() {
 
   // Update project store with POIs
   if (pois.value) {
-    projectStore.updatePois(pois.value)
+    projectStore.updateProjectState({ pois: pois.value })
   }
 }
 

@@ -2,16 +2,16 @@ import axios from 'axios'
 import { ref } from 'vue'
 import type { Address, GeocodeJSON, GeocodeJSONFeature } from './types'
 
+const data = ref<Address[] | null>(null)
+
+// see: https://alexop.dev/posts/best-practices-for-error-handling-in-vue-composables/
+const loading = ref<boolean>(false)
+const error = ref<Error | null>(null)
+
 /**
  * Composable function to interact with geocoding services.
  */
 export function useGeocodingService() {
-  const data = ref<Address[] | null>(null)
-
-  // see: https://alexop.dev/posts/best-practices-for-error-handling-in-vue-composables/
-  const loading = ref<boolean>(false)
-  const error = ref<Error | null>(null)
-
   async function getGeocoding(search: string) {
     // Fetch geocoding data from Nominatim
     const geocoding = await fetchGeocoding(search)

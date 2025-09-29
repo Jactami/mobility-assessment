@@ -11,7 +11,7 @@ import UISkeleton from './UISkeleton.vue'
 defineProps<{
   width?: string
   height?: string
-  loading: boolean
+  loading?: boolean
 }>()
 
 defineOptions({ inheritAttrs: false })

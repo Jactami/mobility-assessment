@@ -15,8 +15,8 @@
 
   <!-- Map Overlay -->
   <OlOverlay
-    v-if="selectedPoi"
-    :position="fromLonLat([selectedPoi.longitude, selectedPoi.latitude])"
+    v-if="projectStore.selectedPoi"
+    :position="fromLonLat([projectStore.selectedPoi.longitude, projectStore.selectedPoi.latitude])"
     :auto-pan="{
       animation: {
         duration: 200,
@@ -26,25 +26,26 @@
     :offset="[0, -18]"
   >
     <div
-      v-if="selectedPoi"
-      class="rounded-border bg-surface relative min-w-64 max-w-96 border-2 p-2 shadow-md"
+      class="rounded-border bg-surface relative w-full min-w-64 max-w-96 border-2 p-2 shadow-md"
       :style="`border-color: ${color};`"
     >
       <div>
         <div class="flex items-start justify-between gap-x-10">
-          <strong>{{ selectedPoi.label || t(`category.${selectedPoi.category}`) }}</strong>
+          <strong>{{
+            projectStore.selectedPoi.label || t(`category.${projectStore.selectedPoi.category}`)
+          }}</strong>
           <UIButtonIcon icon="close" @click="handleClose" />
         </div>
         <div class="text-on-surface-variant mt-4 text-sm">
           <div class="flex items-center gap-x-1">
-            <ProjectCategoryIcon :category="selectedPoi.category" class="size-5" />
-            <span>{{ t(`category.${selectedPoi.category}`) }}</span>
+            <ProjectCategoryIcon :category="projectStore.selectedPoi.category" class="size-5" />
+            <span>{{ t(`category.${projectStore.selectedPoi.category}`) }}</span>
           </div>
           <div class="mt-2 flex items-center justify-between">
-            <span>{{ n(selectedPoi.distance, 'meter') }}</span>
+            <span>{{ n(projectStore.selectedPoi.distance, 'meter') }}</span>
             <div class="">
               <UIButtonIcon icon="edit" @click="modalOpen = true" />
-              <UIButtonIcon icon="delete" @click="deletePoi(selectedPoi)" />
+              <UIButtonIcon icon="delete" @click="deletePoi(projectStore.selectedPoi)" />
             </div>
           </div>
         </div>
@@ -57,12 +58,16 @@
     </div>
   </OlOverlay>
 
-  <ProjectPoiForm v-if="selectedPoi" v-model:open="modalOpen" v-model:poi="selectedPoi" />
+  <ProjectPoiForm
+    v-if="projectStore.selectedPoi"
+    v-model:open="modalOpen"
+    v-model:poi="projectStore.selectedPoi"
+  />
 </template>
 
 <script setup lang="ts">
-import ProjectCategoryIcon from '@/components/project/ProjectCategoryIcon.vue'
-import ProjectPoiForm from '@/components/project/ProjectPoiForm.vue'
+import ProjectCategoryIcon from '@/components/project/category/ProjectCategoryIcon.vue'
+import ProjectPoiForm from '@/components/project/poi/ProjectPoiForm.vue'
 import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import { useNotification } from '@/composables/notification'
 import { useColorUtil } from '@/composables/util/color'
@@ -88,10 +93,8 @@ const modalOpen = ref(false)
 
 const featureCollection = new Collection<Feature<Geometry>>()
 
-const selectedPoi = defineModel<Poi | null>()
-
 const color = computed(() =>
-  selectedPoi.value ? categoryToColor(selectedPoi.value.category) : '#000',
+  projectStore.selectedPoi ? categoryToColor(projectStore.selectedPoi.category) : '#000',
 )
 
 function handleSelect(event: SelectEvent) {
@@ -105,12 +108,13 @@ function handleSelect(event: SelectEvent) {
   featureCollection.push(event.selected[0])
 
   // Important: Set the poi as a property on the feature in the poi layer!
-  selectedPoi.value = event.selected.length > 0 ? event.selected[0].getProperties().poi : null
+  projectStore.selectedPoi =
+    event.selected.length > 0 ? event.selected[0].getProperties().poi : null
 }
 
 function handleClose() {
   featureCollection.clear()
-  selectedPoi.value = null
+  projectStore.selectedPoi = null
 }
 
 function selectInteractionFilter(feature: Feature) {
@@ -131,6 +135,6 @@ async function deletePoi(poi: Poi) {
 
   // Remove the POI from the store
   const newPois = projectStore.pois.filter((p) => p !== poi)
-  projectStore.updatePois(newPois)
+  projectStore.updateProjectState({ pois: newPois })
 }
 </script>

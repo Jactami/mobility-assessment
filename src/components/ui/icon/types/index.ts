@@ -40,7 +40,6 @@ import TablerExternalLink from '~icons/tabler/external-link'
  */
 export const icons = {
   add: MaterialSymbolsAdd2Rounded,
-  analytics: MaterialSymbolsBarChartRounded,
   back: TablerArrowBackUp,
   check: MaterialSymbolsCheckRounded,
   clear: MaterialSymbolsCloseRounded,
@@ -52,6 +51,7 @@ export const icons = {
   download: MaterialSymbolsDownload,
   edit: MaterialSymbolsEditRounded,
   error: MaterialSymbolsErrorOutlineRounded,
+  evaluation: MaterialSymbolsBarChartRounded,
   favorite: MaterialSymbolsStarRounded,
   first: MdiChevronDoubleLeft,
   hide: MaterialSymbolsVisibilityOffOutlineRounded,

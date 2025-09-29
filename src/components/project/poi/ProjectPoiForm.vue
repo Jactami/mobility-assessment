@@ -120,7 +120,7 @@ function handleSubmit() {
   }
 
   // Update the project store with the new POIs
-  projectStore.updatePois(pois)
+  projectStore.updateProjectState({ pois })
 
   // Reset state
   open.value = false

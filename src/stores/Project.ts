@@ -1,72 +1,97 @@
+import { useProjectUtil } from '@/composables/util/project'
 import type { Poi, Project } from '@/db/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 /**
- * Store to create a shadow project to temporarily hold project data without saving it to the database.
- * This is useful for creating new projects or editing existing ones without immediately committing changes.
+ * Single source of truth for the current project data and UI state.
+ * This store mitigates prop drilling and event propagation.
  *
- * TODO: Add history tracking to allow undo/redo functionality.
+ * TODO: Add setters and getter for secure data manipulation
+ * TODO: Decide whether to fetch data and handle loading and error state here or in view
  */
 export const useProjectStore = defineStore('project', () => {
-  const _project = ref<Project | null>(null)
-  const _pois = ref<Poi[] | null>(null)
+  // Data
+  const project = ref<Project | null>(null)
+  const pois = ref<Poi[] | null>(null)
 
-  const project = computed(() => _project.value)
-  const pois = computed(() => _pois.value)
+  // Original data to check for changes
+  const originalProject = ref<Project | null>(null)
+  const originalPois = ref<Poi[] | null>(null)
 
-  /**
-   * Initializes the current project.
-   *
-   * @param newProject - Partial project data to update or initialize the project.
-   */
-  function set(project: Project, pois: Poi[]) {
-    _project.value = project
-    _pois.value = pois
+  // UI states
+  const selectedPoi = ref<Poi | null>(null)
+  const dimensionFilter = ref<string | null>(null)
+
+  // Check if data has unsaved changes
+  const isDirty = computed(
+    () =>
+      JSON.stringify(project.value) !== JSON.stringify(originalProject.value) ||
+      JSON.stringify(pois.value) !== JSON.stringify(originalPois.value),
+  )
+
+  const filteredPois = computed(() => {
+    if (!dimensionFilter.value || !pois.value) return pois.value
+    return useProjectUtil().getPoisByDimension(pois.value, dimensionFilter.value)
+  })
+
+  function syncProjectState(state: { project: Project; pois: Poi[] }) {
+    // Store original data for change detection
+    originalProject.value = state.project
+    originalPois.value = state.pois
+
+    // Set current data
+    updateProjectState(state)
   }
 
-  /**
-   * Updates the current project and merges it with the new data.
-   *
-   * @param newProject - Partial project data to update the current project.
-   */
-  function updateProject(newProject: Partial<Project>) {
-    if (!_project.value) {
-      console.warn('Attempted to update a project that has not been set.')
-      return
+  function updateProjectState(state: { project?: Project; pois?: Poi[] }) {
+    // Update project
+    if (state.project) {
+      project.value = state.project
     }
 
-    _project.value = { ..._project.value, ...newProject }
-  }
+    // Update POIs
+    if (state.pois) {
+      pois.value = state.pois
 
-  /**
-   * Updates the current Points of Interest (POIs).
-   *
-   * @param newPois - Array of POIs to update the current POIs.
-   */
-  function updatePois(newPois: Poi[]) {
-    if (!_pois.value) {
-      console.warn('Attempted to update POIs that have not been set.')
-      return
+      // Check if selected POI still exists in the updated list
+      if (selectedPoi.value && !state.pois.find((p) => p.id === selectedPoi.value?.id)) {
+        selectedPoi.value = null
+      }
     }
+  }
 
-    _pois.value = newPois
+  function setFilter(dimension: string | null) {
+    dimensionFilter.value = dimension
+
+    // Check if selected POI still exists in the filtered list
+    if (selectedPoi.value && !filteredPois.value?.find((p) => p.id === selectedPoi.value?.id)) {
+      selectedPoi.value = null
+    }
   }
 
   /**
-   * Resets the project store, clearing the current project data.
+   * Resets the project store and clears the current project data.
    */
   function reset() {
-    _project.value = null
-    _pois.value = null
+    project.value = null
+    pois.value = null
+    selectedPoi.value = null
+    dimensionFilter.value = null
   }
 
   return {
     project,
     pois,
+    originalProject,
+    originalPois,
+    selectedPoi,
+    dimensionFilter,
+    isDirty,
+    filteredPois,
+    syncProjectState,
+    updateProjectState,
+    setFilter,
     reset,
-    updateProject,
-    updatePois,
-    set,
   }
 })

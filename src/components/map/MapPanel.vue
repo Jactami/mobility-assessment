@@ -1,7 +1,7 @@
 <template>
   <OlMap
     ref="mapRef"
-    class="block overflow-hidden rounded-border"
+    class="rounded-border block overflow-hidden"
     :class="{ 'opacity-60': disabled }"
     :style="{ height: `${height}px` }"
   >
@@ -23,8 +23,9 @@
     >
       <!-- Radius Layer -->
       <MapLayerRadius
+        v-if="map"
         :location="location"
-        :radius="metersToPixels(mapRef.map as Map, location, props.project?.radius)"
+        :radius="metersToPixels(map, location, props.project?.radius)"
       />
 
       <!-- Points of Interest Layer -->
@@ -34,11 +35,11 @@
       <MapLayerLocation :location="location" />
 
       <!-- Overlay Layer -->
-      <MapLayerOverlay v-model="selectedPoi" />
+      <MapLayerOverlay v-if="!static" />
     </template>
 
     <!-- Map Control Buttons -->
-    <template v-if="!disabled">
+    <template v-if="!disabled && !static">
       <OlZoomControl :zoom-in-tip-label="t('map.zoomIn')" :zoom-out-tip-label="t('map.zoomOut')" />
       <OlFullScreenControl :tip-label="t('map.toggleFullscreen')" />
       <OlZoomToExtentControl
@@ -62,7 +63,7 @@ import { useGeolocation } from '@vueuse/core'
 import type { Extent } from 'ol/extent'
 import type Map from 'ol/Map'
 import { fromLonLat } from 'ol/proj'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   OlFullScreenControl,
@@ -85,6 +86,7 @@ interface Props {
   pois?: Poi[] | null
   height?: number
   disabled?: boolean
+  static?: boolean // prevent user interaction -> export only
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -99,10 +101,7 @@ const { t } = useI18n()
 const { coords, pause } = useGeolocation({ immediate: true, enableHighAccuracy: true })
 const { exportMapToImage, metersToPixels, zoomFromMeters } = useMapUtils()
 
-// Define a model for the selected POI to be used across components
-const selectedPoi = defineModel<Poi | null>()
-
-const mapRef = ref<{ map: Map } | null>(null)
+const mapRef = useTemplateRef<InstanceType<typeof OlMap>>('mapRef')
 const map = computed(() => mapRef.value?.map)
 
 // Default coordinates and zoom level centered on Germany
