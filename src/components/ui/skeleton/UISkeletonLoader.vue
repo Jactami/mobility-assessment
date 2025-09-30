@@ -1,5 +1,5 @@
 <template>
-  <UISkeleton v-if="loading" :width="width" :height="height" v-bind="$attrs" />
+  <UISkeleton v-if="loading" :width="width" :height="height" :rounded="rounded" v-bind="$attrs" />
   <slot v-else>
     <!-- Loaded content goes here... -->
   </slot>
@@ -11,6 +11,7 @@ import UISkeleton from './UISkeleton.vue'
 defineProps<{
   width?: string
   height?: string
+  rounded?: boolean
   loading?: boolean
 }>()
 

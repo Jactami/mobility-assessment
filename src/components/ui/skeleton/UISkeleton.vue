@@ -1,6 +1,7 @@
 <template>
   <div
-    class="animate-pulse rounded-border bg-surface-container-high"
+    class="rounded-border bg-surface-container-high animate-pulse"
+    :class="{ 'rounded-full': rounded }"
     :style="style"
     aria-busy="true"
   />
@@ -12,6 +13,7 @@ import { computed } from 'vue'
 interface Props {
   width?: string
   height?: string
+  rounded?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

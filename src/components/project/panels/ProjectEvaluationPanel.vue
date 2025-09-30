@@ -8,7 +8,7 @@
     </div>
 
     <!-- Partial Scores -->
-    <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
+    <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
       <template v-for="dimension in geoConfig" :key="dimension.name">
         <UISkeletonLoader :loading="loading" height="2rem">
           <ProjectPartialScore :dimension="dimension" :score="scores?.partial[dimension.name]" />
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Score Chart -->
-    <div class="mx-auto mt-3 h-auto w-full max-w-sm">
+    <div class="mx-auto mt-12 h-auto w-full max-w-md">
       <UISkeletonLoader :loading="loading" height="18rem">
         <ProjectScoreChart :scores="scores" />
       </UISkeletonLoader>

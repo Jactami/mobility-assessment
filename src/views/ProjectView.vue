@@ -18,17 +18,13 @@
       </UISkeletonLoader>
     </div>
 
-    <div class="mt-10">
-      <ProjectFilter :loading="isFetching" />
-    </div>
-
     <!-- Dashboard Panels -->
-    <div class="max-w-8xl mx-auto mt-4 grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
+    <div class="max-w-8xl mx-auto mt-10 grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
       <!-- Map -->
       <ProjectMapPanel
         id="map-panel"
         :project="projectStore.project"
-        :pois="projectStore.filteredPois"
+        :pois="projectStore.pois"
         :loading="isFetching"
       />
 
@@ -39,7 +35,7 @@
       <ProjectPoiPanel
         id="poi-panel"
         :project="projectStore.project"
-        :pois="projectStore.filteredPois"
+        :pois="projectStore.pois"
         :loading="isFetching"
         class="col-span-full"
       />
@@ -64,7 +60,6 @@ import ProjectEvaluationPanel from '@/components/project/panels/ProjectEvaluatio
 import ProjectMapPanel from '@/components/project/panels/ProjectMapPanel.vue'
 import ProjectPoiPanel from '@/components/project/panels/ProjectPoiPanel.vue'
 import ProjectExportAssets from '@/components/project/ProjectExportAssets.vue'
-import ProjectFilter from '@/components/project/ProjectFilter.vue'
 import ProjectLocationSearch from '@/components/project/ProjectLocationSearch.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenuActionBar from '@/components/ui/menu/UIMenuActionBar.vue'

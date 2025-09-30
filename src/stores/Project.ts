@@ -1,4 +1,3 @@
-import { useProjectUtil } from '@/composables/util/project'
 import type { Poi, Project } from '@/db/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
@@ -21,7 +20,6 @@ export const useProjectStore = defineStore('project', () => {
 
   // UI states
   const selectedPoi = ref<Poi | null>(null)
-  const dimensionFilter = ref<string | null>(null)
 
   // Check if data has unsaved changes
   const isDirty = computed(
@@ -29,11 +27,6 @@ export const useProjectStore = defineStore('project', () => {
       JSON.stringify(project.value) !== JSON.stringify(originalProject.value) ||
       JSON.stringify(pois.value) !== JSON.stringify(originalPois.value),
   )
-
-  const filteredPois = computed(() => {
-    if (!dimensionFilter.value || !pois.value) return pois.value
-    return useProjectUtil().getPoisByDimension(pois.value, dimensionFilter.value)
-  })
 
   function syncProjectState(state: { project: Project; pois: Poi[] }) {
     // Store original data for change detection
@@ -61,15 +54,6 @@ export const useProjectStore = defineStore('project', () => {
     }
   }
 
-  function setFilter(dimension: string | null) {
-    dimensionFilter.value = dimension
-
-    // Check if selected POI still exists in the filtered list
-    if (selectedPoi.value && !filteredPois.value?.find((p) => p.id === selectedPoi.value?.id)) {
-      selectedPoi.value = null
-    }
-  }
-
   /**
    * Resets the project store and clears the current project data.
    */
@@ -77,7 +61,6 @@ export const useProjectStore = defineStore('project', () => {
     project.value = null
     pois.value = null
     selectedPoi.value = null
-    dimensionFilter.value = null
   }
 
   return {
@@ -86,12 +69,9 @@ export const useProjectStore = defineStore('project', () => {
     originalProject,
     originalPois,
     selectedPoi,
-    dimensionFilter,
     isDirty,
-    filteredPois,
     syncProjectState,
     updateProjectState,
-    setFilter,
     reset,
   }
 })
