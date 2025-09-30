@@ -14,7 +14,7 @@
     <!-- Search Bar -->
     <div class="mx-auto mb-3 w-full max-w-2xl">
       <UISkeletonLoader :loading="projectLoading" height="2.5rem">
-        <ProjectLocationSearch />
+        <ProjectLocationSearch @update-location="fetchPois" />
       </UISkeletonLoader>
     </div>
 
@@ -38,6 +38,7 @@
         :pois="projectStore.pois"
         :loading="isFetching"
         class="col-span-full"
+        @refresh-pois="fetchPois"
       />
     </div>
 
@@ -90,7 +91,7 @@ const pdfService = usePDF()
 const { downloadPDF } = useDownload()
 const { calcScores } = useEvaluation()
 const { loading: geodataLoading } = useGeocodingService()
-const { loading: poiLoading } = usePoiService()
+const { data: pois, error: poisError, loading: poiLoading, getPois } = usePoiService()
 
 const exportAssetsRef = useTemplateRef('exportAssetsRef')
 
@@ -207,6 +208,33 @@ async function saveProject() {
 
   // Update the project and POIs in the store
   projectStore.syncProjectState({ project: projectResponse.data, pois: poisResponse.data })
+}
+
+async function fetchPois() {
+  if (
+    !projectStore.project?.latitude ||
+    !projectStore.project?.longitude ||
+    !projectStore.project?.radius
+  )
+    return
+
+  // Get POIs for the selected project location
+  await getPois(
+    projectStore.project?.latitude,
+    projectStore.project?.longitude,
+    projectStore.project?.radius,
+    projectStore.project.id,
+  )
+
+  // If there is an error in the POI service, show error
+  if (poisError.value) {
+    errorToast(t('common.errorMessage'))
+  }
+
+  // Update project store with POIs
+  if (pois.value) {
+    projectStore.updateProjectState({ pois: pois.value })
+  }
 }
 
 async function generateReport() {

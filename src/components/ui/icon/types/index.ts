@@ -21,6 +21,7 @@ import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded
 import MaterialSymbolsMapOutlineRounded from '~icons/material-symbols/map-outline-rounded'
 import MaterialSymbolsMoreVert from '~icons/material-symbols/more-vert'
 import MaterialSymbolsPerson from '~icons/material-symbols/person'
+import MaterialSymbolsRefreshRounded from '~icons/material-symbols/refresh-rounded'
 import MaterialSymbolsSaveOutlineRounded from '~icons/material-symbols/save-outline-rounded'
 import MaterialSymbolsSearchRounded from '~icons/material-symbols/search-rounded'
 import MaterialSymbolsSettings from '~icons/material-symbols/settings'
@@ -66,6 +67,7 @@ export const icons = {
   noFavorite: MaterialSymbolsStarOutlineRounded,
   poi: MaterialSymbolsLocationOnRounded,
   previous: MaterialSymbolsChevronLeft,
+  refresh: MaterialSymbolsRefreshRounded,
   report: MdiFilePdfOutline,
   save: MaterialSymbolsSaveOutlineRounded,
   search: MaterialSymbolsSearchRounded,

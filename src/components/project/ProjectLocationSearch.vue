@@ -46,8 +46,7 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const emit = defineEmits<{
-  (e: 'search-initiated'): void
-  (e: 'search-completed'): void
+  (e: 'update-location'): void
 }>()
 
 const { t } = useI18n()
@@ -57,7 +56,7 @@ const {
   loading: geocodingLoading,
   getGeocoding,
 } = useGeocodingService()
-const { data: pois, error: poisError, loading: poisLoading, getPois } = usePoiService()
+const { loading: poisLoading } = usePoiService()
 const { errorToast } = useNotification()
 const projectStore = useProjectStore()
 const { createAddress } = useUtil()
@@ -93,30 +92,7 @@ async function search() {
   // Update project store
   projectStore.updateProjectState({ project: { ...projectStore.project, ...location } })
 
-  if (
-    !projectStore.project?.latitude ||
-    !projectStore.project?.longitude ||
-    !projectStore.project?.radius
-  )
-    return
-
-  // Get POIs for the selected project location
-  await getPois(
-    projectStore.project?.latitude,
-    projectStore.project?.longitude,
-    projectStore.project?.radius,
-    projectStore.project.id,
-  )
-
-  // If there is an error in the POI service, show error
-  if (poisError.value) {
-    errorToast(t('common.errorMessage'))
-  }
-
-  // Update project store with POIs
-  if (pois.value) {
-    projectStore.updateProjectState({ pois: pois.value })
-  }
+  emit('update-location')
 }
 
 function resetQuery() {
@@ -146,13 +122,4 @@ watch(
   },
   { immediate: true },
 )
-
-// Inform parent component about search status changes
-watch(loading, (isLoading) => {
-  if (isLoading) {
-    emit('search-initiated')
-  } else {
-    emit('search-completed')
-  }
-})
 </script>

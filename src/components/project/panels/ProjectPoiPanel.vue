@@ -1,5 +1,5 @@
 <template>
-  <UIPanel :title="t('project.pois')" icon="poi">
+  <UIPanel :title="t('project.pois')" icon="poi" :actions="actions">
     <!-- Category Summary Pills -->
     <div class="flex flex-wrap justify-center gap-2">
       <template v-for="dimension in geoConfig" :key="dimension.name">
@@ -30,8 +30,10 @@
 </template>
 
 <script setup lang="ts">
+import type { MenuListItem } from '@/components/ui/menu/types'
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import UIPanel from '@/components/ui/UIPanel.vue'
+import { useNotification } from '@/composables/notification'
 import { useProjectUtil } from '@/composables/util/project'
 import { geoConfig } from '@/config/geo'
 import type { Poi, Project } from '@/db/types'
@@ -45,6 +47,23 @@ defineProps<{
   loading: boolean
 }>()
 
+const emit = defineEmits<{
+  (e: 'refresh-pois'): void
+}>()
+
 const { t } = useI18n()
 const { getPoisByCategory } = useProjectUtil()
+const { confirmDialog } = useNotification()
+
+const actions: MenuListItem[] = [
+  {
+    label: t('project.refreshPois'),
+    icon: 'refresh',
+    action: async () => {
+      // Inform user that existing data will be overwritten and user made data will be lost
+      const confirmation = await confirmDialog(t('project.refreshPoisConfirm'))
+      if (confirmation) emit('refresh-pois')
+    },
+  },
+]
 </script>

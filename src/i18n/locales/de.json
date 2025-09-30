@@ -92,6 +92,8 @@
     "newProject": "Neues Projekt",
     "notFound": "Projekt konnte nicht gefunden werden.",
     "overview": "Projektübersicht",
+    "refreshPois": "Standortdaten aktualisieren",
+    "refreshPoisConfirm": "Alle vorhandenen Daten werden überschrieben und selbst erstellte Standortdaten gehen verloren.",
     "removeFavorite": "Von Favoriten entfernen",
     "pois": "Standortdaten",
     "projectCopy": "Kopie",
