@@ -24,36 +24,20 @@
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
       >
-        <div class="whitespace-pre-line text-pretty break-words text-center">
+        <div
+          class="overflow-hidden text-ellipsis whitespace-pre-line text-pretty break-words text-center"
+        >
           {{ message }}
         </div>
-
-        <!-- Triangle -->
-        <div
-          v-if="placement === 'top'"
-          class="border-t-5 border-r-5 border-l-5 border-t-surface-inverse absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-l-transparent border-r-transparent"
-        />
-        <div
-          v-else-if="placement === 'bottom'"
-          class="border-r-5 border-b-5 border-l-5 border-b-surface-inverse absolute bottom-full left-1/2 h-0 w-0 -translate-x-1/2 border-l-transparent border-r-transparent"
-        />
-        <div
-          v-else-if="placement === 'left'"
-          class="border-t-5 border-b-5 border-l-5 border-l-surface-inverse absolute left-full top-1/2 h-0 w-0 -translate-y-1/2 border-b-transparent border-t-transparent"
-        />
-        <div
-          v-else-if="placement === 'right'"
-          class="border-t-5 border-r-5 border-b-5 border-r-surface-inverse absolute right-full top-1/2 h-0 w-0 -translate-y-1/2 border-b-transparent border-t-transparent"
-        />
       </PopoverPanel>
     </Teleport>
   </Popover>
 </template>
 
 <script setup lang="ts">
-import { autoUpdate, flip, offset, useFloating } from '@floating-ui/vue'
+import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/vue'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -65,14 +49,18 @@ const props = withDefaults(
   },
 )
 
-const referenceEl = ref<HTMLElement | null>(null)
-const floatingEl = ref<HTMLElement | null>(null)
+const referenceEl = useTemplateRef<HTMLElement>('referenceEl')
+const floatingEl = useTemplateRef<HTMLElement>('floatingEl')
 
 const isHovered = ref(false)
 
-const { floatingStyles, placement } = useFloating(referenceEl, floatingEl, {
+const { floatingStyles } = useFloating(referenceEl, floatingEl, {
   placement: props.position,
-  middleware: [offset(5), flip()],
+  middleware: [
+    offset(5), // Space between reference and floating element
+    flip(), // Flip vertical/horizontal to keep in viewport
+    shift({ padding: 8 }), // Shift to side to keep in viewport
+  ],
   whileElementsMounted: autoUpdate,
 })
 </script>
