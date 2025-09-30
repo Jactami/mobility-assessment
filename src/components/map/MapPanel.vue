@@ -147,10 +147,10 @@ async function resetMap() {
 async function exportMap() {
   if (!map.value) return
 
-  const size = 200 // 4:3
-  const attribution = { text: attributions.join(' '), size: 22 }
+  const size = 150
+  const attribution = { text: attributions.join(' '), size: 16 }
 
-  const img = await exportMapToImage(map.value as Map, [size, size * 0.75], 192, 0.8, attribution)
+  const img = await exportMapToImage(map.value, [size, size * 0.75], 192, 0.8, attribution)
   return img
 }
 
