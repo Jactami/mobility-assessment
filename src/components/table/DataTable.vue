@@ -27,7 +27,7 @@
         </FormKit>
       </div>
 
-      <div class="flex gap-x-2">
+      <div class="flex gap-x-2 sm:ml-auto">
         <!-- Button Export -->
         <UIButton v-if="config.export" variant="secondary" @click="exportData">
           <UIIcon icon="download" />
@@ -43,7 +43,7 @@
     </div>
 
     <!-- Data Table -->
-    <div class="rounded-border border-outline-variant mt-5 overflow-hidden border sm:mt-0">
+    <div class="rounded-border border-outline-variant mt-5 overflow-hidden border sm:mt-2">
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full">
           <table class="relative min-w-full border-collapse text-sm">
