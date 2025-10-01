@@ -143,11 +143,13 @@
       <nav class="flex grow items-center justify-center gap-x-0 text-sm sm:gap-x-2">
         <UIButtonIcon
           icon="first"
+          :aria-label="t('table.firstPage')"
           :disabled="!table.getCanPreviousPage()"
           @click="table.setPageIndex(0)"
         />
         <UIButtonIcon
           icon="previous"
+          :aria-label="t('table.previousPage')"
           :disabled="!table.getCanPreviousPage()"
           @click="table.previousPage()"
         />
@@ -157,9 +159,15 @@
             {{ table.getState().pagination.pageIndex + 1 }} / {{ table.getPageCount() }}
           </span>
         </div>
-        <UIButtonIcon icon="next" :disabled="!table.getCanNextPage()" @click="table.nextPage()" />
+        <UIButtonIcon
+          icon="next"
+          :aria-label="t('table.nextPage')"
+          :disabled="!table.getCanNextPage()"
+          @click="table.nextPage()"
+        />
         <UIButtonIcon
           icon="last"
+          :aria-label="t('table.lastPage')"
           :disabled="!table.getCanNextPage()"
           @click="table.setPageIndex(table.getPageCount() - 1)"
         />

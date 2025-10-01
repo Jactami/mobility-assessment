@@ -15,7 +15,7 @@
             />
           </UITooltip>
         </div>
-        <div v-if="item.divider" class="bg-outline my-1 w-px self-stretch" />
+        <div v-if="item.divider" class="border-outline my-1 self-stretch border-s" />
       </template>
     </div>
   </div>

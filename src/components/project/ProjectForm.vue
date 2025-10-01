@@ -33,24 +33,23 @@
         number
       >
         <template #help>
-          <div class="text-on-surface-variant -mt-4">
+          <!-- <div class="text-on-surface-variant">
             {{ n(model.radius ?? 0, 'meter') }}
+          </div> -->
+          <div class="mt-2 flex flex-wrap gap-4">
+            <UIButton
+              v-for="radius in presetRadiusList"
+              :key="radius"
+              type="button"
+              size="sm"
+              severity="neutral"
+              @click="model.radius = radius"
+            >
+              {{ n(radius, 'meter') }}
+            </UIButton>
           </div>
         </template>
       </FormKit>
-
-      <div class="mt-2 flex flex-wrap gap-4">
-        <UIButton
-          v-for="radius in presetRadiusList"
-          :key="radius"
-          type="button"
-          size="sm"
-          severity="neutral"
-          @click="model.radius = radius"
-        >
-          {{ n(radius, 'meter') }}
-        </UIButton>
-      </div>
     </div>
   </UIForm>
 </template>

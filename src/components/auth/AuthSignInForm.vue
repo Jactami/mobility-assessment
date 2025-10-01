@@ -32,6 +32,7 @@
               <UIButtonIcon
                 tabindex="-1"
                 :icon="passwordVisible ? 'hide' : 'show'"
+                :aria-label="passwordVisible ? t('auth.hidePassword') : t('auth.showPassword')"
                 @mousedown="passwordVisible = true"
                 @mouseup="passwordVisible = false"
               />

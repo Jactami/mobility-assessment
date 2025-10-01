@@ -23,6 +23,7 @@
               <UIButtonIcon
                 tabindex="-1"
                 :icon="oldPasswordVisible ? 'hide' : 'show'"
+                :aria-label="oldPasswordVisible ? t('auth.hidePassword') : t('auth.showPassword')"
                 @mousedown="oldPasswordVisible = true"
                 @mouseup="oldPasswordVisible = false"
               />
@@ -45,6 +46,7 @@
             <UIButtonIcon
               tabindex="-1"
               :icon="newPasswordVisible ? 'hide' : 'show'"
+              :aria-label="newPasswordVisible ? t('auth.hidePassword') : t('auth.showPassword')"
               @mousedown="newPasswordVisible = true"
               @mouseup="newPasswordVisible = false"
             />

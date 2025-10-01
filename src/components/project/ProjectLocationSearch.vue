@@ -17,14 +17,20 @@
       <template #suffixIcon>
         <div class="relative w-6">
           <div class="absolute inset-y-0 -right-2 flex items-center">
-            <UIButtonIcon v-if="query && !loading" icon="close" @click="resetQuery" />
-            <UIIcon v-else-if="loading" icon="loading" />
+            <UIButtonIcon
+              v-if="query && !loading"
+              icon="close"
+              :aria-label="t('common.reset')"
+              @click="resetQuery"
+            />
+            <UIIcon v-else-if="loading" icon="loading" :aria-label="t('common.loading')" />
           </div>
         </div>
       </template>
     </FormKit>
     <UIButton
       icon="search"
+      :aria-label="t('common.search')"
       size="lg"
       class="rounded-l-none text-lg"
       :disabled="loading || query.trim() === ''"

@@ -1,7 +1,7 @@
 <template>
   <svg viewBox="0 5 100 50" class="h-auto w-full">
     <!-- Background Arc -->
-    <path class="fill-none stroke-surface-container stroke-[5]" :d="arcPath" />
+    <path class="stroke-surface-container-high fill-none stroke-[5]" :d="arcPath" />
 
     <!-- Foreground Arc -->
     <path
@@ -32,7 +32,7 @@
       x="50"
       y="48"
       text-anchor="middle"
-      class="font-semibold text-on-surface-variant"
+      class="text-on-surface-variant font-semibold"
       fill="currentColor"
       font-size="6"
     >

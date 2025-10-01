@@ -6,7 +6,11 @@
     <div v-if="actions && actions.length > 0" class="absolute right-2.5 top-2.5">
       <UIMenu v-if="actions.length > 1" :items="actions" position="bottom-end" />
       <UITooltip v-else-if="actions[0]" :message="actions[0].label" position="top">
-        <UIButtonIcon :icon="actions[0].icon" @click="actions[0].action" />
+        <UIButtonIcon
+          :icon="actions[0].icon"
+          :aria-label="actions[0].label"
+          @click="actions[0].action"
+        />
       </UITooltip>
     </div>
 

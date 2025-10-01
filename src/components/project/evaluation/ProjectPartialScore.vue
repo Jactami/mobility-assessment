@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="text-on-surface-variant flex justify-between gap-2 text-sm font-semibold">
-      <dt class="flex items-center gap-1.5">
+      <div class="flex items-center gap-1.5">
         <div class="size-2 rounded-full" :style="{ backgroundColor: dimension.color }" />
         <span>{{ t(`dimension.${dimension.name}`) }}</span>
-      </dt>
-      <dd
+      </div>
+      <div
         v-if="typeof score === 'number'"
         class="transition-color duration-1000"
         :style="{ color: scoreToColor(score) }"
       >
         {{ n(score * 100, 'rounded') }}
-      </dd>
+      </div>
     </div>
-    <div class="rounded-border bg-surface-container mt-1.5 flex h-2 overflow-hidden">
+    <div class="rounded-border bg-surface-container-high mt-1.5 flex h-2 overflow-hidden">
       <div
         v-if="typeof score === 'number'"
         class="rounded-border h-full transition-all duration-1000"

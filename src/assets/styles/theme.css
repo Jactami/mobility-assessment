@@ -1,7 +1,7 @@
 /* https://m3.material.io/styles/color/roles */
 @theme {
   /* Base colors */
-  --color-primary: var(--color-teal-600); /* TODO: Teal-600 (#0D9488) vs Emerald-600 (#059669) */
+  --color-primary: var(--color-teal-700); /* TODO: Teal (#00786f) vs Emerald (#007a55) */
   --color-on-primary: var(--color-white);
   --color-primary-container: var(--color-teal-100);
   --color-on-primary-container: var(--color-teal-900);
@@ -83,8 +83,8 @@
       --color-surface-container-highest: var(--color-zinc-400);
 
       --color-on-surface: var(--color-zinc-200);
-      --color-on-surface-variant: var(--color-zinc-400);
-      --color-on-surface-muted: var(--color-zinc-500);
+      --color-on-surface-variant: var(--color-zinc-300);
+      --color-on-surface-muted: var(--color-zinc-400);
       --color-on-surface-inverse: var(--color-zinc-900);
 
       --color-outline: var(--color-zinc-500);
