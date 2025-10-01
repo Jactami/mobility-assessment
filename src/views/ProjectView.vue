@@ -8,7 +8,15 @@
 
   <template v-else>
     <UISkeletonLoader :loading="projectLoading" height="3rem" width="40%" class="my-6">
-      <UIPageHeader v-if="projectStore.project?.title" :title="projectStore.project.title" />
+      <UIPageHeader
+        v-if="projectStore.project?.title"
+        :title="projectStore.project.title"
+        :subtitle="
+          projectStore.project?.radius
+            ? `${t('project.radius')} ${n(projectStore.project.radius, 'meter')}`
+            : undefined
+        "
+      />
     </UISkeletonLoader>
 
     <!-- Search Bar -->
@@ -45,6 +53,14 @@
     <!-- Action Bar -->
     <UIMenuActionBar :items="actionItems" />
 
+    <!-- Edit Project Modal -->
+    <ProjectForm
+      v-if="projectStore.project"
+      v-model:open="modalOpen"
+      :project="projectStore.project"
+      @submit="saveProject"
+    />
+
     <!-- Hidden content to produce map and chart exports -->
     <ProjectExportAssets
       v-if="projectStore.project && projectStore.pois && scores"
@@ -61,6 +77,7 @@ import ProjectEvaluationPanel from '@/components/project/panels/ProjectEvaluatio
 import ProjectMapPanel from '@/components/project/panels/ProjectMapPanel.vue'
 import ProjectPoiPanel from '@/components/project/panels/ProjectPoiPanel.vue'
 import ProjectExportAssets from '@/components/project/ProjectExportAssets.vue'
+import ProjectForm from '@/components/project/ProjectForm.vue'
 import ProjectLocationSearch from '@/components/project/ProjectLocationSearch.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenuActionBar from '@/components/ui/menu/UIMenuActionBar.vue'
@@ -73,7 +90,6 @@ import useDB from '@/composables/db'
 import { useDownload } from '@/composables/download'
 import { useEvaluation } from '@/composables/evaluation'
 import type { EvaluationScores } from '@/composables/evaluation/types'
-import { useLogger } from '@/composables/log'
 import { useNotification } from '@/composables/notification'
 import { usePDF } from '@/composables/pdf'
 import { useProjectStore } from '@/stores/Project'
@@ -81,7 +97,7 @@ import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vu
 import { useI18n } from 'vue-i18n'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 
-const { t } = useI18n()
+const { n, t } = useI18n()
 const db = useDB()
 const projectStore = useProjectStore()
 const route = useRoute()
@@ -97,6 +113,8 @@ const exportAssetsRef = useTemplateRef('exportAssetsRef')
 
 // TODO: Decide if we should move scores to the store
 const scores = ref<EvaluationScores | null>(null)
+
+const modalOpen = ref(false)
 
 // State flags
 const projectLoading = ref(false)
@@ -114,9 +132,9 @@ const actionItems: MenuListItem[] = [
     divider: true,
   },
   {
-    label: t('common.edit'),
-    icon: 'edit',
-    action: () => useLogger().log('TODO: EDIT'),
+    label: t('project.config'),
+    icon: 'settings',
+    action: () => (modalOpen.value = true),
   },
   {
     label: t('project.report'),

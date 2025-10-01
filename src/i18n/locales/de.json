@@ -69,11 +69,12 @@
   },
   "project": {
     "project": "Projekt | Projekte",
-    "addFavorite": "Zu Favoriten hinzufügen",
+    "addFavorite": "Als Favorit markieren",
     "evaluation": "Auswertung",
     "confirmDelete": "Möchten Sie das Projekt wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
     "confirmLeave": "Möchten Sie das Projekt wirklich verlassen? Alle nicht gespeicherten Änderungen gehen verloren.",
     "copy": "Projekt kopieren",
+    "config": "Projektkonfiguration",
     "create": "Projekt erstellen",
     "createError": "Fehler beim Erstellen des Projekts",
     "createSuccess": "Projekt erfolgreich erstellt",
@@ -97,12 +98,14 @@
     "removeFavorite": "Von Favoriten entfernen",
     "pois": "Standortdaten",
     "projectCopy": "Kopie",
+    "radius": "Einzugsradius",
     "report": "PDF",
     "reportError": "Fehler beim Erstellen des PDF-Berichts",
     "score": "Gesamtbewertung",
     "scoreDescription": "Es wurden alle Daten ausgewertet.",
     "saveError": "Fehler beim Speichern des Projekts",
-    "saveSuccess": "Projekt erfolgreich gespeichert"
+    "saveSuccess": "Projekt erfolgreich gespeichert",
+    "title": "Projektname"
   },
   "poi": {
     "label": "Bezeichnung",
