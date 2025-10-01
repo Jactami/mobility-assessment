@@ -37,7 +37,7 @@ const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
   lg: 'px-3.5 py-2.5 text-base',
 }
 
-const shadowClasses = 'shadow-md disabled:shadow-none'
+const shadowClasses = 'shadow-sm disabled:shadow-none'
 
 const variantClasses: Record<
   NonNullable<ButtonProps['variant']>,
