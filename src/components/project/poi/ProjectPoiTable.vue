@@ -13,7 +13,7 @@
     </template>
   </DataTable>
 
-  <ProjectPoiForm v-model:open="modalOpen" v-model:poi="editPoi" />
+  <ProjectPoiForm v-if="modalOpen" v-model:open="modalOpen" :poi="editPoi" />
 </template>
 
 <script setup lang="ts">

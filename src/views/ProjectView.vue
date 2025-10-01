@@ -7,7 +7,7 @@
   />
 
   <template v-else>
-    <UISkeletonLoader :loading="projectLoading" height="3rem" width="40%" class="my-6">
+    <UISkeletonLoader :loading="projectLoading" height="4rem" width="30%" class="my-6">
       <UIPageHeader
         v-if="projectStore.project?.title"
         :title="projectStore.project.title"
@@ -20,7 +20,7 @@
     </UISkeletonLoader>
 
     <!-- Search Bar -->
-    <div class="mx-auto mb-3 w-full max-w-2xl">
+    <div class="mx-auto mt-6 w-full lg:max-w-2xl">
       <UISkeletonLoader :loading="projectLoading" height="2.5rem">
         <ProjectLocationSearch @update-location="fetchPois" />
       </UISkeletonLoader>
@@ -55,7 +55,7 @@
 
     <!-- Edit Project Modal -->
     <ProjectForm
-      v-if="projectStore.project"
+      v-if="projectStore.project && modalOpen"
       v-model:open="modalOpen"
       :project="projectStore.project"
       @submit="saveProject"
@@ -124,7 +124,7 @@ const projectError = ref(false)
 // Indicates if any data fetching is in progress
 const isFetching = computed(() => geodataLoading.value || poiLoading.value || projectLoading.value)
 
-const actionItems: MenuListItem[] = [
+const actionItems = computed<MenuListItem[]>(() => [
   {
     label: t('project.overview'),
     icon: 'home',
@@ -135,18 +135,21 @@ const actionItems: MenuListItem[] = [
     label: t('project.config'),
     icon: 'settings',
     action: () => (modalOpen.value = true),
+    disabled: !projectStore.project,
   },
   {
     label: t('project.report'),
     icon: 'report',
     action: generateReport,
+    disabled: !projectStore.project || reportLoading.value, // disable while report is generating
   },
   {
     label: t('common.save'),
     icon: 'save',
     action: saveProject,
+    disabled: !projectStore.project,
   },
-]
+])
 
 // Load the project and POIs when the user enters the page
 onMounted(loadProject)

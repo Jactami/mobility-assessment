@@ -1,13 +1,13 @@
 <template>
   <Dialog :open="isOpen" @close="isOpen = false" class="relative z-50">
     <!-- The backdrop, rendered as a fixed sibling to the panel container -->
-    <div class="bg-surface-inverse fixed inset-0 opacity-40" aria-hidden="true" />
+    <div class="fixed inset-0 bg-black opacity-70" aria-hidden="true" />
 
     <!-- Full-screen container to center the panel -->
     <div class="fixed inset-0 flex w-screen items-center justify-center p-4">
       <!-- The actual dialog panel -->
       <DialogPanel
-        class="rounded-border border-outline-variant bg-surface relative w-full max-w-5xl border p-6 shadow-md"
+        class="rounded-border border-outline-variant bg-surface relative w-full max-w-2xl border p-6 shadow-md"
       >
         <div class="z-9999 absolute right-4 top-4">
           <UIButtonIcon icon="close" @click="isOpen = false" />
