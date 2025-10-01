@@ -10,7 +10,7 @@
               :icon="item.icon"
               :title="item.label"
               :disabled="item.disabled"
-              class="hover:bg-primary-container hover:text-on-primary-container flex aspect-auto w-full justify-center rounded-full p-3.5 text-xl sm:p-2.5"
+              class="p-3.5 text-xl sm:p-2.5"
               @click="item.action"
             />
           </UITooltip>

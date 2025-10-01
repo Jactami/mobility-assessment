@@ -128,6 +128,7 @@ const tableConfig: TableConfig<Profile> = {
     {
       icon: 'delete',
       label: t('common.delete'),
+      severity: 'danger',
       handler: deleteUser,
     },
   ],

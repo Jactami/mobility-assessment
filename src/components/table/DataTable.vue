@@ -29,15 +29,13 @@
 
       <div class="flex gap-x-2 sm:ml-auto">
         <!-- Button Export -->
-        <UIButton v-if="config.export" variant="secondary" @click="exportData">
-          <UIIcon icon="download" />
-          <span>{{ t('table.export') }}</span>
+        <UIButton v-if="config.export" severity="neutral" icon="download" @click="exportData">
+          {{ t('table.export') }}
         </UIButton>
 
         <!-- Button New -->
-        <UIButton v-if="config.add" variant="primary" @click="config.add">
-          <UIIcon icon="add" />
-          <span>{{ t('table.add') }}</span>
+        <UIButton v-if="config.add" icon="add" @click="config.add">
+          {{ t('table.add') }}
         </UIButton>
       </div>
     </div>
@@ -126,6 +124,7 @@
                         <UIButtonIcon
                           :icon="action.icon"
                           :title="action.label"
+                          :severity="action.severity"
                           @click="action.handler(row.original)"
                         />
                       </UITooltip>

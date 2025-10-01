@@ -105,6 +105,7 @@ const config: TableConfig<Poi> = {
     {
       label: t('common.delete'),
       icon: 'delete',
+      severity: 'danger',
       handler: deletePoi,
     },
   ],

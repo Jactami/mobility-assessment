@@ -11,7 +11,7 @@
     </p>
 
     <div class="mt-10">
-      <UIButton @click="emit('retry')" variant="error">{{ t('common.retry') }}</UIButton>
+      <UIButton @click="emit('retry')" severity="danger">{{ t('common.retry') }}</UIButton>
     </div>
   </div>
 </template>

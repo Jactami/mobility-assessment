@@ -1,3 +1,4 @@
+import type { ButtonSeverity } from '@/components/ui/button/types'
 import type { Icon } from '@/components/ui/icon/types'
 
 /**
@@ -48,6 +49,7 @@ export default interface TableConfig<T> {
     handler: (item: T) => unknown
     label: string
     icon: Icon
+    severity?: ButtonSeverity
   }[]
 
   /** Optional action to handle adding a new item to the table. */

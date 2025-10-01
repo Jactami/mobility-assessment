@@ -84,7 +84,7 @@
 
       --color-on-surface: var(--color-zinc-200);
       --color-on-surface-variant: var(--color-zinc-400);
-      --color-on-surface-muted: var(--color-zinc-600);
+      --color-on-surface-muted: var(--color-zinc-500);
       --color-on-surface-inverse: var(--color-zinc-900);
 
       --color-outline: var(--color-zinc-500);

@@ -1,30 +1,29 @@
 <template>
-  <UIButtonBase :type="type" :title="title" :disabled="disabled" :class="btnClass">
-    <UIIcon :icon="icon" />
-  </UIButtonBase>
+  <UIButton v-bind="props" :class="btnClass" />
 </template>
 
 <script setup lang="ts">
+/**
+ * Wrapper class around UIButton with default settings to display an icon-only button
+ * with ghost variant and neutral severity.
+ */
 import { twMerge } from 'tailwind-merge'
 import { computed } from 'vue'
-import type { Icon } from '../icon/types'
-import UIIcon from '../icon/UIIcon.vue'
-import UIButtonBase from './elements/UIButtonBase.vue'
 import type { ButtonProps } from './types'
+import UIButton from './UIButton.vue'
 
-type Props = ButtonProps & {
-  icon: Icon
-  class?: string // additional (tailwind) classes
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  class: '',
+const props = withDefaults(defineProps<ButtonProps>(), {
+  variant: 'ghost',
+  severity: 'neutral',
+  size: 'md',
 })
 
 const btnClass = computed(() =>
-  twMerge(
-    'aspect-square text-on-surface text-base cursor-pointer rounded-full p-1.5 hover:bg-surface-container-high disabled:cursor-not-allowed disabled:bg-transparent disabled:text-on-surface-muted',
+  twMerge([
+    // modify default button classes to make it an icon-only button
+    'aspect-square rounded-full p-1.5',
+    // prop classes
     props.class,
-  ),
+  ]),
 )
 </script>

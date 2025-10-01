@@ -44,8 +44,8 @@
           v-for="radius in presetRadiusList"
           :key="radius"
           type="button"
-          size="small"
-          variant="secondary"
+          size="sm"
+          severity="neutral"
           @click="model.radius = radius"
         >
           {{ n(radius, 'meter') }}

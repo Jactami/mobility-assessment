@@ -1,52 +1,78 @@
 <template>
-  <UIButtonBase :type="type" :title="title" :disabled="disabled" :class="btnClass">
+  <button
+    :type="type"
+    :class="buttonClasses"
+    :title="title"
+    :aria-label="ariaLabel || title"
+    :disabled="disabled"
+  >
+    <slot name="icon">
+      <!-- Fallback for icon slot -->
+      <UIIcon v-if="icon" :icon="icon" />
+    </slot>
+
     <slot>
       <!-- Button content goes here... -->
     </slot>
-  </UIButtonBase>
+  </button>
 </template>
 
 <script setup lang="ts">
 import { twMerge } from 'tailwind-merge'
 import { computed } from 'vue'
-import UIButtonBase from './elements/UIButtonBase.vue'
+import UIIcon from '../icon/UIIcon.vue'
 import type { ButtonProps } from './types'
 
-type Props = ButtonProps & {
-  size?: 'small' | 'normal' | 'large'
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'error' | 'custom'
-  class?: string // additional (tailwind) classes
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  size: 'normal',
-  variant: 'primary',
-  class: '',
+const props = withDefaults(defineProps<ButtonProps>(), {
+  variant: 'solid',
+  severity: 'primary',
+  size: 'md',
+  type: 'button',
+  disabled: false,
 })
 
-const variantClass: Record<Exclude<Props['variant'], undefined>, string> = {
-  primary: 'bg-primary text-on-primary focus:outline-primary',
-  secondary: 'bg-secondary text-on-secondary focus-visible:outline-secondary',
-  tertiary: 'bg-tertiary text-on-tertiary focus-visible:outline-tertiary',
-  error: 'bg-error text-on-error focus-visible:outline-error',
-  custom: '',
+const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
+  sm: 'px-2.5 py-1.5 text-sm',
+  md: 'px-3 py-2 text-base',
+  lg: 'px-3.5 py-2.5 text-base',
 }
 
-const sizeClass: Record<Exclude<Props['size'], undefined>, string> = {
-  small: 'text-sm px-2.5 py-1.5',
-  normal: 'text-base px-3.5 py-2.5',
-  large: 'text-lg px-4 py-3',
+const shadowClasses = 'shadow-md disabled:shadow-none'
+
+const variantClasses: Record<
+  NonNullable<ButtonProps['variant']>,
+  Record<NonNullable<ButtonProps['severity']>, string>
+> = {
+  solid: {
+    primary: `bg-primary text-on-primary disabled:bg-primary hover:bg-primary/85 active:bg-primary/75 ${shadowClasses}`,
+    neutral: `bg-surface-container text-on-surface-variant disabled:bg-surface-container hover:bg-surface-container-high/90 active:bg-surface-container-high ${shadowClasses}`,
+    danger: `bg-error text-on-error disabled:bg-error hover:bg-error/85 active:bg-error/75 ${shadowClasses}`,
+  },
+  ghost: {
+    primary: 'text-primary disabled:bg-transparent hover:bg-primary/15 active:bg-primary/25',
+    neutral:
+      'text-on-surface disabled:bg-transparent hover:bg-surface-container-high/90 active:bg-surface-container-high',
+    danger: 'text-error disabled:bg-transparent hover:bg-error/15 active:bg-error/25',
+  },
 }
 
-/**
- * Generated button classes based on the variant and size props and passed classes.
- */
-const btnClass = computed(() => {
-  return twMerge([
-    'relative inline-flex h-fit w-fit cursor-pointer items-center justify-center gap-x-2 rounded-border shadow-sm hover:shadow-md hover:brightness-120 dark:hover:brightness-80 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:brightness-100',
-    variantClass[props.variant],
-    sizeClass[props.size],
+const focusClasses: Record<NonNullable<ButtonProps['severity']>, string> = {
+  primary: 'focus-visible:ring-primary',
+  neutral: 'focus-visible:ring-on-surface',
+  danger: 'focus-visible:ring-error',
+}
+
+const buttonClasses = computed(() =>
+  twMerge([
+    // base classes
+    'relative inline-flex cursor-pointer transition-colors font-medium items-center justify-center gap-x-1 rounded-border',
+    'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+    'disabled:cursor-not-allowed disabled:opacity-50 disabled:brightness-100',
+    // prop classes
+    focusClasses[props.severity],
+    sizeClasses[props.size],
+    variantClasses[props.variant!][props.severity!],
     props.class,
-  ])
-})
+  ]),
+)
 </script>

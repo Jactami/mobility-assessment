@@ -1,7 +1,7 @@
 <template>
   <UIButtonIcon
     :icon="isDark ? 'light' : 'dark'"
-    :label="isDark ? 'Light Mode' : 'Dark Mode'"
+    :aria-label="isDark ? 'Light Mode' : 'Dark Mode'"
     class="text-xl"
     @click="isDark = !isDark"
   />

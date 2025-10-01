@@ -104,10 +104,11 @@ export function useNotification() {
         customClass: {
           popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
           confirmButton: '!text-on-error',
-          cancelButton: '!text-on-secondary',
+          cancelButton: '!text-on-surface-variant !bg-surface-container ',
         },
         allowOutsideClick: false,
         allowEscapeKey: false,
+        reverseButtons: true,
         didClose: () => resolve(confirmResult),
       }).then((result) => (confirmResult = result.value))
     })

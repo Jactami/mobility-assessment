@@ -61,25 +61,38 @@
       class="mt-10 space-y-8 [&>div]:flex [&>div]:flex-col [&>div]:items-center [&>div]:justify-center [&>div]:gap-6 [&>div]:sm:flex-row"
     >
       <div>
-        <UIButton>Primary Button</UIButton>
-        <UIButton variant="secondary">Secondary Button</UIButton>
-        <UIButton variant="tertiary">Tertiary Button</UIButton>
+        <UIButton variant="solid" severity="primary">Primary Button</UIButton>
+        <UIButton variant="solid" severity="neutral">Neutral Button</UIButton>
+        <UIButton variant="solid" severity="danger">Danger Button</UIButton>
       </div>
       <div>
-        <UIButton size="small">Small Button</UIButton>
-        <UIButton>Normal Button</UIButton>
-        <UIButton size="large">Large Button</UIButton>
+        <UIButton variant="ghost" severity="primary">Primary Button</UIButton>
+        <UIButton variant="ghost" severity="neutral">Neutral Button</UIButton>
+        <UIButton variant="ghost" severity="danger">Danger Button</UIButton>
+      </div>
+      <div>
+        <UIButton size="sm">Small Button</UIButton>
+        <UIButton size="md">Medium Button</UIButton>
+        <UIButton size="lg">Large Button</UIButton>
+      </div>
+      <div>
+        <UIButton icon="signIn">Button with Icon</UIButton>
       </div>
       <div>
         <UIButton disabled>Disabled Button</UIButton>
       </div>
       <div>
-        <UIButton variant="custom" class="w-full max-w-96 rounded-full bg-lime-700 text-white">
+        <UIButton
+          class="w-full max-w-96 rounded-full bg-lime-700 text-white hover:bg-lime-700/90 active:bg-lime-700/80"
+        >
           Custom Button <UIIcon icon="signIn" />
         </UIButton>
       </div>
       <div>
-        <UIButtonIcon icon="link" title="Icon Button" />
+        <UIButtonIcon severity="primary" icon="add" title="Icon Button" />
+        <UIButtonIcon severity="neutral" icon="add" title="Icon Button" />
+        <UIButtonIcon severity="danger" icon="add" title="Icon Button" />
+        <UIButtonIcon severity="neutral" icon="add" title="Icon Button" disabled />
       </div>
     </div>
   </UISection>
@@ -167,18 +180,10 @@
   <UISection title="Notifications">
     <p>The notifications are based on the SweetAlert2 library.</p>
     <div class="mt-10 flex items-center justify-center gap-6">
-      <UIButton
-        variant="custom"
-        class="bg-success text-on-success"
-        @click="notification.successToast('Success message...')"
-      >
+      <UIButton severity="neutral" @click="notification.successToast('Success message...')">
         Success
       </UIButton>
-      <UIButton
-        variant="custom"
-        class="bg-error text-on-error"
-        @click="notification.errorToast('Error message...')"
-      >
+      <UIButton severity="neutral" @click="notification.errorToast('Error message...')">
         Error
       </UIButton>
     </div>

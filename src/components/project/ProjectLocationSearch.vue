@@ -24,12 +24,12 @@
       </template>
     </FormKit>
     <UIButton
+      icon="search"
+      size="lg"
       class="rounded-l-none text-lg"
       :disabled="loading || query.trim() === ''"
       @click="search"
-    >
-      <UIIcon icon="search" />
-    </UIButton>
+    />
   </div>
 </template>
 
