@@ -4,7 +4,7 @@
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
 -- SELECT
-CREATE POLICY "Authenticated users can read their own profiles or if admin" ON public.profiles
+CREATE POLICY "Authenticated users can read their own profiles." ON public.profiles
   FOR SELECT TO authenticated
     USING (authorize('admin')
       OR (
@@ -12,7 +12,7 @@ CREATE POLICY "Authenticated users can read their own profiles or if admin" ON p
           auth.uid()) = id);
 
 -- INSERT
-CREATE POLICY "Authenticated users can insert their own profiles or if admin" ON public.profiles
+CREATE POLICY "Authenticated users can insert their own profiles." ON public.profiles
   FOR INSERT TO authenticated
     WITH CHECK (authorize('admin')
     OR (
@@ -20,7 +20,7 @@ CREATE POLICY "Authenticated users can insert their own profiles or if admin" ON
         auth.uid()) = id);
 
 -- UPDATE
-CREATE POLICY "Authenticated users can update their own profiles or if admin" ON public.profiles
+CREATE POLICY "Authenticated users can update their own profiles." ON public.profiles
   FOR UPDATE TO authenticated
     USING (authorize('admin')
       OR (
@@ -28,7 +28,7 @@ CREATE POLICY "Authenticated users can update their own profiles or if admin" ON
           auth.uid()) = id);
 
 -- DELETE
-CREATE POLICY "Authenticated users can delete their own profiles or if admin" ON public.profiles
+CREATE POLICY "Authenticated users can delete their own profiles." ON public.profiles
   FOR DELETE TO authenticated
     USING (authorize('admin')
       OR (
@@ -47,7 +47,7 @@ GRANT ALL ON TABLE public.profiles TO service_role;
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 
 -- SELECT
-CREATE POLICY "Authenticated users can read their own projects or if admin" ON public.projects
+CREATE POLICY "Authenticated users can read their own projects." ON public.projects
   FOR SELECT TO authenticated
     USING (authorize('admin')
       OR (
@@ -55,7 +55,7 @@ CREATE POLICY "Authenticated users can read their own projects or if admin" ON p
           auth.uid()) = owner_id);
 
 -- INSERT
-CREATE POLICY "Authenticated users can insert their own projects or if admin" ON public.projects
+CREATE POLICY "Authenticated users can insert their own projects." ON public.projects
   FOR INSERT TO authenticated
     WITH CHECK (authorize('admin')
     OR (
@@ -63,7 +63,7 @@ CREATE POLICY "Authenticated users can insert their own projects or if admin" ON
         auth.uid()) = owner_id);
 
 -- UPDATE
-CREATE POLICY "Authenticated users can update their own projects or if admin" ON public.projects
+CREATE POLICY "Authenticated users can update their own projects." ON public.projects
   FOR UPDATE TO authenticated
     USING (authorize('admin')
       OR (
@@ -71,7 +71,7 @@ CREATE POLICY "Authenticated users can update their own projects or if admin" ON
           auth.uid()) = owner_id);
 
 -- DELETE
-CREATE POLICY "Authenticated users can delete their own projects or if admin" ON public.projects
+CREATE POLICY "Authenticated users can delete their own projects." ON public.projects
   FOR DELETE TO authenticated
     USING (authorize('admin')
       OR (
@@ -90,7 +90,7 @@ GRANT ALL ON TABLE public.projects TO service_role;
 ALTER TABLE public.pois ENABLE ROW LEVEL SECURITY;
 
 -- SELECT
-CREATE POLICY "Authenticated users can read POIs of their own projects or if admin" ON public.pois
+CREATE POLICY "Authenticated users can read POIs of their own projects." ON public.pois
   FOR SELECT TO authenticated
     USING (authorize('admin')
       OR ((
@@ -104,7 +104,7 @@ CREATE POLICY "Authenticated users can read POIs of their own projects or if adm
               id = project_id)));
 
 -- INSERT
-CREATE POLICY "Authenticated users can insert POIs into their own projects or if admin" ON public.pois
+CREATE POLICY "Authenticated users can insert POIs into their own projects." ON public.pois
   FOR INSERT TO authenticated
     WITH CHECK (authorize('admin')
     OR ((
@@ -118,7 +118,7 @@ CREATE POLICY "Authenticated users can insert POIs into their own projects or if
             id = project_id)));
 
 -- UPDATE
-CREATE POLICY "Authenticated users can update POIs of their own projects or if admin" ON public.pois
+CREATE POLICY "Authenticated users can update POIs of their own projects." ON public.pois
   FOR UPDATE TO authenticated
     USING (authorize('admin')
       OR ((
@@ -132,7 +132,7 @@ CREATE POLICY "Authenticated users can update POIs of their own projects or if a
               id = project_id)));
 
 -- DELETE
-CREATE POLICY "Authenticated users can delete POIs of their own projects or if admin" ON public.pois
+CREATE POLICY "Authenticated users can delete POIs of their own projects." ON public.pois
   FOR DELETE TO authenticated
     USING (authorize('admin')
       OR ((
