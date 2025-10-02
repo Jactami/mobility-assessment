@@ -306,7 +306,10 @@ export const geoConfig: readonly GeoDimension[] = [
       },
       {
         name: 'atm',
-        tags: [{ key: 'amenity', value: 'atm' }],
+        tags: [
+          { key: 'amenity', value: 'atm' },
+          { key: 'atm', value: 'yes' },
+        ],
         saturation: 3,
       },
       {

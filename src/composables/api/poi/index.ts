@@ -81,30 +81,37 @@ export function usePoiService() {
    * @returns An array of POI objects.
    */
   function transformOverpassElementsToPois(elements: OverpassElement[], projectId: string): Poi[] {
-    return elements.map((element) => ({
-      osm_id: element.id,
-      osm_type: element.type,
-      project_id: projectId,
-      label: getPoiLabel(element),
-      category: getPoiCategory(element),
-      latitude: element.type === 'node' ? element.lat : element.center.lat,
-      longitude: element.type === 'node' ? element.lon : element.center.lon,
-      distance: Infinity, // Placeholder for distance, to be calculated later
-    }))
+    const pois: Poi[] = []
+
+    for (const element of elements) {
+      const categories = getPoiCategories(element)
+      for (const cat of categories) {
+        pois.push({
+          osm_id: element.id,
+          osm_type: element.type,
+          project_id: projectId,
+          label: getPoiLabel(element),
+          category: cat,
+          latitude: element.type === 'node' ? element.lat : element.center.lat,
+          longitude: element.type === 'node' ? element.lon : element.center.lon,
+          distance: Infinity,
+        })
+      }
+    }
+
+    return pois
   }
 
   /**
    * Categorizes an Overpass element into a POI category.
    * @param element - The Overpass element to categorize.
-   * @returns The POI category.
+   * @returns The POI categories.
    */
-  function getPoiCategory(element: OverpassElement) {
-    return (
-      geoConfig
-        .flatMap((dimension) => dimension.categories)
-        .find((category) => category.tags.some((tag) => tag.value === element.tags?.[tag.key]))
-        ?.name ?? 'unknown'
-    )
+  function getPoiCategories(element: OverpassElement) {
+    return geoConfig
+      .flatMap((dimension) => dimension.categories)
+      .filter((category) => category.tags.some((tag) => tag.value === element.tags?.[tag.key]))
+      .map((category) => category.name)
   }
 
   /**
