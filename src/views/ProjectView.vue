@@ -303,7 +303,12 @@ async function generateReport() {
 watch(
   () => projectStore.pois,
   () => {
-    if (projectStore.pois && projectStore.project?.radius) {
+    if (
+      projectStore.pois &&
+      projectStore.project?.latitude &&
+      projectStore.project?.longitude &&
+      projectStore.project?.radius
+    ) {
       scores.value = calcScores(projectStore.pois, projectStore.project.radius)
       projectStore.updateProjectState({
         project: { ...projectStore.project, score: scores.value.total },

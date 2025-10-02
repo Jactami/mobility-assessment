@@ -66,8 +66,6 @@ export const useProjectStore = defineStore('project', () => {
   return {
     project,
     pois,
-    originalProject,
-    originalPois,
     selectedPoi,
     isDirty,
     syncProjectState,
