@@ -15,6 +15,7 @@
     "test:unit": "vitest",
     "typecheck": "vue-tsc -b --noEmit",
     "icons": "pwa-assets-generator --preset minimal-2023 public/logo.svg && tauri icon public/logo.svg",
+    "db:dump": "pnpx supabase db dump --data-only --local --schema public --file ./supabase/dump/dump.sql",
     "db:types": "pnpx supabase gen types --lang=typescript --local > ./src/db/types/supabase.ts --schema public && prettier --write ./src/db/types/supabase.ts"
   },
   "dependencies": {
