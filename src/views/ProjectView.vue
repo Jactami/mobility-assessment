@@ -12,7 +12,7 @@
     </UISkeletonLoader>
 
     <!-- Search Bar -->
-    <div class="mx-auto mt-6 w-full lg:max-w-2xl">
+    <div class="mx-auto mt-2 w-full lg:max-w-2xl">
       <UISkeletonLoader :loading="projectLoading" height="2.5rem">
         <ProjectSearchBar
           v-if="projectStore.project"
@@ -23,7 +23,7 @@
     </div>
 
     <!-- Dashboard Panels -->
-    <div class="max-w-8xl mx-auto mt-10 grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
+    <div class="max-w-8xl mx-auto mt-8 grid w-full grid-cols-1 gap-4 pb-20 xl:grid-cols-2">
       <!-- Map -->
       <ProjectMapPanel
         id="map-panel"
