@@ -3,7 +3,8 @@
     <!-- Trigger Element -->
     <PopoverButton
       ref="referenceEl"
-      class="inline-block"
+      as="template"
+      class="inline-block focus:outline-none"
       @mouseenter="isHovered = true"
       @mouseleave="isHovered = false"
     >
