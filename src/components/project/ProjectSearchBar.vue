@@ -3,8 +3,10 @@
     <div class="flex flex-col items-center sm:flex-row sm:items-start">
       <!-- Radius Select -->
       <FormKit
-        v-model="radius"
+        v-model.number="radius"
         type="select"
+        name="radius"
+        :placeholder="t('project.radius')"
         :label="t('project.radius')"
         label-class="sr-only"
         inner-class="sm:rounded-r-none focus-within:z-10"
@@ -26,6 +28,7 @@
         id="location-search-input"
         v-model="query"
         type="text"
+        name="location"
         :label="t('project.location')"
         label-class="sr-only"
         :placeholder="t('project.location')"
@@ -136,7 +139,7 @@ async function search() {
 
   // Update project store with new location and radius
   projectStore.updateProjectState({
-    project: { ...projectStore.project, ...location, radius: parseInt(radius.value) },
+    project: { ...projectStore.project, ...location, radius: radius.value },
   })
 
   emit('update-location')
