@@ -120,7 +120,7 @@
     "longitude": "Längengrad",
     "viewOnMap": "Auf Karte anzeigen"
   },
-  "dimension": {
+  "factor": {
     "education": "Bildung",
     "health": "Gesundheit",
     "leisure": "Freizeit",

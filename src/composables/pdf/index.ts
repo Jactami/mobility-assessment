@@ -79,15 +79,15 @@ export function usePDF() {
         .createSeparatorPage(t('pdf.section.methodology'))
         // Create methodic overview
         .createMethodologyPage()
-        // Create dimension specific sections
+        // Create factor specific sections
         .newPage()
-        .createDimensionPages(data.pois, data.scores, data.maps)
+        .createFactorPages(data.pois, data.scores, data.maps)
         // Create about us section
         .createSeparatorPage(t('pdf.section.publisher'))
         .createPublisherPage()
         // Create appendix
         .createSeparatorPage(t('pdf.section.appendix'))
-        .createDimensionTables(data.pois)
+        .createFactorTables(data.pois)
         // Create legal notice page
         .createSeparatorPage(t('pdf.section.legal'))
         .createLegalNoticePage()

@@ -1,19 +1,19 @@
 /**
  * Organizes categories into semantic groups such as leisure, education, medical, etc.
  */
-export interface GeoDimension {
-  /** The name of the dimension. */
+export interface LocationFactor {
+  /** The name of the location factor. */
   name: string
-  /** Hex color code representing the dimension. */
+  /** Hex color code representing the location factor. */
   color: string
-  /** List of categories within the dimension. */
-  categories: GeoCategory[]
+  /** List of categories within the location factor. */
+  categories: FactorCategory[]
 }
 
 /**
  * Tag associated with a category.
  */
-interface GeoCategoryTag {
+interface FactorCategoryTag {
   /** Openstreetmap tag key. */
   key: string
   /** Openstreetmap tag value. */
@@ -21,17 +21,17 @@ interface GeoCategoryTag {
 }
 
 /**
- * Represents a point of interest within a dimension, such as supermarkets, doctors, restaurants, etc.
+ * Represents a point of interest within a location factor, such as supermarkets, doctors, restaurants, etc.
  */
-export interface GeoCategory {
+export interface FactorCategory {
   /** The name of the category. */
   name: string
   /** List of tags associated with the category. */
-  tags: GeoCategoryTag[]
+  tags: FactorCategoryTag[]
   /** List of optional rules for labeling. */
   labelRules?: {
     /** Tags that must match for this rule to apply. */
-    matches: GeoCategoryTag[]
+    matches: FactorCategoryTag[]
     /** Fallback tag to use if no name tag is found. */
     fallback?: string
     /** Label to use instead of the name tag. */

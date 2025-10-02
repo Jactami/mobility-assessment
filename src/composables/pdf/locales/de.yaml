@@ -30,7 +30,7 @@ pdf:
     singleScoresTitle: 'Einzelbewertungen'
     singleScoresText: >
       Um die Stärken und Schwächen des Standorts zu betonen, wird die Analyse in verschiedene Bereiche unterteilt.
-      Analysiert werden hierfür die Dimensionen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität.
+      Analysiert werden hierfür die Standortfaktoren Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität.
   methodology:
     title: 'Methodik'
     text1: >
@@ -44,7 +44,7 @@ pdf:
       Innerhalb dieses Radius identifizieren und bewerten wir alle relevanten Angebote und Einrichtungen.
 
 
-      Dabei erfassen wir eine Vielzahl von Standortfaktoren aus den Bereichen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität.
+      Dabei erfassen wir eine Vielzahl an Standortdaten aus den Bereichen Nahversorgung, Bildung, Erholung, Gesundheit, Freizeit und Mobilität.
       Jeder Bereich wird separat analysiert und mit einer Punktzahl zwischen 0 und 100 bewertet.
       Sowohl die Anzahl der vorhandenen Angebote als auch deren Entfernung zum Standort fließen in die Auswertung ein – je näher und zahlreicher die Angebote, desto besser die Bewertung.
       Auf diese Weise werden die spezifischen Stärken und Schwächen des Standorts klar und nachvollziehbar dargestellt.
@@ -73,10 +73,10 @@ pdf:
         Wir untersuchen die Nahversorgung des Standorts, indem wir die Erreichbarkeit von Einrichtungen und Dienstleistungen des täglichen Bedarfs erfassen.
         Dazu zählen Supermärkte, Bäckereien, Drogerien und weitere Einzelhändler, die eine wohnortnahe Versorgung sicherstellen.
     score: 'Bewertung'
-    mapCaption: 'Übersichtskarte der Angebote im Bereich {dimension} um den Standort.'
-    cardIntro: 'Im Bereich {dimension} wurden folgende Angebote gefunden:'
+    mapCaption: 'Übersichtskarte der Angebote im Bereich {factor} um den Standort.'
+    cardIntro: 'Im Bereich {factor} wurden folgende Angebote gefunden:'
     closestElement: 'Nächstgelegenes Angebot'
-    tableIntro: 'Die nachfolgende Tabelle zeigt die nächstgelegenen Angebote in dem Bereich {dimension}.'
+    tableIntro: 'Die nachfolgende Tabelle zeigt die nächstgelegenen Angebote in dem Bereich {factor}.'
   publisher:
     title: 'Über Uns'
     text: >
@@ -95,7 +95,7 @@ pdf:
       Telefon: {phone}
       Webseite: {web}
   appendix:
-    noEntries: 'Keine Angebote in dem Bereich {dimension} gefunden.'
+    noEntries: 'Keine Angebote in dem Bereich {factor} gefunden.'
   legal:
     title: 'Rechtliche Hinweise'
     text: >

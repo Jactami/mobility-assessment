@@ -1,4 +1,4 @@
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 
 export function useColorUtil() {
   return {
@@ -45,13 +45,13 @@ function scoreToColor(score: number): string {
 }
 
 /**
- * Get the color representation of the dimension of a category.
+ * Get the color representation of the factor of a category.
  * @param category - The category name to find the corresponding color.
  * @returns A color string representing the category.
  */
 function categoryToColor(category: string): string {
-  const dimension = geoConfig.find((dimension) =>
-    dimension.categories.some((cat) => cat.name === category),
+  const factor = factorConfig.find((factor) =>
+    factor.categories.some((cat) => cat.name === category),
   )
-  return dimension ? dimension.color : '#FFF'
+  return factor ? factor.color : '#FFF'
 }

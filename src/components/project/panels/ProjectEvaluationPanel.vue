@@ -9,9 +9,9 @@
 
     <!-- Partial Scores -->
     <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
-      <template v-for="dimension in geoConfig" :key="dimension.name">
+      <template v-for="factor in factorConfig" :key="factor.name">
         <UISkeletonLoader :loading="loading" height="2rem">
-          <ProjectPartialScore :dimension="dimension" :score="scores?.partial[dimension.name]" />
+          <ProjectPartialScore :factor="factor" :score="scores?.partial[factor.name]" />
         </UISkeletonLoader>
       </template>
     </div>
@@ -29,7 +29,7 @@
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import UIPanel from '@/components/ui/UIPanel.vue'
 import type { EvaluationScores } from '@/composables/evaluation/types'
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 import { useI18n } from 'vue-i18n'
 import ProjectPartialScore from '../evaluation/ProjectPartialScore.vue'
 import ProjectScoreChart from '../evaluation/ProjectScoreChart.vue'

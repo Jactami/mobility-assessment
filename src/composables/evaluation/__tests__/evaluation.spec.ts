@@ -1,4 +1,4 @@
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 import type { Poi } from '@/db/types'
 import { describe, expect, it } from 'vitest'
 import { useEvaluation } from '..'
@@ -23,11 +23,11 @@ function mockPoi(category: string, distance: number): Poi {
 }
 
 describe('useEvaluation', () => {
-  // Sample dimension and category
-  const DIMENSION = geoConfig[0]
-  if (!DIMENSION) throw new Error('No dimension found for testing')
+  // Sample factor and category
+  const FACTOR = factorConfig[0]
+  if (!FACTOR) throw new Error('No factor found for testing')
 
-  const CATEGORY = DIMENSION.categories[0]
+  const CATEGORY = FACTOR.categories[0]
   if (!CATEGORY) throw new Error('No category found for testing')
 
   const radius = 1000 // 1000m
@@ -37,13 +37,13 @@ describe('useEvaluation', () => {
     const scores = calcScores([], radius)
 
     expect(scores.total).toBe(0)
-    for (const dimension of geoConfig) {
-      expect(scores.partial[dimension.name]).toBe(0)
+    for (const factor of factorConfig) {
+      expect(scores.partial[factor.name]).toBe(0)
     }
   })
 
   it('returns maximal score when POI at distance 0', () => {
-    const categories = DIMENSION.categories.map((c) => c)
+    const categories = FACTOR.categories.map((c) => c)
     const pois: Poi[] = []
     for (const category of categories) {
       const saturation = category.saturation || 1
@@ -54,7 +54,7 @@ describe('useEvaluation', () => {
 
     const scores = calcScores(pois, radius)
 
-    expect(scores.partial[DIMENSION.name]).toBe(1)
+    expect(scores.partial[FACTOR.name]).toBe(1)
     expect(scores.total).toBeGreaterThan(0)
   })
 
@@ -62,8 +62,8 @@ describe('useEvaluation', () => {
     const closePoi = mockPoi(CATEGORY.name, 100)
     const farPoi = mockPoi(CATEGORY.name, 900)
 
-    const closeScore = calcScores([closePoi], radius).partial[DIMENSION.name]
-    const farScore = calcScores([farPoi], radius).partial[DIMENSION.name]
+    const closeScore = calcScores([closePoi], radius).partial[FACTOR.name]
+    const farScore = calcScores([farPoi], radius).partial[FACTOR.name]
 
     expect(closeScore).toBeDefined()
     expect(farScore).toBeDefined()
@@ -75,20 +75,20 @@ describe('useEvaluation', () => {
       mockPoi(CATEGORY.name, 100),
     )
 
-    const score = calcScores(pois, radius).partial[DIMENSION.name]
+    const score = calcScores(pois, radius).partial[FACTOR.name]
 
     expect(score).toBeLessThanOrEqual(1)
     expect(score).toBeGreaterThan(0)
   })
 
   it('handles multiple POIs correctly', () => {
-    const dimension = geoConfig[0]
-    if (!dimension) throw new Error('No dimension found for testing')
+    const factor = factorConfig[0]
+    if (!factor) throw new Error('No factor found for testing')
 
-    const category = dimension?.categories[0]?.name
+    const category = factor?.categories[0]?.name
     if (!category) throw new Error('No category found for testing')
 
-    expect(dimension).toBeTruthy()
+    expect(factor).toBeTruthy()
 
     const pois: Poi[] = [
       mockPoi(category, 0), // 1.0
@@ -98,11 +98,11 @@ describe('useEvaluation', () => {
 
     const scores = calcScores(pois, radius)
 
-    const scoreDimension = scores.partial[dimension.name]
-    const expected = 0.861 / dimension.categories.length
+    const scoreFactor = scores.partial[factor.name]
+    const expected = 0.861 / factor.categories.length
     const epsilon = 0.01
 
-    expect(scoreDimension).toBeGreaterThan(0)
-    expect(Math.abs((scoreDimension ?? 0) - expected)).toBeLessThan(epsilon)
+    expect(scoreFactor).toBeGreaterThan(0)
+    expect(Math.abs((scoreFactor ?? 0) - expected)).toBeLessThan(epsilon)
   })
 })

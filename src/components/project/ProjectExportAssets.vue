@@ -2,11 +2,11 @@
   <!-- Map Export -->
   <div class="invisible">
     <MapPanel
-      v-for="dimension in geoConfig"
-      :key="dimension.name"
+      v-for="factor in factorConfig"
+      :key="factor.name"
       ref="mapRefs"
       :project="project"
-      :pois="getPoisByDimension(pois || [], dimension.name)"
+      :pois="getPoisByFactor(pois || [], factor.name)"
       :height="1"
       :static="true"
     />
@@ -22,7 +22,7 @@
 import MapPanel from '@/components/map/MapPanel.vue'
 import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useProjectUtil } from '@/composables/util/project'
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 import type { Poi, Project } from '@/db/types'
 import { useTemplateRef } from 'vue'
 import ProjectScoreChart from './evaluation/ProjectScoreChart.vue'
@@ -35,7 +35,7 @@ defineProps<{
 
 defineExpose({ exportAssets })
 
-const { getPoisByDimension } = useProjectUtil()
+const { getPoisByFactor } = useProjectUtil()
 
 const mapRefs = useTemplateRef('mapRefs')
 const chartRef = useTemplateRef('chartRef')
@@ -49,7 +49,7 @@ async function exportAssets() {
   await Promise.all(
     mapRefs.value?.map(async (mapRef, i) => {
       const img = await mapRef?.exportMap()
-      if (img && geoConfig[i]?.name) maps[geoConfig[i].name] = img
+      if (img && factorConfig[i]?.name) maps[factorConfig[i].name] = img
     }) || [],
   )
 

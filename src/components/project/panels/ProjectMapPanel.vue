@@ -34,7 +34,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const { getPoisByDimension } = useProjectUtil()
+const { getPoisByFactor } = useProjectUtil()
 const projectStore = useProjectStore()
 
 const mapHeight = 600 // px
@@ -44,7 +44,7 @@ const filter = ref<string | null>(null)
 
 const filteredPois = computed(() => {
   if (!filter.value || !props.pois) return props.pois
-  return getPoisByDimension(props.pois, filter.value)
+  return getPoisByFactor(props.pois, filter.value)
 })
 
 function handleFilterUpdate(newFilter: string | null) {

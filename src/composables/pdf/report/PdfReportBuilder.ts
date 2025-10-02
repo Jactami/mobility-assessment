@@ -4,8 +4,8 @@ import { useLegal } from '@/composables/legal'
 import { useColorUtil } from '@/composables/util/color'
 import { useUtil } from '@/composables/util/misc'
 import { useProjectUtil } from '@/composables/util/project'
-import { geoConfig } from '@/config/geo'
-import type { GeoDimension } from '@/config/geo/types'
+import { factorConfig } from '@/config/app'
+import type { LocationFactor } from '@/config/app/types'
 import type { Poi, Project } from '@/db/types'
 import i18n from '@/i18n'
 import logoBgw from '../assets/images/logo-bgw'
@@ -213,24 +213,24 @@ export class PdfReportBuilder extends PdfBuilder {
     return this
   }
 
-  createClosestPoisTable(pois: Poi[], dimension: GeoDimension, y: number): this {
-    const { getClosestPois, sortPoisByDistance, getPoisByDimension } = useProjectUtil()
+  createClosestPoisTable(pois: Poi[], factor: LocationFactor, y: number): this {
+    const { getClosestPois, sortPoisByDistance, getPoisByFactor } = useProjectUtil()
 
-    // Filter POIs that belong to the current dimension's categories
-    const dimensionPois = getPoisByDimension(pois, dimension.name)
+    // Filter POIs that belong to the current factor's categories
+    const factorPois = getPoisByFactor(pois, factor.name)
 
     // Abort if no POIs are found
-    if (dimensionPois.length === 0) return this
+    if (factorPois.length === 0) return this
 
     // Find the closest POI for each category
-    let closestPois = getClosestPois(dimensionPois)
+    let closestPois = getClosestPois(factorPois)
 
     // Sort the closest POIs by distance
     closestPois = sortPoisByDistance(closestPois)
 
     return this.createText(
       i18n.global.t('pdf.analysis.tableIntro', {
-        dimension: i18n.global.t(`dimension.${dimension.name}`),
+        factor: i18n.global.t(`factor.${factor.name}`),
       }),
       { y },
     ).createTable(
@@ -256,9 +256,9 @@ export class PdfReportBuilder extends PdfBuilder {
     )
   }
 
-  createDimensionCards(pois: Poi[], dimension: GeoDimension, y: number): this {
-    const { getCategoriesByDimension, getPoisByCategory } = useProjectUtil()
-    const categories = getCategoriesByDimension(dimension.name)
+  createFactorCards(pois: Poi[], factor: LocationFactor, y: number): this {
+    const { getCategoriesByFactor, getPoisByCategory } = useProjectUtil()
+    const categories = getCategoriesByFactor(factor.name)
 
     // Card configuration
     const padding = 2
@@ -271,22 +271,22 @@ export class PdfReportBuilder extends PdfBuilder {
         padding * (cardsPerRow - 1)) /
       cardsPerRow
 
-    // Create cards for each category in the dimension
+    // Create cards for each category in the factor
     this.createText(
       i18n.global.t(`pdf.analysis.cardIntro`, {
-        dimension: i18n.global.t(`dimension.${dimension.name}`),
+        factor: i18n.global.t(`factor.${factor.name}`),
       }),
       { y },
     )
     categories?.forEach((category, i) => {
       const count = getPoisByCategory(pois, category).length
-      const icon = useIcon().getIcon(category, dimension.color)
+      const icon = useIcon().getIcon(category, factor.color)
       this.createCard(i18n.global.t(`category.${category}`), count ? count.toString() : '-', icon, {
         x: this._config.padding.left + (i % cardsPerRow) * (CardW + padding),
         y: y + 10 + Math.floor(i / cardsPerRow) * (cardH + padding),
         width: CardW,
         height: cardH,
-        color: dimension.color,
+        color: factor.color,
       })
     })
 
@@ -505,27 +505,27 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   /**
-   * Creates a dimension page in the PDF document.
-   * @param pois - The list of points of interest (POIs) to include in the dimension page.
-   * @param scores - The evaluation scores for the dimension.
-   * @param maps - A record of map images for each dimension.
+   * Creates a factor page in the PDF document.
+   * @param pois - The list of points of interest (POIs) to include in the factor page.
+   * @param scores - The evaluation scores for the factor.
+   * @param maps - A record of map images for each factor.
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
-  createDimensionPages(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
-    geoConfig.forEach((dimension, i) => {
-      this.createSectionHeader(i18n.global.t(`dimension.${dimension.name}`))
+  createFactorPages(pois: Poi[], scores: EvaluationScores, maps: Record<string, string>): this {
+    factorConfig.forEach((factor, i) => {
+      this.createSectionHeader(i18n.global.t(`factor.${factor.name}`))
         // Show description
-        .createText(i18n.global.t(`pdf.analysis.description.${dimension.name}`), {
+        .createText(i18n.global.t(`pdf.analysis.description.${factor.name}`), {
           y: this._config.padding.top + 10,
         })
         // Show score evaluation
         .createScoreMeter(
-          scores.partial[dimension.name] ?? 0,
-          `${i18n.global.t('pdf.analysis.score')} ${i18n.global.t(`dimension.${dimension.name}`)}`,
+          scores.partial[factor.name] ?? 0,
+          `${i18n.global.t('pdf.analysis.score')} ${i18n.global.t(`factor.${factor.name}`)}`,
           this._config.padding.top + 35,
         )
         // Show map with POIs
-        .createImage(maps[dimension.name] ?? '', {
+        .createImage(maps[factor.name] ?? '', {
           x: this._config.padding.left,
           y: this._config.padding.top + 100,
           width: this._innerWidth,
@@ -533,7 +533,7 @@ export class PdfReportBuilder extends PdfBuilder {
         })
         .createText(
           i18n.global.t('pdf.analysis.mapCaption', {
-            dimension: i18n.global.t(`dimension.${dimension.name}`),
+            factor: i18n.global.t(`factor.${factor.name}`),
           }),
           {
             y: this._config.padding.top + 100 + this._innerWidth * 0.75 + 2,
@@ -543,13 +543,13 @@ export class PdfReportBuilder extends PdfBuilder {
           },
         )
         .newPage()
-        // Create dimension cards
-        .createDimensionCards(pois, dimension, this._config.padding.top)
+        // Create factor cards
+        .createFactorCards(pois, factor, this._config.padding.top)
         // Create closest POIs table
-        .createClosestPoisTable(pois, dimension, this._config.padding.top + 90)
+        .createClosestPoisTable(pois, factor, this._config.padding.top + 90)
 
-      // Create a new page after each dimension section except the last one
-      if (i < geoConfig.length - 1) this.newPage()
+      // Create a new page after each factor section except the last one
+      if (i < factorConfig.length - 1) this.newPage()
     })
 
     return this
@@ -602,23 +602,23 @@ export class PdfReportBuilder extends PdfBuilder {
   }
 
   /**
-   * Creates dimension tables for the PDF document.
-   * @param pois - The list of Points of Interest (POIs) to be categorized and displayed in dimension tables.
+   * Creates factor tables for the PDF document.
+   * @param pois - The list of Points of Interest (POIs) to be categorized and displayed in factor tables.
    * @returns The current instance of PdfReportBuilder for method chaining.
    */
-  createDimensionTables(pois: Poi[]): this {
-    const { getPoisByDimension, sortPoisByDistance } = useProjectUtil()
+  createFactorTables(pois: Poi[]): this {
+    const { getPoisByFactor, sortPoisByDistance } = useProjectUtil()
 
-    geoConfig.forEach((dimension, i) => {
-      // Filter POIs that belong to the current dimension's categories
-      let dimensionPois = getPoisByDimension(pois, dimension.name)
+    factorConfig.forEach((factor, i) => {
+      // Filter POIs that belong to the current factor's categories
+      let factorPois = getPoisByFactor(pois, factor.name)
 
       // Sort the POIs by distance
-      dimensionPois = sortPoisByDistance(dimensionPois)
+      factorPois = sortPoisByDistance(factorPois)
 
-      this.createSectionHeader(i18n.global.t(`dimension.${dimension.name}`))
+      this.createSectionHeader(i18n.global.t(`factor.${factor.name}`))
 
-      if (dimensionPois.length > 0) {
+      if (factorPois.length > 0) {
         // Show POIs in a table
         this.createTable(
           [
@@ -626,7 +626,7 @@ export class PdfReportBuilder extends PdfBuilder {
             i18n.global.t('poi.category'),
             i18n.global.t('poi.distance'),
           ],
-          dimensionPois.map((poi) => [
+          factorPois.map((poi) => [
             poi.label || i18n.global.t(`category.${poi.category}`),
             i18n.global.t(`category.${poi.category}`),
             i18n.global.n(poi.distance, 'meter'),
@@ -643,7 +643,7 @@ export class PdfReportBuilder extends PdfBuilder {
         )
       } else {
         // Show a message if no POIs are found
-        this.createText(i18n.global.t('pdf.appendix.noEntries', { dimension: dimension.name }), {
+        this.createText(i18n.global.t('pdf.appendix.noEntries', { factor: factor.name }), {
           y: this._config.padding.top + 10,
           alignment: 'left',
           color: 'muted',
@@ -651,8 +651,8 @@ export class PdfReportBuilder extends PdfBuilder {
         })
       }
 
-      // Start a new page after each dimension table except the last one
-      if (i < geoConfig.length - 1) this.newPage()
+      // Start a new page after each factor table except the last one
+      if (i < factorConfig.length - 1) this.newPage()
     })
 
     return this

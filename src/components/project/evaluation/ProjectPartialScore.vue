@@ -2,8 +2,8 @@
   <div>
     <div class="text-on-surface-variant flex justify-between gap-2 text-sm font-semibold">
       <div class="flex items-center gap-1.5">
-        <div class="size-2 rounded-full" :style="{ backgroundColor: dimension.color }" />
-        <span>{{ t(`dimension.${dimension.name}`) }}</span>
+        <div class="size-2 rounded-full" :style="{ backgroundColor: factor.color }" />
+        <span>{{ t(`factor.${factor.name}`) }}</span>
       </div>
       <div
         v-if="typeof score === 'number'"
@@ -28,12 +28,12 @@
 
 <script setup lang="ts">
 import { useColorUtil } from '@/composables/util/color'
-import type { GeoDimension } from '@/config/geo/types'
+import type { LocationFactor } from '@/config/app/types'
 import { nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
-  dimension: GeoDimension
+  factor: LocationFactor
   score?: number | null
 }>()
 

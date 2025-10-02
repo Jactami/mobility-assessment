@@ -1,4 +1,4 @@
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 import type { Poi } from '@/db/types'
 import { useProjectUtil } from '../util/project'
 import type { EvaluationScores } from './types'
@@ -51,12 +51,12 @@ function calcScores(pois: Poi[], radius: number): EvaluationScores {
     partial: {} as Record<string, number>,
   }
 
-  // Iterate over all dimensions
-  for (const dimension of geoConfig) {
+  // Iterate over all factors
+  for (const factor of factorConfig) {
     const scoresCategory: number[] = []
 
-    // Calculate the score for each category in the current dimension
-    for (const category of dimension.categories) {
+    // Calculate the score for each category in the current factor
+    for (const category of factor.categories) {
       const categoryPois = getPoisByCategory(pois, category.name)
       const saturation = category.saturation ?? 1
 
@@ -64,18 +64,18 @@ function calcScores(pois: Poi[], radius: number): EvaluationScores {
       scoresCategory.push(score)
     }
 
-    // Calculate the dimension score as the average of the category scores
+    // Calculate the factor score as the average of the category scores
     // TODO: Consider using a weighted average if some categories are more important than others
-    const scoreDimension = scoresCategory.length
+    const scoreFactor = scoresCategory.length
       ? scoresCategory.reduce((a, b) => a + b, 0) / scoresCategory.length
       : 0
 
-    scores.partial[dimension.name] = Math.round(scoreDimension * 100) / 100
+    scores.partial[factor.name] = Math.round(scoreFactor * 100) / 100
   }
 
-  // Calculate the total score as the average of all dimension scores
-  // TODO: Consider using a weighted average if some dimensions are more important than others
-  const scoreTotal = Object.values(scores.partial).reduce((a, b) => a + b, 0) / geoConfig.length
+  // Calculate the total score as the average of all factor scores
+  // TODO: Consider using a weighted average if some factors are more important than others
+  const scoreTotal = Object.values(scores.partial).reduce((a, b) => a + b, 0) / factorConfig.length
   scores.total = Math.round(scoreTotal * 100) / 100
 
   return scores

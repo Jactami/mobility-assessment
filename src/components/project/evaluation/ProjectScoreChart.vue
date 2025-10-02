@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import type { EvaluationScores } from '@/composables/evaluation/types'
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 import { useDark, useResizeObserver } from '@vueuse/core'
 import {
   Chart as ChartJS,
@@ -55,7 +55,7 @@ useResizeObserver(chartContainer, () => {
 })
 
 const chartData = computed<ChartData<'radar'>>(() => ({
-  labels: geoConfig.map((dimension) => t(`dimension.${dimension.name}`)),
+  labels: factorConfig.map((factor) => t(`factor.${factor.name}`)),
   datasets: [
     {
       data: data.value,
@@ -63,7 +63,7 @@ const chartData = computed<ChartData<'radar'>>(() => ({
       backgroundColor: chartColors.value.background,
       borderColor: chartColors.value.border,
       borderWidth: 1,
-      pointBackgroundColor: geoConfig.map((dimension) => dimension.color),
+      pointBackgroundColor: factorConfig.map((factor) => factor.color),
       pointBorderColor: chartColors.value.border,
       pointRadius: 5,
     },
@@ -87,7 +87,7 @@ const chartOptions = computed<ChartOptions<'radar'>>(() => ({
           size: 14,
           weight: 'bold',
         },
-        color: (ctx) => geoConfig[ctx.index]?.color,
+        color: (ctx) => factorConfig[ctx.index]?.color,
       },
       ticks: {
         color: chartColors.value.text,
@@ -166,7 +166,7 @@ watch(
   async (newScores) => {
     if (newScores) {
       await nextTick()
-      data.value = geoConfig.map((dimension) => (newScores.partial?.[dimension.name] ?? 0) * 100)
+      data.value = factorConfig.map((factor) => (newScores.partial?.[factor.name] ?? 0) * 100)
     } else {
       data.value = []
     }

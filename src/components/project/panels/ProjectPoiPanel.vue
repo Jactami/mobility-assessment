@@ -2,8 +2,8 @@
   <UIPanel :title="t('project.pois')" icon="poi" :actions="actions">
     <!-- Category Summary Pills -->
     <div class="flex flex-wrap justify-center gap-2">
-      <template v-for="dimension in geoConfig" :key="dimension.name">
-        <template v-for="(category, i) in dimension.categories" :key="category.name">
+      <template v-for="factor in factorConfig" :key="factor.name">
+        <template v-for="(category, i) in factor.categories" :key="category.name">
           <UISkeletonLoader
             :loading="loading"
             :rounded="true"
@@ -35,7 +35,7 @@ import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import UIPanel from '@/components/ui/UIPanel.vue'
 import { useNotification } from '@/composables/notification'
 import { useProjectUtil } from '@/composables/util/project'
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 import type { Poi, Project } from '@/db/types'
 import { useI18n } from 'vue-i18n'
 import ProjectCategoryPill from '../category/ProjectCategoryPill.vue'

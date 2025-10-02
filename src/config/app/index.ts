@@ -1,9 +1,9 @@
-import type { GeoDimension } from './types'
+import type { LocationFactor } from './types'
 
 // Colors are taken from ColorBrewer's Dark2 scheme:
 // https://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=6
 
-export const geoConfig: readonly GeoDimension[] = [
+export const factorConfig: readonly LocationFactor[] = [
   // Bildung + Erziehung
   {
     name: 'education',

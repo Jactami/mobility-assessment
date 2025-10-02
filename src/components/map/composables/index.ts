@@ -11,7 +11,7 @@ export function useMapUtils() {
 }
 
 /**
- * Calculates the zoom level needed to fit an extent of a given dimension in meters within the current map view.
+ * Calculates the zoom level needed to fit an extent of a given factor in meters within the current map view.
  *
  * @param map The OpenLayers map instance
  * @param center The center coordinate around which the zoom level is calculated

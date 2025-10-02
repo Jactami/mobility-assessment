@@ -16,12 +16,12 @@
         validation="required"
       >
         <optgroup
-          v-for="dimension in geoConfig"
-          :key="dimension.name"
-          :label="t(`dimension.${dimension.name}`)"
+          v-for="factor in factorConfig"
+          :key="factor.name"
+          :label="t(`factor.${factor.name}`)"
         >
           <option
-            v-for="category in dimension.categories.map((c) => c.name)"
+            v-for="category in factor.categories.map((c) => c.name)"
             :key="category"
             :value="category"
           >
@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import UIForm from '@/components/ui/UIForm.vue'
 import { usePoiService } from '@/composables/api/poi'
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { ref } from 'vue'

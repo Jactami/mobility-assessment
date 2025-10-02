@@ -1,5 +1,5 @@
-import { geoConfig } from '@/config/geo'
-import type { GeoCategory, GeoDimension } from '@/config/geo/types'
+import { factorConfig } from '@/config/app'
+import type { FactorCategory, LocationFactor } from '@/config/app/types'
 import { OverpassQueryBuilder } from './OverpassQueryBuilder'
 
 /**
@@ -17,23 +17,23 @@ export class OverpassQueryFactory {
    * @returns The Overpass API query string.
    */
   static createQuery(lat: number, lon: number, radius: number) {
-    geoConfig.forEach((dimension) => {
-      this.queryDimension(dimension, lat, lon, radius)
+    factorConfig.forEach((factor) => {
+      this.queryFactor(factor, lat, lon, radius)
     })
 
     return this.builder.build()
   }
 
   /**
-   * Appends a specific dimension of categories to the Overpass query.
+   * Appends a specific factor of categories to the Overpass query.
    *
-   * @param dimension The dimension to query.
+   * @param factor The factor to query.
    * @param lat The latitude of the center point.
    * @param lon The longitude of the center point.
    * @param radius The radius around the center point (in meters).
    */
-  private static queryDimension(dimension: GeoDimension, lat: number, lon: number, radius: number) {
-    for (const category of dimension.categories) {
+  private static queryFactor(factor: LocationFactor, lat: number, lon: number, radius: number) {
+    for (const category of factor.categories) {
       this.queryCategory(category, lat, lon, radius)
     }
   }
@@ -46,7 +46,7 @@ export class OverpassQueryFactory {
    * @param lon The longitude of the center point.
    * @param radius The radius around the center point (in meters).
    */
-  private static queryCategory(category: GeoCategory, lat: number, lon: number, radius: number) {
+  private static queryCategory(category: FactorCategory, lat: number, lon: number, radius: number) {
     category.tags.forEach((tag) => {
       this.builder.add(tag.key, tag.value, lat, lon, radius)
     })

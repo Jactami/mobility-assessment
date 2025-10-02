@@ -1,4 +1,4 @@
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 import type { Poi } from '@/db/types'
 import axios from 'axios'
 import { getDistance } from 'ol/sphere'
@@ -108,8 +108,8 @@ export function usePoiService() {
    * @returns The POI categories.
    */
   function getPoiCategories(element: OverpassElement) {
-    return geoConfig
-      .flatMap((dimension) => dimension.categories)
+    return factorConfig
+      .flatMap((factor) => factor.categories)
       .filter((category) => category.tags.some((tag) => tag.value === element.tags?.[tag.key]))
       .map((category) => category.name)
   }
@@ -120,8 +120,8 @@ export function usePoiService() {
    * @returns The label for the POI, or null if no label can be determined.
    */
   function getPoiLabel(element: OverpassElement): string | null {
-    for (const dimension of geoConfig) {
-      for (const category of dimension.categories) {
+    for (const factor of factorConfig) {
+      for (const category of factor.categories) {
         const matchesTag = category.tags.some((tag) => element.tags?.[tag.key] === tag.value)
 
         if (!matchesTag) continue

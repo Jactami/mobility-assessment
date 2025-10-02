@@ -1,55 +1,55 @@
-import { geoConfig } from '@/config/geo'
+import { factorConfig } from '@/config/app'
 import type { Poi } from '@/db/types'
 
 export function useProjectUtil() {
   return {
-    getCategoriesByDimension,
+    getCategoriesByFactor,
     getClosestPois,
-    getDimensionByCategory,
-    getDimensionByName,
+    getFactorByCategory,
+    getFactorByName,
     getPoisByCategory,
-    getPoisByDimension,
+    getPoisByFactor,
     sortPoisByDistance,
   }
 }
 
 /**
- * Gets a dimension by its name.
- * @param name - The name of the dimension to search for.
- * @returns The dimension object if found, or null.
+ * Gets a factor by its name.
+ * @param name - The name of the factor to search for.
+ * @returns The factor object if found, or null.
  */
-function getDimensionByName(name: string) {
-  return geoConfig.find((dimension) => dimension.name === name) || null
+function getFactorByName(name: string) {
+  return factorConfig.find((factor) => factor.name === name) || null
 }
 
 /**
- * Gets the categories for a specific dimension.
- * @param dimension - The name of the dimension to get categories for.
- * @returns An array of category names for the specified dimension.
+ * Gets the categories for a specific factor.
+ * @param factor - The name of the factor to get categories for.
+ * @returns An array of category names for the specified factor.
  */
-function getCategoriesByDimension(dimension: string) {
-  return getDimensionByName(dimension)?.categories.map((category) => category.name)
+function getCategoriesByFactor(factor: string) {
+  return getFactorByName(factor)?.categories.map((category) => category.name)
 }
 
 /**
- * Gets a dimension by a specific category.
+ * Gets a factor by a specific category.
  * @param category - The name of the category to search for.
- * @returns The dimension object if found, or null.
+ * @returns The factor object if found, or null.
  */
-function getDimensionByCategory(category: string) {
+function getFactorByCategory(category: string) {
   return (
-    geoConfig.find((dimension) => dimension.categories.some((cat) => cat.name === category)) || null
+    factorConfig.find((factor) => factor.categories.some((cat) => cat.name === category)) || null
   )
 }
 
 /**
- * Filters POIs by a specific dimension.
+ * Filters POIs by a specific factor.
  * @param pois - The list of POIs to filter.
- * @param dimension - The name of the dimension to filter by.
- * @returns An array of POIs that belong to the specified dimension.
+ * @param factor - The name of the factor to filter by.
+ * @returns An array of POIs that belong to the specified factor.
  */
-function getPoisByDimension(pois: Poi[], dimension: string): Poi[] {
-  const categories = getCategoriesByDimension(dimension) ?? []
+function getPoisByFactor(pois: Poi[], factor: string): Poi[] {
+  const categories = getCategoriesByFactor(factor) ?? []
   return pois.filter((poi) => categories?.includes(poi.category))
 }
 
