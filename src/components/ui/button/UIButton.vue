@@ -32,9 +32,9 @@ const props = withDefaults(defineProps<ButtonProps>(), {
 })
 
 const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
-  sm: 'px-2.5 py-1.5 text-sm',
-  md: 'px-3 py-2 text-base',
-  lg: 'px-3.5 py-2.5 text-base',
+  sm: 'px-2.5 py-1.5 text-xs sm:text-sm',
+  md: 'px-3 py-2 text-sm sm:text-base',
+  lg: 'px-3.5 py-2.5 text-sm sm:text-base',
 }
 
 const shadowClasses = 'shadow-sm disabled:shadow-none'
