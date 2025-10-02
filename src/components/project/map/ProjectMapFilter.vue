@@ -5,7 +5,7 @@
         <UISkeletonLoader :loading="loading" :rounded="true" height="2rem">
           <label
             :aria-label="t(`dimension.${dimension.name}`)"
-            class="has-focus-visible:outline-2 has-focus-visible:outline-offset-2 group relative w-full rounded-full border-[1.5px] px-3 py-0.5 text-center shadow-sm"
+            class="has-focus-visible:outline-2 has-focus-visible:outline-offset-2 group relative flex w-full justify-center rounded-full border-[1.5px] px-3 py-1 text-center shadow-sm"
             :style="{
               borderColor: dimension.color,
               outlineColor: dimension.color,
