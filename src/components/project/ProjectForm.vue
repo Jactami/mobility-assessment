@@ -19,38 +19,6 @@
         <UIIcon :icon="model.favorite ? 'favorite' : 'noFavorite'" class="text-primary text-2xl" />
       </template>
     </FormKit>
-
-    <div>
-      <FormKit
-        type="range"
-        name="radius"
-        :label="t('project.radius')"
-        validation="required|number|min:100|max:3000"
-        outer-class="col-span-3"
-        :min="100"
-        :max="3000"
-        :step="100"
-        number
-      >
-        <template #help>
-          <!-- <div class="text-on-surface-variant">
-            {{ n(model.radius ?? 0, 'meter') }}
-          </div> -->
-          <div class="mt-2 flex flex-wrap gap-4">
-            <UIButton
-              v-for="radius in presetRadiusList"
-              :key="radius"
-              type="button"
-              size="sm"
-              severity="neutral"
-              @click="model.radius = radius"
-            >
-              {{ n(radius, 'meter') }}
-            </UIButton>
-          </div>
-        </template>
-      </FormKit>
-    </div>
   </UIForm>
 </template>
 
@@ -59,7 +27,6 @@ import type { Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import UIButton from '../ui/button/UIButton.vue'
 import UIIcon from '../ui/icon/UIIcon.vue'
 import UIForm from '../ui/UIForm.vue'
 
@@ -73,12 +40,10 @@ const emit = defineEmits<{
 
 const open = defineModel<boolean>('open')
 
-const { t, n } = useI18n()
+const { t } = useI18n()
 const projectStore = useProjectStore()
 
 const model = ref<Project>({ ...props.project })
-
-const presetRadiusList = [500, 1000, 2000, 3000]
 
 function handleSubmit() {
   projectStore.updateProjectState({ project: model.value })

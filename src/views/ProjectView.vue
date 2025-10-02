@@ -7,22 +7,18 @@
   />
 
   <template v-else>
-    <UISkeletonLoader :loading="projectLoading" height="4rem" width="30%" class="my-6">
-      <UIPageHeader
-        v-if="projectStore.project?.title"
-        :title="projectStore.project.title"
-        :subtitle="
-          projectStore.project?.radius
-            ? `${t('project.radius')} ${n(projectStore.project.radius, 'meter')}`
-            : undefined
-        "
-      />
+    <UISkeletonLoader :loading="projectLoading" height="3rem" width="30%" class="my-6">
+      <UIPageHeader v-if="projectStore.project?.title" :title="projectStore.project.title" />
     </UISkeletonLoader>
 
     <!-- Search Bar -->
     <div class="mx-auto mt-6 w-full lg:max-w-2xl">
       <UISkeletonLoader :loading="projectLoading" height="2.5rem">
-        <ProjectLocationSearch @update-location="fetchPois" />
+        <ProjectSearchBar
+          v-if="projectStore.project"
+          :project="projectStore.project"
+          @update-location="fetchPois"
+        />
       </UISkeletonLoader>
     </div>
 
@@ -58,7 +54,6 @@
       v-if="projectStore.project && modalOpen"
       v-model:open="modalOpen"
       :project="projectStore.project"
-      @submit="saveProject"
     />
 
     <!-- Hidden content to produce map and chart exports -->
@@ -78,7 +73,7 @@ import ProjectMapPanel from '@/components/project/panels/ProjectMapPanel.vue'
 import ProjectPoiPanel from '@/components/project/panels/ProjectPoiPanel.vue'
 import ProjectExportAssets from '@/components/project/ProjectExportAssets.vue'
 import ProjectForm from '@/components/project/ProjectForm.vue'
-import ProjectLocationSearch from '@/components/project/ProjectLocationSearch.vue'
+import ProjectSearchBar from '@/components/project/ProjectSearchBar.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenuActionBar from '@/components/ui/menu/UIMenuActionBar.vue'
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
@@ -97,7 +92,7 @@ import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vu
 import { useI18n } from 'vue-i18n'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 
-const { n, t } = useI18n()
+const { t } = useI18n()
 const db = useDB()
 const projectStore = useProjectStore()
 const route = useRoute()
@@ -132,8 +127,8 @@ const actionItems = computed<MenuListItem[]>(() => [
     divider: true,
   },
   {
-    label: t('project.config'),
-    icon: 'settings',
+    label: t('common.edit'),
+    icon: 'edit',
     action: () => (modalOpen.value = true),
     disabled: !projectStore.project,
   },

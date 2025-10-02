@@ -61,7 +61,6 @@
 import type { Poi, Project } from '@/db/types'
 import { useGeolocation } from '@vueuse/core'
 import type { Extent } from 'ol/extent'
-import type Map from 'ol/Map'
 import { fromLonLat } from 'ol/proj'
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -133,9 +132,11 @@ async function resetMap() {
   lat.value = props.project.latitude
   center.value = fromLonLat([lon.value, lat.value])
   const offset = props.project.radius * 0.1
-  zoom.value = zoomFromMeters(map.value as Map, location.value, (props.project.radius + offset) * 2)
+  zoom.value = zoomFromMeters(map.value, location.value, (props.project.radius + offset) * 2)
 
   // await next render to save current extent
+  map.value.render()
+
   await nextTick()
   if (map.value) extent.value = map.value.getView().calculateExtent(map.value.getSize())
 }
@@ -156,8 +157,8 @@ async function exportMap() {
 
 onMounted(resetMap)
 
-// Update and initialize map view when the project location changes
-watch(() => props.project, resetMap)
+// Update map view when the project settings change
+watch(() => [props.project?.latitude, props.project?.longitude, props.project?.radius], resetMap)
 
 // Watch for geolocation updates and center the map on the user's location
 watch(coords, ({ latitude, longitude }) => {
