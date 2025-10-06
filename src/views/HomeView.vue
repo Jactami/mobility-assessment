@@ -30,7 +30,7 @@
               v-if="filter"
               icon="clear"
               :aria-label="t('common.clear')"
-              @click="filter = ''"
+              @click="clearFilter"
             />
           </div>
         </template>
@@ -222,6 +222,16 @@ async function copyProject(project: Project) {
       name: 'project',
       params: { projectId: data.id },
     })
+  }
+}
+
+function clearFilter() {
+  filter.value = ''
+
+  const input = document.getElementById('project-filter-input') as HTMLInputElement
+  if (input) {
+    input.focus()
+    input.select()
   }
 }
 
