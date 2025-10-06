@@ -10,9 +10,9 @@
       <FormKit
         id="email"
         type="email"
-        :label="t('auth.email')"
+        :label="t('user.email')"
         name="email"
-        :placeholder="t('auth.email')"
+        :placeholder="t('user.email')"
         validation="required|email"
         autocomplete="email"
         autofocus
@@ -20,9 +20,9 @@
       <FormKit
         id="password"
         :type="passwordVisible ? 'text' : 'password'"
-        :label="t('auth.password')"
+        :label="t('user.password')"
         name="password"
-        :placeholder="t('auth.password')"
+        :placeholder="t('user.password')"
         inner-class="relative"
         validation="required"
       >
@@ -32,7 +32,7 @@
               <UIButtonIcon
                 tabindex="-1"
                 :icon="passwordVisible ? 'hide' : 'show'"
-                :aria-label="passwordVisible ? t('auth.hidePassword') : t('auth.showPassword')"
+                :aria-label="passwordVisible ? t('auth.password.hide') : t('auth.password.show')"
                 @mousedown="passwordVisible = true"
                 @mouseup="passwordVisible = false"
               />
@@ -40,7 +40,7 @@
           </div>
         </template>
       </FormKit>
-      <UIButton type="submit" class="w-full" :disabled="!valid || loading">
+      <UIButton type="submit" size="lg" class="w-full" :disabled="!valid || loading">
         {{ t('auth.login') }}
       </UIButton>
     </FormKit>
@@ -85,7 +85,9 @@ async function handleSignIn(form: SignInFormData) {
   if (error) {
     // TODO: handle more error cases
     const errorMessage =
-      error.code === 'invalid_credentials' ? t('auth.invalidCredentials') : t('auth.loginError')
+      error.code === 'invalid_credentials'
+        ? t('auth.error.invalidCredentials')
+        : t('auth.error.login')
     errorToast(errorMessage)
     console.error(error)
     return

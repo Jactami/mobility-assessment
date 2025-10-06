@@ -41,7 +41,7 @@
     <!-- Map Control Buttons -->
     <template v-if="!disabled && !static">
       <OlZoomControl :zoom-in-tip-label="t('map.zoomIn')" :zoom-out-tip-label="t('map.zoomOut')" />
-      <OlFullScreenControl :tip-label="t('map.toggleFullscreen')" />
+      <OlFullScreenControl :tip-label="t('map.fullScreen')" />
       <OlZoomToExtentControl
         :extent="extent"
         label="🞋"
@@ -110,11 +110,12 @@ const lon = ref(10.4477)
 const center = ref(fromLonLat([lon.value, lat.value]))
 const zoom = ref(5.7)
 
-// Attribution text for the exported map image
-const attributions: string[] = [
-  `© ${new Date().getFullYear()} by BGW Digital`,
-  `© OpenStreetMap contributors/`,
-  `Lizenz: ODbL`,
+// Attribution text for the map
+const attributions = [
+  t('map.attribution', {
+    year: new Date().getFullYear(),
+    company: t('app.company.short'),
+  }),
 ]
 
 // Extent for the map view

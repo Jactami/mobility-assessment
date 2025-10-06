@@ -11,9 +11,9 @@
       <FormKit
         id="old-password"
         :type="oldPasswordVisible ? 'text' : 'password'"
-        :label="t('auth.passwordOld')"
+        :label="t('auth.password.old')"
         name="old_password"
-        :placeholder="t('auth.passwordOld')"
+        :placeholder="t('auth.password.old')"
         inner-class="relative"
         validation="required"
       >
@@ -23,7 +23,7 @@
               <UIButtonIcon
                 tabindex="-1"
                 :icon="oldPasswordVisible ? 'hide' : 'show'"
-                :aria-label="oldPasswordVisible ? t('auth.hidePassword') : t('auth.showPassword')"
+                :aria-label="oldPasswordVisible ? t('auth.password.hide') : t('auth.password.show')"
                 @mousedown="oldPasswordVisible = true"
                 @mouseup="oldPasswordVisible = false"
               />
@@ -34,19 +34,19 @@
       <FormKit
         id="new-password"
         :type="newPasswordVisible ? 'text' : 'password'"
-        :label="t('auth.passwordNew')"
+        :label="t('auth.password.new')"
         name="new_password"
-        :placeholder="t('auth.passwordNew')"
+        :placeholder="t('auth.password.new')"
         inner-class="relative"
         validation="required|contains_alpha|contains_numeric|contains_symbol|contains_uppercase|length:8,64"
-        :help="t('auth.passwordHelp')"
+        :help="t('auth.password.help')"
       >
         <template #suffix>
           <div class="absolute inset-y-0 right-0 flex items-center pr-2">
             <UIButtonIcon
               tabindex="-1"
               :icon="newPasswordVisible ? 'hide' : 'show'"
-              :aria-label="newPasswordVisible ? t('auth.hidePassword') : t('auth.showPassword')"
+              :aria-label="newPasswordVisible ? t('auth.password.hide') : t('auth.password.show')"
               @mousedown="newPasswordVisible = true"
               @mouseup="newPasswordVisible = false"
             />
@@ -56,14 +56,14 @@
       <FormKit
         id="new-password-confirm"
         type="password"
-        :label="t('auth.passwordConfirm')"
+        :label="t('auth.password.confirm')"
         name="new_password_confirm"
-        :placeholder="t('auth.passwordConfirm')"
+        :placeholder="t('auth.password.confirm')"
         validation="required|confirm"
       />
 
       <UIButton type="submit" :disabled="!valid || loading">
-        {{ t('auth.changePassword') }}
+        {{ t('auth.password.change') }}
       </UIButton>
     </FormKit>
   </div>
@@ -105,7 +105,7 @@ async function handlePasswordReset() {
 
   if (oldPasswordError) {
     loading.value = false
-    errorToast(t('auth.passwordOldInvalid'))
+    errorToast(t('auth.error.invalidCredentials'))
     return
   }
 
@@ -119,9 +119,9 @@ async function handlePasswordReset() {
 
   if (updateError) {
     console.error(updateError)
-    errorToast(t('auth.changePasswordError'))
+    errorToast(t('notification.error.default'))
   } else {
-    successToast(t('auth.changePasswordSuccess'))
+    successToast(t('notification.success.save'))
     reset('change-password-form')
   }
 }

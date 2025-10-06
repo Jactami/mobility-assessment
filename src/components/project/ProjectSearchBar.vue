@@ -46,7 +46,7 @@
               <UIButtonIcon
                 v-if="query && !loading"
                 icon="close"
-                :aria-label="t('common.reset')"
+                :aria-label="t('common.clear')"
                 @click="resetQuery"
               />
               <UIIcon v-else-if="loading" icon="loading" :aria-label="t('common.loading')" />
@@ -123,13 +123,14 @@ async function search() {
 
   // If there is an error in the geocode service, show error
   if (geocodingError.value) {
-    errorToast(t('common.errorMessage'))
+    console.log(geocodingError.value)
+    errorToast(t('notification.error.default'))
     return
   }
 
   // If no results are found, show an error message
   if (!geocoding.value || geocoding.value.length === 0) {
-    errorToast(t('project.locationNotFound'))
+    errorToast(t('project.error.locationNotFound'))
     return
   }
 

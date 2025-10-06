@@ -4,12 +4,12 @@
       <li v-for="(r, i) in routes" :key="r.fullPath" class="flex items-center">
         <RouterLink
           :to="r.fullPath"
-          :aria-label="t(`meta.${r.name?.toString()}`)"
+          :aria-label="t(`navigation.${r.name?.toString()}`)"
           class="hover:bg-primary-container hover:text-on-primary-container flex items-center rounded-full px-2.5 py-1.5"
           :class="{ 'bg-primary-container text-on-primary-container': i === routes.length - 1 }"
         >
-          <UIIcon v-if="i === 0" icon="home" :aria-label="t('meta.home')" />
-          <span v-else class="text-sm">{{ t(`meta.${r.name?.toString()}`) }}</span>
+          <UIIcon v-if="i === 0" icon="home" :aria-label="t('navigation.home')" />
+          <span v-else class="text-sm">{{ t(`navigation.${r.name?.toString()}`) }}</span>
         </RouterLink>
         <UIIcon v-if="i < routes.length - 1" class="mx-1" icon="next" />
       </li>

@@ -18,7 +18,7 @@
       <!-- Control buttons -->
       <div class="mt-10 flex justify-center gap-2">
         <UIButton severity="neutral" @click="open = false">{{ t('common.cancel') }}</UIButton>
-        <UIButton type="submit" :disabled="!valid">{{ t('common.save') }}</UIButton>
+        <UIButton type="submit" :disabled="!valid">{{ t('action.save') }}</UIButton>
       </div>
     </FormKit>
   </UIModal>

@@ -127,10 +127,10 @@ async function deletePoi(poi: Poi) {
   if (!projectStore.pois) return
 
   // Confirm deletion
-  const confirmation = await confirmDialog(
-    t('table.confirmDelete', { object: poi.label || t(`category.${poi.category}`) }),
-    { confirmText: t('common.delete') },
-  )
+  const confirmation = await confirmDialog({
+    message: t('dialog.delete', { item: poi.label || t(`category.${poi.category}`) }),
+    confirm: t('action.delete'),
+  })
   if (!confirmation) return
 
   // Remove the POI from the store

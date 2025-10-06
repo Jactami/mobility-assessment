@@ -1,5 +1,5 @@
 <template>
-  <UIPanel :title="t('project.pois')" icon="poi" :actions="actions">
+  <UIPanel :title="t('project.poi', 2)" icon="poi" :actions="actions">
     <!-- Category Summary Pills -->
     <div class="flex flex-wrap justify-center gap-2">
       <template v-for="factor in factorConfig" :key="factor.name">
@@ -57,11 +57,11 @@ const { confirmDialog } = useNotification()
 
 const actions: MenuListItem[] = [
   {
-    label: t('project.refreshPois'),
+    label: t('project.refresh'),
     icon: 'refresh',
     action: async () => {
       // Inform user that existing data will be overwritten and user made data will be lost
-      const confirmation = await confirmDialog(t('project.refreshPoisConfirm'))
+      const confirmation = await confirmDialog({ message: t('dialog.overwrite') })
       if (confirmation) emit('refresh-pois')
     },
   },

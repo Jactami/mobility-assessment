@@ -17,7 +17,7 @@
         </div>
         <span
           class="text-surface-container-highest absolute right-2 top-2 text-2xl transition-transform hover:scale-125"
-          :title="project.favorite ? t('project.removeFavorite') : t('project.addFavorite')"
+          :title="project.favorite ? t('project.favorite.remove') : t('project.favorite.add')"
           @click.prevent="emit('favorite')"
         >
           <UIIcon v-if="project.favorite" icon="favorite" />
@@ -27,10 +27,10 @@
 
       <!-- Card Body -->
       <div class="grow p-4">
-        <h2 v-mark="search" class="line-clamp-2 h-[3rem] text-xl font-medium leading-tight">
+        <h2 v-mark="filter" class="line-clamp-2 h-[3rem] text-xl font-medium leading-tight">
           {{ project.title }}
         </h2>
-        <div v-mark="search" class="text-on-surface-variant mt-4">
+        <div v-mark="filter" class="text-on-surface-variant mt-4">
           <div v-for="(part, i) in address" :key="i" class="truncate">{{ part }}</div>
         </div>
       </div>
@@ -59,7 +59,7 @@ import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
   project: Project
-  search?: string
+  filter?: string
 }>()
 
 const emit = defineEmits<{
@@ -83,18 +83,18 @@ const bgColor = computed(() =>
 
 const menu = computed<MenuListItem[]>(() => [
   {
-    label: props.project.favorite ? t('project.removeFavorite') : t('project.addFavorite'),
+    label: props.project.favorite ? t('project.favorite.remove') : t('project.favorite.add'),
     icon: props.project.favorite ? 'noFavorite' : 'favorite',
     action: () => emit('favorite'),
   },
   {
-    label: t('project.copy'),
+    label: t('action.copyItem', { item: t('project.label') }),
     icon: 'copy',
     action: () => emit('copy'),
     divider: true,
   },
   {
-    label: t('project.delete'),
+    label: t('action.deleteItem', { item: t('project.label') }),
     icon: 'delete',
     action: () => emit('delete'),
   },

@@ -1,10 +1,10 @@
 <template>
-  <UIPageHeader :title="t('meta.home')" />
+  <UIPageHeader :title="t('navigation.home')" />
 
   <UIErrorPage
     v-if="loadingError"
     :title="t('common.error')"
-    :message="t('project.loadAllError')"
+    :message="t('notification.error.load')"
     @retry="loadProjects"
   />
 
@@ -12,11 +12,12 @@
     <!-- Action Bar -->
     <div class="max-w-sm">
       <FormKit
-        v-model="search"
+        id="project-filter-input"
+        v-model="filter"
         type="text"
-        name="search"
+        name="filter"
         :label="t('common.search')"
-        :placeholder="t('common.searchPlaceholder')"
+        :placeholder="t('common.search')"
         autocomplete="off"
         :spellcheck="false"
       >
@@ -25,20 +26,28 @@
         </template>
         <template #suffixIcon>
           <div class="absolute bottom-1 right-0 flex items-center pr-2">
-            <UIButtonIcon v-if="search" icon="clear" @click="search = ''" />
+            <UIButtonIcon
+              v-if="filter"
+              icon="clear"
+              :aria-label="t('common.clear')"
+              @click="filter = ''"
+            />
           </div>
         </template>
       </FormKit>
     </div>
 
     <!-- Favorites -->
-    <UISection v-if="favoriteProjects && favoriteProjects.length" :title="t('project.favorites')">
+    <UISection
+      v-if="favoriteProjects && favoriteProjects.length"
+      :title="t('project.favorite.label', 2)"
+    >
       <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <ProjectCard
           v-for="project in favoriteProjects"
           :key="project.id"
           :project="project"
-          :search="search"
+          :filter="filter"
           @delete="deleteProject(project)"
           @copy="copyProject(project)"
           @favorite="toggleFavorite(project)"
@@ -47,16 +56,20 @@
     </UISection>
 
     <!-- All Projects -->
-    <UISection :title="t('project.myProjects')">
+    <UISection :title="t('project.allProjects')">
       <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <template v-if="!loading">
-          <button class="cursor-pointer" :title="t('project.create')" @click="createProject">
+          <button
+            class="cursor-pointer"
+            :title="t('action.createItem', { item: t('project.label') })"
+            @click="createProject"
+          >
             <UICard :animation="true" class="min-h-64">
               <div
                 class="bg-surface-container-low text-on-surface-variant flex h-full flex-col items-center justify-center gap-y-4 p-2"
               >
                 <UIIcon class="text-on-surface-variant rounded-full text-7xl" icon="add" />
-                <span>{{ t('project.create') }}</span>
+                <span>{{ t('action.createItem', { item: t('project.label') }) }}</span>
               </div>
             </UICard>
           </button>
@@ -64,7 +77,7 @@
             v-for="project in filteredProjects"
             :key="project.id"
             :project="project"
-            :search="search"
+            :filter="filter"
             @delete="deleteProject(project)"
             @copy="copyProject(project)"
             @favorite="toggleFavorite(project)"
@@ -105,22 +118,22 @@ const { successToast, errorToast, confirmDialog } = useNotification()
 const { t } = useI18n()
 const { createAddress } = useUtil()
 
-const search = ref('')
+const filter = ref('')
 
 const loading = ref(false)
 const loadingError = ref<boolean>(false)
 const projects = ref<Project[] | null>(null)
 
-/** Filtered projects based on the search query. */
+/** Filtered projects based on the filter query. */
 const filteredProjects = computed(() => {
   return projects.value?.filter((project) => {
     // Create address
     const address = createAddress(project)
 
-    // Check if search query is in title or address
+    // Check if filter query is in title or address
     return (
-      project.title.toLowerCase().includes(search.value) ||
-      address.toLowerCase().includes(search.value)
+      project.title.toLowerCase().includes(filter.value) ||
+      address.toLowerCase().includes(filter.value)
     )
   })
 })
@@ -142,7 +155,7 @@ async function loadProjects() {
   loadingError.value = false
 
   if (error) {
-    errorToast(t('project.loadAllError'))
+    errorToast(t('notification.error.load'))
     loadingError.value = true
   }
 
@@ -161,35 +174,34 @@ async function createProject() {
     // Check if the error is due to project limit
     // TODO
     if (error?.code === 'P0001') {
-      errorToast(t('project.limitReached'))
+      errorToast(t('project.error.limitExceeded'))
     } else {
       // General error handling
-      errorToast(t('project.createError'))
+      errorToast(t('notification.error.default'))
     }
   } else {
     router.push({
       name: 'project',
       params: { projectId: data.id },
     })
-
-    successToast(t('project.createSuccess'))
   }
 }
 
 async function deleteProject(project: Project) {
   if (!authStore.user) return
 
-  const confirmLeave = await confirmDialog(t('project.confirmDelete'), {
-    confirmText: t('common.delete'),
+  const confirmLeave = await confirmDialog({
+    message: t('dialog.delete', { item: project.title }),
+    confirm: t('action.delete'),
   })
   if (!confirmLeave) return
 
   const { error } = await db.deleteProject(project.id)
 
   if (error) {
-    errorToast(t('project.deleteError'))
+    errorToast(t('notification.error.delete'))
   } else {
-    successToast(t('project.deleteSuccess'))
+    successToast(t('notification.success.delete'))
     loadProjects()
   }
 }
@@ -200,18 +212,16 @@ async function copyProject(project: Project) {
   const { data, error } = await db.setProject({
     ...project,
     id: undefined, // Ensure a new ID is generated
-    title: `${project.title} (${t('project.projectCopy')})`,
+    title: `${project.title} (${t('common.copy')})`,
   })
 
   if (!data || error) {
-    errorToast(t('project.createError'))
+    errorToast(t('notification.error.default'))
   } else {
     router.push({
       name: 'project',
       params: { projectId: data.id },
     })
-
-    successToast(t('project.createSuccess'))
   }
 }
 

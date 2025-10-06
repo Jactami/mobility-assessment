@@ -2,7 +2,7 @@
   <UIErrorPage
     v-if="projectError"
     :title="t('common.error')"
-    :message="t('project.loadError')"
+    :message="t('notification.error.load')"
     @retry="loadProject"
   />
 
@@ -121,25 +121,25 @@ const isFetching = computed(() => geodataLoading.value || poiLoading.value || pr
 
 const actionItems = computed<MenuListItem[]>(() => [
   {
-    label: t('project.overview'),
+    label: t('navigation.home'),
     icon: 'home',
     action: () => router.push('/'),
     divider: true,
   },
   {
-    label: t('common.edit'),
+    label: t('action.editItem', { item: t('project.label') }),
     icon: 'edit',
     action: () => (modalOpen.value = true),
     disabled: !projectStore.project,
   },
   {
-    label: t('project.report'),
+    label: t('project.report.label'),
     icon: 'report',
     action: generateReport,
     disabled: !projectStore.project || reportLoading.value, // disable while report is generating
   },
   {
-    label: t('common.save'),
+    label: t('action.save'),
     icon: 'save',
     action: saveProject,
     disabled: !projectStore.project,
@@ -155,7 +155,9 @@ onUnmounted(projectStore.reset)
 // Prompt user if they try to leave the page with unsaved changes
 onBeforeRouteLeave(async (_, __, next) => {
   if (projectStore.isDirty) {
-    const confirmLeave = await confirmDialog(t('project.confirmLeave'))
+    const confirmLeave = await confirmDialog({
+      message: t('dialog.unsavedChanges'),
+    })
     if (confirmLeave) {
       return next()
     }
@@ -182,14 +184,14 @@ async function loadProject() {
   if (projectResponse.error || poisResponse.error) {
     projectError.value = true
     console.log(projectResponse.error || poisResponse.error)
-    errorToast(t('project.loadError'))
+    errorToast(t('notification.error.load'))
     return
   }
 
   // If no project or POIs are found, show error message
   if (!projectResponse.data || !poisResponse.data) {
     projectError.value = true
-    errorToast(t('project.notFound'))
+    errorToast(t('project.error.projectNotFound'))
     projectStore.reset()
     return
   }
@@ -209,18 +211,18 @@ async function saveProject() {
 
   // If there is an error in the database, show error
   if (projectResponse.error || poisResponse.error) {
-    errorToast(t('project.saveError'))
+    errorToast(t('notification.error.save'))
     return
   }
 
   // If no project or POIs are found, show error message
   if (!projectResponse.data || !poisResponse.data) {
-    errorToast(t('project.loadError'))
+    errorToast(t('notification.error.load'))
     return
   }
 
   // Show success message
-  successToast(t('project.saveSuccess'))
+  successToast(t('notification.success.save'))
 
   // Update the project and POIs in the store
   projectStore.syncProjectState({ project: projectResponse.data, pois: poisResponse.data })
@@ -234,6 +236,8 @@ async function fetchPois() {
   )
     return
 
+  const toast = await loadingToast(t('notification.info.fetching'))
+
   // Get POIs for the selected project location
   await getPois(
     projectStore.project?.latitude,
@@ -242,9 +246,12 @@ async function fetchPois() {
     projectStore.project.id,
   )
 
+  toast.dismiss()
+
   // If there is an error in the POI service, show error
   if (poisError.value) {
-    errorToast(t('common.errorMessage'))
+    console.error(poisError.value)
+    errorToast(t('notification.error.default'))
   }
 
   // Update project store with POIs
@@ -259,12 +266,12 @@ async function generateReport() {
 
   // Ensure we have all necessary data
   if (!projectStore.project || !projectStore.pois || !scores.value || !exportAssetsRef.value) {
-    errorToast(t('common.errorMessage'))
+    errorToast(t('notification.error.default'))
     return
   }
 
   reportLoading.value = true
-  const toast = await loadingToast(t('project.generatingReport'))
+  const toast = await loadingToast(t('project.report.generating'))
 
   // Generate map and chart images
   const { maps, chart } = await exportAssetsRef.value?.exportAssets()
@@ -283,7 +290,7 @@ async function generateReport() {
   // If there is an error in creating the PDF, show error
   if (pdfService.error.value) {
     console.error(pdfService.error.value)
-    errorToast(t('project.reportError'))
+    errorToast(t('notification.error.default'))
     return
   }
 

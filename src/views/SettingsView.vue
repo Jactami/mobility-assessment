@@ -1,14 +1,22 @@
 <template>
-  <UIPageHeader :title="t('settings.title')" />
+  <UIPageHeader :title="t('navigation.settings')" />
 
-  <UISection :title="t('auth.changePassword')" class="grow">
+  <UISection :title="t('auth.password.change')" class="grow">
     <AuthChangePasswordForm />
   </UISection>
 
-  <UISection :title="t('settings.appInfo')">
+  <UISection :title="t('app.info')">
     <div class="text-sm">
-      <p>v{{ version }} ({{ new Date(buildDate).toISOString() }})</p>
-      <p>{{ t('app.copyright', { app: t('app.title'), year: new Date().getFullYear() }) }}</p>
+      <p>{{ t('app.version', { version, date: new Date(buildDate).toISOString() }) }}</p>
+      <p>
+        {{
+          t('app.copyright', {
+            app: t('app.title'),
+            company: t('app.company.full'),
+            year: new Date().getFullYear(),
+          })
+        }}
+      </p>
     </div>
   </UISection>
 </template>

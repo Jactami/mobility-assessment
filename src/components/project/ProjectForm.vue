@@ -3,7 +3,7 @@
     id="edit-project-form"
     v-model:open="open"
     v-model:model="model"
-    :title="t('project.config')"
+    :title="t('action.editItem', { item: t('project.label') })"
     @submit="handleSubmit"
   >
     <FormKit
@@ -14,7 +14,7 @@
       validation="required"
     />
 
-    <FormKit type="checkbox" name="favorite" :label="t('project.addFavorite')">
+    <FormKit type="checkbox" name="favorite" :label="t('project.favorite.add')">
       <template #decorator>
         <UIIcon :icon="model.favorite ? 'favorite' : 'noFavorite'" class="text-primary text-2xl" />
       </template>

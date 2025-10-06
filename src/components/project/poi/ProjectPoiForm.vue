@@ -3,16 +3,20 @@
     id="edit-poi-form"
     v-model:open="open"
     v-model:model="model"
-    :title="poi?.id ? t('common.edit') : t('common.add')"
+    :title="
+      poi?.id
+        ? t('action.editItem', { item: t('project.poi') })
+        : t('action.addItem', { item: t('project.poi') })
+    "
     @submit="handleSubmit"
   >
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <FormKit type="text" name="label" :label="t('poi.label')" :placeholder="t('poi.label')" />
+      <FormKit type="text" name="label" :label="t('project.poi')" :placeholder="t('project.poi')" />
       <FormKit
         type="select"
         name="category"
-        :label="t('poi.category')"
-        :placeholder="t('poi.category')"
+        :label="t('project.category')"
+        :placeholder="t('project.category')"
         validation="required"
       >
         <optgroup
@@ -32,8 +36,8 @@
       <FormKit
         type="number"
         name="latitude"
-        :label="t('poi.latitude')"
-        :placeholder="t('poi.latitude')"
+        :label="t('project.latitude')"
+        :placeholder="t('project.latitude')"
         step="any"
         number="float"
         min="-90"
@@ -43,8 +47,8 @@
       <FormKit
         type="number"
         name="longitude"
-        :label="t('poi.longitude')"
-        :placeholder="t('poi.longitude')"
+        :label="t('project.longitude')"
+        :placeholder="t('project.longitude')"
         step="any"
         number="float"
         min="-180"

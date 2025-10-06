@@ -1,124 +1,159 @@
 {
   "app": {
     "title": "MobiMeter",
-    "copyright": "{app} © {year} Bayerische Gesellschaft für Wohneigentum - Digital mbH & Co. KG"
+    "company": {
+      "full": "Bayerische Gesellschaft für Wohneigentum - Digital mbH & Co. KG",
+      "short": "BGW Digital"
+    },
+    "copyright": "{app} © {year} {company}",
+    "info": "App-Informationen",
+    "theme": {
+      "light": "Heller Modus",
+      "dark": "Dunkler Modus"
+    },
+    "version": "App-Version {version} {date}"
   },
-  "meta": {
-    "title": "MobiMeter",
+  "navigation": {
     "admin": "Admin",
+    "home": "Meine Projekte",
     "login": "Anmelden",
-    "home": "Home",
     "playground": "Playground",
-    "settings": "Einstellungen",
-    "project": "Projekt"
-  },
-  "auth": {
-    "addUser": "Nutzer hinzufügen",
-    "changePassword": "Passwort ändern",
-    "changePasswordError": "Fehler beim Ändern des Passworts",
-    "changePasswordSuccess": "Passwort erfolgreich geändert",
-    "editUser": "Nutzer bearbeiten",
-    "deleteSuccess": "Nutzer erfolgreich gelöscht",
-    "deleteError": "Fehler beim Löschen des Nutzers",
-    "login": "Anmelden",
-    "logout": "Abmelden",
-    "loadError": "Fehler beim Laden der Nutzerdaten",
-    "email": "E-Mail",
-    "emailExists": "E-Mail-Adresse ist bereits vergeben.",
-    "firstName": "Vorname",
-    "lastName": "Nachname",
-    "invalidCredentials": "Ungültige Anmeldedaten",
-    "password": "Passwort",
-    "passwordConfirm": "Passwort bestätigen",
-    "passwordNew": "Neues Passwort",
-    "passwordHelp": "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.",
-    "passwordOld": "Altes Passwort",
-    "passwordOldInvalid": "Altes Passwort ist ungültig.",
-    "loginError": "Fehler bei der Anmeldung",
-    "logoutError": "Fehler bei der Abmeldung",
-    "loggedInAs": "Sie sind angemeldet als {user}.",
-    "profile": "Profil",
-    "upsertError": "Fehler beim Aktualisieren des Nutzers",
-    "upsertSuccess": "Nutzer erfolgreich aktualisiert",
-    "showPassword": "Passwort anzeigen",
-    "hidePassword": "Passwort verbergen"
+    "project": "Projekt",
+    "settings": "Einstellungen"
   },
   "common": {
-    "add": "Hinzufügen",
     "back": "Zurück",
     "cancel": "Abbrechen",
+    "clear": "Löschen",
     "close": "Schließen",
-    "delete": "Löschen",
-    "edit": "Bearbeiten",
+    "continue": "Fortfahren",
+    "copy": "Kopie",
     "error": "Fehler",
-    "errorMessage": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
-    "info": "Info",
     "loading": "Lade...",
+    "no": "Nein",
+    "notAvailable": "n.v.",
     "ok": "OK",
     "optional": "Optional",
     "options": "Optionen",
-    "notAvailable": "n.v.",
-    "pleaseConfirm": "Bitte bestätigen",
     "retry": "Erneut versuchen",
-    "reset": "Zurücksetzen",
-    "success": "Erfolg",
-    "save": "Speichern",
     "search": "Suchen",
-    "searchPlaceholder": "Durchsuchen..."
+    "success": "Erfolg",
+    "yes": "Ja"
   },
-  "map": {
-    "resetMap": "Karte zurücksetzen",
-    "toggleFullscreen": "Vollbildmodus umschalten",
-    "zoomIn": "Ausschnitt vergrößern",
-    "zoomOut": "Ausschnitt verkleinern"
+  "action": {
+    "add": "Hinzufügen",
+    "addItem": "{item} hinzufügen",
+    "copy": "Kopieren",
+    "copyItem": "{item} kopieren",
+    "create": "Erstellen",
+    "createItem": "{item} erstellen",
+    "delete": "Löschen",
+    "deleteItem": "{item} löschen",
+    "duplicate": "Duplizieren",
+    "duplicateItem": "{item} duplizieren",
+    "edit": "Bearbeiten",
+    "editItem": "{item} bearbeiten",
+    "save": "Speichern",
+    "saveItem": "{item} speichern",
+    "update": "Aktualisieren",
+    "updateItem": "{item} aktualisieren"
+  },
+  "notification": {
+    "error": {
+      "default": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
+      "delete": "Daten konnten nicht gelöscht werden.",
+      "load": "Daten konnten nicht geladen werden.",
+      "save": "Daten konnten nicht gespeichert werden."
+    },
+    "info": {
+      "fetching": "Daten werden geladen. Dies kann einen Moment dauern..."
+    },
+    "success": {
+      "delete": "Daten erfolgreich gelöscht.",
+      "save": "Daten erfolgreich gespeichert."
+    }
+  },
+  "dialog": {
+    "confirm": "Bitte bestätigen",
+    "delete": "Möchten Sie {item} wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.",
+    "overwrite": "Alle vorhandenen Daten werden überschrieben und gehen ggf. verloren. Möchten sie fortfahren?",
+    "unsavedChanges": "Es gibt ungespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen?"
+  },
+  "auth": {
+    "error": {
+      "emailInUse": "E-Mail-Adresse ist bereits vergeben.",
+      "invalidCredentials": "Anmeldedaten sind ungültig.",
+      "login": "Fehler bei der Anmeldung.",
+      "logout": "Fehler bei der Abmeldung."
+    },
+    "login": "Anmelden",
+    "loggedInAs": "Angemeldet als {user}",
+    "logout": "Abmelden",
+    "password": {
+      "change": "Passwort ändern",
+      "confirm": "Passwort bestätigen",
+      "help": "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.",
+      "hide": "Passwort verbergen",
+      "new": "Neues Passwort",
+      "old": "Altes Passwort",
+      "show": "Passwort anzeigen"
+    }
+  },
+  "user": {
+    "email": "E-Mail",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "label": "Nutzer",
+    "password": "Passwort"
   },
   "project": {
-    "project": "Projekt | Projekte",
-    "addFavorite": "Als Favorit markieren",
-    "evaluation": "Auswertung",
-    "confirmDelete": "Möchten Sie das Projekt wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "confirmLeave": "Möchten Sie das Projekt wirklich verlassen? Alle nicht gespeicherten Änderungen gehen verloren.",
-    "copy": "Projekt kopieren",
-    "config": "Projektkonfiguration",
-    "create": "Projekt erstellen",
-    "createError": "Fehler beim Erstellen des Projekts",
-    "createSuccess": "Projekt erfolgreich erstellt",
-    "delete": "Projekt löschen",
-    "deleteError": "Fehler beim Löschen des Projekts",
-    "deleteSuccess": "Projekt erfolgreich gelöscht",
-    "favorites": "Favoriten",
-    "generatingReport": "Bericht wird generiert...",
-    "limitReached": "Sie haben die maximale Anzahl an Projekten erreicht. Bitte löschen Sie ein Projekt, um ein neues zu erstellen.",
-    "loadAllError": "Fehler beim Laden der Projekte",
-    "loadError": "Fehler beim Laden des Projekts",
-    "location": "Standort",
-    "locationNotFound": "Standort konnte nicht gefunden werden.",
-    "map": "Karte",
-    "myProjects": "Meine Projekte",
-    "newProject": "Neues Projekt",
-    "notFound": "Projekt konnte nicht gefunden werden.",
-    "overview": "Projektübersicht",
-    "refreshPois": "Standortdaten aktualisieren",
-    "refreshPoisConfirm": "Alle vorhandenen Daten werden überschrieben und selbst erstellte Standortdaten gehen verloren.",
-    "removeFavorite": "Von Favoriten entfernen",
-    "pois": "Standortdaten",
-    "projectCopy": "Kopie",
-    "radius": "Radius",
-    "report": "PDF",
-    "reportError": "Fehler beim Erstellen des PDF-Berichts",
-    "score": "Gesamtbewertung",
-    "scoreDescription": "Es wurden alle Daten ausgewertet.",
-    "saveError": "Fehler beim Speichern des Projekts",
-    "saveSuccess": "Projekt erfolgreich gespeichert",
-    "title": "Projektname"
-  },
-  "poi": {
-    "label": "Bezeichnung",
+    "allProjects": "Alle Projekte",
     "category": "Kategorie",
     "distance": "Entfernung",
+    "evaluation": "Auswertung",
+    "error": {
+      "locationNotFound": "Standort konnte nicht gefunden werden.",
+      "limitExceeded": "Maximale Projektanzahl erreicht. Bitte löschen Sie ein bestehendes Projekt, um ein neues zu erstellen.",
+      "projectNotFound": "Projekt konnte nicht gefunden werden."
+    },
+    "factor": "Standortfaktor",
+    "favorite": {
+      "add": "Zu Favoriten hinzufügen",
+      "label": "Favorit | Favoriten",
+      "remove": "Von Favoriten entfernen"
+    },
     "latitude": "Breitengrad",
+    "label": "Projekt | Projekte",
+    "location": "Standort",
     "longitude": "Längengrad",
-    "viewOnMap": "Auf Karte anzeigen"
+    "map": "Karte",
+    "poi": "Objekt | Objekte",
+    "radius": "Radius",
+    "refresh": "Standortdaten aktualisieren",
+    "report": {
+      "generating": "Bericht wird erstellt...",
+      "label": "Projektbericht"
+    },
+    "score": "Gesamtbewertung",
+    "title": "Projektname"
+  },
+  "map": {
+    "attribution": "© {year} by {company} © OpenStreetMap contributors/ Lizenz: ODbL",
+    "fullScreen": "Vollbild",
+    "resetMap": "Karte zurücksetzen",
+    "showOnMap": "Auf Karte anzeigen",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern"
+  },
+  "table": {
+    "actions": "Aktionen",
+    "export": "Exportieren",
+    "empty": "Keine Daten vorhanden",
+    "firstPage": "Erste Seite",
+    "nextPage": "Nächste Seite",
+    "previousPage": "Vorherige Seite",
+    "lastPage": "Letzte Seite",
+    "page": "Seite {current} von {total}"
   },
   "factor": {
     "education": "Bildung",
@@ -162,23 +197,5 @@
     "taxi": "Taxistand",
     "theatre": "Theater",
     "university": "Universität"
-  },
-  "table": {
-    "actions": "Aktionen",
-    "add": "Hinzufügen",
-    "confirmDelete": "Möchten Sie den Eintrag \"{object}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "export": "Export",
-    "noData": "Keine Daten verfügbar",
-    "firstPage": "Erste Seite",
-    "previousPage": "Vorherige Seite",
-    "nextPage": "Nächste Seite",
-    "lastPage": "Letzte Seite",
-    "page": "Seite",
-    "search": "Suchen",
-    "searchPlaceholder": "Durchsuchen..."
-  },
-  "settings": {
-    "appInfo": "App-Informationen",
-    "title": "Einstellungen"
   }
 }

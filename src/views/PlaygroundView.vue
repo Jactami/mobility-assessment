@@ -1,6 +1,6 @@
 <template>
   <UIPageHeader
-    :title="t('meta.playground')"
+    :title="t('navigation.playground')"
     subtitle="A place to develop and test new components and features."
   />
 

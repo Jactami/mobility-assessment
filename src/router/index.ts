@@ -83,8 +83,8 @@ router.beforeEach(async (to, _, next) => {
 
 // set document title
 router.beforeEach((to) => {
-  const title = i18n.global.t('meta.title')
-  const subtitle = i18n.global.t(`meta.${to.name?.toString()}`)
+  const title = i18n.global.t('app.title')
+  const subtitle = i18n.global.t(`navigation.${to.name?.toString()}`)
 
   document.title = subtitle ? `${title} | ${subtitle}` : title
 })

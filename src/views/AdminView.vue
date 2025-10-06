@@ -1,5 +1,5 @@
 <template>
-  <UIPageHeader :title="t('meta.admin')" />
+  <UIPageHeader :title="t('navigation.admin')" />
 
   <!-- TODO: Move user management to separate component -->
   <UISection title="Nutzer">
@@ -10,29 +10,33 @@
     id="edit-user-form"
     v-model:open="modalOpen"
     v-model:model="editProfile"
-    :title="editProfile?.id ? t('common.edit') : t('common.add')"
+    :title="
+      editProfile?.id
+        ? t('action.editItem', { item: t('user.label') })
+        : t('action.addItem', { item: t('user.label') })
+    "
     @submit="handleUpsertUser"
   >
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <FormKit
         type="text"
         name="last_name"
-        :label="t('auth.lastName')"
-        :placeholder="t('auth.lastName')"
+        :label="t('user.lastName')"
+        :placeholder="t('user.lastName')"
         validation="required"
       />
       <FormKit
         type="text"
         name="first_name"
-        :label="t('auth.firstName')"
-        :placeholder="t('auth.firstName')"
+        :label="t('user.firstName')"
+        :placeholder="t('user.firstName')"
         validation="required"
       />
       <FormKit
         type="email"
         name="email"
-        :label="t('auth.email')"
-        :placeholder="t('auth.email')"
+        :label="t('user.email')"
+        :placeholder="t('user.email')"
         validation="required|email"
         outer-class="col-span-2"
       />
@@ -40,16 +44,16 @@
         type="password"
         name="password"
         :label="
-          editProfile.id ? `${t('auth.password')} (${t('common.optional')})` : t('auth.password')
+          editProfile.id ? `${t('user.password')} (${t('common.optional')})` : t('user.password')
         "
-        :placeholder="t('auth.password')"
+        :placeholder="t('user.password')"
         :validation="!editProfile.id || editProfile.password_confirm ? 'required' : ''"
       />
       <FormKit
         type="password"
         name="password_confirm"
-        :label="t('auth.passwordConfirm')"
-        :placeholder="t('auth.passwordConfirm')"
+        :label="t('auth.password.confirm')"
+        :placeholder="t('auth.password.confirm')"
         :validation="!editProfile?.id || editProfile?.password ? 'required|confirm' : 'confirm'"
       />
     </div>
@@ -88,19 +92,19 @@ const tableConfig: TableConfig<Profile> = {
   columns: [
     {
       key: 'last_name',
-      label: t('auth.lastName'),
+      label: t('user.lastName'),
       sort: 'raw',
       width: 30,
     },
     {
       key: 'first_name',
-      label: t('auth.firstName'),
+      label: t('user.firstName'),
       sort: 'raw',
       width: 30,
     },
     {
       key: 'email',
-      label: t('auth.email'),
+      label: t('user.email'),
       sort: 'raw',
       width: 40,
     },
@@ -111,7 +115,7 @@ const tableConfig: TableConfig<Profile> = {
   actions: [
     {
       icon: 'edit',
-      label: t('common.edit'),
+      label: t('action.edit'),
       handler: (profile) => {
         // Open modal and set profile for editing
         modalOpen.value = true
@@ -127,7 +131,7 @@ const tableConfig: TableConfig<Profile> = {
     },
     {
       icon: 'delete',
-      label: t('common.delete'),
+      label: t('action.delete'),
       severity: 'danger',
       handler: deleteUser,
     },
@@ -144,7 +148,7 @@ async function fetchProfiles() {
 
   if (error) {
     console.error(error)
-    errorToast(t('auth.loadError'))
+    errorToast(t('notification.error.load'))
     profiles.value = []
   } else {
     profiles.value = data
@@ -152,20 +156,20 @@ async function fetchProfiles() {
 }
 
 async function deleteUser(profile: Profile) {
-  const confirmed = await confirmDialog(
-    t('table.confirmDelete', { object: `${profile.first_name} ${profile.last_name}` }),
-    { confirmText: t('common.delete') },
-  )
+  const confirmed = await confirmDialog({
+    message: t('dialog.delete', { item: `${profile.first_name} ${profile.last_name}` }),
+    confirm: t('action.delete'),
+  })
   if (!confirmed) return
 
   const { data, error } = await db.deleteUser(profile.id)
 
   if (error) {
     console.error(error)
-    errorToast(t('auth.deleteError'))
+    errorToast(t('notification.error.delete'))
   } else {
     profiles.value = data
-    successToast(t('auth.deleteSuccess'))
+    successToast(t('notification.success.delete'))
   }
 }
 
@@ -195,14 +199,14 @@ async function handleUpsertUser() {
     console.error(error)
     if (error.code === '23505') {
       // Unique constraint violation (email already exists)
-      errorToast(t('auth.emailExists'))
+      errorToast(t('auth.error.emailInUse'))
     } else {
       // General error
-      errorToast(t('auth.upsertError'))
+      errorToast(t('notification.error.save'))
     }
   } else {
     profiles.value = data
-    successToast(t('auth.upsertSuccess'))
+    successToast(t('notification.success.save'))
 
     // Close modal after successful upsert
     modalOpen.value = false

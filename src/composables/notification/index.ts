@@ -26,7 +26,7 @@ export function useNotification() {
     })
   }
 
-  const errorToast = (message: string) => {
+  const errorToast = (message: string = t('notification.error.default')) => {
     Swal.fire({
       title: t('common.error'),
       icon: 'error',
@@ -42,7 +42,6 @@ export function useNotification() {
 
   const infoToast = async (message: string) => {
     Swal.fire({
-      title: t('common.info'),
       icon: 'info',
       text: message,
       ...options,
@@ -78,26 +77,25 @@ export function useNotification() {
     return { dismiss }
   }
 
-  const confirmDialog = (
-    message: string,
-    {
-      confirmText = t('common.ok'),
-      cancelText = t('common.cancel'),
-    }: { confirmText?: string; cancelText?: string } = {},
-  ) => {
+  const confirmDialog = ({
+    title = t('dialog.confirm'),
+    message = t('dialog.confirm'),
+    confirm = t('common.continue'),
+    cancel = t('common.cancel'),
+  } = {}) => {
     return new Promise((resolve) => {
       let confirmResult = false
       Swal.fire({
-        title: t('common.pleaseConfirm'),
+        title: title,
         icon: 'question',
         text: message,
         showConfirmButton: true,
-        confirmButtonText: confirmText,
+        confirmButtonText: confirm,
         confirmButtonColor: window
           .getComputedStyle(document.body)
           .getPropertyValue('--color-error'), // danger action
         showCancelButton: true,
-        cancelButtonText: cancelText,
+        cancelButtonText: cancel,
         cancelButtonColor: window
           .getComputedStyle(document.body)
           .getPropertyValue('--color-secondary'),

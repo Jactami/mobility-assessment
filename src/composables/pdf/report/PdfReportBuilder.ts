@@ -235,9 +235,9 @@ export class PdfReportBuilder extends PdfBuilder {
       { y },
     ).createTable(
       [
-        i18n.global.t('poi.category'),
+        i18n.global.t('project.category'),
         i18n.global.t('pdf.analysis.closestElement'),
-        i18n.global.t('poi.distance'),
+        i18n.global.t('project.distance'),
       ],
       closestPois.map((poi) => [
         i18n.global.t(`category.${poi.category}`),
@@ -622,9 +622,9 @@ export class PdfReportBuilder extends PdfBuilder {
         // Show POIs in a table
         this.createTable(
           [
-            i18n.global.t('poi.label'),
-            i18n.global.t('poi.category'),
-            i18n.global.t('poi.distance'),
+            i18n.global.t('project.label'),
+            i18n.global.t('project.category'),
+            i18n.global.t('project.distance'),
           ],
           factorPois.map((poi) => [
             poi.label || i18n.global.t(`category.${poi.category}`),

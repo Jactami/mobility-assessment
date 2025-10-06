@@ -2,7 +2,7 @@
   <UIMenu v-if="authStore.profile" :items="menu" position="bottom-end">
     <template #trigger>
       <UIButton
-        class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary font-mono font-medium text-on-primary shadow-none select-none hover:outline-2 hover:outline-primary/50"
+        class="bg-primary text-on-primary hover:outline-primary/50 flex size-8 shrink-0 select-none items-center justify-center rounded-full font-mono font-medium shadow-none hover:outline-2"
       >
         {{ initials }}
       </UIButton>
@@ -12,7 +12,7 @@
         <div class="text-base font-semibold">
           {{ authStore.profile?.first_name }} {{ authStore.profile?.last_name }}
         </div>
-        <div class="mt-1 text-sm text-on-surface-variant">{{ authStore.profile?.email }}</div>
+        <div class="text-on-surface-variant mt-1 text-sm">{{ authStore.profile?.email }}</div>
       </div>
     </template>
   </UIMenu>
@@ -37,7 +37,7 @@ const { t } = useI18n()
 
 const menu: MenuListItem[] = [
   {
-    label: t('settings.title'),
+    label: t('navigation.settings'),
     icon: 'settings',
     action: () => router.push({ name: 'settings' }),
     divider: true,
@@ -60,7 +60,7 @@ async function handleSignOut() {
 
   // handle authentication errors
   if (error) {
-    errorToast(t('auth.logoutError'))
+    errorToast(t('auth.error.logout'))
     console.error(error)
     return
   }

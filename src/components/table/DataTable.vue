@@ -5,12 +5,13 @@
       <!-- Global Search -->
       <div v-if="config.searchable" class="w-full max-w-full sm:max-w-sm">
         <FormKit
+          id="table-filter-input"
           v-model="globalFilter"
           type="text"
           name="search"
-          :label="t('table.search')"
+          :label="t('common.search')"
           label-class="sr-only"
-          :placeholder="t('table.searchPlaceholder')"
+          :placeholder="t('common.search')"
           autocomplete="off"
           :spellcheck="false"
         >
@@ -20,7 +21,12 @@
           <template #suffixIcon>
             <div class="relative w-6">
               <div class="absolute inset-y-0 -right-2 flex items-center">
-                <UIButtonIcon v-if="globalFilter" icon="clear" @click="globalFilter = ''" />
+                <UIButtonIcon
+                  v-if="globalFilter"
+                  icon="clear"
+                  :aria-label="t('common.clear')"
+                  @click="clearFilter"
+                />
               </div>
             </div>
           </template>
@@ -35,7 +41,7 @@
 
         <!-- Button New -->
         <UIButton v-if="config.add" icon="add" @click="config.add">
-          {{ t('table.add') }}
+          {{ t('action.add') }}
         </UIButton>
       </div>
     </div>
@@ -92,7 +98,7 @@
                     :colspan="columns.length"
                     class="text-on-surface-variant p-4 text-center text-sm italic"
                   >
-                    {{ t('table.noData') }}
+                    {{ t('table.empty') }}
                   </td>
                 </tr>
               </template>
@@ -154,8 +160,15 @@
           @click="table.previousPage()"
         />
         <div class="px-2 text-center">
-          <span class="hidden sm:inline-block">{{ t('table.page') }}&nbsp;</span>
-          <span>
+          <span class="hidden sm:inline-block">
+            {{
+              t('table.page', {
+                current: table.getState().pagination.pageIndex + 1,
+                total: table.getPageCount(),
+              })
+            }}&nbsp;
+          </span>
+          <span class="inline-block sm:hidden">
             {{ table.getState().pagination.pageIndex + 1 }} / {{ table.getPageCount() }}
           </span>
         </div>
@@ -307,6 +320,16 @@ const table = useVueTable({
     return String(formatted).toLowerCase().includes(filterValue.toLowerCase())
   },
 })
+
+function clearFilter() {
+  globalFilter.value = ''
+
+  const input = document.getElementById('table-filter-input') as HTMLInputElement
+  if (input) {
+    input.focus()
+    input.select()
+  }
+}
 
 // TODO: Decide whether to export raw data or formatted data
 function exportData() {

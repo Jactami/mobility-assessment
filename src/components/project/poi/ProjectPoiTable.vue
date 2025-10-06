@@ -54,21 +54,21 @@ const config: TableConfig<Poi> = {
   columns: [
     {
       key: 'label',
-      label: t('poi.label'),
+      label: t('project.poi'),
       sort: 'formatted',
       formatter: (label, poi) => label || t(`category.${poi.category}`),
       width: 60,
     },
     {
       key: 'category',
-      label: t('poi.category'),
+      label: t('project.category'),
       sort: 'formatted',
       formatter: (category) => t(`category.${category}`),
       width: 30,
     },
     {
       key: 'distance',
-      label: t('poi.distance'),
+      label: t('project.distance'),
       sort: 'raw',
       formatter: (distance) => n(Number(distance), 'meter'),
       width: 10,
@@ -82,7 +82,7 @@ const config: TableConfig<Poi> = {
   },
   actions: [
     {
-      label: t('poi.viewOnMap'),
+      label: t('map.showOnMap'),
       icon: 'map',
       handler: (poi) => {
         projectStore.selectedPoi = poi
@@ -95,7 +95,7 @@ const config: TableConfig<Poi> = {
       },
     },
     {
-      label: t('common.edit'),
+      label: t('action.edit'),
       icon: 'edit',
       handler: (poi) => {
         modalOpen.value = true
@@ -103,7 +103,7 @@ const config: TableConfig<Poi> = {
       },
     },
     {
-      label: t('common.delete'),
+      label: t('action.delete'),
       icon: 'delete',
       severity: 'danger',
       handler: deletePoi,
@@ -117,10 +117,10 @@ async function deletePoi(poi: Poi) {
   if (!projectStore.pois) return
 
   // Confirm deletion
-  const confirmation = await confirmDialog(
-    t('table.confirmDelete', { object: poi.label || t(`category.${poi.category}`) }),
-    { confirmText: t('common.delete') },
-  )
+  const confirmation = await confirmDialog({
+    message: t('dialog.delete', { item: poi.label || t(`category.${poi.category}`) }),
+    confirm: t('action.delete'),
+  })
   if (!confirmation) return
 
   // Remove the POI from the store
