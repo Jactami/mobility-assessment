@@ -15,7 +15,7 @@ schemas = ["public", "graphql_public"]
 extra_search_path = ["public", "extensions"]
 # The maximum number of rows returns from a view, table, or stored procedure. Limits payload size
 # for accidental or malicious requests.
-max_rows = 1000
+max_rows = 5000
 
 [api.tls]
 # Enable HTTPS endpoints locally using a self-signed certificate.
@@ -92,9 +92,9 @@ port = 54324
 # sender_name = "Admin"
 
 [storage]
-enabled = true
+# enabled = true
 # The maximum file size allowed (e.g. "5MB", "500KB").
-file_size_limit = "50MiB"
+# file_size_limit = "50MiB"
 
 # Image transformation API is available to Supabase Pro plan.
 # [storage.image_transformation]
