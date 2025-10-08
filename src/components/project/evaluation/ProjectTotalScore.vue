@@ -10,7 +10,7 @@
       :style="{
         strokeDasharray: circumference,
         strokeDashoffset: dashOffset,
-        stroke: scoreToColor(score || 0),
+        stroke: score ? scoreToColor(score) : '',
       }"
     />
 

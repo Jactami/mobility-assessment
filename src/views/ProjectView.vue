@@ -236,6 +236,10 @@ async function fetchPois() {
   )
     return
 
+  // Reset scores
+  scores.value = null
+
+  // Show loading toast
   const toast = await loadingToast(t('notification.info.fetching'))
 
   // Get POIs for the selected project location
