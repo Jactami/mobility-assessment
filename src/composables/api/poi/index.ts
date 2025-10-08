@@ -8,11 +8,11 @@ import { useRouteService } from '../route'
 import { OverpassQueryFactory } from './overpass/OverpassQueryFactory'
 import type { OverpassElement, OverpassResponse } from './types'
 
-const data = ref<Poi[] | null>(null)
-const loading = ref<boolean>(false)
-const error = ref<Error | null>(null)
-
 export function usePoiService() {
+  const data = ref<Poi[] | null>(null)
+  const loading = ref<boolean>(false)
+  const error = ref<Error | null>(null)
+
   /**
    * Fetches Points of Interest (POIs) within a specified radius from a given latitude and longitude.
    * @param lat Latitude of the location.

@@ -17,7 +17,8 @@
         <ProjectSearchBar
           v-if="projectStore.project"
           :project="projectStore.project"
-          @update-location="fetchPois"
+          :loading="isFetching"
+          @search="search"
         />
       </UISkeletonLoader>
     </div>
@@ -42,7 +43,7 @@
         :pois="projectStore.pois"
         :loading="isFetching"
         class="col-span-full"
-        @refresh-pois="fetchPois"
+        @refresh-pois="refetchPois"
       />
     </div>
 
@@ -101,7 +102,12 @@ const { errorToast, loadingToast, successToast, confirmDialog } = useNotificatio
 const pdfService = usePDF()
 const { downloadPDF } = useDownload()
 const { calcScores } = useEvaluation()
-const { loading: geodataLoading } = useGeocodingService()
+const {
+  loading: geodataLoading,
+  data: geocodingData,
+  error: geocodingError,
+  getGeocoding,
+} = useGeocodingService()
 const { data: pois, error: poisError, loading: poiLoading, getPois } = usePoiService()
 
 const exportAssetsRef = useTemplateRef('exportAssetsRef')
@@ -228,6 +234,53 @@ async function saveProject() {
   projectStore.syncProjectState({ project: projectResponse.data, pois: poisResponse.data })
 }
 
+async function search(query: string, radius: number) {
+  if (!query || radius <= 0 || !projectStore.project) return
+
+  const toast = await loadingToast(t('notification.info.fetching'))
+
+  // Get geocoding results for the query
+  await getGeocoding(query)
+
+  // If there is an error in the geocode service, show error
+  if (geocodingError.value) {
+    console.log(geocodingError.value)
+    errorToast(t('notification.error.default'))
+    return
+  }
+
+  // If no results are found, show an error message
+  if (!geocodingData.value || geocodingData.value.length === 0) {
+    errorToast(t('project.error.locationNotFound'))
+    return
+  }
+
+  // TODO: Implement autocomplete to select a location from the results
+  // For now, we just take the first result
+  const location = geocodingData.value[0]
+
+  // Update project store with new location and radius
+  projectStore.updateProjectState({
+    project: { ...projectStore.project, ...location, radius: radius },
+  })
+
+  // Fetch POIs for the new location
+  await fetchPois()
+
+  toast.dismiss()
+}
+
+async function refetchPois() {
+  // Show loading toast
+  const toast = await loadingToast(t('notification.info.fetching'))
+
+  // Fetch POIs for the current project location
+  await fetchPois()
+
+  // Dismiss loading toast
+  toast.dismiss()
+}
+
 async function fetchPois() {
   if (
     !projectStore.project?.latitude ||
@@ -239,9 +292,6 @@ async function fetchPois() {
   // Reset scores
   scores.value = null
 
-  // Show loading toast
-  const toast = await loadingToast(t('notification.info.fetching'))
-
   // Get POIs for the selected project location
   await getPois(
     projectStore.project?.latitude,
@@ -249,8 +299,6 @@ async function fetchPois() {
     projectStore.project?.radius,
     projectStore.project.id,
   )
-
-  toast.dismiss()
 
   // If there is an error in the POI service, show error
   if (poisError.value) {

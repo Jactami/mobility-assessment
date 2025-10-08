@@ -1,5 +1,5 @@
 <template>
-  <FormKit type="form" :actions="false" @submit="search">
+  <FormKit type="form" :actions="false" @submit="handleSubmit">
     <div class="flex flex-col items-center sm:flex-row sm:items-start">
       <!-- Radius Select -->
       <FormKit
@@ -38,7 +38,6 @@
         autocomplete="off"
         spellcheck="false"
         :disabled="loading"
-        @keydown.enter="search"
       >
         <template #suffixIcon>
           <div class="relative w-6">
@@ -63,7 +62,6 @@
         type="submit"
         class="sm:-ml-px sm:rounded-l-none sm:text-lg"
         :disabled="loading || query.trim() === ''"
-        @click="search"
       >
         <span class="not-sr-only sm:sr-only">
           {{ t('common.search') }}
@@ -77,73 +75,33 @@
 import UIButton from '@/components/ui/button/UIButton.vue'
 import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import UIIcon from '@/components/ui/icon/UIIcon.vue'
-import { useGeocodingService } from '@/composables/api/geocoding'
-import { usePoiService } from '@/composables/api/poi'
-import { useNotification } from '@/composables/notification'
 import { useUtil } from '@/composables/util/misc'
 import type { Project } from '@/db/types'
-import { useProjectStore } from '@/stores/Project'
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
   project: Project
+  loading?: boolean
 }>()
 
 const emit = defineEmits<{
-  (e: 'update-location'): void
+  (e: 'search', query: string, radius: number): void
 }>()
 
 const { n, t } = useI18n()
-const {
-  data: geocoding,
-  error: geocodingError,
-  loading: geocodingLoading,
-  getGeocoding,
-} = useGeocodingService()
-const { loading: poisLoading } = usePoiService()
-const { errorToast } = useNotification()
-const projectStore = useProjectStore()
 const { createAddress } = useUtil()
 
 const query = ref()
 const radius = ref()
 
-const loading = computed(() => geocodingLoading.value || poisLoading.value)
-
 const radiusOptions = [200, 500, 1000, 1200, 1500, 2000] // in meters
 
-async function search() {
-  if (loading.value) return
+function handleSubmit() {
+  if (props.loading) return
   if (!query.value.trim()) return
-  if (!projectStore.project) return
 
-  // Get geocoding results for the query
-  await getGeocoding(query.value)
-
-  // If there is an error in the geocode service, show error
-  if (geocodingError.value) {
-    console.log(geocodingError.value)
-    errorToast(t('notification.error.default'))
-    return
-  }
-
-  // If no results are found, show an error message
-  if (!geocoding.value || geocoding.value.length === 0) {
-    errorToast(t('project.error.locationNotFound'))
-    return
-  }
-
-  // TODO: Implement autocomplete to select a location from the results
-  // For now, we just take the first result
-  const location = geocoding.value[0]
-
-  // Update project store with new location and radius
-  projectStore.updateProjectState({
-    project: { ...projectStore.project, ...location, radius: radius.value },
-  })
-
-  emit('update-location')
+  emit('search', query.value.trim(), radius.value)
 }
 
 function resetQuery() {
