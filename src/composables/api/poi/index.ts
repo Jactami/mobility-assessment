@@ -168,7 +168,12 @@ export function usePoiService() {
    * @returns An array of POIs with updated routes and distances.
    */
   async function setRoutes(lat: number, lon: number, pois: Poi[]): Promise<Poi[]> {
-    const limit = pLimit(20) // max 20 concurrent requests to avoid overwhelming the routing service
+    // Limit concurrent requests to avoid overwhelming the routing service
+    const limitValue = navigator.hardwareConcurrency
+      ? Math.min(20, navigator.hardwareConcurrency * 2)
+      : 10
+
+    const limit = pLimit(limitValue)
 
     const updatedPois = await Promise.all(
       pois.map(async (poi) => {
