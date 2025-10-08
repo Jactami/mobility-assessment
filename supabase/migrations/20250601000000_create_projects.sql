@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS public.projects(
     postcode varchar(5),
     city varchar(100),
     country varchar(100),
-    radius integer DEFAULT 1000,
+    radius integer DEFAULT 1200,
     score numeric(5, 2)
 );
 

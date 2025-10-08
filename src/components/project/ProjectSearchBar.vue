@@ -111,7 +111,7 @@ const radius = ref()
 
 const loading = computed(() => geocodingLoading.value || poisLoading.value)
 
-const radiusOptions = [200, 500, 1000, 1500, 2000] // in meters
+const radiusOptions = [200, 500, 1000, 1200, 1500, 2000] // in meters
 
 async function search() {
   if (loading.value) return
