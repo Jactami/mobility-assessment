@@ -12,7 +12,7 @@ export const factorConfig: readonly LocationFactor[] = [
       {
         name: 'school',
         tags: [{ key: 'amenity', value: 'school' }],
-        saturation: 3,
+        saturation: 2,
       },
       {
         name: 'university',
@@ -26,12 +26,12 @@ export const factorConfig: readonly LocationFactor[] = [
           { key: 'amenity', value: 'childcare' },
           { key: 'amenity', value: 'preschool' }, // Deprecated, but still might be used
         ],
-        saturation: 4,
+        saturation: 3,
       },
       {
         name: 'library',
         tags: [{ key: 'amenity', value: 'library' }],
-        saturation: 2,
+        saturation: 1,
       },
     ],
   },
@@ -43,32 +43,32 @@ export const factorConfig: readonly LocationFactor[] = [
       {
         name: 'restaurant',
         tags: [{ key: 'amenity', value: 'restaurant' }],
-        saturation: 5,
+        saturation: 4,
       },
       {
         name: 'cafe',
         tags: [{ key: 'amenity', value: 'cafe' }],
-        saturation: 4,
+        saturation: 3,
       },
       {
         name: 'bar',
         tags: [{ key: 'amenity', value: 'bar' }],
-        saturation: 4,
+        saturation: 3,
       },
       {
         name: 'cinema',
         tags: [{ key: 'amenity', value: 'cinema' }],
-        saturation: 2,
+        saturation: 1,
       },
       {
         name: 'theatre',
         tags: [{ key: 'amenity', value: 'theatre' }],
-        saturation: 2,
+        saturation: 1,
       },
       {
         name: 'gym',
         tags: [{ key: 'leisure', value: 'fitness_centre' }],
-        saturation: 3,
+        saturation: 2,
       },
       {
         // TODO: handle different types of pitches (e.g. football, basketball)
@@ -131,7 +131,7 @@ export const factorConfig: readonly LocationFactor[] = [
           { key: 'leisure', value: 'bathing_place' },
           { key: 'amenity', value: 'public_bath' },
         ],
-        saturation: 2,
+        saturation: 1,
       },
     ],
   },
@@ -156,12 +156,12 @@ export const factorConfig: readonly LocationFactor[] = [
       {
         name: 'pharmacy',
         tags: [{ key: 'amenity', value: 'pharmacy' }],
-        saturation: 3,
+        saturation: 2,
       },
       {
         name: 'dentist',
         tags: [{ key: 'amenity', value: 'dentist' }],
-        saturation: 3,
+        saturation: 2,
       },
       {
         name: 'care',
@@ -219,7 +219,7 @@ export const factorConfig: readonly LocationFactor[] = [
       {
         name: 'bicycle',
         tags: [{ key: 'amenity', value: 'bicycle_rental' }],
-        saturation: 2,
+        saturation: 1,
       },
       {
         name: 'car',
@@ -230,7 +230,7 @@ export const factorConfig: readonly LocationFactor[] = [
             fallback: 'operator',
           },
         ],
-        saturation: 2,
+        saturation: 1,
       },
       {
         name: 'taxi',
