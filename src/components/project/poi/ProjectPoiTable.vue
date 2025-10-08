@@ -85,7 +85,7 @@ const config: TableConfig<Poi> = {
       label: t('map.showOnMap'),
       icon: 'map',
       handler: (poi) => {
-        projectStore.selectedPoi = poi
+        projectStore.setSelectedPoi(poi)
 
         // Not to happy about this direct DOM access, but works for now
         document.getElementById('map-panel')?.scrollIntoView({

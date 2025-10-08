@@ -6,7 +6,7 @@ import { computed, ref } from 'vue'
  * Single source of truth for the current project data and UI state.
  * This store mitigates prop drilling and event propagation.
  *
- * TODO: Add setters and getter for secure data manipulation
+ * TODO: Add getters for secure data manipulation
  * TODO: Decide whether to fetch data and handle loading and error state here or in view
  */
 export const useProjectStore = defineStore('project', () => {
@@ -55,6 +55,15 @@ export const useProjectStore = defineStore('project', () => {
   }
 
   /**
+   * Sets the currently selected POI.
+   * @param poi The POI to select, or null to clear selection.
+   */
+  function setSelectedPoi(poi: Poi | null) {
+    // clone POI to trigger watchers even if the same POI is selected again
+    selectedPoi.value = poi ? { ...poi } : null
+  }
+
+  /**
    * Resets the project store and clears the current project data.
    */
   function reset() {
@@ -70,6 +79,7 @@ export const useProjectStore = defineStore('project', () => {
     isDirty,
     syncProjectState,
     updateProjectState,
+    setSelectedPoi,
     reset,
   }
 })

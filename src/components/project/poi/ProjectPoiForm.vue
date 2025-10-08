@@ -62,6 +62,8 @@
 <script setup lang="ts">
 import UIForm from '@/components/ui/UIForm.vue'
 import { usePoiService } from '@/composables/api/poi'
+import { useRouteService } from '@/composables/api/route'
+import { useNotification } from '@/composables/notification'
 import { factorConfig } from '@/config/app'
 import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
@@ -79,8 +81,10 @@ const model = ref<Partial<Poi>>({ ...props.poi })
 const { t } = useI18n()
 const projectStore = useProjectStore()
 const { calculateDistance } = usePoiService()
+const { data, error, getRoute } = useRouteService()
+const { errorToast } = useNotification()
 
-function handleSubmit() {
+async function handleSubmit() {
   if (!model.value) return
   if (!projectStore.pois) return
   if (!projectStore.project) return
@@ -98,13 +102,29 @@ function handleSubmit() {
     project_id: projectStore.project.id,
   }
 
-  // Calculate the distance from the project location
-  newPoi.distance = calculateDistance(
-    newPoi.latitude,
-    newPoi.longitude,
+  // Get the route and distance from the project location to the POI
+  await getRoute(
     projectStore.project.latitude,
     projectStore.project.longitude,
+    newPoi.latitude,
+    newPoi.longitude,
   )
+
+  if (error.value) {
+    errorToast(t('notification.error.default'))
+    console.error(error.value)
+    return
+  }
+
+  newPoi.footway = data.value?.route
+  newPoi.distance = data.value?.distance
+    ? data.value.distance
+    : calculateDistance(
+        newPoi.latitude,
+        newPoi.longitude,
+        projectStore.project.latitude,
+        projectStore.project.longitude,
+      )
 
   const pois = [...projectStore.pois]
 

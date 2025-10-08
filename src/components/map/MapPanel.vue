@@ -28,6 +28,9 @@
         :radius="metersToPixels(map, location, props.project?.radius)"
       />
 
+      <!-- Foot Path Route -->
+      <MapLayerRoute v-if="!static" />
+
       <!-- Points of Interest Layer -->
       <MapLayerPois :pois="pois" />
 
@@ -79,6 +82,7 @@ import MapLayerLocation from './layers/MapLayerLocation.vue'
 import MapLayerOverlay from './layers/MapLayerOverlay.vue'
 import MapLayerPois from './layers/MapLayerPois.vue'
 import MapLayerRadius from './layers/MapLayerRadius.vue'
+import MapLayerRoute from './layers/MapLayerRoute.vue'
 
 interface Props {
   project?: Project | null

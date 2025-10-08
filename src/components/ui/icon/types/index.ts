@@ -1,5 +1,6 @@
 import type { FunctionalComponent } from 'vue'
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop'
+import LucideMinimize from '~icons/lucide/minimize'
 import MaterialSymbolsAdd2Rounded from '~icons/material-symbols/add-2-rounded'
 import MaterialSymbolsArrowDropDownRounded from '~icons/material-symbols/arrow-drop-down-rounded'
 import MaterialSymbolsArrowDropUpRounded from '~icons/material-symbols/arrow-drop-up-rounded'
@@ -62,6 +63,7 @@ export const icons = {
   link: TablerExternalLink,
   loading: LineMdLoadingTwotoneLoop,
   map: MaterialSymbolsMapOutlineRounded,
+  minimize: LucideMinimize,
   more: MaterialSymbolsMoreVert,
   next: MaterialSymbolsChevronRight,
   noFavorite: MaterialSymbolsStarOutlineRounded,

@@ -55,7 +55,7 @@ function handleFilterUpdate(newFilter: string | null) {
     projectStore.selectedPoi &&
     !filteredPois.value?.find((p) => p.id === projectStore.selectedPoi?.id)
   ) {
-    projectStore.selectedPoi = null
+    projectStore.setSelectedPoi(null)
   }
 }
 </script>

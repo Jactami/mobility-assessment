@@ -10,13 +10,14 @@
 
   <template v-else>
     <!-- Action Bar -->
-    <div class="max-w-sm">
+    <div class="mt-3 max-w-sm">
       <FormKit
         id="project-filter-input"
         v-model="filter"
         type="text"
         name="filter"
         :label="t('common.search')"
+        label-class="sr-only"
         :placeholder="t('common.search')"
         autocomplete="off"
         :spellcheck="false"
