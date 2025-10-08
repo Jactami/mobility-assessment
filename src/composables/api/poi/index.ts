@@ -2,6 +2,7 @@ import { factorConfig } from '@/config/app'
 import type { Poi } from '@/db/types'
 import axios from 'axios'
 import { getDistance } from 'ol/sphere'
+import pLimit from 'p-limit'
 import { ref } from 'vue'
 import { useRouteService } from '../route'
 import { OverpassQueryFactory } from './overpass/OverpassQueryFactory'
@@ -170,22 +171,26 @@ export function usePoiService() {
    * @returns An array of POIs with updated routes and distances.
    */
   async function setRoutes(lat: number, lon: number, pois: Poi[]): Promise<Poi[]> {
+    const limit = pLimit(20) // max 20 concurrent requests to avoid overwhelming the routing service
+
     const updatedPois = await Promise.all(
       pois.map(async (poi) => {
-        try {
-          const { getRoute, data } = useRouteService()
-          await getRoute(lat, lon, poi.latitude, poi.longitude)
+        return limit(async () => {
+          try {
+            const { getRoute, data } = useRouteService()
+            await getRoute(lat, lon, poi.latitude, poi.longitude)
 
-          return {
-            ...poi,
-            footway: data.value?.route,
-            distance:
-              data.value?.distance ?? calculateDistance(lat, lon, poi.latitude, poi.longitude), // fallback to direct path
+            return {
+              ...poi,
+              footway: data.value?.route,
+              distance:
+                data.value?.distance ?? calculateDistance(lat, lon, poi.latitude, poi.longitude), // fallback to direct path
+            }
+          } catch (err) {
+            error.value = err instanceof Error ? err : new Error('An unknown error occurred')
+            return poi
           }
-        } catch (err) {
-          error.value = err instanceof Error ? err : new Error('An unknown error occurred')
-          return poi
-        }
+        })
       }),
     )
 
