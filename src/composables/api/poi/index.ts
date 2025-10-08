@@ -3,6 +3,7 @@ import type { Poi } from '@/db/types'
 import axios from 'axios'
 import { getDistance } from 'ol/sphere'
 import { ref } from 'vue'
+import { useRouteService } from '../route'
 import { OverpassQueryFactory } from './overpass/OverpassQueryFactory'
 import type { OverpassElement, OverpassResponse } from './types'
 
@@ -19,7 +20,7 @@ export function usePoiService() {
    * @param projectId The ID of the project to associate with the POIs.
    */
   async function getPois(lat: number, lon: number, radius: number, projectId: string) {
-    // Fetch Overpass elements
+    // Fetch Overpass elements within radius (as footpath can never be longer than direct distance)
     const elements = await fetchOverpassElements(lat, lon, radius)
 
     if (!elements) {
@@ -29,7 +30,7 @@ export function usePoiService() {
       let pois = transformOverpassElementsToPois(elements, projectId)
 
       // Calculate distances for each POI
-      pois = calculateDistances(lat, lon, pois)
+      pois = await setRoutes(lat, lon, pois)
 
       // Filter POIs by radius
       // Nodes of a way or relation might lay inside the radius, but the centroid is not.
@@ -94,6 +95,7 @@ export function usePoiService() {
           category: cat,
           latitude: element.type === 'node' ? element.lat : element.center.lat,
           longitude: element.type === 'node' ? element.lon : element.center.lon,
+          footway: [],
           distance: Infinity,
         })
       }
@@ -161,17 +163,33 @@ export function usePoiService() {
   }
 
   /**
-   * Calculates the distance between two geographical points.
-   * @param lat Latitude of the reference point.
-   * @param lon Longitude of the reference point.
-   * @param pois Array of POIs to calculate distances for.
-   * @returns An array of POIs with calculated distances.
+   * Fetches routes and distances from a given location to each POI using the routing service.
+   * @param lat Latitude of the starting location.
+   * @param lon Longitude of the starting location.
+   * @param pois Array of POIs to calculate routes for.
+   * @returns An array of POIs with updated routes and distances.
    */
-  function calculateDistances(lat: number, lon: number, pois: Poi[]) {
-    return pois.map((poi) => {
-      poi.distance = calculateDistance(lat, lon, poi.latitude, poi.longitude)
-      return poi
-    })
+  async function setRoutes(lat: number, lon: number, pois: Poi[]): Promise<Poi[]> {
+    const updatedPois = await Promise.all(
+      pois.map(async (poi) => {
+        try {
+          const { getRoute, data } = useRouteService()
+          await getRoute(lat, lon, poi.latitude, poi.longitude)
+
+          return {
+            ...poi,
+            footway: data.value?.route,
+            distance:
+              data.value?.distance ?? calculateDistance(lat, lon, poi.latitude, poi.longitude), // fallback to direct path
+          }
+        } catch (err) {
+          error.value = err instanceof Error ? err : new Error('An unknown error occurred')
+          return poi
+        }
+      }),
+    )
+
+    return updatedPois
   }
 
   /**

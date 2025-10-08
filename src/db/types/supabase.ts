@@ -8,6 +8,7 @@ export type Database = {
           category: string
           created_at: string
           distance: number
+          footway: number[] | null
           id: string
           label: string | null
           latitude: number
@@ -21,6 +22,7 @@ export type Database = {
           category: string
           created_at?: string
           distance: number
+          footway?: number[] | null
           id?: string
           label?: string | null
           latitude: number
@@ -34,6 +36,7 @@ export type Database = {
           category?: string
           created_at?: string
           distance?: number
+          footway?: number[] | null
           id?: string
           label?: string | null
           latitude?: number

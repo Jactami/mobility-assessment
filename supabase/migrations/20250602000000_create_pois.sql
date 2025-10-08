@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS public.pois(
   category varchar(50) NOT NULL,
   latitude decimal(9, 7) NOT NULL,
   longitude decimal(9, 7) NOT NULL,
+  footway decimal[][],
   distance decimal(10, 2) NOT NULL -- TODO: Decide whether to store geometry as well
 );
 
