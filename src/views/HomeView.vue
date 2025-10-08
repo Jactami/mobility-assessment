@@ -67,7 +67,7 @@
           >
             <UICard :animation="true" class="min-h-64">
               <div
-                class="bg-surface-container-low text-on-surface-variant flex h-full flex-col items-center justify-center gap-y-4 p-2"
+                class="text-on-surface-variant flex h-full flex-col items-center justify-center gap-y-4 p-2"
               >
                 <UIIcon class="text-on-surface-variant rounded-full text-7xl" icon="add" />
                 <span>{{ t('action.createItem', { item: t('project.label') }) }}</span>

@@ -17,10 +17,10 @@
   --color-on-tertiary-container: var(--color-sky-900);
 
   /* Neutral colors */
-  --color-surface: var(--color-white);
+  --color-surface: var(--color-zinc-50);
   --color-surface-inverse: var(--color-zinc-800);
 
-  --color-surface-container-lowest: var(--color-zinc-50);
+  --color-surface-container-lowest: var(--color-white);
   --color-surface-container-low: var(--color-zinc-100);
   --color-surface-container: var(--color-zinc-200);
   --color-surface-container-high: var(--color-zinc-300);

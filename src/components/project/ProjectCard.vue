@@ -37,7 +37,7 @@
 
       <!-- Card Footer -->
       <div
-        class="bg-surface-container-lowest text-on-surface-variant relative flex items-center justify-between gap-x-1 py-1 pl-4 pr-1"
+        class="bg-surface-container text-on-surface-variant relative flex items-center justify-between gap-x-1 py-1 pl-4 pr-1"
       >
         <time class="text-xs" :datetime="project.created_at">{{ d(project.created_at) }}</time>
         <UIMenu :items="menu" />

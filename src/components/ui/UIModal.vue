@@ -7,7 +7,7 @@
     <div class="fixed inset-0 flex w-screen items-center justify-center p-4">
       <!-- The actual dialog panel -->
       <DialogPanel
-        class="rounded-border border-outline-variant bg-surface relative w-full max-w-2xl border p-6 shadow-md"
+        class="rounded-border border-outline-variant bg-surface-container-lowest relative w-full max-w-2xl border p-6 shadow-md"
       >
         <div class="z-9999 absolute right-4 top-4">
           <UIButtonIcon icon="close" @click="isOpen = false" />

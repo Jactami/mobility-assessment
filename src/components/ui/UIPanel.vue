@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-border border-outline bg-surface relative overflow-hidden border p-2.5 shadow-sm sm:p-4"
+    class="rounded-border border-outline bg-surface-container-lowest relative overflow-hidden border p-2.5 shadow-sm sm:p-4"
   >
     <!-- Panel Actions -->
     <div v-if="actions && actions.length > 0" class="absolute right-2.5 top-2.5">

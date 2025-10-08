@@ -26,7 +26,7 @@
     :offset="[0, -18]"
   >
     <div
-      class="rounded-border bg-surface relative w-full min-w-64 max-w-96 border-2 p-2 shadow-md"
+      class="rounded-border bg-surface-container-lowest relative w-full min-w-64 max-w-96 border-2 p-2 shadow-md"
       :style="`border-color: ${color};`"
     >
       <div>
