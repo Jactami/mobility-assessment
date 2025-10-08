@@ -173,19 +173,16 @@ export function usePoiService() {
     const updatedPois = await Promise.all(
       pois.map(async (poi) => {
         return limit(async () => {
-          try {
-            const { getRoute, data } = useRouteService()
-            await getRoute(lat, lon, poi.latitude, poi.longitude)
+          const { getRoute, data, error } = useRouteService()
+          await getRoute(lat, lon, poi.latitude, poi.longitude)
 
-            return {
-              ...poi,
-              footway: data.value?.route,
-              distance:
-                data.value?.distance ?? calculateDistance(lat, lon, poi.latitude, poi.longitude), // fallback to direct path
-            }
-          } catch (err) {
-            error.value = err instanceof Error ? err : new Error('An unknown error occurred')
-            return poi
+          if (error.value) throw error.value
+
+          return {
+            ...poi,
+            footway: data.value?.route,
+            distance:
+              data.value?.distance ?? calculateDistance(lat, lon, poi.latitude, poi.longitude), // fallback to direct path
           }
         })
       }),
