@@ -68,7 +68,7 @@ export function useNotification() {
       },
       customClass: {
         popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
-        loader: '!border-t-tertiary border-b-tertiary',
+        loader: '!border-t-tertiary !border-b-tertiary',
       },
     })
 
