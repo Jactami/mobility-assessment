@@ -10,22 +10,22 @@ export function useColorUtil() {
 
 // Diverging color thresholds for scores
 const scoreColorThresholds = [
-  { max: 0.5, color: '#d32029' },
-  { max: 0.6, color: '#d46b08' },
-  { max: 0.7, color: '#d4b106' },
-  { max: 0.8, color: '#7cb305' },
-  { max: 0.9, color: '#389e0d' },
-  { max: 1.0, color: '#237804' },
+  { min: 0.9, color: '#237804' },
+  { min: 0.8, color: '#389e0d' },
+  { min: 0.7, color: '#7cb305' },
+  { min: 0.6, color: '#d4b106' },
+  { min: 0.5, color: '#d46b08' },
+  { min: 0.0, color: '#d32029' },
 ]
 
 // Alternate monochrome color thresholds for scores
 // const scoreColorThresholds = [
-//   { max: 0.5, color: '#27c984' },
-//   { max: 0.6, color: '#21aa70' },
-//   { max: 0.7, color: '#1c8b5c' },
-//   { max: 0.8, color: '#166c48' },
-//   { max: 0.9, color: '#114d34' },
-//   { max: 1.0, color: '#0b2e20' },
+//   { min: 0.9, color: '#0b2e20' },
+//   { min: 0.8, color: '#114d34' },
+//   { min: 0.7, color: '#166c48' },
+//   { min: 0.6, color: '#1c8b5c' },
+//   { min: 0.5, color: '#21aa70' },
+//   { min: 0.4, color: '#27c984' },
 // ]
 
 /**
@@ -37,11 +37,11 @@ function scoreToColor(score: number): string {
   // Determine the color based on the score
   const clamped = Math.max(0, Math.min(1, score))
   for (const t of scoreColorThresholds) {
-    if (clamped <= t.max) {
+    if (clamped >= t.min) {
       return t.color
     }
   }
-  return '#FFF' // fallback
+  return '' // fallback
 }
 
 /**
@@ -53,5 +53,5 @@ function categoryToColor(category: string): string {
   const factor = factorConfig.find((factor) =>
     factor.categories.some((cat) => cat.name === category),
   )
-  return factor ? factor.color : '#FFF'
+  return factor ? factor.color : ''
 }
