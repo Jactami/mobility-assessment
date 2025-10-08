@@ -9,6 +9,7 @@ export function useGeocodingService() {
   const data = ref<Address[] | null>(null)
 
   // see: https://alexop.dev/posts/best-practices-for-error-handling-in-vue-composables/
+  // TODO: write own generic useAsyncData wrapper to handle data, loading and error states
   const loading = ref<boolean>(false)
   const error = ref<Error | null>(null)
 
