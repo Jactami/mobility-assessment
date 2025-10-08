@@ -21,25 +21,36 @@ export function usePoiService() {
    * @param projectId The ID of the project to associate with the POIs.
    */
   async function getPois(lat: number, lon: number, radius: number, projectId: string) {
-    // Fetch Overpass elements within radius (as footpath can never be longer than direct distance)
-    const elements = await fetchOverpassElements(lat, lon, radius)
+    // Reset state
+    loading.value = true
+    error.value = null
+    data.value = null
 
-    if (!elements) {
-      data.value = null
-    } else {
-      // Process and transform Overpass response into POIs
-      let pois = transformOverpassElementsToPois(elements, projectId)
+    try {
+      // Fetch Overpass elements within radius (as footpath can never be longer than direct distance)
+      const elements = await fetchOverpassElements(lat, lon, radius)
 
-      // Calculate distances for each POI
-      pois = await setRoutes(lat, lon, pois)
+      if (!elements) {
+        data.value = null
+      } else {
+        // Process and transform Overpass response into POIs
+        let pois = transformOverpassElementsToPois(elements, projectId)
 
-      // Filter POIs by radius
-      // Nodes of a way or relation might lay inside the radius, but the centroid is not.
-      // TODO: Decide if these POIs should be filtered out or just marked and let user decide.
-      pois = filterPoisByDistance(pois, radius)
+        // Calculate distances for each POI
+        pois = await setRoutes(lat, lon, pois)
 
-      // assign the processed POIs to the data ref
-      data.value = pois
+        // Filter POIs by radius
+        // Nodes of a way or relation might lay inside the radius, but the centroid is not.
+        // TODO: Decide if these POIs should be filtered out or just marked and let user decide.
+        pois = filterPoisByDistance(pois, radius)
+
+        // assign the processed POIs to the data ref
+        data.value = pois
+      }
+    } catch (err) {
+      error.value = err instanceof Error ? err : new Error('An unknown error occurred')
+    } finally {
+      loading.value = false
     }
   }
 
@@ -50,30 +61,16 @@ export function usePoiService() {
    * @param radius Radius (in meters) to search for POIs.
    */
   async function fetchOverpassElements(lat: number, lon: number, radius: number) {
-    try {
-      // Reset state before making a new request
-      loading.value = true
-      error.value = null
-      data.value = null
+    // Fetch location details from Overpass API
+    const response = await axios.get<OverpassResponse>('https://overpass-api.de/api/interpreter', {
+      params: {
+        data: OverpassQueryFactory.createQuery(lat, lon, radius),
+      },
+    })
 
-      // Fetch location details from Overpass API
-      const response = await axios.get<OverpassResponse>(
-        'https://overpass-api.de/api/interpreter',
-        {
-          params: {
-            data: OverpassQueryFactory.createQuery(lat, lon, radius),
-          },
-        },
-      )
+    if (response.status !== 200) throw new Error(response.statusText)
 
-      if (response.status !== 200) throw new Error(response.statusText)
-
-      return response.data.elements
-    } catch (err) {
-      error.value = err instanceof Error ? err : new Error('An unknown error occurred')
-    } finally {
-      loading.value = false
-    }
+    return response.data.elements
   }
 
   /**
