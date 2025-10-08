@@ -20,7 +20,7 @@ export function useNotification() {
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-success'),
       customClass: {
-        popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
+        popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
         timerProgressBar: '!bg-success',
       },
     })
@@ -34,7 +34,7 @@ export function useNotification() {
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-error'),
       customClass: {
-        popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
+        popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
         timerProgressBar: '!bg-error',
       },
     })
@@ -47,7 +47,7 @@ export function useNotification() {
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-tertiary'),
       customClass: {
-        popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
+        popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
         timerProgressBar: '!bg-tertiary',
       },
     })
@@ -67,7 +67,7 @@ export function useNotification() {
         Swal.showLoading()
       },
       customClass: {
-        popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
+        popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
         loader: '!border-t-tertiary !border-b-tertiary',
       },
     })
@@ -100,7 +100,7 @@ export function useNotification() {
           .getComputedStyle(document.body)
           .getPropertyValue('--color-secondary'),
         customClass: {
-          popup: '!bg-surface !text-on-surface dark:!border dark:!border-outline',
+          popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
           confirmButton: '!text-on-error',
           cancelButton: '!text-on-surface-variant !bg-surface-container ',
         },
