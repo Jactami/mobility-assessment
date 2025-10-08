@@ -16,7 +16,9 @@
     "typecheck": "vue-tsc -b --noEmit",
     "icons": "pwa-assets-generator --preset minimal-2023 public/logo.svg && tauri icon public/logo.svg",
     "db:dump": "pnpx supabase db dump --data-only --local --schema public --file ./supabase/dump/dump.sql",
-    "db:types": "pnpx supabase gen types --lang=typescript --local > ./src/db/types/supabase.ts --schema public && prettier --write ./src/db/types/supabase.ts"
+    "db:types": "pnpx supabase gen types --lang=typescript --local > ./src/db/types/supabase.ts --schema public && prettier --write ./src/db/types/supabase.ts",
+    "ors:start": "docker-compose -f ./ors/docker-compose.yml up -d",
+    "ors:stop": "docker-compose -f ./ors/docker-compose.yml down"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.9",
