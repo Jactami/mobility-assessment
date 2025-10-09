@@ -40,7 +40,7 @@ export class OverpassQueryBuilder {
    * @returns The OverpassQueryBuilder instance.
    */
   add(tagKey: string, tagValue: string, lat: number, lon: number, radius: number): this {
-    this.query += `nwr[${tagKey}=${tagValue}](around:${radius},${lat},${lon});`
+    this.query += `nwr["${tagKey}"="${tagValue}"](around:${radius},${lat},${lon});`
     return this
   }
 }
