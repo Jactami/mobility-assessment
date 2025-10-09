@@ -1,4 +1,5 @@
 import axios from 'axios'
+import axiosRetry from 'axios-retry'
 import { ref } from 'vue'
 import type { OrsResponse } from './types'
 
@@ -53,6 +54,15 @@ export function useRouteService() {
       params: {
         start: `${startLon},${startLat}`,
         end: `${endLon},${endLat}`,
+      },
+      // Configure retries as multiple concurrent requests might overload ORS server
+      // TODO: Decide whether to globally configure axios-retry instead
+      'axios-retry': {
+        retries: 3,
+        retryDelay: axiosRetry.exponentialDelay, // exponential backoff
+        // Only retry on network errors or idempotent requests (5xx)
+        retryCondition: (error) => axiosRetry.isNetworkOrIdempotentRequestError(error),
+        // onRetry: (err) => console.log(`Retrying request: ${err}`),
       },
     })
 
