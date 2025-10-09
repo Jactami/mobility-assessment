@@ -98,7 +98,8 @@ const db = useDB()
 const projectStore = useProjectStore()
 const route = useRoute()
 const router = useRouter()
-const { errorToast, loadingToast, successToast, confirmDialog } = useNotification()
+const { errorToast, loadingToast, successToast, confirmDialog, dismissNotification } =
+  useNotification()
 const pdfService = usePDF()
 const { downloadPDF } = useDownload()
 const { calcScores } = useEvaluation()
@@ -237,7 +238,7 @@ async function saveProject() {
 async function search(query: string, radius: number) {
   if (!query || radius <= 0 || !projectStore.project) return
 
-  const toast = await loadingToast(t('notification.info.fetching'))
+  loadingToast(t('notification.info.fetching'))
 
   // Get geocoding results for the query
   await getGeocoding(query)
@@ -245,7 +246,7 @@ async function search(query: string, radius: number) {
   // If there is an error in the geocode service, show error
   if (geocodingError.value) {
     console.log(geocodingError.value)
-    errorToast(t('notification.error.default'))
+    errorToast(t('notification.error.service'))
     return
   }
 
@@ -266,19 +267,14 @@ async function search(query: string, radius: number) {
 
   // Fetch POIs for the new location
   await fetchPois()
-
-  toast.dismiss()
 }
 
 async function refetchPois() {
   // Show loading toast
-  const toast = await loadingToast(t('notification.info.fetching'))
+  loadingToast(t('notification.info.fetching'))
 
   // Fetch POIs for the current project location
   await fetchPois()
-
-  // Dismiss loading toast
-  toast.dismiss()
 }
 
 async function fetchPois() {
@@ -303,13 +299,18 @@ async function fetchPois() {
   // If there is an error in the POI service, show error
   if (poisError.value) {
     console.error(poisError.value)
-    errorToast(t('notification.error.default'))
+    errorToast(t('notification.error.service'))
+    projectStore.updateProjectState({ pois: [] })
+    return
   }
 
   // Update project store with POIs
   if (pois.value) {
     projectStore.updateProjectState({ pois: pois.value })
   }
+
+  // Finally dismiss loading toast
+  dismissNotification()
 }
 
 async function generateReport() {
@@ -323,7 +324,7 @@ async function generateReport() {
   }
 
   reportLoading.value = true
-  const toast = await loadingToast(t('project.report.generating'))
+  loadingToast(t('project.report.generating'))
 
   // Generate map and chart images
   const { maps, chart } = await exportAssetsRef.value?.exportAssets()
@@ -354,7 +355,7 @@ async function generateReport() {
     )
 
     // Reset loading state
-    toast.dismiss()
+    dismissNotification()
   }
 }
 

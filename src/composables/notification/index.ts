@@ -7,7 +7,6 @@ export function useNotification() {
   const options: SweetAlertOptions = {
     position: 'top-end',
     showConfirmButton: false,
-    timer: 3000,
     toast: true,
     timerProgressBar: true,
   }
@@ -17,6 +16,7 @@ export function useNotification() {
       title: t('common.success'),
       icon: 'success',
       text: message,
+      timer: 3000,
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-success'),
       customClass: {
@@ -31,7 +31,12 @@ export function useNotification() {
       title: t('common.error'),
       icon: 'error',
       text: message,
+      timer: 5000,
       ...options,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer
+        toast.onmouseleave = Swal.resumeTimer
+      },
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-error'),
       customClass: {
         popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
@@ -44,6 +49,7 @@ export function useNotification() {
     Swal.fire({
       icon: 'info',
       text: message,
+      timer: 3000,
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-tertiary'),
       customClass: {
@@ -71,10 +77,6 @@ export function useNotification() {
         loader: '!border-t-tertiary !border-b-tertiary',
       },
     })
-
-    const dismiss = () => Swal.close()
-
-    return { dismiss }
   }
 
   const confirmDialog = ({
@@ -112,11 +114,14 @@ export function useNotification() {
     })
   }
 
+  const dismissNotification = () => Swal.close()
+
   return {
     successToast,
     errorToast,
     infoToast,
     loadingToast,
     confirmDialog,
+    dismissNotification,
   }
 }

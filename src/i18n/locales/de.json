@@ -64,7 +64,8 @@
       "default": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
       "delete": "Daten konnten nicht gelöscht werden.",
       "load": "Daten konnten nicht geladen werden.",
-      "save": "Daten konnten nicht gespeichert werden."
+      "save": "Daten konnten nicht gespeichert werden.",
+      "service": "Der Service ist momentan nicht erreichbar. Bitte versuchen Sie es später erneut."
     },
     "info": {
       "fetching": "Daten werden geladen. Dies kann einen Moment dauern..."
