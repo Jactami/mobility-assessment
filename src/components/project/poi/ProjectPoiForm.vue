@@ -96,6 +96,7 @@ async function handleSubmit() {
     latitude: model.value.latitude || Infinity,
     longitude: model.value.longitude || Infinity,
     category: model.value.category ?? '',
+    footway: null, // This will be set later
     distance: Infinity, // This will be calculated later
     osm_id: -1,
     osm_type: 'node',

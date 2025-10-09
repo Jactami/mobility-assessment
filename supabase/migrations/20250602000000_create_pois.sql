@@ -7,6 +7,8 @@ CREATE TYPE osm_type AS ENUM(
 --
 -- Table projects
 --
+-- TODO: Decide whether to store geometry as well
+--
 CREATE TABLE IF NOT EXISTS public.pois(
   id uuid DEFAULT gen_random_uuid() NOT NULL,
   created_at timestamp with time zone DEFAULT "now"() NOT NULL,
@@ -18,8 +20,9 @@ CREATE TABLE IF NOT EXISTS public.pois(
   category varchar(50) NOT NULL,
   latitude decimal(9, 7) NOT NULL,
   longitude decimal(9, 7) NOT NULL,
-  footway decimal[][],
-  distance decimal(10, 2) NOT NULL -- TODO: Decide whether to store geometry as well
+  footway jsonb, -- use json because supabase doesn't support nested arrays even though postgres does
+  -- footway decimal[][]
+  distance decimal(10, 2) NOT NULL
 );
 
 ALTER TABLE public.pois OWNER TO postgres;

@@ -23,9 +23,18 @@ import { OlStyle, OlStyleStroke } from 'vue3-openlayers/styles'
 
 const projectStore = useProjectStore()
 
-const coordinates = computed(() =>
-  projectStore.selectedPoi?.footway
-    ? projectStore.selectedPoi.footway.map((coord) => fromLonLat(coord))
-    : [],
-)
+const coordinates = computed(() => {
+  const footway = projectStore.selectedPoi?.footway
+  return Array.isArray(footway)
+    ? footway
+        .filter(
+          (coord): coord is [number, number] =>
+            Array.isArray(coord) &&
+            coord.length === 2 &&
+            typeof coord[0] === 'number' &&
+            typeof coord[1] === 'number',
+        )
+        .map((coord) => fromLonLat(coord))
+    : []
+})
 </script>

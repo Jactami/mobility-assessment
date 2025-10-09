@@ -1,6 +1,6 @@
 import type { Poi, Project } from '@/db/types'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 
 /**
  * Single source of truth for the current project data and UI state.
@@ -12,14 +12,16 @@ import { computed, ref } from 'vue'
 export const useProjectStore = defineStore('project', () => {
   // Data
   const project = ref<Project | null>(null)
-  const pois = ref<Poi[] | null>(null)
+
+  // use shallowRef to avoid excessively deep type definitions and improve performance
+  const pois = shallowRef<Poi[] | null>(null)
 
   // Original data to check for changes
   const originalProject = ref<Project | null>(null)
   const originalPois = ref<Poi[] | null>(null)
 
   // UI states
-  const selectedPoi = ref<Poi | null>(null)
+  const selectedPoi = shallowRef<Poi | null>(null)
 
   // Check if data has unsaved changes
   const isDirty = computed(

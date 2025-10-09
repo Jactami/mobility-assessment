@@ -3,13 +3,13 @@ import type { Poi } from '@/db/types'
 import axios from 'axios'
 import { getDistance } from 'ol/sphere'
 import pLimit from 'p-limit'
-import { ref } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { useRouteService } from '../route'
 import { OverpassQueryFactory } from './overpass/OverpassQueryFactory'
 import type { OverpassElement, OverpassResponse } from './types'
 
 export function usePoiService() {
-  const data = ref<Poi[] | null>(null)
+  const data = shallowRef<Poi[] | null>(null)
   const loading = ref<boolean>(false)
   const error = ref<Error | null>(null)
 
