@@ -166,9 +166,13 @@ export const factorConfig: readonly LocationFactor[] = [
       {
         name: 'care',
         tags: [
-          { key: 'amenity', value: 'nursing_home' },
-          { key: 'social_facility', value: 'assisted_living' },
-          { key: 'social_facility', value: 'day_care' },
+          // TODO: Decide whether to use explicit tags or rely on 'social_facility:for=senior'
+          // { key: 'amenity', value: 'retirement_home' },
+          // { key: 'social_facility', value: 'nursing_home' },
+          // { key: 'social_facility', value: 'group_home' },
+          // { key: 'social_facility', value: 'assisted_living' },
+          // { key: 'social_facility', value: 'day_care' },
+          { key: 'social_facility:for', value: 'senior' },
         ],
         saturation: 1,
       },
