@@ -1,4 +1,4 @@
-import { factorConfig } from '@/config/app'
+import type { LocationFactor } from '@/config/app/types'
 import type { Poi } from '@/db/types'
 import { describe, expect, it } from 'vitest'
 import { useEvaluation } from '..'
@@ -22,48 +22,47 @@ function mockPoi(category: string, distance: number): Poi {
   }
 }
 
+// Custom test config
+const mockedConfig: LocationFactor[] = [
+  {
+    name: 'factor',
+    color: '',
+    categories: [
+      {
+        name: 'category',
+        saturation: 3,
+        tags: [],
+      },
+    ],
+  },
+]
+
 describe('useEvaluation', () => {
-  // Sample factor and category
-  const FACTOR = factorConfig[0]
-  if (!FACTOR) throw new Error('No factor found for testing')
-
-  const CATEGORY = FACTOR.categories[0]
-  if (!CATEGORY) throw new Error('No category found for testing')
-
-  const radius = 1000 // 1000m
+  const radius = 1000
   const { calcScores } = useEvaluation()
 
   it('returns 0 scores when no POIs', () => {
-    const scores = calcScores([], radius)
+    const scores = calcScores([], radius, mockedConfig)
 
     expect(scores.total).toBe(0)
-    for (const factor of factorConfig) {
-      expect(scores.partial[factor.name]).toBe(0)
-    }
+    expect(scores.partial['factor']).toBe(0)
   })
 
-  it('returns maximal score when POI at distance 0', () => {
-    const categories = FACTOR.categories.map((c) => c)
-    const pois: Poi[] = []
-    for (const category of categories) {
-      const saturation = category.saturation || 1
-      for (let i = 0; i < saturation; i++) {
-        pois.push(mockPoi(category.name, 0))
-      }
-    }
+  it('returns maximal score when POIs at distance 0 (full saturation)', () => {
+    // 3 POIs because saturation is 3 (with distance 0 to maximize score)
+    const pois: Poi[] = [mockPoi('category', 0), mockPoi('category', 0), mockPoi('category', 0)]
+    const scores = calcScores(pois, radius, mockedConfig)
 
-    const scores = calcScores(pois, radius)
-
-    expect(scores.partial[FACTOR.name]).toBe(1)
-    expect(scores.total).toBeGreaterThan(0)
+    expect(scores.partial['factor']).toBe(1)
+    expect(scores.total).toBe(1)
   })
 
   it('scores decrease as distance increases', () => {
-    const closePoi = mockPoi(CATEGORY.name, 100)
-    const farPoi = mockPoi(CATEGORY.name, 900)
+    const closePoi = mockPoi('category', 100)
+    const farPoi = mockPoi('category', 900)
 
-    const closeScore = calcScores([closePoi], radius).partial[FACTOR.name]
-    const farScore = calcScores([farPoi], radius).partial[FACTOR.name]
+    const closeScore = calcScores([closePoi], radius, mockedConfig).partial['factor']
+    const farScore = calcScores([farPoi], radius, mockedConfig).partial['factor']
 
     expect(closeScore).toBeDefined()
     expect(farScore).toBeDefined()
@@ -71,38 +70,25 @@ describe('useEvaluation', () => {
   })
 
   it('scores saturate when many POIs in same category', () => {
-    const pois = Array.from({ length: (CATEGORY.saturation || 1) * 2 }, () =>
-      mockPoi(CATEGORY.name, 100),
-    )
+    const pois = Array.from({ length: 10 }, () => mockPoi('category', 100))
 
-    const score = calcScores(pois, radius).partial[FACTOR.name]
+    const score = calcScores(pois, radius, mockedConfig).partial['factor']
 
     expect(score).toBeLessThanOrEqual(1)
     expect(score).toBeGreaterThan(0)
   })
 
   it('handles multiple POIs correctly', () => {
-    const factor = factorConfig[0]
-    if (!factor) throw new Error('No factor found for testing')
-
-    const category = factor?.categories[0]?.name
-    if (!category) throw new Error('No category found for testing')
-
-    expect(factor).toBeTruthy()
-
     const pois: Poi[] = [
-      mockPoi(category, 0), // 1.0
-      mockPoi(category, 500), // 0.8
-      mockPoi(category, 1000), // 0.5
+      mockPoi('category', 0), // score = 1.0
+      mockPoi('category', radius * 0.5), // score = 0.89
+      mockPoi('category', radius), // score = 0.5
     ]
 
-    const scores = calcScores(pois, radius)
+    const scores = calcScores(pois, radius, mockedConfig)
+    const result = scores.partial['factor']
+    const expected = 0.88
 
-    const scoreFactor = scores.partial[factor.name]
-    const expected = 0.861 / factor.categories.length
-    const epsilon = 0.01
-
-    expect(scoreFactor).toBeGreaterThan(0)
-    expect(Math.abs((scoreFactor ?? 0) - expected)).toBeLessThan(epsilon)
+    expect(result).toBeCloseTo(expected, 2)
   })
 })
