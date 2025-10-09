@@ -10,22 +10,22 @@ export function useColorUtil() {
 
 // Diverging color thresholds for scores
 const scoreColorThresholds = [
-  { min: 0.9, color: '#237804' },
-  { min: 0.8, color: '#389e0d' },
-  { min: 0.7, color: '#7cb305' },
-  { min: 0.6, color: '#d4b106' },
-  { min: 0.5, color: '#d46b08' },
+  { min: 0.8, color: '#237804' },
+  // { min: 0.6, color: '#389e0d' },
+  { min: 0.6, color: '#7cb305' },
+  { min: 0.4, color: '#d4b106' },
+  { min: 0.2, color: '#d46b08' },
   { min: 0.0, color: '#d32029' },
 ]
 
 // Alternate monochrome color thresholds for scores
 // const scoreColorThresholds = [
-//   { min: 0.9, color: '#0b2e20' },
+// //   { min: 0.9, color: '#0b2e20' },
 //   { min: 0.8, color: '#114d34' },
-//   { min: 0.7, color: '#166c48' },
-//   { min: 0.6, color: '#1c8b5c' },
-//   { min: 0.5, color: '#21aa70' },
-//   { min: 0.4, color: '#27c984' },
+//   { min: 0.6, color: '#166c48' },
+//   { min: 0.4, color: '#1c8b5c' },
+//   { min: 0.2, color: '#21aa70' },
+//   { min: 0.0, color: '#27c984' },
 // ]
 
 /**
