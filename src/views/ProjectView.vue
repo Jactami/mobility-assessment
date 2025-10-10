@@ -88,6 +88,7 @@ import { useEvaluation } from '@/composables/evaluation'
 import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useNotification } from '@/composables/notification'
 import { usePDF } from '@/composables/pdf'
+import { useUtil } from '@/composables/util/misc'
 import { useProjectStore } from '@/stores/Project'
 import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -110,6 +111,7 @@ const {
   getGeocoding,
 } = useGeocodingService()
 const { data: pois, error: poisError, loading: poiLoading, getPois } = usePoiService()
+const { createAddress } = useUtil()
 
 const exportAssetsRef = useTemplateRef('exportAssetsRef')
 
@@ -240,30 +242,45 @@ async function search(query: string, radius: number) {
 
   loadingToast(t('notification.info.fetching'))
 
-  // Get geocoding results for the query
-  await getGeocoding(query)
-
-  // If there is an error in the geocode service, show error
-  if (geocodingError.value) {
-    console.log(geocodingError.value)
-    errorToast(t('notification.error.service'))
-    return
-  }
-
-  // If no results are found, show an error message
-  if (!geocodingData.value || geocodingData.value.length === 0) {
-    errorToast(t('project.error.locationNotFound'))
-    return
-  }
-
-  // TODO: Implement autocomplete to select a location from the results
-  // For now, we just take the first result
-  const location = geocodingData.value[0]
-
-  // Update project store with new location and radius
-  projectStore.updateProjectState({
-    project: { ...projectStore.project, ...location, radius: radius },
+  const address = createAddress({
+    name: projectStore.project.name,
+    street: projectStore.project.street,
+    housenumber: projectStore.project.housenumber,
+    city: projectStore.project.city,
+    postcode: projectStore.project.postcode,
   })
+
+  if (address === query) {
+    // Skip geocoding request and only update radius if the address hasn't changed
+    projectStore.updateProjectState({
+      project: { ...projectStore.project, radius: radius },
+    })
+  } else {
+    // Get geocoding results for the query
+    await getGeocoding(query)
+
+    // If there is an error in the geocode service, show error
+    if (geocodingError.value) {
+      console.log(geocodingError.value)
+      errorToast(t('notification.error.service'))
+      return
+    }
+
+    // If no results are found, show an error message
+    if (!geocodingData.value || geocodingData.value.length === 0) {
+      errorToast(t('project.error.locationNotFound'))
+      return
+    }
+
+    // TODO: Implement autocomplete to select a location from the results
+    // For now, we just take the first result
+    const location = geocodingData.value[0]
+
+    // Update project store with new location and radius
+    projectStore.updateProjectState({
+      project: { ...projectStore.project, ...location, radius: radius },
+    })
+  }
 
   // Fetch POIs for the new location
   await fetchPois()
