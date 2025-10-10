@@ -1,12 +1,12 @@
 --
 -- Update existing users
 --
-CREATE OR REPLACE FUNCTION public.update_user(target_user_id uuid, new_first_name varchar(100) DEFAULT NULL, new_last_name varchar(100) DEFAULT NULL, new_email varchar(100) DEFAULT NULL, new_password varchar(100) DEFAULT NULL)
+CREATE OR REPLACE FUNCTION public.update_user(target_user_id uuid, new_first_name text DEFAULT NULL, new_last_name text DEFAULT NULL, new_email text DEFAULT NULL, new_password text DEFAULT NULL)
     RETURNS VOID
     SECURITY DEFINER
     AS $$
 DECLARE
-    encrypted_pw varchar(255);
+    encrypted_pw text;
 BEGIN
     -- Update auth.users (email and password if provided)
     IF new_password IS NOT NULL THEN

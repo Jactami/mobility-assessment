@@ -6,11 +6,11 @@ CREATE TABLE IF NOT EXISTS public.profiles(
   id uuid NOT NULL,
   created_at timestamp with time zone DEFAULT "now"() NOT NULL,
   updated_at timestamp with time zone,
-  first_name varchar(100) NOT NULL,
-  last_name varchar(100) NOT NULL,
-  email varchar(100) NOT NULL,
+  first_name text NOT NULL,
+  last_name text NOT NULL,
+  email text NOT NULL,
   -- email is technically redundant, but useful for queries without a explicit view
-  user_role public.user_role DEFAULT 'user' ::public.user_role NOT NULL
+  user_role public.user_role DEFAULT 'user'::public.user_role NOT NULL
 );
 
 ALTER TABLE public.profiles OWNER TO postgres;

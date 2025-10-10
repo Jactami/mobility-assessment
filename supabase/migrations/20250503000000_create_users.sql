@@ -1,12 +1,12 @@
 --
 -- Create new users
 --
-CREATE OR REPLACE FUNCTION public.create_user(first_name varchar(100), last_name varchar(100), email varchar(100), PASSWORD varchar(100), user_role public.user_role DEFAULT 'user', user_id uuid DEFAULT NULL)
+CREATE OR REPLACE FUNCTION public.create_user(first_name text, last_name text, email text, PASSWORD text, user_role public.user_role DEFAULT 'user', user_id uuid DEFAULT NULL)
     RETURNS uuid
     SECURITY DEFINER
     AS $$
 DECLARE
-    encrypted_pw varchar(255);
+    encrypted_pw text;
     confirmation timestamp;
 BEGIN
     IF user_id IS NULL THEN

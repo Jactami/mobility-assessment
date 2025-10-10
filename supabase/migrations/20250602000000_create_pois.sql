@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS public.pois(
   project_id uuid NOT NULL,
   osm_id bigint NOT NULL,
   osm_type osm_type NOT NULL,
-  label varchar(100),
-  category varchar(50) NOT NULL,
+  label text,
+  category text NOT NULL,
   latitude decimal(9, 7) NOT NULL,
   longitude decimal(9, 7) NOT NULL,
   footway jsonb, -- use json because supabase doesn't support nested arrays even though postgres does
