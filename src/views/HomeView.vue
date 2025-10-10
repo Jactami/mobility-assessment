@@ -167,7 +167,7 @@ async function createProject() {
   if (!authStore.user) return
 
   const { data, error } = await db.setProject({
-    title: 'Neues Projekt',
+    title: t('project.newProject'),
     owner_id: authStore.user.id,
   })
 
