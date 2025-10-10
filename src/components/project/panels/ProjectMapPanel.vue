@@ -39,7 +39,7 @@ const projectStore = useProjectStore()
 
 const mapHeight = 600 // px
 
-// TODO: Decide whether to move filter to store to make iot available globally
+// TODO: Decide whether to move filter to store to make it available globally
 const filter = ref<string | null>(null)
 
 const filteredPois = computed(() => {
