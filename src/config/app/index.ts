@@ -11,18 +11,25 @@ export const factorConfig: readonly LocationFactor[] = [
     categories: [
       {
         name: 'school',
-        tags: [{ key: 'amenity', value: 'school' }],
+        tags: [
+          { key: 'amenity', value: 'school' },
+          { key: 'education', value: 'school' },
+        ],
         saturation: 2,
       },
       {
         name: 'university',
-        tags: [{ key: 'amenity', value: 'university' }],
+        tags: [
+          { key: 'amenity', value: 'university' },
+          { key: 'education', value: 'university' },
+        ],
         saturation: 1,
       },
       {
         name: 'kindergarten',
         tags: [
           { key: 'amenity', value: 'kindergarten' },
+          { key: 'education', value: 'kindergarten' },
           { key: 'amenity', value: 'childcare' },
           { key: 'amenity', value: 'preschool' }, // Deprecated, but still might be used
         ],
