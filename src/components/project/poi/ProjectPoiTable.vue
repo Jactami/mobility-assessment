@@ -23,7 +23,7 @@ import { useNotification } from '@/composables/notification'
 import { useColorUtil } from '@/composables/util/color'
 import type { Poi } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProjectCategoryIcon from '../category/ProjectCategoryIcon.vue'
 import ProjectPoiForm from './ProjectPoiForm.vue'
@@ -42,7 +42,7 @@ const modalOpen = ref(false)
 const defaultLat = computed(() => projectStore.project?.latitude ?? 0)
 const defaultLon = computed(() => projectStore.project?.longitude ?? 0)
 
-const editPoi = ref<Partial<Poi>>({
+const editPoi = shallowRef<Partial<Poi>>({
   id: undefined,
   label: '',
   category: '',
