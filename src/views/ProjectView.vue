@@ -290,6 +290,9 @@ async function refetchPois() {
   // Show loading toast
   loadingToast(t('notification.info.fetching'))
 
+  // Reset selected POI
+  projectStore.setSelectedPoi(null)
+
   // Fetch POIs for the current project location
   await fetchPois()
 }
