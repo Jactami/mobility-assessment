@@ -144,14 +144,14 @@ const favoriteProjects = computed(() => {
   return filteredProjects.value?.filter((project) => project.favorite)
 })
 
-onMounted(() => {
+onMounted(async () => {
   // Load projects when user enters the page
-  loading.value = true
   loadProjects()
-  loading.value = false
 })
 
 async function loadProjects() {
+  loading.value = true
+
   const { data, error } = await db.getProjects()
   loadingError.value = false
 
@@ -161,6 +161,7 @@ async function loadProjects() {
   }
 
   projects.value = data
+  loading.value = false
 }
 
 async function createProject() {
