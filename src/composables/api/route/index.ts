@@ -54,6 +54,7 @@ export function useRouteService() {
       params: {
         start: `${startLon},${startLat}`,
         end: `${endLon},${endLat}`,
+        preference: 'shortest',
       },
       // Configure retries as multiple concurrent requests might overload ORS server
       // TODO: Decide whether to globally configure axios-retry instead
