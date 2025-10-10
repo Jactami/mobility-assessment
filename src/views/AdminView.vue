@@ -3,7 +3,9 @@
 
   <!-- TODO: Move user management to separate component -->
   <UISection title="Nutzer">
-    <DataTable v-if="profiles" :data="profiles" :config="tableConfig" />
+    <UISkeletonLoader :loading="!profiles" height="10rem">
+      <DataTable v-if="profiles" :data="profiles" :config="tableConfig" />
+    </UISkeletonLoader>
   </UISection>
 
   <UIForm
@@ -63,6 +65,7 @@
 <script setup lang="ts">
 import DataTable from '@/components/table/DataTable.vue'
 import type TableConfig from '@/components/table/types'
+import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import UIForm from '@/components/ui/UIForm.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UISection from '@/components/ui/UISection.vue'
