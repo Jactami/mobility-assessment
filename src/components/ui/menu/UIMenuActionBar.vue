@@ -4,7 +4,7 @@
       class="border-outline bg-surface-container-lowest flex items-center gap-2 border-t p-2 sm:rounded-full sm:border sm:shadow-lg"
     >
       <template v-for="item in items" :key="item.label">
-        <div class="flex-1">
+        <div class="flex flex-1 items-center justify-center">
           <UITooltip :message="item.label" position="top">
             <UIButtonIcon
               :icon="item.icon"
