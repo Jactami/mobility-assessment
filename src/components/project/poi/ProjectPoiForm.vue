@@ -92,14 +92,17 @@ async function handleSubmit() {
 
   // Create a new POI object with the provided data
   const newPoi: Poi = {
+    // set custom osm values
+    osm_id: -1,
+    osm_type: 'node',
+    // overwrite with model values
     ...model.value,
+    // ensure required values are set
     latitude: model.value.latitude || Infinity,
     longitude: model.value.longitude || Infinity,
     category: model.value.category ?? '',
     footway: null, // This will be set later
     distance: Infinity, // This will be calculated later
-    osm_id: -1,
-    osm_type: 'node',
     project_id: projectStore.project.id,
   }
 
@@ -131,8 +134,8 @@ async function handleSubmit() {
 
   if (model.value?.id) {
     // Update existing POI
-    const index = projectStore.pois?.findIndex((p) => p.id && p.id === model.value?.id)
-    if (index !== undefined && index >= 0) {
+    const index = projectStore.pois?.findIndex((p) => p && p.id === model.value?.id)
+    if (index >= 0) {
       pois[index] = { ...newPoi, id: model.value.id, created_at: model.value.created_at }
     }
   } else {

@@ -89,6 +89,9 @@ export function usePoiService() {
       const categories = getPoiCategories(element)
       for (const cat of categories) {
         pois.push({
+          // TODO: Use temporary ID until saved to DB
+          id: crypto.randomUUID(),
+          created_at: new Date().toISOString(),
           osm_id: element.id,
           osm_type: element.type,
           project_id: projectId,
