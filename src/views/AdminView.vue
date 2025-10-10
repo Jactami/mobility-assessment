@@ -22,16 +22,16 @@
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <FormKit
         type="text"
-        name="last_name"
-        :label="t('user.lastName')"
-        :placeholder="t('user.lastName')"
+        name="first_name"
+        :label="t('user.firstName')"
+        :placeholder="t('user.firstName')"
         validation="required"
       />
       <FormKit
         type="text"
-        name="first_name"
-        :label="t('user.firstName')"
-        :placeholder="t('user.firstName')"
+        name="last_name"
+        :label="t('user.lastName')"
+        :placeholder="t('user.lastName')"
         validation="required"
       />
       <FormKit
