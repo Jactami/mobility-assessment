@@ -227,10 +227,10 @@ export const factorConfig: readonly LocationFactor[] = [
       },
       {
         name: 'car',
-        tags: [{ key: 'amenity', value: 'car_rental' }],
+        tags: [{ key: 'amenity', value: 'car_sharing' }],
         labelRules: [
           {
-            matches: [{ key: 'amenity', value: 'car_rental' }],
+            matches: [{ key: 'amenity', value: 'car_sharing' }],
             fallback: 'operator',
           },
         ],
