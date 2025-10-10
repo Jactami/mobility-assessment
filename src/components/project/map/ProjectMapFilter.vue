@@ -41,7 +41,8 @@
 
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import { factorConfig } from '@/config/app'
-import { ref } from 'vue'
+import { useProjectStore } from '@/stores/Project'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 defineProps<{
@@ -53,6 +54,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const projectStore = useProjectStore()
 
 const selectedFactor = ref<string | null>(null)
 
@@ -60,4 +62,13 @@ function toggleSelected(factor: string) {
   selectedFactor.value = selectedFactor.value === factor ? null : factor
   emit('update-filter', selectedFactor.value)
 }
+
+// Reset filter when project location changes
+watch(
+  () => projectStore.project?.latitude && projectStore.project?.longitude,
+  () => {
+    selectedFactor.value = null
+    emit('update-filter', selectedFactor.value)
+  },
+)
 </script>
