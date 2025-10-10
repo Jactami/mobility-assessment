@@ -44,7 +44,10 @@ export function usePoiService() {
         // TODO: Decide if these POIs should be filtered out or just marked and let user decide.
         pois = filterPoisByDistance(pois, radius)
 
-        // assign the processed POIs to the data ref
+        // Sort POIs by distance
+        pois = sortPoisByDistance(pois)
+
+        // Assign the processed POIs to the data ref
         data.value = pois
       }
     } catch (err) {
@@ -217,6 +220,10 @@ export function usePoiService() {
    */
   function filterPoisByDistance(pois: Poi[], threshold: number): Poi[] {
     return pois.filter((poi) => poi.distance <= threshold)
+  }
+
+  function sortPoisByDistance(pois: Poi[]): Poi[] {
+    return pois.sort((a, b) => a.distance - b.distance)
   }
 
   return {
