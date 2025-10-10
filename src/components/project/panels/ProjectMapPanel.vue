@@ -34,7 +34,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const { getPoisByFactor } = useProjectUtil()
+const { getPoisByFactor, getFactorByCategory } = useProjectUtil()
 const projectStore = useProjectStore()
 
 const mapHeight = 600 // px
@@ -50,10 +50,11 @@ const filteredPois = computed(() => {
 function handleFilterUpdate(newFilter: string | null) {
   filter.value = newFilter
 
-  // Check if selected POI still exists in the filtered list
+  // check if selected POI matches the filter
   if (
+    filter.value &&
     projectStore.selectedPoi &&
-    !filteredPois.value?.find((p) => p.id === projectStore.selectedPoi?.id)
+    getFactorByCategory(projectStore.selectedPoi.category)?.name !== filter.value
   ) {
     projectStore.setSelectedPoi(null)
   }
