@@ -302,7 +302,11 @@ export const factorConfig: readonly LocationFactor[] = [
       },
       {
         name: 'clothing',
-        tags: [{ key: 'shop', value: 'clothes' }],
+        tags: [
+          { key: 'shop', value: 'clothes' },
+          { key: 'shop', value: 'fashion' },
+          { key: 'shop', value: 'boutique' },
+        ],
         saturation: 2,
       },
       {
