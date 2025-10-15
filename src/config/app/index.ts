@@ -32,6 +32,7 @@ export const factorConfig: readonly LocationFactor[] = [
           { key: 'education', value: 'kindergarten' },
           { key: 'amenity', value: 'childcare' },
           { key: 'amenity', value: 'preschool' }, // Deprecated, but still might be used
+          { key: 'amenity', value: 'nursery' }, // Deprecated, but still might be used
         ],
         saturation: 3,
       },
@@ -78,7 +79,6 @@ export const factorConfig: readonly LocationFactor[] = [
         saturation: 2,
       },
       {
-        // TODO: handle different types of pitches (e.g. football, basketball)
         name: 'pitch',
         tags: [{ key: 'leisure', value: 'pitch' }],
         labelRules: [
