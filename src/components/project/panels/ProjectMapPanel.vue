@@ -2,7 +2,7 @@
   <UIPanel ref="mapPanelRef" :title="t('project.map')" icon="map">
     <!-- Category Filter -->
     <div>
-      <ProjectMapFilter :loading="loading" @update-filter="handleFilterUpdate" />
+      <ProjectMapFilter v-model="filter" :loading="loading" />
     </div>
 
     <!-- TODO: Maybe implement category filter as well? -->
@@ -23,7 +23,7 @@ import UIPanel from '@/components/ui/UIPanel.vue'
 import { useProjectUtil } from '@/composables/util/project'
 import type { Poi, Project } from '@/db/types'
 import { useProjectStore } from '@/stores/Project'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProjectMapFilter from '../map/ProjectMapFilter.vue'
 
@@ -47,16 +47,38 @@ const filteredPois = computed(() => {
   return getPoisByFactor(props.pois, filter.value)
 })
 
-function handleFilterUpdate(newFilter: string | null) {
-  filter.value = newFilter
+// Reset filter when project location changes
+watch(
+  () => projectStore.project?.latitude && projectStore.project?.longitude,
+  () => {
+    filter.value = null
+  },
+)
 
-  // check if selected POI matches the filter
-  if (
-    filter.value &&
-    projectStore.selectedPoi &&
-    getFactorByCategory(projectStore.selectedPoi.category)?.name !== filter.value
-  ) {
-    projectStore.setSelectedPoi(null)
-  }
-}
+// Deselect selected POI if it does not match the filter anymore
+watch(
+  () => filter.value,
+  () => {
+    if (
+      filter.value &&
+      projectStore.selectedPoi &&
+      getFactorByCategory(projectStore.selectedPoi.category)?.name !== filter.value
+    ) {
+      projectStore.setSelectedPoi(null)
+    }
+  },
+)
+
+// Reset filter if selected POI's category does not match the filter anymore
+watch(
+  () => projectStore.selectedPoi,
+  () => {
+    if (
+      projectStore.selectedPoi?.category &&
+      getFactorByCategory(projectStore.selectedPoi.category)?.name !== filter.value
+    ) {
+      filter.value = null
+    }
+  },
+)
 </script>

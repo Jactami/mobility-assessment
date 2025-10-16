@@ -5,23 +5,23 @@
         <UISkeletonLoader :loading="loading" :rounded="true" height="2rem">
           <label
             :aria-label="t(`factor.${factor.name}`)"
-            class="has-focus-visible:outline-2 has-focus-visible:outline-offset-2 group relative flex w-full justify-center rounded-full border-[1.5px] px-3 py-1.5 text-center shadow-sm"
+            class="group relative flex w-full justify-center rounded-full border-[1.5px] px-3 py-1.5 text-center shadow-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
             :style="{
               borderColor: factor.color,
               outlineColor: factor.color,
-              backgroundColor: selectedFactor === factor.name ? factor.color : '',
+              backgroundColor: filter === factor.name ? factor.color : '',
             }"
           >
             <input
               type="radio"
               name="option"
               :value="factor.name"
-              :checked="selectedFactor === factor.name"
+              :checked="filter === factor.name"
               class="absolute inset-0 cursor-pointer appearance-none focus:outline-none"
               @click="toggleSelected(factor.name)"
             />
             <span
-              class="group-has-checked:text-on-surface-inverse text-on-surface-variant text-xs font-medium"
+              class="text-xs font-medium text-on-surface-variant group-has-checked:text-on-surface-inverse"
             >
               {{ t(`factor.${factor.name}`) }}
             </span>
@@ -41,34 +41,17 @@
 
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import { factorConfig } from '@/config/app'
-import { useProjectStore } from '@/stores/Project'
-import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 defineProps<{
   loading?: boolean
 }>()
 
-const emit = defineEmits<{
-  (e: 'update-filter', filter: string | null): void
-}>()
+const filter = defineModel<string | null>()
 
 const { t } = useI18n()
-const projectStore = useProjectStore()
-
-const selectedFactor = ref<string | null>(null)
 
 function toggleSelected(factor: string) {
-  selectedFactor.value = selectedFactor.value === factor ? null : factor
-  emit('update-filter', selectedFactor.value)
+  filter.value = filter.value === factor ? null : factor
 }
-
-// Reset filter when project location changes
-watch(
-  () => projectStore.project?.latitude && projectStore.project?.longitude,
-  () => {
-    selectedFactor.value = null
-    emit('update-filter', selectedFactor.value)
-  },
-)
 </script>
