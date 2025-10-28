@@ -2,6 +2,15 @@
 
 **Mobimeter** is a tool for **qualitative location analysis** based on key location factors such as mobility, education, local supply, recreation, leisure and health.
 
+A hosted demo version of the application is available at: 👉 https://mobimeter.bgw24.de/
+
+Use the following credentials to log in:
+
+```makefile
+user: demo@bgw24.de  
+password: demo
+```
+
 ---
 
 ## 🧩 Prerequisites
