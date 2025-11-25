@@ -7,7 +7,7 @@ A hosted demo version of the application is available at: 👉 https://mobimeter
 Use the following credentials to log in:
 
 ```makefile
-user: demo@bgw24.de  
+user: mobimeter-demo@bgw24.de  
 password: demo
 ```
 
