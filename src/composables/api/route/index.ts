@@ -2,13 +2,16 @@ import axios from 'axios'
 import axiosRetry from 'axios-retry'
 import { getDistance } from 'ol/sphere'
 import { ref } from 'vue'
+import { ServiceError } from '../error'
 import type { OrsErrorResponse, OrsResponse, OrsRouteResponse } from './types'
 
 const baseURL = import.meta.env.VITE_ORS_URL
 
 export function useRouteService() {
+  const servie = 'OpenRouteService'
+
   const data = ref<{ distance: number; route: [number, number][] } | null>(null)
-  const error = ref<Error | null>(null)
+  const error = ref<ServiceError | null>(null)
   const loading = ref(false)
 
   /**
@@ -36,8 +39,13 @@ export function useRouteService() {
 
       return data.value
     } catch (err) {
-      const e = err instanceof Error ? err : new Error('An unknown error occurred')
-      error.value = e
+      error.value =
+        err instanceof ServiceError
+          ? err
+          : new ServiceError(
+              servie,
+              err instanceof Error ? err.message : 'An unknown error occurred',
+            )
     } finally {
       loading.value = false
     }
@@ -81,13 +89,15 @@ export function useRouteService() {
             // TODO: Log points with no route?
             return null
           }
-
-          // Throw other ORS errors explicitly
-          throw new Error(`ORS ${data.error.code}: ${data.error.message}`)
         }
+
+        throw new ServiceError(servie, data.error.message, data.error.code)
       }
 
-      throw error
+      throw new ServiceError(
+        servie,
+        error instanceof Error ? error.message : 'An unknown error occurred',
+      )
     }
   }
 

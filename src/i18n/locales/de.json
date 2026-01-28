@@ -65,7 +65,7 @@
       "delete": "Daten konnten nicht gelöscht werden.",
       "load": "Daten konnten nicht geladen werden.",
       "save": "Daten konnten nicht gespeichert werden.",
-      "service": "Der Service ist momentan nicht erreichbar. Bitte versuchen Sie es später erneut."
+      "service": "Der Service ist temporär nicht verfügbar.\n(Quelle: {service})"
     },
     "info": {
       "fetching": "Daten werden geladen. Dies kann einen Moment dauern..."
@@ -78,7 +78,7 @@
   "dialog": {
     "confirm": "Bitte bestätigen",
     "delete": "Möchten Sie {item} wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.",
-    "overwrite": "Alle vorhandenen Daten werden überschrieben und gehen ggf. verloren. Möchten sie fortfahren?",
+    "overwrite": "Alle vorhandenen Daten werden überschrieben und gehen ggf. verloren. Möchten Sie fortfahren?",
     "unsavedChanges": "Es gibt ungespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen?"
   },
   "auth": {

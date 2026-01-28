@@ -4,14 +4,17 @@ import axios from 'axios'
 import { getDistance } from 'ol/sphere'
 import pLimit from 'p-limit'
 import { ref, shallowRef } from 'vue'
+import { ServiceError } from '../error'
 import { useRouteService } from '../route'
 import { OverpassQueryFactory } from './overpass/OverpassQueryFactory'
 import type { OverpassElement, OverpassResponse } from './types'
 
 export function usePoiService() {
+  const service = 'Overpass'
+
   const data = shallowRef<Poi[] | null>(null)
   const loading = ref<boolean>(false)
-  const error = ref<Error | null>(null)
+  const error = ref<ServiceError | null>(null)
 
   /**
    * Fetches Points of Interest (POIs) within a specified radius from a given latitude and longitude.
@@ -51,7 +54,13 @@ export function usePoiService() {
         data.value = pois
       }
     } catch (err) {
-      error.value = err instanceof Error ? err : new Error('An unknown error occurred')
+      error.value =
+        err instanceof ServiceError
+          ? err
+          : new ServiceError(
+              service,
+              err instanceof Error ? err.message : 'An unknown error occurred',
+            )
     } finally {
       loading.value = false
     }
@@ -65,15 +74,27 @@ export function usePoiService() {
    */
   async function fetchOverpassElements(lat: number, lon: number, radius: number) {
     // Fetch location details from Overpass API
-    const response = await axios.get<OverpassResponse>('https://overpass-api.de/api/interpreter', {
-      params: {
-        data: OverpassQueryFactory.createQuery(lat, lon, radius),
-      },
-    })
+    try {
+      const response = await axios.get<OverpassResponse>(
+        'https://overpass-api.de/api/interpreter',
+        {
+          params: {
+            data: OverpassQueryFactory.createQuery(lat, lon, radius),
+          },
+        },
+      )
 
-    if (response.status !== 200) throw new Error(response.statusText)
+      return response.data.elements
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        throw new ServiceError(service, err.message, err.response?.status)
+      }
 
-    return response.data.elements
+      throw new ServiceError(
+        service,
+        err instanceof Error ? err.message : 'An unknown error occurred',
+      )
+    }
   }
 
   /**

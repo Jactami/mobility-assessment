@@ -261,8 +261,8 @@ async function search(query: string, radius: number) {
 
     // If there is an error in the geocode service, show error
     if (geocodingError.value) {
-      console.log(geocodingError.value)
-      errorToast(t('notification.error.service'))
+      console.error(geocodingError.value)
+      errorToast(t('notification.error.service', { service: geocodingError.value.service }))
       return
     }
 
@@ -319,7 +319,7 @@ async function fetchPois() {
   // If there is an error in the POI service, show error
   if (poisError.value) {
     console.error(poisError.value)
-    errorToast(t('notification.error.service'))
+    errorToast(t('notification.error.service', { service: poisError.value.service }))
     projectStore.updateProjectState({ pois: [] })
     return
   }

@@ -20,6 +20,7 @@ export function useNotification() {
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-success'),
       customClass: {
+        container: 'whitespace-pre-line',
         popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
         timerProgressBar: '!bg-success',
       },
@@ -39,6 +40,7 @@ export function useNotification() {
       },
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-error'),
       customClass: {
+        container: 'whitespace-pre-line',
         popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
         timerProgressBar: '!bg-error',
       },
@@ -53,6 +55,7 @@ export function useNotification() {
       ...options,
       iconColor: window.getComputedStyle(document.body).getPropertyValue('--color-tertiary'),
       customClass: {
+        container: 'whitespace-pre-line',
         popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
         timerProgressBar: '!bg-tertiary',
       },
@@ -73,6 +76,7 @@ export function useNotification() {
         Swal.showLoading()
       },
       customClass: {
+        container: 'whitespace-pre-line',
         popup: '!bg-surface-container-lowest!text-on-surface dark:!border dark:!border-outline',
         loader: '!border-t-tertiary !border-b-tertiary',
       },

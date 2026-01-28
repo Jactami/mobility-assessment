@@ -1,27 +1,40 @@
 import axios from 'axios'
 import { ref } from 'vue'
+import { ServiceError } from '../error'
 import type { Address, GeocodeJSON, GeocodeJSONFeature } from './types'
 
 /**
  * Composable function to interact with geocoding services.
  */
 export function useGeocodingService() {
-  const data = ref<Address[] | null>(null)
+  const service = 'Nominatim'
 
+  const data = ref<Address[] | null>(null)
   // see: https://alexop.dev/posts/best-practices-for-error-handling-in-vue-composables/
   // TODO: write own generic useAsyncData wrapper to handle data, loading and error states
   const loading = ref<boolean>(false)
-  const error = ref<Error | null>(null)
+  const error = ref<ServiceError | null>(null)
 
   async function getGeocoding(search: string) {
-    // Fetch geocoding data from Nominatim
-    const geocoding = await fetchGeocoding(search)
+    try {
+      // Fetch geocoding data from Nominatim
+      const geocoding = await fetchGeocoding(search)
 
-    if (geocoding) {
-      // Transform the geocoding data into a structured address format
-      data.value = transformGeocodingToAddress(geocoding)
-    } else {
-      data.value = null
+      if (geocoding) {
+        // Transform the geocoding data into a structured address format
+        data.value = transformGeocodingToAddress(geocoding)
+      } else {
+        data.value = null
+      }
+    } catch (err) {
+      if (err instanceof ServiceError) {
+        error.value = err
+      } else {
+        error.value = new ServiceError(
+          service,
+          err instanceof Error ? err.message : 'An unknown error occurred',
+        )
+      }
     }
   }
 
@@ -52,11 +65,16 @@ export function useGeocodingService() {
         },
       })
 
-      if (response.status !== 200) throw new Error(response.statusText)
-
       return response.data.features
     } catch (err) {
-      error.value = err instanceof Error ? err : new Error('An unknown error occurred')
+      if (axios.isAxiosError(err)) {
+        throw new ServiceError(service, err.message, err.response?.status)
+      }
+
+      throw new ServiceError(
+        service,
+        err instanceof Error ? err.message : 'An unknown error occurred',
+      )
     } finally {
       loading.value = false
     }
