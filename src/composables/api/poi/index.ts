@@ -193,7 +193,8 @@ export function usePoiService() {
             ...poi,
             footway: data.value?.route,
             distance:
-              data.value?.distance ?? calculateDistance(lat, lon, poi.latitude, poi.longitude), // fallback to direct path
+              // data.value?.distance ?? calculateDistance(lat, lon, poi.latitude, poi.longitude), // fallback to direct path
+              data.value?.distance ?? Infinity, // Set infinite distance if no route found to filter out later
           }
         })
       }),

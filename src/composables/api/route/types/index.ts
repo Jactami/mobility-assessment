@@ -1,4 +1,16 @@
-export interface OrsResponse {
+export type OrsResponse = OrsRouteResponse | OrsErrorResponse
+
+export interface OrsErrorResponse {
+  error: {
+    code: number
+    message: string
+  }
+  info: {
+    engine: OrsEngine
+  }
+  timestamp: number
+}
+export interface OrsRouteResponse {
   type: 'FeatureCollection'
   bbox: [number, number, number, number]
   features: OrsFeature[]
@@ -56,5 +68,5 @@ export interface OrsQuery {
 export interface OrsEngine {
   version: string
   build_date: string
-  graph_date: string
+  graph_date?: string
 }
