@@ -44,15 +44,15 @@ const variantClasses: Record<
   Record<NonNullable<ButtonProps['severity']>, string>
 > = {
   solid: {
-    primary: `bg-primary text-on-primary disabled:bg-primary hover:bg-primary/85 active:bg-primary/75 ${shadowClasses}`,
-    neutral: `bg-surface-container text-on-surface-variant disabled:bg-surface-container hover:bg-surface-container-high/90 active:bg-surface-container-high ${shadowClasses}`,
-    danger: `bg-error text-on-error disabled:bg-error hover:bg-error/85 active:bg-error/75 ${shadowClasses}`,
+    primary: `bg-primary text-on-primary enabled:hover:bg-primary/85 enabled:active:bg-primary/75 ${shadowClasses}`,
+    neutral: `bg-surface-container text-on-surface-variant enabled:hover:bg-surface-container-high/90 enabled:active:bg-surface-container-high ${shadowClasses}`,
+    danger: `bg-error text-on-error enabled:hover:bg-error/85 enabled:active:bg-error/75 ${shadowClasses}`,
   },
   ghost: {
-    primary: 'text-primary disabled:bg-transparent hover:bg-primary/15 active:bg-primary/25',
+    primary: 'text-primary enabled:hover:bg-primary/15 enabled:active:bg-primary/25',
     neutral:
-      'text-on-surface disabled:bg-transparent hover:bg-surface-container-high/90 active:bg-surface-container-high',
-    danger: 'text-error disabled:bg-transparent hover:bg-error/15 active:bg-error/25',
+      'text-on-surface  enabled:hover:bg-surface-container-high/90 enabled:active:bg-surface-container-high',
+    danger: 'text-error enabled:hover:bg-error/15 enabled:active:bg-error/25',
   },
 }
 
@@ -62,6 +62,7 @@ const focusClasses: Record<NonNullable<ButtonProps['severity']>, string> = {
   danger: 'focus-visible:ring-error',
 }
 
+// TODO: Decide whether a 'transition active:scale-95' should be added to base classes.
 const buttonClasses = computed(() =>
   twMerge([
     // base classes

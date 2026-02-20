@@ -80,10 +80,11 @@
       </div>
       <div>
         <UIButton disabled>Disabled Button</UIButton>
+        <UIButton variant="ghost" severity="primary" disabled>Disabled Button</UIButton>
       </div>
       <div>
         <UIButton
-          class="w-full max-w-96 rounded-full bg-lime-700 text-white hover:bg-lime-700/90 active:bg-lime-700/80"
+          class="w-full max-w-96 rounded-full bg-lime-700 text-white enabled:hover:bg-lime-700/90 enabled:active:bg-lime-700/80"
         >
           Custom Button <UIIcon icon="signIn" />
         </UIButton>
@@ -105,7 +106,7 @@
     <div class="mt-10 grid grid-cols-4 gap-x-8 gap-y-10 lg:grid-cols-12">
       <div v-for="icon of Object.keys(icons)" :key="icon" class="flex flex-col items-center gap-2">
         <UIIcon :icon="icon as Icon" />
-        <div class="text-on-surface-variant text-sm">{{ icon }}</div>
+        <div class="text-sm text-on-surface-variant">{{ icon }}</div>
       </div>
     </div>
   </UISection>
@@ -206,7 +207,7 @@
     </p>
     <div class="mt-10 flex items-center justify-evenly gap-10">
       <UITooltip message="This is a tooltip message that appears on hover.">
-        <div class="bg-primary-container text-on-primary-container p-4 text-lg font-semibold">
+        <div class="bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
           Hover me
         </div>
       </UITooltip>
@@ -214,7 +215,7 @@
         message="You can also define the position of the tooltip. This one is on the bottom."
         position="bottom"
       >
-        <div class="bg-primary-container text-on-primary-container p-4 text-lg font-semibold">
+        <div class="bg-primary-container p-4 text-lg font-semibold text-on-primary-container">
           Hover me
         </div>
       </UITooltip>
