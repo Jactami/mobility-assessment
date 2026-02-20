@@ -20,8 +20,10 @@ export const factorConfig: readonly LocationFactor[] = [
       {
         name: 'university',
         tags: [
-          { key: 'amenity', value: 'university' },
-          { key: 'education', value: 'university' },
+          // Only query for buildings, not for institutions
+          // { key: 'amenity', value: 'university' },
+          // { key: 'education', value: 'university' },
+          { key: 'building', value: 'university' },
         ],
         saturation: 1,
       },
