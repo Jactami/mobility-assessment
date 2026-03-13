@@ -3,7 +3,7 @@
 version = 4
 
 [[package]]
-name = "MobiMeter"
+name = "Mobimeter"
 version = "1.0.0"
 dependencies = [
  "serde",

@@ -1,5 +1,5 @@
 [package]
-name = "MobiMeter"
+name = "Mobimeter"
 version = "1.0.0"
 description = "A desktop application to assess mobility"
 authors = ["BGW Digital"]

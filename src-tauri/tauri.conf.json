@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "MobiMeter",
+  "productName": "Mobimeter",
   "version": "1.0.0",
   "identifier": "com.mobimeter.app",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "MobiMeter",
+        "title": "Mobimeter",
         "fullscreen": false,
         "width": 800,
         "height": 600,
