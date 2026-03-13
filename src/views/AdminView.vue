@@ -17,48 +17,47 @@
         ? t('action.editItem', { item: t('user.label') })
         : t('action.addItem', { item: t('user.label') })
     "
+    :grid="true"
     @submit="handleUpsertUser"
   >
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <FormKit
-        type="text"
-        name="first_name"
-        :label="t('user.firstName')"
-        :placeholder="t('user.firstName')"
-        validation="required"
-      />
-      <FormKit
-        type="text"
-        name="last_name"
-        :label="t('user.lastName')"
-        :placeholder="t('user.lastName')"
-        validation="required"
-      />
-      <FormKit
-        type="email"
-        name="email"
-        :label="t('user.email')"
-        :placeholder="t('user.email')"
-        validation="required|email"
-        outer-class="col-span-2"
-      />
-      <FormKit
-        type="password"
-        name="password"
-        :label="
-          editProfile.id ? `${t('user.password')} (${t('common.optional')})` : t('user.password')
-        "
-        :placeholder="t('user.password')"
-        :validation="!editProfile.id || editProfile.password_confirm ? 'required' : ''"
-      />
-      <FormKit
-        type="password"
-        name="password_confirm"
-        :label="t('auth.password.confirm')"
-        :placeholder="t('auth.password.confirm')"
-        :validation="!editProfile?.id || editProfile?.password ? 'required|confirm' : 'confirm'"
-      />
-    </div>
+    <FormKit
+      type="text"
+      name="first_name"
+      :label="t('user.firstName')"
+      :placeholder="t('user.firstName')"
+      validation="required"
+    />
+    <FormKit
+      type="text"
+      name="last_name"
+      :label="t('user.lastName')"
+      :placeholder="t('user.lastName')"
+      validation="required"
+    />
+    <FormKit
+      type="email"
+      name="email"
+      :label="t('user.email')"
+      :placeholder="t('user.email')"
+      validation="required|email"
+      outer-class="col-span-2"
+    />
+    <FormKit
+      type="password"
+      name="password"
+      :label="
+        editProfile.id ? `${t('user.password')} (${t('common.optional')})` : t('user.password')
+      "
+      :placeholder="t('user.password')"
+      :validation="!editProfile.id || editProfile.password_confirm ? 'required' : ''"
+    />
+    <FormKit
+      type="password"
+      name="password_confirm"
+      :label="t('auth.password.confirm')"
+      :placeholder="t('auth.password.confirm')"
+      :validation="!editProfile?.id || editProfile?.password ? 'required|confirm' : 'confirm'"
+    />
   </UIForm>
 </template>
 

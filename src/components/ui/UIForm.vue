@@ -9,7 +9,7 @@
       :actions="false"
       @submit="handleSubmit"
     >
-      <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-1 gap-4" :class="{ 'sm:grid-cols-2': grid }">
         <slot>
           <!-- Input elements go here... -->
         </slot>
@@ -32,6 +32,8 @@ import UIModal from './UIModal.vue'
 defineProps<{
   title?: string
   id: string
+  // TODO: Decide whether grid should be a boolean or accept number of grid columns
+  grid?: boolean
 }>()
 
 const emit = defineEmits<{

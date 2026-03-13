@@ -8,54 +8,53 @@
         ? t('action.editItem', { item: t('project.poi') })
         : t('action.addItem', { item: t('project.poi') })
     "
+    :grid="true"
     @submit="handleSubmit"
   >
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <FormKit type="text" name="label" :label="t('project.poi')" :placeholder="t('project.poi')" />
-      <FormKit
-        type="select"
-        name="category"
-        :label="t('project.category')"
-        :placeholder="t('project.category')"
-        validation="required"
+    <FormKit type="text" name="label" :label="t('project.poi')" :placeholder="t('project.poi')" />
+    <FormKit
+      type="select"
+      name="category"
+      :label="t('project.category')"
+      :placeholder="t('project.category')"
+      validation="required"
+    >
+      <optgroup
+        v-for="factor in factorConfig"
+        :key="factor.name"
+        :label="t(`factor.${factor.name}`)"
       >
-        <optgroup
-          v-for="factor in factorConfig"
-          :key="factor.name"
-          :label="t(`factor.${factor.name}`)"
+        <option
+          v-for="category in factor.categories.map((c) => c.name)"
+          :key="category"
+          :value="category"
         >
-          <option
-            v-for="category in factor.categories.map((c) => c.name)"
-            :key="category"
-            :value="category"
-          >
-            {{ t(`category.${category}`) }}
-          </option>
-        </optgroup>
-      </FormKit>
-      <FormKit
-        type="number"
-        name="latitude"
-        :label="t('project.latitude')"
-        :placeholder="t('project.latitude')"
-        step="any"
-        number="float"
-        min="-90"
-        max="90"
-        validation="required|number"
-      />
-      <FormKit
-        type="number"
-        name="longitude"
-        :label="t('project.longitude')"
-        :placeholder="t('project.longitude')"
-        step="any"
-        number="float"
-        min="-180"
-        max="180"
-        validation="required|number"
-      />
-    </div>
+          {{ t(`category.${category}`) }}
+        </option>
+      </optgroup>
+    </FormKit>
+    <FormKit
+      type="number"
+      name="latitude"
+      :label="t('project.latitude')"
+      :placeholder="t('project.latitude')"
+      step="any"
+      number="float"
+      min="-90"
+      max="90"
+      validation="required|number"
+    />
+    <FormKit
+      type="number"
+      name="longitude"
+      :label="t('project.longitude')"
+      :placeholder="t('project.longitude')"
+      step="any"
+      number="float"
+      min="-180"
+      max="180"
+      validation="required|number"
+    />
   </UIForm>
 </template>
 
