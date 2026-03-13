@@ -9,7 +9,7 @@
       />
     </div>
     <pre
-      class="max-h-fit resize-y overflow-y-auto bg-surface-container-low px-4 py-3 text-sm/6 break-words whitespace-pre-wrap text-on-surface-variant"
+      class="wrap-break-words max-h-fit resize-y overflow-y-auto bg-surface-container-low px-4 py-3 text-sm/6 whitespace-pre-wrap text-on-surface-variant"
       v-html="highlightedJson"
     ></pre>
   </div>
