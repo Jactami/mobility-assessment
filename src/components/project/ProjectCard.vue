@@ -26,12 +26,16 @@
       </div>
 
       <!-- Card Body -->
-      <div class="grow p-4">
+      <div class="grow space-y-4 p-4">
         <h2 v-mark="filter" class="line-clamp-2 min-h-12.5 text-xl leading-tight font-medium">
           {{ project.title }}
         </h2>
-        <div v-mark="filter" class="mt-4 text-on-surface-variant">
+        <div v-mark="filter" class="text-on-surface-variant">
           <div v-for="(part, i) in address" :key="i" class="truncate">{{ part }}</div>
+        </div>
+        <div class="text-sm">
+          <!-- TODO: Show radius as Badge or Pill? -->
+          <div v-if="project.radius">{{ n(project.radius, 'meter') }}</div>
         </div>
       </div>
 
