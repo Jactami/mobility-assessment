@@ -19,7 +19,7 @@
         v-if="projects && profiles"
         :projects="projects"
         :profiles="profiles"
-        @copy="copyProject"
+        @duplicate="duplicateProject"
         @delete="deleteProject"
       />
     </UISkeletonLoader>
@@ -148,8 +148,8 @@ async function deleteProject(project: Project) {
   }
 }
 
-// TODO: This is a duplicate of the copyProject function in HomeView.
-async function copyProject(project: Project) {
+// TODO: This is a duplicate of the duplicateProject function in HomeView.
+async function duplicateProject(project: Project) {
   const { error } = await db.setProject({
     ...project,
     id: undefined, // Ensure a new ID is generated

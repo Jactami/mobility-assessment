@@ -68,7 +68,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'delete'): void
-  (e: 'copy'): void
+  (e: 'duplicate'): void
   (e: 'favorite'): void
 }>()
 
@@ -92,9 +92,9 @@ const menu = computed<MenuListItem[]>(() => [
     action: () => emit('favorite'),
   },
   {
-    label: t('action.copyItem', { item: t('project.label') }),
+    label: t('action.duplicateItem', { item: t('project.label') }),
     icon: 'copy',
-    action: () => emit('copy'),
+    action: () => emit('duplicate'),
     divider: true,
   },
   {

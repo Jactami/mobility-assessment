@@ -17,7 +17,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'delete', project: Project): void
-  (e: 'copy', project: Project): void
+  (e: 'duplicate', project: Project): void
 }>()
 
 const { n, t } = useI18n()
@@ -77,8 +77,8 @@ const tableConfig: TableConfig<Project> = {
     },
     {
       icon: 'copy',
-      label: t('action.copy'),
-      handler: (project) => emit('copy', project),
+      label: t('action.duplicate'),
+      handler: (project) => emit('duplicate', project),
     },
     {
       icon: 'delete',

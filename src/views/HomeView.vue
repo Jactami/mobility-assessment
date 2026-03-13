@@ -23,10 +23,10 @@
         :spellcheck="false"
       >
         <template #prefixIcon>
-          <UIIcon icon="search" class="text-on-surface-variant mr-2" />
+          <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
         </template>
         <template #suffixIcon>
-          <div class="absolute bottom-1 right-0 flex items-center pr-2">
+          <div class="absolute right-0 bottom-1 flex items-center pr-2">
             <UIButtonIcon
               v-if="filter"
               icon="clear"
@@ -50,7 +50,7 @@
           :project="project"
           :filter="filter"
           @delete="deleteProject(project)"
-          @copy="copyProject(project)"
+          @duplicate="duplicateProject(project)"
           @favorite="toggleFavorite(project)"
         />
       </div>
@@ -67,9 +67,9 @@
           >
             <UICard :animation="true" class="min-h-64">
               <div
-                class="text-on-surface-variant flex h-full flex-col items-center justify-center gap-y-4 p-2"
+                class="flex h-full flex-col items-center justify-center gap-y-4 p-2 text-on-surface-variant"
               >
-                <UIIcon class="text-on-surface-variant rounded-full text-7xl" icon="add" />
+                <UIIcon class="rounded-full text-7xl text-on-surface-variant" icon="add" />
                 <span>{{ t('action.createItem', { item: t('project.label') }) }}</span>
               </div>
             </UICard>
@@ -80,7 +80,7 @@
             :project="project"
             :filter="filter"
             @delete="deleteProject(project)"
-            @copy="copyProject(project)"
+            @duplicate="duplicateProject(project)"
             @favorite="toggleFavorite(project)"
           />
         </template>
@@ -208,7 +208,7 @@ async function deleteProject(project: Project) {
   }
 }
 
-async function copyProject(project: Project) {
+async function duplicateProject(project: Project) {
   if (!authStore.user) return
 
   const { data, error } = await db.setProject({
