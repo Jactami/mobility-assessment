@@ -105,7 +105,7 @@
     "email": "E-Mail",
     "firstName": "Vorname",
     "lastName": "Nachname",
-    "label": "Nutzer",
+    "label": "Nutzer | Nutzer",
     "password": "Passwort"
   },
   "project": {
