@@ -2,7 +2,7 @@
   <!-- TODO: Decide whether modal should be part of this component or handled externally -->
   <UIModal v-model="open" :title="title">
     <FormKit
-      id="edit-project-form"
+      :id="id"
       v-model="model"
       #default="{ state: { valid } }"
       type="form"
