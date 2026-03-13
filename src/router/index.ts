@@ -31,7 +31,7 @@ const routes: RouteRecordRaw[] = [
     name: 'project',
     component: () => import('../views/ProjectView.vue'),
     meta: {
-      roles: ['user'],
+      roles: ['admin', 'user'],
     },
   },
   {

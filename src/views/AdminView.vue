@@ -2,7 +2,7 @@
   <UIPageHeader :title="t('navigation.admin')" />
 
   <UISection :title="t('user.label', 2)">
-    <UISkeletonLoader :loading="!profiles" height="10rem">
+    <UISkeletonLoader :loading="loading" height="10rem">
       <AdminProfileTable
         v-if="profiles"
         :profiles="profiles"
@@ -12,17 +12,30 @@
       />
     </UISkeletonLoader>
   </UISection>
+
+  <UISection :title="t('project.label', 2)">
+    <UISkeletonLoader :loading="loading" height="10rem">
+      <AdminProjectTable
+        v-if="projects && profiles"
+        :projects="projects"
+        :profiles="profiles"
+        @copy="copyProject"
+        @delete="deleteProject"
+      />
+    </UISkeletonLoader>
+  </UISection>
 </template>
 
 <script setup lang="ts">
 import AdminProfileTable from '@/components/admin/AdminProfileTable.vue'
+import AdminProjectTable from '@/components/admin/AdminProjectTable.vue'
 import type { ProfileWithPassword } from '@/components/admin/types'
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UISection from '@/components/ui/UISection.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
-import type { Profile } from '@/db/types'
+import type { Profile, Project } from '@/db/types'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -31,9 +44,14 @@ const { t } = useI18n()
 const { errorToast, successToast, confirmDialog } = useNotification()
 
 const profiles = ref<Profile[]>()
+const projects = ref<Project[]>()
 
-onMounted(() => {
-  loadProfiles()
+const loading = ref<boolean>(false)
+
+onMounted(async () => {
+  loading.value = true
+  await Promise.all([loadProfiles(), loadProjects()])
+  loading.value = false
 })
 
 async function loadProfiles() {
@@ -91,6 +109,57 @@ async function upsertUser(profile: ProfileWithPassword) {
   } else {
     // Refresh profile list
     profiles.value = data
+    successToast(t('notification.success.save'))
+  }
+}
+
+async function loadProjects() {
+  // TODO: Decide whether to load projects with owner data or connect them in frontend
+  const { data, error } = await db.getProjects()
+
+  if (error) {
+    console.error(error)
+    errorToast(t('notification.error.load'))
+    projects.value = []
+  } else {
+    projects.value = data
+  }
+}
+
+async function deleteProject(project: Project) {
+  // Get user confirmation
+  const confirmed = await confirmDialog({
+    message: t('dialog.delete', { item: project.title }),
+    confirm: t('action.delete'),
+  })
+
+  if (!confirmed) return
+
+  // Delete project
+  const { error } = await db.deleteProject(project.id)
+
+  if (error) {
+    console.error(error)
+    errorToast(t('notification.error.delete'))
+  } else {
+    // Refresh project list
+    await loadProjects()
+    successToast(t('notification.success.delete'))
+  }
+}
+
+// TODO: This is a duplicate of the copyProject function in HomeView.
+async function copyProject(project: Project) {
+  const { error } = await db.setProject({
+    ...project,
+    id: undefined, // Ensure a new ID is generated
+    title: `${project.title} (${t('common.copy')})`,
+  })
+
+  if (error) {
+    errorToast(t('notification.error.default'))
+  } else {
+    await loadProjects()
     successToast(t('notification.success.save'))
   }
 }

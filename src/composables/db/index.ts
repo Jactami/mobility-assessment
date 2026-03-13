@@ -108,8 +108,9 @@ export default function useDB() {
       // delete all POIs if the project is being updated
       if (project.id) await supabase.from('pois').delete().eq('project_id', project.id)
 
-      // upsert the POI data
-      return await supabase.from('projects').upsert(undefinedToNull(project)).select().maybeSingle()
+      // upsert the project data
+      const _project = { ...undefinedToNull(project), id: project.id || undefined }
+      return await supabase.from('projects').upsert(_project).select().maybeSingle()
     })
 
   /**

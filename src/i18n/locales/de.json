@@ -109,6 +109,7 @@
     "password": "Passwort"
   },
   "project": {
+    "address": "Adresse",
     "allProjects": "Alle Projekte",
     "category": "Kategorie",
     "distance": "Entfernung",
@@ -130,6 +131,7 @@
     "longitude": "Längengrad",
     "map": "Karte",
     "newProject": "Neues Projekt",
+    "owner": "Besitzer",
     "poi": "Objekt | Objekte",
     "radius": "Radius",
     "refresh": "Standortdaten aktualisieren",
