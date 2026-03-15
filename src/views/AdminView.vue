@@ -1,6 +1,8 @@
 <template>
   <UIPageHeader :title="t('navigation.admin')" />
 
+  <!-- TODO: Decide whether to split user and project management into separate views or keep them together. -->
+
   <UISection :title="t('user.label', 2)">
     <UISkeletonLoader :loading="loading" height="10rem">
       <AdminProfileTable
