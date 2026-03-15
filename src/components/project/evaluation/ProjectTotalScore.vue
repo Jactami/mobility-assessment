@@ -1,12 +1,12 @@
 <template>
   <svg viewBox="0 5 100 50" class="h-auto w-full">
     <!-- Background Arc -->
-    <path class="stroke-surface-container-high fill-none stroke-[5]" :d="arcPath" />
+    <path class="fill-none stroke-surface-container-high stroke-5" :d="arcPath" />
 
     <!-- Foreground Arc -->
     <path
       :d="arcPath"
-      class="fill-none stroke-[5] transition-all duration-1000"
+      class="fill-none stroke-5 transition-all duration-1000"
       :style="{
         strokeDasharray: circumference,
         strokeDashoffset: dashOffset,
@@ -32,7 +32,7 @@
       x="50"
       y="48"
       text-anchor="middle"
-      class="text-on-surface-variant font-semibold"
+      class="font-semibold text-on-surface-variant"
       fill="currentColor"
       font-size="6"
     >
