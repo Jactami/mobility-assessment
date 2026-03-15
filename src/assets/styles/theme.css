@@ -45,6 +45,11 @@
   --color-success-container: var(--color-green-200);
   --color-on-success-container: var(--color-green-900);
 
+  --color-warning: var(--color-yellow-700);
+  --color-on-warning: var(--color-white);
+  --color-warning-container: var(--color-yellow-200);
+  --color-on-warning-container: var(--color-yellow-900);
+
   /* Border radius */
   --radius-border: var(--radius-md);
 
