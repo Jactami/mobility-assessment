@@ -65,7 +65,7 @@
                   <div
                     v-if="!header.isPlaceholder"
                     class="flex items-center gap-1"
-                    :class="[alignClass(header.column.id)]"
+                    :class="[getAlignClass(header.column.id)]"
                   >
                     <FlexRender
                       v-if="!header.isPlaceholder"
@@ -122,12 +122,15 @@
                     class="px-3 py-2.5"
                     :style="`width: ${cell.column.columnDef.size}%`"
                   >
-                    <div class="flex items-center" :class="[alignClass(cell.column.id)]">
+                    <div class="flex items-center" :class="[getAlignClass(cell.column.id)]">
                       <slot
                         :name="`item-${cell.column.id}`"
                         :row="cell.row.original"
                         :value="cell.getValue()"
-                        :formatted="formatValue(cell)"
+                        :formatted="
+                          getFormatter(cell.column.id)?.(cell.getValue(), cell.row.original) ??
+                          cell.getValue()
+                        "
                       >
                         <FlexRender
                           :render="cell.column.columnDef.cell"
@@ -220,7 +223,6 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useVueTable,
-  type Cell,
   type PaginationState,
   type SortingState,
 } from '@tanstack/vue-table'
@@ -348,13 +350,12 @@ const table = useVueTable({
 /** Mapping of column keys to their definitions for easy access. */
 const columnMap = computed(() => Object.fromEntries(props.config.columns.map((c) => [c.key, c])))
 
-function formatValue(cell: Cell<T, unknown>) {
-  const col = columnMap.value[cell.column.id]
-  const raw = cell.getValue()
-  return col?.formatter ? col.formatter(raw, cell.row.original) : raw
+function getFormatter(columnId: string) {
+  const col = columnMap.value[columnId]
+  return col?.formatter
 }
 
-function alignClass(columnId: string) {
+function getAlignClass(columnId: string) {
   const alignMap: Record<ColumnAlign, string> = {
     left: 'justify-start',
     center: 'justify-center',
