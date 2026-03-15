@@ -1,11 +1,11 @@
 import type { ButtonSeverity } from '@/components/ui/button/types'
 import type { Icon } from '@/components/ui/icon/types'
 
+export type ColumnAlign = 'left' | 'center' | 'right'
+
 /**
  * Defines the structure of a column in a generic table component.
  * @template T - The type of the data of the table.
- *
- * TODO: Add more properties like alignments, widths, etc. as needed
  */
 export interface TableColumn<T> {
   /** The key in the data object used to access the column value.*/
@@ -22,6 +22,9 @@ export interface TableColumn<T> {
 
   /** Optional width for the column. */
   width?: number
+
+  /** Optional alignment for the column content. Defaults to 'left'. */
+  align?: ColumnAlign
 }
 
 /**

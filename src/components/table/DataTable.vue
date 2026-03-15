@@ -62,7 +62,11 @@
                   :class="header.column.getCanSort() ? 'cursor-pointer select-none' : ''"
                   @click="header.column.getToggleSortingHandler()?.($event)"
                 >
-                  <div v-if="!header.isPlaceholder" class="flex items-center gap-1">
+                  <div
+                    v-if="!header.isPlaceholder"
+                    class="flex items-center gap-1"
+                    :class="[alignClass(header.column.id)]"
+                  >
                     <FlexRender
                       v-if="!header.isPlaceholder"
                       :render="header.column.columnDef.header"
@@ -104,27 +108,35 @@
               </template>
 
               <template v-else>
+                <!-- Table Row -->
                 <tr
                   v-for="row in table.getRowModel().rows"
                   :key="row.id"
                   class="odd:bg-surface-container-low hover:bg-surface-container"
                 >
+                  <!-- Table Cell -->
                   <td
                     v-for="cell in row.getVisibleCells()"
                     v-mark="config.searchable ? globalFilter : undefined"
                     :key="cell.id"
-                    class="px-3 py-2.5 text-left"
+                    class="px-3 py-2.5"
                     :style="`width: ${cell.column.columnDef.size}%`"
                   >
-                    <slot
-                      :name="`item-${cell.column.id}`"
-                      :row="cell.row.original"
-                      :value="cell.getValue()"
-                      :formatted="formatValue(cell)"
-                    >
-                      <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
-                    </slot>
+                    <div class="flex items-center" :class="[alignClass(cell.column.id)]">
+                      <slot
+                        :name="`item-${cell.column.id}`"
+                        :row="cell.row.original"
+                        :value="cell.getValue()"
+                        :formatted="formatValue(cell)"
+                      >
+                        <FlexRender
+                          :render="cell.column.columnDef.cell"
+                          :props="cell.getContext()"
+                        />
+                      </slot>
+                    </div>
                   </td>
+                  <!-- Table Row Actions -->
                   <td v-if="config.actions" class="px-1.5 text-right">
                     <div class="flex items-center gap-x-0.5 sm:gap-x-1">
                       <UITooltip
@@ -216,6 +228,7 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UITooltip from '../ui/UITooltip.vue'
 import type TableConfig from './types'
+import type { ColumnAlign } from './types'
 
 /**
  * Props:
@@ -339,6 +352,17 @@ function formatValue(cell: Cell<T, unknown>) {
   const col = columnMap.value[cell.column.id]
   const raw = cell.getValue()
   return col?.formatter ? col.formatter(raw, cell.row.original) : raw
+}
+
+function alignClass(columnId: string) {
+  const alignMap: Record<ColumnAlign, string> = {
+    left: 'justify-start',
+    center: 'justify-center',
+    right: 'justify-end',
+  }
+
+  const col = columnMap.value[columnId]
+  return col?.align ? alignMap[col.align] : alignMap.left
 }
 
 function clearFilter() {

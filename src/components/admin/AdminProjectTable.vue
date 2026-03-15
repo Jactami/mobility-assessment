@@ -44,6 +44,7 @@ const tableConfig: TableConfig<Project> = {
       label: t('project.score'),
       formatter: (score) => (typeof score === 'number' ? n(score * 100, 'rounded') : undefined),
       sort: 'raw',
+      align: 'center',
       width: 10,
     },
     {
