@@ -45,7 +45,7 @@
   --color-success-container: var(--color-green-200);
   --color-on-success-container: var(--color-green-900);
 
-  --color-warning: var(--color-yellow-700);
+  --color-warning: var(--color-yellow-600);
   --color-on-warning: var(--color-white);
   --color-warning-container: var(--color-yellow-200);
   --color-on-warning-container: var(--color-yellow-900);

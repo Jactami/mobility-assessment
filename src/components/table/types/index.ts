@@ -1,5 +1,5 @@
-import type { ButtonSeverity } from '@/components/ui/button/types'
 import type { Icon } from '@/components/ui/icon/types'
+import type { UISeverity } from '@/components/ui/types'
 
 export type ColumnAlign = 'left' | 'center' | 'right'
 
@@ -52,7 +52,7 @@ export default interface TableConfig<T> {
     handler: (item: T) => unknown
     label: string
     icon: Icon
-    severity?: ButtonSeverity
+    severity?: UISeverity
   }[]
 
   /** Optional action to handle adding a new item to the table. */

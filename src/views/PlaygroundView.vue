@@ -61,14 +61,18 @@
       class="mt-10 space-y-8 [&>div]:flex [&>div]:flex-col [&>div]:items-center [&>div]:justify-center [&>div]:gap-6 [&>div]:sm:flex-row"
     >
       <div>
-        <UIButton variant="solid" severity="primary">Primary Button</UIButton>
-        <UIButton variant="solid" severity="neutral">Neutral Button</UIButton>
-        <UIButton variant="solid" severity="danger">Danger Button</UIButton>
+        <UIButton variant="solid" severity="primary">Primary Solid</UIButton>
+        <UIButton variant="solid" severity="neutral">Neutral Solid</UIButton>
+        <UIButton variant="solid" severity="success">Success Solid</UIButton>
+        <UIButton variant="solid" severity="danger">Danger Solid</UIButton>
+        <UIButton variant="solid" severity="warning">Warning Solid</UIButton>
       </div>
       <div>
-        <UIButton variant="ghost" severity="primary">Primary Button</UIButton>
-        <UIButton variant="ghost" severity="neutral">Neutral Button</UIButton>
-        <UIButton variant="ghost" severity="danger">Danger Button</UIButton>
+        <UIButton variant="ghost" severity="primary">Primary Ghost</UIButton>
+        <UIButton variant="ghost" severity="neutral">Neutral Ghost</UIButton>
+        <UIButton variant="ghost" severity="success">Success Ghost</UIButton>
+        <UIButton variant="ghost" severity="danger">Danger Ghost</UIButton>
+        <UIButton variant="ghost" severity="warning">Warning Ghost</UIButton>
       </div>
       <div>
         <UIButton size="sm">Small Button</UIButton>
@@ -79,12 +83,13 @@
         <UIButton icon="signIn">Button with Icon</UIButton>
       </div>
       <div>
-        <UIButton disabled>Disabled Button</UIButton>
-        <UIButton variant="ghost" severity="primary" disabled>Disabled Button</UIButton>
+        <UIButton disabled>Disabled Solid</UIButton>
+        <UIButton variant="ghost" severity="primary" disabled>Disabled Ghost</UIButton>
       </div>
       <div>
         <UIButton
-          class="w-full max-w-96 rounded-full bg-lime-700 text-white enabled:hover:bg-lime-700/90 enabled:active:bg-lime-700/80"
+          severity="none"
+          class="w-full max-w-96 rounded-full bg-lime-700 text-white focus:ring-lime-700 enabled:hover:bg-lime-700/90 enabled:active:bg-lime-700/80"
         >
           Custom Button <UIIcon icon="signIn" />
         </UIButton>
@@ -92,7 +97,9 @@
       <div>
         <UIButtonIcon severity="primary" icon="add" title="Icon Button" />
         <UIButtonIcon severity="neutral" icon="add" title="Icon Button" />
+        <UIButtonIcon severity="success" icon="add" title="Icon Button" />
         <UIButtonIcon severity="danger" icon="add" title="Icon Button" />
+        <UIButtonIcon severity="warning" icon="add" title="Icon Button" />
         <UIButtonIcon severity="neutral" icon="add" title="Icon Button" disabled />
       </div>
     </div>

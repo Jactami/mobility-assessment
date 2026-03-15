@@ -8,18 +8,23 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { UISeverity } from './types'
 
-type Severity = 'primary' | 'neutral' | 'success' | 'warning' | 'danger' | 'none'
-
-const props = defineProps<{
+type BadgeProps = {
   label?: string
-  severity?: Severity
+  severity?: UISeverity
   // TODO: add icon support
   // TODO: add size variants
+  // TODO: add variant (filled, ghost)
   // TODO: add custom classes
-}>()
+}
 
-const severityClassMap: Record<Severity, string> = {
+const props = withDefaults(defineProps<BadgeProps>(), {
+  severity: 'none',
+})
+
+// TODO: Move color mapping to utility composable?
+const severityClassMap: Record<UISeverity, string> = {
   primary: 'bg-primary text-on-primary',
   neutral: 'bg-surface-container text-on-surface-variant',
   success: 'bg-success text-on-success',

@@ -1,16 +1,18 @@
 import type { Icon } from '../../icon/types'
+import type { UISeverity } from '../../types'
 
-// add more variants, e.g. outline, soft, link, etc.?
+// TODO: Add more variants, e.g. outline, soft, link, etc.?
+// TODO:Create shared ui variant type
 export type ButtonVariant = 'solid' | 'ghost'
 
-// add more severities, e.g. secondary, success, warning, info, etc.?
-export type ButtonSeverity = 'primary' | 'neutral' | 'danger'
+// TODO: Create shared ui size type
+export type ButtonSize = 'sm' | 'md' | 'lg'
 
 export interface ButtonProps {
   variant?: ButtonVariant
-  severity?: ButtonSeverity
+  severity?: UISeverity
   icon?: Icon
-  size?: 'sm' | 'md' | 'lg'
+  size?: ButtonSize
   type?: 'button' | 'submit' | 'reset'
   title?: string
   disabled?: boolean
