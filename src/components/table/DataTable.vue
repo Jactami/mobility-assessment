@@ -260,26 +260,31 @@ const columns = computed(() => {
       cell: (props) =>
         col.formatter ? col.formatter(props.getValue(), props.cell.row.original) : props.getValue(),
       enableSorting: !!col.sort,
-      sortingFn:
-        col.sort && col.formatter
-          ? (a, b) => {
-              const rawA = a.getValue(col.key)
-              const rawB = b.getValue(col.key)
+      sortingFn: col.formatter
+        ? (a, b) => {
+            const rawA = a.getValue(col.key)
+            const rawB = b.getValue(col.key)
 
-              const aVal = col.sort === 'formatted' ? col.formatter?.(rawA, a.original) : rawA
-              const bVal = col.sort === 'formatted' ? col.formatter?.(rawB, b.original) : rawB
+            const aVal = col.sort === 'formatted' ? col.formatter?.(rawA, a.original) : rawA
+            const bVal = col.sort === 'formatted' ? col.formatter?.(rawB, b.original) : rawB
 
-              // Sort numbers
-              if (typeof aVal === 'number' && typeof bVal === 'number') return aVal - bVal
+            // Sort nullish values last (empty strings, null, undefined)
+            if ((aVal == null || aVal === '') && (bVal == null || bVal === '')) return 0
 
-              // Sort dates
-              if (aVal instanceof Date && bVal instanceof Date)
-                return aVal.getTime() - bVal.getTime()
+            const isDesc = sorting.value?.find((s) => s.id === col.key)?.desc
+            if (aVal == null || aVal === '') return isDesc ? -1 : 1
+            if (bVal == null || bVal === '') return isDesc ? 1 : -1
 
-              // Default alphanumeric sort
-              return String(aVal).localeCompare(String(bVal))
-            }
-          : 'alphanumeric',
+            // Sort numbers
+            if (typeof aVal === 'number' && typeof bVal === 'number') return aVal - bVal
+
+            // Sort dates
+            if (aVal instanceof Date && bVal instanceof Date) return aVal.getTime() - bVal.getTime()
+
+            // Default alphanumeric sort
+            return String(aVal).localeCompare(String(bVal))
+          }
+        : 'alphanumeric',
       enableGlobalFilter: props.config.searchable,
       size: col.width || 150, // Default width if not specified
     })
