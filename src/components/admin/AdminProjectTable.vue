@@ -70,8 +70,8 @@ const tableConfig: TableConfig<Project> = {
   pagination: true,
   actions: [
     {
-      icon: 'edit',
-      label: t('action.edit'),
+      icon: 'open',
+      label: t('action.open'),
       handler: (project) => {
         router.push({ name: 'project', params: { projectId: project.id } })
       },

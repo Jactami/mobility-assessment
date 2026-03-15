@@ -54,6 +54,8 @@
     "duplicateItem": "{item} duplizieren",
     "edit": "Bearbeiten",
     "editItem": "{item} bearbeiten",
+    "open": "Öffnen",
+    "openItem": "{item} öffnen",
     "save": "Speichern",
     "saveItem": "{item} speichern",
     "update": "Aktualisieren",

@@ -60,6 +60,7 @@ import { useUtil } from '@/composables/util/misc'
 import type { Project } from '@/db/types'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   project: Project
@@ -72,6 +73,7 @@ const emit = defineEmits<{
   (e: 'favorite'): void
 }>()
 
+const router = useRouter()
 const { d, n, t } = useI18n()
 const { scoreToColor } = useColorUtil()
 const { createAddress } = useUtil()
@@ -90,6 +92,11 @@ const menu = computed<MenuListItem[]>(() => [
     label: props.project.favorite ? t('project.favorite.remove') : t('project.favorite.add'),
     icon: props.project.favorite ? 'noFavorite' : 'favorite',
     action: () => emit('favorite'),
+  },
+  {
+    label: t('action.openItem', { item: t('project.label') }),
+    icon: 'open',
+    action: () => router.push({ name: 'project', params: { projectId: props.project.id } }),
   },
   {
     label: t('action.duplicateItem', { item: t('project.label') }),

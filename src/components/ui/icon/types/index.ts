@@ -15,6 +15,7 @@ import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-
 import MaterialSymbolsDownload from '~icons/material-symbols/download'
 import MaterialSymbolsEditRounded from '~icons/material-symbols/edit-rounded'
 import MaterialSymbolsErrorOutlineRounded from '~icons/material-symbols/error-outline-rounded'
+import MaterialSymbolsFolderOpenOutlineRounded from '~icons/material-symbols/folder-open-outline-rounded'
 import MaterialSymbolsHome from '~icons/material-symbols/home'
 import MaterialSymbolsLocationOnRounded from '~icons/material-symbols/location-on-rounded'
 import MaterialSymbolsLoginRounded from '~icons/material-symbols/login-rounded'
@@ -67,6 +68,7 @@ export const icons = {
   more: MaterialSymbolsMoreVert,
   next: MaterialSymbolsChevronRight,
   noFavorite: MaterialSymbolsStarOutlineRounded,
+  open: MaterialSymbolsFolderOpenOutlineRounded,
   poi: MaterialSymbolsLocationOnRounded,
   previous: MaterialSymbolsChevronLeft,
   refresh: MaterialSymbolsRefreshRounded,
