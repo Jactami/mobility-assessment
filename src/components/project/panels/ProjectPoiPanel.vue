@@ -10,6 +10,7 @@
             height="2rem"
             :width="`${7 + (i % 3) * 2}rem`"
           >
+            <!-- TODO: Implement category poi filter on click of pill -->
             <ProjectCategoryPill
               v-if="project?.latitude && project?.longitude"
               :category="category.name"
