@@ -68,7 +68,7 @@ const buttonClasses = computed(() =>
     // base classes
     'relative inline-flex cursor-pointer transition-colors font-medium items-center justify-center gap-x-1 rounded-border',
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-    'disabled:cursor-not-allowed disabled:opacity-50 disabled:brightness-100',
+    'disabled:cursor-not-allowed disabled:opacity-50 disabled:brightness-100 disabled:pointer-events-none',
     // prop classes
     focusClasses[props.severity],
     sizeClasses[props.size],

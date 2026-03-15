@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<ButtonProps>(), {
 const btnClass = computed(() =>
   twMerge([
     // modify default button classes to make it an icon-only button
-    'aspect-square rounded-full p-1.5',
+    'aspect-square rounded-full p-1.5 focus-visible:ring-offset-0',
     // prop classes
     props.class,
   ]),
