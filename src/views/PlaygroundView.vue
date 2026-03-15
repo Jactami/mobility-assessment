@@ -98,6 +98,20 @@
     </div>
   </UISection>
 
+  <UISection title="Badges">
+    <p>
+      The badges are defined in the <code>src/components/ui/UIBadge.vue</code> file and can be used
+      throughout the application to display small pieces of information.
+    </p>
+    <div class="mt-10 flex items-center justify-center gap-6">
+      <UIBadge severity="primary" label="Primary" />
+      <UIBadge severity="neutral" label="Neutral" />
+      <UIBadge severity="success" label="Success" />
+      <UIBadge severity="warning" label="Warning" />
+      <UIBadge severity="danger" label="Danger" />
+    </div>
+  </UISection>
+
   <UISection title="Icons">
     <p>
       This is an overview of the available icons. The icons are defined in the
@@ -286,6 +300,7 @@ import { icons } from '@/components/ui/icon/types'
 import UIIcon from '@/components/ui/icon/UIIcon.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenu from '@/components/ui/menu/UIMenu.vue'
+import UIBadge from '@/components/ui/UIBadge.vue'
 import UIModal from '@/components/ui/UIModal.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UISection from '@/components/ui/UISection.vue'
