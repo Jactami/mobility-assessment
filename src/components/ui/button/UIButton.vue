@@ -32,6 +32,8 @@ const props = withDefaults(defineProps<ButtonProps>(), {
   disabled: false,
 })
 
+// TODO: Create utility composable for for mapping ui types to Tailwind classes?
+
 const sizeClasses: Record<ButtonSize, string> = {
   sm: 'px-2.5 py-1.5 text-xs sm:text-sm',
   md: 'px-3 py-2 text-sm sm:text-base',
