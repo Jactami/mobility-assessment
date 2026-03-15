@@ -5,11 +5,11 @@
  * ```
  * [out:json];
  * (
- *  node[shop=supermarket](around:1000,49.8926840,10.9080738);
- *  way[shop=supermarket](around:1000,49.8926840,10.9080738);
- *  relation[shop=supermarket](around:1000,49.8926840,10.9080738);
+ *   nwr[shop=supermarket](around:1000,49.8926840,10.9080738);
+ *   nwr[amenity=school](around:1000,49.8926840,10.9080738);
+ *   nwr[amenity=doctor](around:1000,49.8926840,10.9080738);
  * );
- * out geom;
+ * out center;
  */
 export class OverpassQueryBuilder {
   private query: string
