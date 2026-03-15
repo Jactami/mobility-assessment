@@ -5,7 +5,7 @@
         <UISkeletonLoader :loading="loading" :rounded="true" height="2rem">
           <label
             :aria-label="t(`factor.${factor.name}`)"
-            class="group relative flex w-full justify-center rounded-full border-[1.5px] px-3 py-1.5 text-center shadow-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
+            class="group relative flex w-full justify-center rounded-full border-[1.5px] px-3 py-1.5 text-center shadow-sm transition hover:scale-105 has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
             :style="{
               borderColor: factor.color,
               outlineColor: factor.color,
