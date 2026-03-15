@@ -2,13 +2,15 @@
   <DataTable :data="projects" :config="tableConfig">
     <template #item-score="{ formatted, value }">
       <!-- Score Badge -->
-      <div
+      <UIBadge
         v-if="Number.isFinite(value)"
-        class="flex aspect-square w-6 items-center justify-center rounded-border text-xs font-medium text-on-surface-inverse"
+        severity="none"
         :style="{ backgroundColor: scoreToColor(Number(value)) }"
       >
-        {{ formatted }}
-      </div>
+        <div class="flex aspect-square w-4 items-center justify-center text-on-surface-inverse">
+          {{ formatted }}
+        </div>
+      </UIBadge>
     </template>
   </DataTable>
 </template>
@@ -16,6 +18,7 @@
 <script setup lang="ts">
 import DataTable from '@/components/table/DataTable.vue'
 import type TableConfig from '@/components/table/types'
+import UIBadge from '@/components/ui/UIBadge.vue'
 import { useColorUtil } from '@/composables/util/color'
 import { useUtil } from '@/composables/util/misc'
 import type { Profile, Project } from '@/db/types'
