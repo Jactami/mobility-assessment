@@ -16,7 +16,7 @@
           :spellcheck="false"
         >
           <template #prefixIcon>
-            <UIIcon icon="search" class="text-on-surface-variant mr-2" />
+            <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
           </template>
           <template #suffixIcon>
             <div class="relative w-6">
@@ -47,12 +47,12 @@
     </div>
 
     <!-- Data Table -->
-    <div class="rounded-border border-outline-variant mt-5 overflow-hidden border sm:mt-2">
+    <div class="mt-5 overflow-hidden rounded-border border border-outline-variant sm:mt-2">
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full">
           <table class="relative min-w-full border-collapse text-sm">
             <!-- Table Head -->
-            <thead class="border-outline-variant border-b">
+            <thead class="border-b border-outline-variant">
               <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
                 <th
                   v-for="header in headerGroup.headers"
@@ -96,7 +96,7 @@
                 <tr>
                   <td
                     :colspan="columns.length"
-                    class="text-on-surface-variant p-4 text-center text-sm italic"
+                    class="p-4 text-center text-sm text-on-surface-variant italic"
                   >
                     {{ t('table.empty') }}
                   </td>
@@ -116,7 +116,12 @@
                     class="px-3 py-2.5 text-left"
                     :style="`width: ${cell.column.columnDef.size}%`"
                   >
-                    <slot :name="`item-${cell.column.id}`" :value="cell.getValue()">
+                    <slot
+                      :name="`item-${cell.column.id}`"
+                      :row="cell.row.original"
+                      :value="cell.getValue()"
+                      :formatted="formatValue(cell)"
+                    >
                       <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
                     </slot>
                   </td>
@@ -203,6 +208,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useVueTable,
+  type Cell,
   type PaginationState,
   type SortingState,
 } from '@tanstack/vue-table'
@@ -320,6 +326,15 @@ const table = useVueTable({
     return String(formatted).toLowerCase().includes(filterValue.toLowerCase())
   },
 })
+
+/** Mapping of column keys to their definitions for easy access. */
+const columnMap = computed(() => Object.fromEntries(props.config.columns.map((c) => [c.key, c])))
+
+function formatValue(cell: Cell<T, unknown>) {
+  const col = columnMap.value[cell.column.id]
+  const raw = cell.getValue()
+  return col?.formatter ? col.formatter(raw, cell.row.original) : raw
+}
 
 function clearFilter() {
   globalFilter.value = ''

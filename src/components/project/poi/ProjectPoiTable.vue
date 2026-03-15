@@ -1,14 +1,14 @@
 <template>
   <DataTable :config="config" :data="pois">
-    <template #item-category="{ value }">
+    <template #item-category="{ formatted, value }">
       <div class="flex items-center gap-2">
         <div
-          class="bg-surface flex size-5 items-center justify-center rounded-full border-2 p-0.5"
+          class="flex size-5 items-center justify-center rounded-full border-2 bg-surface p-0.5"
           :style="{ borderColor: categoryToColor(String(value)) }"
         >
           <ProjectCategoryIcon :category="String(value)" class="size-full" />
         </div>
-        <span>{{ t(`category.${value}`) }}</span>
+        <span>{{ formatted }}</span>
       </div>
     </template>
   </DataTable>
