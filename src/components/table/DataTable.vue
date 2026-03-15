@@ -232,13 +232,8 @@ import UITooltip from '../ui/UITooltip.vue'
 import type TableConfig from './types'
 import type { ColumnAlign } from './types'
 
-/**
- * Props:
- * - config: Table setup (columns, sorting, pagination)
- * - data: Array of rows to render
- */
 const props = defineProps<{
-  /** Table setup (columns, sorting, pagination) */
+  /** Table setup (columns, sorting, pagination, etc.) */
   config: TableConfig<T>
   /** Array of rows to render in the table */
   data: T[]
