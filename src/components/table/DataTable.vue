@@ -125,7 +125,7 @@
                     <div class="flex items-center" :class="[getAlignClass(cell.column.id)]">
                       <div>
                         <slot
-                          :name="`item-${cell.column.id}`"
+                          :name="`column-${cell.column.id}`"
                           :row="cell.row.original"
                           :value="cell.getValue()"
                           :formatted="

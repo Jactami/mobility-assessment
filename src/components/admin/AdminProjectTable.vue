@@ -1,6 +1,6 @@
 <template>
   <DataTable :data="projects" :config="tableConfig">
-    <template #item-score="{ formatted, value }">
+    <template #column-score="{ formatted, value }">
       <!-- Score Badge -->
       <UIBadge
         v-if="Number.isFinite(value)"
