@@ -2,6 +2,7 @@ import ViteYaml from '@modyfi/vite-plugin-yaml'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath } from 'node:url'
+import { visualizer } from 'rollup-plugin-visualizer'
 import Unfonts from 'unplugin-fonts/vite'
 import Icons from 'unplugin-icons/vite'
 import { defineConfig } from 'vite'
@@ -37,6 +38,14 @@ export default defineConfig(async () => ({
       },
     }),
     ViteYaml(),
+    // Generate bundle analysis on build
+    visualizer({
+      filename: 'stats.html',
+      template: 'treemap', // sunburst | treemap | network
+      emitFile: true,
+      gzipSize: true,
+      brotliSize: true,
+    }),
   ],
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
