@@ -162,18 +162,18 @@ onMounted(loadProject)
 onUnmounted(projectStore.reset)
 
 // Prompt user if they try to leave the page with unsaved changes
-onBeforeRouteLeave(async (_, __, next) => {
+onBeforeRouteLeave(async () => {
   if (projectStore.isDirty) {
     const confirmLeave = await confirmDialog({
       message: t('dialog.unsavedChanges'),
     })
     if (confirmLeave) {
-      return next()
+      return true
     }
-    return next(false)
+    return false
   }
 
-  return next()
+  return true
 })
 
 async function loadProject() {

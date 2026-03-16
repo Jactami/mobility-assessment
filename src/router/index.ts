@@ -59,9 +59,9 @@ const router = createRouter({
 })
 
 // handle navigation with authentication
-router.beforeEach(async (to, _, next) => {
+router.beforeEach(async (to) => {
   // Allow navigation to public routes
-  if (!to.meta.roles) return next()
+  if (!to.meta.roles) return true
 
   // Wait for authentication
   const authStore = useAuthStore()
@@ -70,14 +70,14 @@ router.beforeEach(async (to, _, next) => {
   if (authStore.user && authStore.role) {
     if (to.meta.roles.includes(authStore.role)) {
       // Allow navigation, if user is authenticated and has the required role
-      return next()
+      return true
     } else {
       // Redirect to home or admin, if user is authenticated but does not have the required role
-      return next(authStore.role === 'admin' ? '/admin' : '/')
+      return authStore.role === 'admin' ? '/admin' : '/'
     }
   } else {
     // Redirect to login, if user not authenticated
-    return next(`/login?redirect=${to.path}`)
+    return `/login?redirect=${to.path}`
   }
 })
 
