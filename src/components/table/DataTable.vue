@@ -119,24 +119,26 @@
                     v-for="cell in row.getVisibleCells()"
                     v-mark="config.searchable ? globalFilter : undefined"
                     :key="cell.id"
-                    class="px-3 py-2.5"
+                    class="px-3 py-2.5 align-middle"
                     :style="`width: ${cell.column.columnDef.size}%`"
                   >
                     <div class="flex items-center" :class="[getAlignClass(cell.column.id)]">
-                      <slot
-                        :name="`item-${cell.column.id}`"
-                        :row="cell.row.original"
-                        :value="cell.getValue()"
-                        :formatted="
-                          getFormatter(cell.column.id)?.(cell.getValue(), cell.row.original) ??
-                          cell.getValue()
-                        "
-                      >
-                        <FlexRender
-                          :render="cell.column.columnDef.cell"
-                          :props="cell.getContext()"
-                        />
-                      </slot>
+                      <div>
+                        <slot
+                          :name="`item-${cell.column.id}`"
+                          :row="cell.row.original"
+                          :value="cell.getValue()"
+                          :formatted="
+                            getFormatter(cell.column.id)?.(cell.getValue(), cell.row.original) ??
+                            cell.getValue()
+                          "
+                        >
+                          <FlexRender
+                            :render="cell.column.columnDef.cell"
+                            :props="cell.getContext()"
+                          />
+                        </slot>
+                      </div>
                     </div>
                   </td>
                   <!-- Table Row Actions -->
