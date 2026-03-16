@@ -31,7 +31,20 @@
       :label="t('user.email')"
       :placeholder="t('user.email')"
       validation="required|email"
-      outer-class="col-span-2"
+      outer-class="col-span-full"
+    />
+    <FormKit
+      type="date"
+      name="expires_at"
+      :label="`${t('user.expiresAt')} (${t('common.optional')})`"
+      validation="date"
+      outer-class="col-span-full"
+    />
+    <FormKit
+      type="checkbox"
+      name="is_disabled"
+      :label="t('user.disabled')"
+      outer-class="col-span-full"
     />
     <FormKit
       type="password"

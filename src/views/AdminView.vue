@@ -96,6 +96,8 @@ async function upsertUser(profile: ProfileWithPassword) {
     firstName: profile.first_name || '',
     lastName: profile.last_name || '',
     email: profile.email || '',
+    isDisabled: profile.is_disabled,
+    expiresAt: profile.expires_at ? new Date(profile.expires_at) : undefined,
     password: profile.password,
   })
 

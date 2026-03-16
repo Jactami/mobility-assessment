@@ -104,11 +104,14 @@
     }
   },
   "user": {
+    "disabled": "Deaktiviert",
     "email": "E-Mail",
+    "expiresAt": "Ablaufdatum",
     "firstName": "Vorname",
     "lastName": "Nachname",
     "label": "Nutzer | Nutzer",
-    "password": "Passwort"
+    "password": "Passwort",
+    "status": "Status"
   },
   "project": {
     "address": "Adresse",

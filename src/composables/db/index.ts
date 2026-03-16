@@ -165,6 +165,8 @@ export default function useDB() {
     firstName: string
     lastName: string
     email: string
+    expiresAt?: Date
+    isDisabled?: boolean
     password?: string
   }): Promise<PostgrestResponse<Tables<'profiles'>>> =>
     handleDBCall(async () => {
@@ -175,6 +177,8 @@ export default function useDB() {
           new_first_name: user.firstName,
           new_last_name: user.lastName,
           new_email: user.email,
+          new_expires_at: user.expiresAt?.toISOString(),
+          new_is_disabled: user.isDisabled,
           new_password: user.password,
         })
         if (response.error) return response
