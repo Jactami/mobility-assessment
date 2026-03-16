@@ -35,4 +35,13 @@ export default createI18n<[MessageSchema], 'de'>({
       },
     },
   },
+  datetimeFormats: {
+    de: {
+      short: {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      },
+    },
+  },
 })
