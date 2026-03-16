@@ -1,6 +1,8 @@
 <template>
   <UIPageHeader :title="t('navigation.settings')" />
 
+  <AuthUserStatusAlert />
+
   <UISection :title="t('auth.password.change')" class="grow">
     <AuthChangePasswordForm />
   </UISection>
@@ -23,6 +25,7 @@
 
 <script setup lang="ts">
 import AuthChangePasswordForm from '@/components/auth/AuthChangePasswordForm.vue'
+import AuthUserStatusAlert from '@/components/auth/AuthUserStatusAlert.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
 import UISection from '@/components/ui/UISection.vue'
 import { useI18n } from 'vue-i18n'

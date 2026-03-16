@@ -13,6 +13,21 @@ export const useAuthStore = defineStore('auth', () => {
   const profile = computed(() => _profile.value)
   const role = computed(() => _role.value)
 
+  const isExpired = computed(() => {
+    if (!profile.value?.expires_at) return false
+
+    const now = new Date()
+    return (
+      new Date(profile.value.expires_at) <
+      new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    )
+  })
+
+  const isBlocked = computed(() => {
+    if (!profile.value) return false
+    return profile.value.is_disabled || isExpired.value
+  })
+
   function setSession(session: Session | null) {
     if (session) {
       _user.value = session.user
@@ -42,6 +57,8 @@ export const useAuthStore = defineStore('auth', () => {
     profile,
     setProfile,
     role,
+    isExpired,
+    isBlocked,
     authInitialized,
   }
 })

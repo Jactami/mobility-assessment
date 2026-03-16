@@ -77,6 +77,20 @@
       "save": "Daten erfolgreich gespeichert."
     }
   },
+  "alert": {
+    "accountDisabled": {
+      "title": "Account deaktiviert",
+      "message": "Ihr Account wurde deaktiviert. Sie können nicht mehr auf Ihre Projekte zugreifen."
+    },
+    "accountExpired": {
+      "title": "Account abgelaufen",
+      "message": "Ihr Zugriff ist abgelaufen. Ab sofort können Sie nicht mehr auf Ihre Projekte zugreifen."
+    },
+    "accountExpiresSoon": {
+      "title": "Zeitlich begrenzter Zugriff",
+      "message": "Ihr Account ist bis zum {date} begrenzt. Nach diesem Datum können Sie nicht mehr auf Ihre Projekte zugreifen."
+    }
+  },
   "dialog": {
     "confirm": "Bitte bestätigen",
     "delete": "Möchten Sie {item} wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.",

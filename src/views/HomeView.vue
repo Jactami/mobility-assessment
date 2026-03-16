@@ -9,73 +9,47 @@
   />
 
   <template v-else>
-    <!-- Action Bar -->
-    <div class="mt-3 max-w-sm">
-      <FormKit
-        id="project-filter-input"
-        v-model="filter"
-        type="text"
-        name="filter"
-        :label="t('common.search')"
-        label-class="sr-only"
-        :placeholder="t('common.search')"
-        autocomplete="off"
-        :spellcheck="false"
-      >
-        <template #prefixIcon>
-          <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
-        </template>
-        <template #suffixIcon>
-          <div class="absolute right-0 bottom-1 flex items-center pr-2">
-            <UIButtonIcon
-              v-if="filter"
-              icon="clear"
-              :aria-label="t('common.clear')"
-              @click="clearFilter"
-            />
-          </div>
-        </template>
-      </FormKit>
-    </div>
+    <!-- User Status -->
+    <AuthUserStatusAlert />
 
-    <!-- Favorites -->
-    <UISection
-      v-if="favoriteProjects && favoriteProjects.length"
-      :title="t('project.favorite.label', 2)"
-    >
-      <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-        <ProjectCard
-          v-for="project in favoriteProjects"
-          :key="project.id"
-          :project="project"
-          :filter="filter"
-          @delete="deleteProject(project)"
-          @duplicate="duplicateProject(project)"
-          @favorite="toggleFavorite(project)"
-        />
+    <template v-if="!authStore.isBlocked">
+      <!-- Action Bar -->
+      <div class="mt-5 max-w-sm">
+        <FormKit
+          id="project-filter-input"
+          v-model="filter"
+          type="text"
+          name="filter"
+          :label="t('common.search')"
+          label-class="sr-only"
+          :placeholder="t('common.search')"
+          autocomplete="off"
+          :spellcheck="false"
+        >
+          <template #prefixIcon>
+            <UIIcon icon="search" class="mr-2 text-on-surface-variant" />
+          </template>
+          <template #suffixIcon>
+            <div class="absolute right-0 bottom-1 flex items-center pr-2">
+              <UIButtonIcon
+                v-if="filter"
+                icon="clear"
+                :aria-label="t('common.clear')"
+                @click="clearFilter"
+              />
+            </div>
+          </template>
+        </FormKit>
       </div>
-    </UISection>
 
-    <!-- All Projects -->
-    <UISection :title="t('project.allProjects')">
-      <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-        <template v-if="!loading">
-          <button
-            class="cursor-pointer"
-            :title="t('action.createItem', { item: t('project.label') })"
-            @click="createProject"
-          >
-            <UICard :animation="true" class="min-h-64">
-              <div
-                class="flex h-full flex-col items-center justify-center gap-y-4 p-2 text-on-surface-variant"
-              >
-                <UIIcon class="rounded-full text-7xl text-on-surface-variant" icon="add" />
-                <span>{{ t('action.createItem', { item: t('project.label') }) }}</span>
-              </div>
-            </UICard>
-          </button>
+      <!-- Favorites -->
+      <UISection
+        v-if="favoriteProjects && favoriteProjects.length"
+        :title="t('project.favorite.label', 2)"
+      >
+        <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <ProjectCard
-            v-for="project in filteredProjects"
+            v-for="project in favoriteProjects"
             :key="project.id"
             :project="project"
             :filter="filter"
@@ -83,18 +57,50 @@
             @duplicate="duplicateProject(project)"
             @favorite="toggleFavorite(project)"
           />
-        </template>
-        <template v-else>
-          <UICard v-for="i in 4" :key="i" :animation="false" class="min-h-64">
-            <UISkeleton width="100%" height="100%" />
-          </UICard>
-        </template>
-      </div>
-    </UISection>
+        </div>
+      </UISection>
+
+      <!-- All Projects -->
+      <UISection :title="t('project.allProjects')">
+        <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <template v-if="!loading">
+            <button
+              class="cursor-pointer"
+              :title="t('action.createItem', { item: t('project.label') })"
+              @click="createProject"
+            >
+              <UICard :animation="true" class="min-h-64">
+                <div
+                  class="flex h-full flex-col items-center justify-center gap-y-4 p-2 text-on-surface-variant"
+                >
+                  <UIIcon class="rounded-full text-7xl text-on-surface-variant" icon="add" />
+                  <span>{{ t('action.createItem', { item: t('project.label') }) }}</span>
+                </div>
+              </UICard>
+            </button>
+            <ProjectCard
+              v-for="project in filteredProjects"
+              :key="project.id"
+              :project="project"
+              :filter="filter"
+              @delete="deleteProject(project)"
+              @duplicate="duplicateProject(project)"
+              @favorite="toggleFavorite(project)"
+            />
+          </template>
+          <template v-else>
+            <UICard v-for="i in 4" :key="i" :animation="false" class="min-h-64">
+              <UISkeleton width="100%" height="100%" />
+            </UICard>
+          </template>
+        </div>
+      </UISection>
+    </template>
   </template>
 </template>
 
 <script setup lang="ts">
+import AuthUserStatusAlert from '@/components/auth/AuthUserStatusAlert.vue'
 import ProjectCard from '@/components/project/ProjectCard.vue'
 import UIButtonIcon from '@/components/ui/button/UIButtonIcon.vue'
 import UIIcon from '@/components/ui/icon/UIIcon.vue'
