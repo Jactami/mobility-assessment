@@ -78,20 +78,20 @@ async function deleteUser(profile: Profile) {
   if (!confirmed) return
 
   // Delete user
-  const { data, error } = await db.deleteUser(profile.id)
+  const { error } = await db.deleteUser(profile.id)
 
   if (error) {
     console.error(error)
     errorToast(t('notification.error.delete'))
   } else {
-    // Refresh profile list
-    profiles.value = data
     successToast(t('notification.success.delete'))
+    // Load updated profile list in the background
+    loadProfiles()
   }
 }
 
 async function upsertUser(profile: ProfileWithPassword) {
-  const { data, error } = await db.setUser({
+  const { error } = await db.setUser({
     id: profile.id,
     firstName: profile.first_name || '',
     lastName: profile.last_name || '',
@@ -111,9 +111,9 @@ async function upsertUser(profile: ProfileWithPassword) {
       errorToast(t('notification.error.save'))
     }
   } else {
-    // Refresh profile list
-    profiles.value = data
     successToast(t('notification.success.save'))
+    // Load updated profile list in the background
+    loadProfiles()
   }
 }
 
@@ -146,25 +146,54 @@ async function deleteProject(project: Project) {
     console.error(error)
     errorToast(t('notification.error.delete'))
   } else {
-    // Refresh project list
-    await loadProjects()
     successToast(t('notification.success.delete'))
+    // Load updated project list in the background
+    loadProjects()
   }
 }
 
 // TODO: This is a duplicate of the duplicateProject function in HomeView.
 async function duplicateProject(project: Project) {
-  const { error } = await db.setProject({
+  // Clone project
+  const projectResp = await db.setProject({
     ...project,
     id: undefined, // Ensure a new ID is generated
     title: `${project.title} (${t('common.copy')})`,
   })
 
-  if (error) {
+  if (projectResp.error || !projectResp.data) {
     errorToast(t('notification.error.default'))
-  } else {
-    await loadProjects()
-    successToast(t('notification.success.save'))
+    return
   }
+
+  const newProject = projectResp.data
+
+  // Load pois
+  const poisResp = await db.getPois(project.id)
+  if (poisResp.error) {
+    errorToast(t('notification.error.default'))
+    return
+  }
+
+  // Clone pois
+  const newPois = (poisResp.data || []).map((poi) => ({
+    ...poi,
+    id: undefined, // Ensure a new ID is generated
+    project_id: newProject.id, // Link to new project
+  }))
+
+  // Save new pois
+  if (newPois.length > 0) {
+    const newPoisResp = await db.setPois(newPois)
+    if (newPoisResp.error) {
+      errorToast(t('notification.error.default'))
+      return
+    }
+  }
+
+  successToast(t('notification.success.save'))
+
+  // Load updated project list in the background
+  loadProjects()
 }
 </script>

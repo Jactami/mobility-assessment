@@ -151,13 +151,12 @@ const favoriteProjects = computed(() => {
 })
 
 onMounted(async () => {
-  // Load projects when user enters the page
-  loadProjects()
+  loading.value = true
+  await loadProjects()
+  loading.value = false
 })
 
 async function loadProjects() {
-  loading.value = true
-
   const { data, error } = await db.getProjects()
   loadingError.value = false
 
@@ -167,7 +166,6 @@ async function loadProjects() {
   }
 
   projects.value = data
-  loading.value = false
 }
 
 async function createProject() {
@@ -180,7 +178,6 @@ async function createProject() {
 
   if (!data || error) {
     // Check if the error is due to project limit
-    // TODO
     if (error?.code === 'P0001') {
       errorToast(t('project.error.limitExceeded'))
     } else {
@@ -204,33 +201,64 @@ async function deleteProject(project: Project) {
   })
   if (!confirmLeave) return
 
-  const { error } = await db.deleteProject(project.id)
+  // Delete project and associated pois
+  const [projectResp, poisResp] = await Promise.all([
+    db.deleteProject(project.id),
+    db.deletePois(project.id),
+  ])
 
-  if (error) {
+  if (projectResp.error || poisResp.error) {
     errorToast(t('notification.error.delete'))
   } else {
     successToast(t('notification.success.delete'))
+    // Load updated project list in the background
     loadProjects()
   }
 }
 
 async function duplicateProject(project: Project) {
-  if (!authStore.user) return
-
-  const { data, error } = await db.setProject({
+  // Clone project
+  const projectResp = await db.setProject({
     ...project,
     id: undefined, // Ensure a new ID is generated
     title: `${project.title} (${t('common.copy')})`,
   })
 
-  if (!data || error) {
+  if (projectResp.error || !projectResp.data) {
     errorToast(t('notification.error.default'))
-  } else {
-    router.push({
-      name: 'project',
-      params: { projectId: data.id },
-    })
+    return
   }
+
+  const newProject = projectResp.data
+
+  // Load pois
+  const poisResp = await db.getPois(project.id)
+  if (poisResp.error) {
+    errorToast(t('notification.error.default'))
+    return
+  }
+
+  // Clone pois
+  const newPois = (poisResp.data || []).map((poi) => ({
+    ...poi,
+    id: undefined, // Ensure a new ID is generated
+    project_id: newProject.id, // Link to new project
+  }))
+
+  // Save new pois
+  if (newPois.length > 0) {
+    const newPoisResp = await db.setPois(newPois)
+    if (newPoisResp.error) {
+      errorToast(t('notification.error.default'))
+      return
+    }
+  }
+
+  // Navigate to the new project
+  router.push({
+    name: 'project',
+    params: { projectId: newProject.id },
+  })
 }
 
 function clearFilter() {

@@ -2,12 +2,13 @@
 -- Update existing users
 --
 CREATE OR REPLACE FUNCTION public.update_user(target_user_id uuid, new_first_name text DEFAULT NULL, new_last_name text DEFAULT NULL, new_email text DEFAULT NULL, new_password text DEFAULT NULL, new_is_disabled boolean DEFAULT NULL, new_expires_at date DEFAULT NULL)
-    RETURNS VOID
+    RETURNS public.profiles
     SECURITY DEFINER
     SET search_path = public, auth
     AS $$
 DECLARE
     encrypted_pw text;
+    updated_profile public.profiles;
 BEGIN
     -- Update auth.users (email and password if provided)
     IF new_password IS NOT NULL THEN
@@ -42,7 +43,7 @@ BEGIN
             user_id = target_user_id
             AND provider = 'email';
     END IF;
-    -- Update public.profiles
+    -- Update public.profiles and return updated row
     UPDATE
         public.profiles
     SET
@@ -52,7 +53,11 @@ BEGIN
         is_disabled = new_is_disabled,
         expires_at = new_expires_at
     WHERE
-        id = target_user_id;
+        id = target_user_id
+    RETURNING
+        * INTO updated_profile;
+    -- Return the updated profile
+    RETURN updated_profile;
 END;
 $$
 LANGUAGE plpgsql;

@@ -212,6 +212,14 @@ async function loadProject() {
 async function saveProject() {
   if (!projectStore.project || !projectStore.pois) return
 
+  // Delete existing POIs for the project to avoid duplicates (since we're using upsert for simplicity)
+  const deleteResp = await db.deletePois(projectStore.project.id)
+  if (deleteResp.error) {
+    console.error(deleteResp.error)
+    errorToast(t('notification.error.delete'))
+    return
+  }
+
   // Save the project and POIs to the database
   const [projectResponse, poisResponse] = await Promise.all([
     db.setProject(projectStore.project),

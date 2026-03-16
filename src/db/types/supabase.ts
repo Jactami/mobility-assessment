@@ -169,10 +169,45 @@ export type Database = {
           user_id?: string
           user_role?: Database['public']['Enums']['user_role']
         }
-        Returns: string
+        Returns: {
+          created_at: string
+          email: string
+          expires_at: string | null
+          first_name: string
+          id: string
+          is_disabled: boolean
+          last_name: string
+          updated_at: string | null
+          user_role: Database['public']['Enums']['user_role']
+        }
+        SetofOptions: {
+          from: '*'
+          to: 'profiles'
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
-      delete_user: { Args: { target_user_id: string }; Returns: undefined }
+      delete_user: {
+        Args: { target_user_id: string }
+        Returns: {
+          created_at: string
+          email: string
+          expires_at: string | null
+          first_name: string
+          id: string
+          is_disabled: boolean
+          last_name: string
+          updated_at: string | null
+          user_role: Database['public']['Enums']['user_role']
+        }
+        SetofOptions: {
+          from: '*'
+          to: 'profiles'
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       is_user_active: { Args: never; Returns: boolean }
       update_user: {
         Args: {
@@ -184,7 +219,23 @@ export type Database = {
           new_password?: string
           target_user_id: string
         }
-        Returns: undefined
+        Returns: {
+          created_at: string
+          email: string
+          expires_at: string | null
+          first_name: string
+          id: string
+          is_disabled: boolean
+          last_name: string
+          updated_at: string | null
+          user_role: Database['public']['Enums']['user_role']
+        }
+        SetofOptions: {
+          from: '*'
+          to: 'profiles'
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
