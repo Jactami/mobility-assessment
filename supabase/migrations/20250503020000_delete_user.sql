@@ -3,6 +3,8 @@
 --
 CREATE OR REPLACE FUNCTION public.delete_user(target_user_id uuid)
     RETURNS VOID
+    SECURITY DEFINER
+    SET search_path = public, auth
     AS $$
 BEGIN
     DELETE FROM auth.identities
@@ -13,8 +15,7 @@ BEGIN
     WHERE id = target_user_id;
 END;
 $$
-LANGUAGE plpgsql
-SECURITY DEFINER;
+LANGUAGE plpgsql;
 
 COMMENT ON FUNCTION public.delete_user IS 'Deletes a user and all associated data.';
 

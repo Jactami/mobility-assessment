@@ -41,6 +41,7 @@ CREATE TRIGGER handle_updated_at_projects
 -- Set project limit
 CREATE OR REPLACE FUNCTION public.enforce_project_limit()
     RETURNS TRIGGER
+    SET search_path = public
     AS $$
 DECLARE
     existing_project projects%ROWTYPE;
@@ -68,8 +69,8 @@ BEGIN
             -- Custom defined error code
             'Project limit exceeded.'
             USING ERRCODE = 'P0001';
-        END IF;
-        RETURN NEW;
+    END IF;
+    RETURN NEW;
 END;
 $$
 LANGUAGE plpgsql;

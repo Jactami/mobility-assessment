@@ -60,8 +60,10 @@ export type Database = {
         Row: {
           created_at: string
           email: string
+          expires_at: string | null
           first_name: string
           id: string
+          is_disabled: boolean
           last_name: string
           updated_at: string | null
           user_role: Database['public']['Enums']['user_role']
@@ -69,8 +71,10 @@ export type Database = {
         Insert: {
           created_at?: string
           email: string
+          expires_at?: string | null
           first_name: string
           id: string
+          is_disabled?: boolean
           last_name: string
           updated_at?: string | null
           user_role?: Database['public']['Enums']['user_role']
@@ -78,8 +82,10 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string
+          expires_at?: string | null
           first_name?: string
           id?: string
+          is_disabled?: boolean
           last_name?: string
           updated_at?: string | null
           user_role?: Database['public']['Enums']['user_role']
@@ -155,7 +161,9 @@ export type Database = {
       create_user: {
         Args: {
           email: string
+          expires_at?: string
           first_name: string
+          is_disabled?: boolean
           last_name: string
           password: string
           user_id?: string
@@ -163,18 +171,15 @@ export type Database = {
         }
         Returns: string
       }
-      custom_access_token_hook: {
-        Args: { event: Json }
-        Returns: Json
-      }
-      delete_user: {
-        Args: { target_user_id: string }
-        Returns: undefined
-      }
+      custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      delete_user: { Args: { target_user_id: string }; Returns: undefined }
+      is_user_active: { Args: never; Returns: boolean }
       update_user: {
         Args: {
           new_email?: string
+          new_expires_at?: string
           new_first_name?: string
+          new_is_disabled?: boolean
           new_last_name?: string
           new_password?: string
           target_user_id: string

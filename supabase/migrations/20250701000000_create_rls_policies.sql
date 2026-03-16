@@ -3,37 +3,34 @@
 --
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
--- SELECT
-CREATE POLICY "Authenticated users can read their own profiles." ON public.profiles
+CREATE POLICY "Users can read own profile or admin" ON public.profiles
   FOR SELECT TO authenticated
-    USING (authorize('admin')
-      OR (
-        SELECT
-          auth.uid()) = id);
-
--- INSERT
-CREATE POLICY "Authenticated users can insert their own profiles." ON public.profiles
-  FOR INSERT TO authenticated
-    WITH CHECK (authorize('admin')
-    OR (
+    USING ((
+    -- Admins can always read
       SELECT
-        auth.uid()) = id);
+        authorize('admin'))
+        -- Users can read own profile
+        OR id =(
+          SELECT
+            auth.uid()));
 
--- UPDATE
-CREATE POLICY "Authenticated users can update their own profiles." ON public.profiles
+CREATE POLICY "Admins can insert profiles" ON public.profiles
+  FOR INSERT TO authenticated
+    WITH CHECK ((
+    -- Admins can always insert, users cannot insert profiles directly
+    SELECT authorize('admin')));
+
+CREATE POLICY "Admins can update profiles" ON public.profiles
   FOR UPDATE TO authenticated
-    USING (authorize('admin')
-      OR (
-        SELECT
-          auth.uid()) = id);
+    USING ((
+    -- Admins can always update, users cannot update profiles directly
+    SELECT authorize('admin')));
 
--- DELETE
-CREATE POLICY "Authenticated users can delete their own profiles." ON public.profiles
+CREATE POLICY "Admins can delete profiles" ON public.profiles
   FOR DELETE TO authenticated
-    USING (authorize('admin')
-      OR (
-        SELECT
-          auth.uid()) = id);
+    USING ((
+    -- Admins can always delete, users cannot delete profiles directly
+    SELECT authorize('admin')));
 
 REVOKE ALL ON TABLE public.profiles FROM anon;
 
@@ -46,37 +43,54 @@ GRANT ALL ON TABLE public.profiles TO service_role;
 --
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 
--- SELECT
-CREATE POLICY "Authenticated users can read their own projects." ON public.projects
+CREATE POLICY "Users can read own projects or admin" ON public.projects
   FOR SELECT TO authenticated
-    USING (authorize('admin')
-      OR (
-        SELECT
-          auth.uid()) = owner_id);
-
--- INSERT
-CREATE POLICY "Authenticated users can insert their own projects." ON public.projects
-  FOR INSERT TO authenticated
-    WITH CHECK (authorize('admin')
-    OR (
+    USING ((
+    -- Admins can always read
       SELECT
-        auth.uid()) = owner_id);
+        authorize('admin'))
+        -- Users can read own projects if active
+        OR ((
+          SELECT
+            is_user_active()) AND owner_id =(
+              SELECT
+                auth.uid())));
 
--- UPDATE
-CREATE POLICY "Authenticated users can update their own projects." ON public.projects
+CREATE POLICY "Users can insert own projects or admin" ON public.projects
+  FOR INSERT TO authenticated
+    WITH CHECK ((
+    -- Admins can always insert
+    SELECT authorize('admin'))
+    -- Users can insert into own projects if active
+    OR ((
+      SELECT
+        is_user_active()) AND owner_id =(
+          SELECT
+            auth.uid())));
+
+CREATE POLICY "Users can update own projects or admin" ON public.projects
   FOR UPDATE TO authenticated
-    USING (authorize('admin')
-      OR (
+    USING ((
+    -- Admins can always update
+    SELECT authorize('admin'))
+    -- Users can update own projects if active
+      OR ((
         SELECT
-          auth.uid()) = owner_id);
+          is_user_active()) AND owner_id =(
+            SELECT
+              auth.uid())));
 
--- DELETE
-CREATE POLICY "Authenticated users can delete their own projects." ON public.projects
+CREATE POLICY "Users can delete own projects or admin" ON public.projects
   FOR DELETE TO authenticated
-    USING (authorize('admin')
-      OR (
+    USING ((
+    -- Admins can always delete
+    SELECT authorize('admin'))
+    -- Users can delete own projects if active
+      OR ((
         SELECT
-          auth.uid()) = owner_id);
+          is_user_active()) AND owner_id =(
+            SELECT
+              auth.uid())));
 
 REVOKE ALL ON TABLE public.projects FROM anon;
 
@@ -89,61 +103,78 @@ GRANT ALL ON TABLE public.projects TO service_role;
 --
 ALTER TABLE public.pois ENABLE ROW LEVEL SECURITY;
 
--- SELECT
-CREATE POLICY "Authenticated users can read POIs of their own projects." ON public.pois
+CREATE POLICY "Users can read POIs of own projects or admin" ON public.pois
   FOR SELECT TO authenticated
-    USING (authorize('admin')
-      OR ((
-        SELECT
-          auth.uid()) =(
-            SELECT
-              owner_id
-            FROM
-              public.projects
-            WHERE
-              id = project_id)));
+    USING ((
+    -- Admins can always read
+      SELECT
+        authorize('admin'))
+        -- Users can read POIs of own projects if active
+        OR ((
+          SELECT
+            is_user_active()) AND EXISTS (
+              SELECT
+                1
+              FROM
+                public.projects p
+              WHERE
+                p.id = pois.project_id AND p.owner_id =(
+                  SELECT
+                    auth.uid()))));
 
--- INSERT
-CREATE POLICY "Authenticated users can insert POIs into their own projects." ON public.pois
+CREATE POLICY "Users can insert POIs into own projects or admin" ON public.pois
   FOR INSERT TO authenticated
-    WITH CHECK (authorize('admin')
+    WITH CHECK ((
+    -- Admins can always insert
+    SELECT authorize('admin'))
+    -- Users can insert POIs of own projects if active
     OR ((
       SELECT
-        auth.uid()) =(
+        is_user_active()) AND EXISTS (
           SELECT
-            owner_id
+            1
           FROM
-            public.projects
+            public.projects p
           WHERE
-            id = project_id)));
+            p.id = pois.project_id AND p.owner_id =(
+              SELECT
+                auth.uid()))));
 
--- UPDATE
-CREATE POLICY "Authenticated users can update POIs of their own projects." ON public.pois
+CREATE POLICY "Users can update POIs of own projects or admin" ON public.pois
   FOR UPDATE TO authenticated
-    USING (authorize('admin')
+    USING ((
+    -- Admins can always update
+    SELECT authorize('admin'))
+    -- Users can update POIs of own projects if active
       OR ((
         SELECT
-          auth.uid()) =(
+          is_user_active()) AND EXISTS (
             SELECT
-              owner_id
+              1
             FROM
-              public.projects
+              public.projects p
             WHERE
-              id = project_id)));
+              p.id = pois.project_id AND p.owner_id =(
+                SELECT
+                  auth.uid()))));
 
--- DELETE
-CREATE POLICY "Authenticated users can delete POIs of their own projects." ON public.pois
+CREATE POLICY "Users can delete POIs of own projects or admin" ON public.pois
   FOR DELETE TO authenticated
-    USING (authorize('admin')
+    USING ((
+    -- Admins can always delete
+    SELECT authorize('admin'))
+    -- Users can delete POIs of own projects if active
       OR ((
         SELECT
-          auth.uid()) =(
+          is_user_active()) AND EXISTS (
             SELECT
-              owner_id
+              1
             FROM
-              public.projects
+              public.projects p
             WHERE
-              id = project_id)));
+              p.id = pois.project_id AND p.owner_id =(
+                SELECT
+                  auth.uid()))));
 
 REVOKE ALL ON TABLE public.pois FROM anon;
 
