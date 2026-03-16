@@ -211,6 +211,46 @@
     </div>
   </UISection>
 
+  <UISection title="Alerts">
+    <p>
+      The alerts are defined in the <code>src/components/ui/UIAlert.vue</code> file and can be used
+      throughout the application to display important messages.
+    </p>
+    <div class="mt-10 space-y-6">
+      <UIAlert
+        severity="primary"
+        title="Primary Alert"
+        message="This is a primary alert message."
+      />
+      <UIAlert
+        severity="neutral"
+        title="Neutral Alert"
+        message="This is a neutral alert message."
+      />
+      <UIAlert
+        severity="success"
+        title="Success Alert"
+        message="This is a success alert message."
+      />
+      <UIAlert
+        severity="warning"
+        title="Warning Alert"
+        message="This is a warning alert message."
+      />
+      <UIAlert severity="danger" title="Danger Alert" message="This is a danger alert message." />
+      <UIAlert severity="primary" title="Custom Alert">
+        <template #default="{ severity }">
+          <p>
+            This is a custom alert message. You can use the <code>slot</code> to define your own
+            message content and add arbitrary components. For example, you can add a button to the
+            alert like this:
+          </p>
+          <UIButton :severity="severity" class="mt-4">Alert Button</UIButton>
+        </template>
+      </UIAlert>
+    </div>
+  </UISection>
+
   <UISection title="Menu">
     <p>
       The menu is a component that can be used to display a list of items. It is defined in the
@@ -251,7 +291,7 @@
     </p>
     <div class="mt-10">
       <DataTable :config="tableConfig" :data="data">
-        <template #item-status="{ value }">
+        <template #column-status="{ value }">
           <span class="font-semibold">{{ value }}</span>
         </template>
       </DataTable>
@@ -307,6 +347,7 @@ import { icons } from '@/components/ui/icon/types'
 import UIIcon from '@/components/ui/icon/UIIcon.vue'
 import type { MenuListItem } from '@/components/ui/menu/types'
 import UIMenu from '@/components/ui/menu/UIMenu.vue'
+import UIAlert from '@/components/ui/UIAlert.vue'
 import UIBadge from '@/components/ui/UIBadge.vue'
 import UIModal from '@/components/ui/UIModal.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
