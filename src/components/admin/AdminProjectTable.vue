@@ -7,7 +7,7 @@
         severity="none"
         :style="{ backgroundColor: scoreToColor(Number(value)) }"
       >
-        <div class="flex aspect-square w-4 items-center justify-center text-on-surface-inverse">
+        <div class="flex w-4 items-center justify-center text-on-surface-inverse">
           {{ formatted }}
         </div>
       </UIBadge>

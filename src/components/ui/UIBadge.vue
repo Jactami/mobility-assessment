@@ -1,5 +1,8 @@
 <template>
-  <div class="rounded-border p-1 text-xs font-medium" :class="severityClasses">
+  <div
+    class="inline-flex items-center justify-center gap-1 rounded-border px-2 py-1 text-xs font-medium tracking-wide"
+    :class="severityClasses"
+  >
     <slot :label="label">
       {{ label }}
     </slot>
