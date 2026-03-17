@@ -36,7 +36,7 @@ CREATE INDEX projects_owner_id_idx ON projects(owner_id);
 CREATE TRIGGER handle_updated_at_projects
     BEFORE UPDATE ON public.projects
     FOR EACH ROW
-    EXECUTE FUNCTION moddatetime('updated_at');
+    EXECUTE FUNCTION extensions.moddatetime('updated_at');
 
 -- Set project limit
 CREATE OR REPLACE FUNCTION public.enforce_project_limit()

@@ -41,5 +41,5 @@ CREATE INDEX pois_project_id_idx ON pois(project_id);
 CREATE TRIGGER handle_updated_at_pois
   BEFORE UPDATE ON public.pois
   FOR EACH ROW
-  EXECUTE FUNCTION moddatetime('updated_at');
+  EXECUTE FUNCTION extensions.moddatetime('updated_at');
 

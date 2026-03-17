@@ -29,7 +29,7 @@ ALTER TABLE ONLY public.profiles
 CREATE TRIGGER handle_updated_at_profiles
   BEFORE UPDATE ON public.profiles
   FOR EACH ROW
-  EXECUTE FUNCTION moddatetime('updated_at');
+  EXECUTE FUNCTION extensions.moddatetime('updated_at');
 
 -- Ensure that only one user can have the role 'admin'
 CREATE UNIQUE INDEX only_one_admin ON public.profiles((user_role))
