@@ -16,7 +16,7 @@
           </div>
         </div>
         <span
-          class="absolute top-2 right-2 text-2xl text-surface-container-highest transition-transform hover:scale-125"
+          class="absolute top-2 right-2 text-2xl text-on-surface-inverse transition-transform hover:scale-125"
           :title="project.favorite ? t('project.favorite.remove') : t('project.favorite.add')"
           @click.prevent="emit('favorite')"
         >
