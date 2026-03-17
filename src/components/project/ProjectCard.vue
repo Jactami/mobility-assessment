@@ -43,7 +43,9 @@
       <div
         class="relative flex items-center justify-between gap-x-1 bg-surface-container py-1 pr-1 pl-4 text-on-surface-variant"
       >
-        <time class="text-xs" :datetime="project.created_at">{{ d(project.created_at) }}</time>
+        <time class="text-xs" :datetime="project.created_at">
+          {{ d(project.created_at, 'short') }}
+        </time>
         <UIMenu :items="menu" />
       </div>
     </UICard>

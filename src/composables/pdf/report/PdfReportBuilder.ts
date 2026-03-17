@@ -350,7 +350,7 @@ export class PdfReportBuilder extends PdfBuilder {
           lineHeight: 1.5,
         })
         // TODO: Decide if to use the creation Date or the current date
-        .createText(`${i18n.global.t('pdf.date')}: ${i18n.global.d(new Date())}`, {
+        .createText(`${i18n.global.t('pdf.date')}: ${i18n.global.d(new Date(), 'short')}`, {
           y: this._config.padding.top + 140,
           alignment: 'center',
           color: 'muted',

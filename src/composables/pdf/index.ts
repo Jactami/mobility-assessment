@@ -1,6 +1,7 @@
 import type { EvaluationScores } from '@/composables/evaluation/types'
 import { useLegal } from '@/composables/legal'
 import type { Poi, Project } from '@/db/types'
+import i18n from '@/i18n'
 import { merge } from '@pdfme/manipulator'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -53,7 +54,7 @@ export function usePDF() {
       const meta = {
         title: t('pdf.title', { title: data.project?.title }),
         author: t('pdf.author', { company: company.name }),
-        date: new Date().toLocaleDateString(),
+        date: new Date().toISOString(),
       }
 
       // Create the title page
@@ -66,7 +67,7 @@ export function usePDF() {
         // Set header and footer
         .createHeader(
           t('pdf.header.left', { title: data.project?.title }),
-          t('pdf.header.right', { date: new Date().toLocaleDateString() }),
+          t('pdf.header.right', { date: i18n.global.d(new Date(), 'short') }),
         )
         .createFooter(
           t('pdf.footer.left', { company: company.name, year: new Date().getFullYear() }),
