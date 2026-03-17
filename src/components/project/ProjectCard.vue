@@ -7,6 +7,12 @@
           class="flex aspect-3/1 items-center justify-center bg-surface-container-high p-4 text-on-surface-inverse transition-transform duration-300 group-hover:scale-110"
           :style="{ backgroundColor: bgColor }"
         >
+          <!-- Gradient Overlay -->
+          <!-- <div
+            class="via-white/ pointer-events-none absolute inset-0 bg-linear-to-t from-white/25 to-transparent"
+          /> -->
+
+          <!-- Score -->
           <div class="text-5xl font-semibold">
             {{
               typeof project.score === 'number'
@@ -15,6 +21,8 @@
             }}
           </div>
         </div>
+
+        <!-- Favorite Icon  -->
         <span
           class="absolute top-2 right-2 text-2xl text-on-surface-inverse transition-transform hover:scale-125"
           :title="project.favorite ? t('project.favorite.remove') : t('project.favorite.add')"
