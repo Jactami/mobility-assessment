@@ -35,7 +35,7 @@ const emit = defineEmits<{
   (e: 'duplicate', project: Project): void
 }>()
 
-const { n, t } = useI18n()
+const { d, n, t } = useI18n()
 const router = useRouter()
 const { createAddress } = useUtil()
 const { scoreToColor } = useColorUtil()
@@ -46,7 +46,7 @@ const tableConfig: TableConfig<Project> = {
       key: 'title',
       label: t('project.title'),
       sort: 'raw',
-      width: 25,
+      width: 20,
     },
     {
       key: 'street',
@@ -71,6 +71,14 @@ const tableConfig: TableConfig<Project> = {
       width: 10,
     },
     {
+      key: 'created_at',
+      label: t('project.createdAt'),
+      formatter: (date) => d(String(date), 'short'),
+      sort: 'raw',
+      width: 10,
+    },
+    // TODO: Also add updated_at?
+    {
       key: 'owner_id',
       label: t('project.owner'),
       formatter: (profileId) => {
@@ -78,7 +86,7 @@ const tableConfig: TableConfig<Project> = {
         return profile ? profile.email : ''
       },
       sort: 'formatted',
-      width: 20,
+      width: 15,
     },
   ],
   presort: { key: 'title', order: 'asc' },
