@@ -96,6 +96,7 @@ const tableConfig: TableConfig<Profile> = {
     {
       icon: 'delete',
       label: t('action.delete'),
+      disabled: (profile) => profile.user_role === 'admin', // Prevent deletion of admin users
       severity: 'danger',
       handler: (profile) => emit('delete', profile),
     },
