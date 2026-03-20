@@ -124,6 +124,10 @@
     "firstName": "Vorname",
     "lastName": "Nachname",
     "label": "Nutzer | Nutzer",
+    "role": {
+      "admin": "Admin",
+      "user": "Benutzer"
+    },
     "password": "Passwort",
     "status": "Status"
   },

@@ -1,5 +1,11 @@
 <template>
   <DataTable :data="profiles" :config="tableConfig">
+    <template #column-last_name="{ formatted, row }">
+      {{ formatted }}
+      <UIBadge v-if="row.user_role === 'admin'" severity="primary" class="ml-2">
+        {{ t('user.role.admin') }}
+      </UIBadge>
+    </template>
     <template #column-is_disabled="{ formatted, value }">
       <UIBadge v-if="value" severity="danger">
         {{ formatted }}
