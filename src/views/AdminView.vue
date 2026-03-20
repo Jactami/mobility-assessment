@@ -21,6 +21,8 @@
         v-if="projects && profiles"
         :projects="projects"
         :profiles="profiles"
+        @add="upsertProject"
+        @update="upsertProject"
         @duplicate="duplicateProject"
         @delete="deleteProject"
       />
@@ -38,12 +40,16 @@ import UISection from '@/components/ui/UISection.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
 import type { Profile, Project } from '@/db/types'
+import { useAuthStore } from '@/stores/Auth'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const db = useDB()
 const { t } = useI18n()
 const { errorToast, successToast, confirmDialog } = useNotification()
+const router = useRouter()
+const authStore = useAuthStore()
 
 const profiles = ref<Profile[]>()
 const projects = ref<Project[]>()
@@ -127,6 +133,38 @@ async function loadProjects() {
     projects.value = []
   } else {
     projects.value = data
+  }
+}
+
+async function upsertProject(project?: Project) {
+  if (!authStore.user) return
+
+  const { data, error } = await db.setProject({
+    // Set default values for new project
+    title: t('project.newProject'),
+    owner_id: authStore.user.id,
+    // Overwrite default values with provided project data
+    ...project,
+  })
+
+  if (!data || error) {
+    // Check if the error is due to project limit
+    if (error?.code === 'P0001') {
+      errorToast(t('project.error.limitExceeded'))
+    } else {
+      // General error handling
+      errorToast(t('notification.error.default'))
+    }
+  } else if (!project) {
+    // Navigate to project if it was a creation, not an update
+    router.push({
+      name: 'project',
+      params: { projectId: data.id },
+    })
+  } else {
+    // Show success message for updates and reload project list
+    successToast(t('notification.success.save'))
+    loadProjects()
   }
 }
 

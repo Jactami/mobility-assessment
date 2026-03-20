@@ -13,6 +13,14 @@
       </UIBadge>
     </template>
   </DataTable>
+
+  <AdminProjectForm
+    v-if="projectModel"
+    v-model:open="modalOpen"
+    :project="projectModel"
+    :profiles="profiles"
+    @submit="handleSubmit"
+  />
 </template>
 
 <script setup lang="ts">
@@ -22,8 +30,10 @@ import UIBadge from '@/components/ui/UIBadge.vue'
 import { useColorUtil } from '@/composables/util/color'
 import { useUtil } from '@/composables/util/misc'
 import type { Profile, Project } from '@/db/types'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import AdminProjectForm from './AdminProjectForm.vue'
 
 const props = defineProps<{
   projects: Project[]
@@ -31,6 +41,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+  (e: 'add'): void
+  (e: 'update', project: Project): void
   (e: 'delete', project: Project): void
   (e: 'duplicate', project: Project): void
 }>()
@@ -39,6 +51,9 @@ const { d, n, t } = useI18n()
 const router = useRouter()
 const { createAddress } = useUtil()
 const { scoreToColor } = useColorUtil()
+
+const modalOpen = ref(false)
+const projectModel = ref<Project>()
 
 const tableConfig: TableConfig<Project> = {
   columns: [
@@ -101,6 +116,15 @@ const tableConfig: TableConfig<Project> = {
       },
     },
     {
+      icon: 'edit',
+      label: t('action.edit'),
+      handler: (project) => {
+        // Open modal and set project for editing
+        modalOpen.value = true
+        projectModel.value = { ...project }
+      },
+    },
+    {
       icon: 'copy',
       label: t('action.duplicate'),
       handler: (project) => emit('duplicate', project),
@@ -112,5 +136,11 @@ const tableConfig: TableConfig<Project> = {
       handler: (project) => emit('delete', project),
     },
   ],
+  add: () => emit('add'),
+}
+
+function handleSubmit(newProject: Project) {
+  modalOpen.value = false
+  emit('update', newProject)
 }
 </script>
