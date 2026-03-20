@@ -202,10 +202,10 @@
   <UISection title="Notifications">
     <p>The notifications are based on the SweetAlert2 library.</p>
     <div class="mt-10 flex items-center justify-center gap-6">
-      <UIButton severity="neutral" @click="notification.successToast('Success message...')">
+      <UIButton severity="success" @click="notification.successToast('Success message...')">
         Success
       </UIButton>
-      <UIButton severity="neutral" @click="notification.errorToast('Error message...')">
+      <UIButton severity="danger" @click="notification.errorToast('Error message...')">
         Error
       </UIButton>
     </div>
@@ -281,7 +281,6 @@
         </div>
       </UITooltip>
     </div>
-    <div></div>
   </UISection>
 
   <UISection title="Data Table">
@@ -419,31 +418,40 @@ const tableConfig: TableConfig<Person> = {
       key: 'firstName',
       label: 'First Name',
       sort: 'raw',
+      width: 25,
     },
     {
       key: 'lastName',
       label: 'Last Name',
       sort: 'raw',
+      width: 25,
     },
     {
       key: 'age',
       label: 'Age',
       sort: 'raw',
+      width: 10,
     },
     {
       key: 'visits',
       label: 'Visits',
       sort: 'raw',
+      width: 10,
     },
     {
       key: 'status',
       label: 'Status',
+      align: 'center',
+      sort: 'raw',
+      width: 20,
     },
     {
       key: 'progress',
       label: 'Progress',
       sort: 'raw',
       formatter: (value) => `${value}%`,
+      align: 'right',
+      width: 10,
     },
   ],
   searchable: true,
