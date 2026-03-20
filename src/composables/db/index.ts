@@ -172,7 +172,8 @@ export default function useDB() {
   const getProfiles = (): Promise<PostgrestResponse<Tables<'profiles'>>> =>
     handleDBCall(
       async () =>
-        await supabase.from('profiles').select().neq('user_role', 'admin').order('last_name'),
+        // await supabase.from('profiles').select().neq('user_role', 'admin').order('last_name'),
+        await supabase.from('profiles').select().order('last_name'),
     )
 
   /**
