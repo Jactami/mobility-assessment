@@ -3,8 +3,8 @@
     <!-- Trigger Element -->
     <PopoverButton
       ref="referenceEl"
-      as="template"
-      class="inline-block focus:outline-none"
+      as="div"
+      class="inline-block"
       @mouseenter="isHovered = true"
       @mouseleave="isHovered = false"
     >
@@ -18,14 +18,14 @@
       <PopoverPanel
         ref="floatingEl"
         as="div"
-        class="rounded-border bg-surface-inverse text-on-surface-inverse pointer-events-none absolute z-10 max-w-sm p-2 text-xs shadow-md"
+        class="pointer-events-none absolute z-10 max-w-sm rounded-border bg-surface-inverse p-2 text-xs text-on-surface-inverse shadow-md"
         :style="floatingStyles"
         static
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
       >
         <div
-          class="overflow-hidden text-ellipsis whitespace-pre-line text-pretty break-words text-center"
+          class="overflow-hidden text-center text-pretty wrap-break-word text-ellipsis whitespace-pre-line"
         >
           {{ message }}
         </div>
