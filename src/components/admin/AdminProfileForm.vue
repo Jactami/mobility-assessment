@@ -38,12 +38,14 @@
       name="expires_at"
       :label="`${t('user.expiresAt')} (${t('common.optional')})`"
       validation="date"
+      :disabled="model.user_role === 'admin'"
       outer-class="col-span-full"
     />
     <FormKit
       type="checkbox"
       name="is_disabled"
       :label="t('user.disabled')"
+      :disabled="model.user_role === 'admin'"
       outer-class="col-span-full"
     />
     <FormKit
