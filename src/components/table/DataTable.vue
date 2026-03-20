@@ -153,6 +153,7 @@
                           :icon="action.icon"
                           :title="action.label"
                           :severity="action.severity"
+                          :disabled="action.disabled?.(row.original)"
                           @click="action.handler(row.original)"
                         />
                       </UITooltip>

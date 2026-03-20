@@ -51,6 +51,7 @@ export default interface TableConfig<T> {
   actions?: {
     handler: (item: T) => unknown
     label: string
+    disabled?: (item: T) => boolean
     icon: Icon
     severity?: UISeverity
   }[]
