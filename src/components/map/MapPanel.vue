@@ -1,7 +1,7 @@
 <template>
   <OlMap
     ref="mapRef"
-    class="rounded-border block overflow-hidden"
+    class="block overflow-hidden rounded-border"
     :class="{ 'opacity-60': disabled }"
     :style="{ height: `${height}px` }"
   >
@@ -163,7 +163,14 @@ async function exportMap() {
 onMounted(resetMap)
 
 // Update map view when the project settings change
-watch(() => [props.project?.latitude, props.project?.longitude, props.project?.radius], resetMap)
+watch(
+  () => [
+    () => props.project?.latitude,
+    () => props.project?.longitude,
+    () => props.project?.radius,
+  ],
+  resetMap,
+)
 
 // Watch for geolocation updates and center the map on the user's location
 watch(coords, ({ latitude, longitude }) => {
