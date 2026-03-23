@@ -12,7 +12,7 @@
     <Teleport to="body">
       <MenuItems
         ref="floating"
-        class="rounded-border bg-surface-container-lowest text-on-surface ring-outline-variant z-50 min-w-56 max-w-md origin-top-right p-1 shadow-md ring focus:outline-none"
+        class="z-50 max-w-md min-w-56 origin-top-right rounded-border bg-surface-container-lowest p-1 text-on-surface shadow-md ring ring-outline-variant focus:outline-none"
         :style="floatingStyles"
       >
         <!-- Menu Header -->
@@ -22,7 +22,7 @@
               <!-- Content before the menu items goes here. -->
             </slot>
           </div>
-          <hr class="border-outline-variant my-1" />
+          <hr class="my-1 border-outline-variant" />
         </template>
 
         <!-- Menu Items -->
@@ -32,10 +32,10 @@
               <component
                 :is="item.link && !item.disabled ? 'RouterLink' : 'div'"
                 :to="item.link"
-                class="rounded-border flex w-full items-center gap-x-1.5 p-2"
+                class="flex w-full items-center gap-x-1.5 rounded-border p-2"
                 :class="[
                   {
-                    'bg-surface-container cursor-pointer': active && !item.disabled,
+                    'cursor-pointer bg-surface-container': active && !item.disabled,
                     'cursor-not-allowed opacity-50': item.disabled,
                   },
                 ]"
@@ -45,13 +45,13 @@
                 <div class="flex-1">{{ item.label }}</div>
               </component>
             </MenuItem>
-            <hr v-if="item.divider" class="border-outline-variant my-1" />
+            <hr v-if="item.divider" class="my-1 border-outline-variant" />
           </template>
         </div>
 
         <!-- Menu Footer -->
         <template v-if="$slots.end">
-          <hr class="border-outline-variant my-1" />
+          <hr class="my-1 border-outline-variant" />
           <div class="p-2">
             <slot name="end">
               <!-- Content after the menu items goes here. -->
@@ -64,7 +64,14 @@
 </template>
 
 <script setup lang="ts">
-import { autoUpdate, flip, offset, useFloating, type Placement } from '@floating-ui/vue'
+import {
+  autoUpdate,
+  flip,
+  offset,
+  useFloating,
+  type Placement,
+  type Strategy,
+} from '@floating-ui/vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -74,13 +81,13 @@ import type { MenuListItem } from './types'
 
 interface Props {
   items: MenuListItem[]
-  // Temporary fix for type issue with floating-ui Placement
-  // TODO: remove '& string' when fixed
-  position?: Placement & string
+  position?: Placement
+  strategy?: Strategy
 }
 
 const props = withDefaults(defineProps<Props>(), {
   position: 'top-start',
+  strategy: 'absolute',
 })
 
 const { t } = useI18n()
@@ -90,8 +97,13 @@ const floating = ref(null)
 
 const { floatingStyles } = useFloating(reference, floating, {
   placement: props.position,
+  strategy: props.strategy,
   middleware: [offset(5), flip()],
-  whileElementsMounted: autoUpdate,
+  transform: false,
+  whileElementsMounted: (refEl, floatEl, update) =>
+    autoUpdate(refEl, floatEl, update, {
+      animationFrame: true,
+    }),
 })
 
 function handleAction(item: MenuListItem) {
