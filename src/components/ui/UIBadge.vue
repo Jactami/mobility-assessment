@@ -19,6 +19,7 @@ type BadgeProps = {
   // TODO: add icon support
   // TODO: add size variants
   // TODO: add variant (filled, ghost)
+  // TODO: add shape (rounded, square)
   // TODO: add custom classes
 }
 
