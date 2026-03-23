@@ -5,6 +5,7 @@
       <OlInteractionSelect
         :features="featureCollection"
         :filter="selectInteractionFilter"
+        :toggle-condition="() => true"
         :style="null"
         @select="handleSelect"
       >
@@ -23,10 +24,10 @@
       },
     }"
     positioning="bottom-center"
-    :offset="[0, -18]"
+    :offset="[0, -17]"
   >
     <div
-      class="rounded-border bg-surface-container-lowest relative w-full min-w-64 max-w-96 border-2 p-2 shadow-md"
+      class="relative w-full max-w-96 min-w-64 rounded-border border-2 bg-surface-container-lowest p-2 shadow-md"
       :style="`border-color: ${color};`"
     >
       <div>
@@ -47,11 +48,11 @@
               icon="close"
               size="sm"
               :aria-label="t('common.close')"
-              @click="handleClose"
+              @click="resetSelection"
             />
           </div>
         </div>
-        <div class="text-on-surface-variant mt-4 text-sm">
+        <div class="mt-4 text-sm text-on-surface-variant">
           <div class="flex items-center gap-x-1">
             <ProjectCategoryIcon :category="projectStore.selectedPoi.category" class="size-5" />
             <span>{{ t(`category.${projectStore.selectedPoi.category}`) }}</span>
@@ -77,7 +78,7 @@
       </div>
       <!-- Bottom Triangle -->
       <div
-        class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent"
+        class="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-t-8 border-r-8 border-l-8 border-r-transparent border-l-transparent"
         :style="`border-top-color: ${color};`"
       />
     </div>
@@ -124,19 +125,17 @@ const color = computed(() =>
 )
 
 function handleSelect(event: SelectEvent) {
-  // Clear previous selection
-  handleClose()
+  // Reset previous selected POI
+  resetSelection()
+
+  const selectedFeature = event.selected[0]
 
   // If user clicked outside of any feature, do nothing
-  if (!event.selected[0]) return
+  if (!selectedFeature) return
 
-  // Select the first feature
-  featureCollection.push(event.selected[0])
-
-  // Important: Set the poi as a property on the feature in the poi layer!
-  projectStore.setSelectedPoi(
-    event.selected.length > 0 ? event.selected[0].getProperties().poi : null,
-  )
+  // Select clicked POI
+  featureCollection.push(selectedFeature)
+  projectStore.setSelectedPoi(selectedFeature.getProperties().poi)
 }
 
 function handleMinimize() {
@@ -144,7 +143,7 @@ function handleMinimize() {
   minimized.value = true
 }
 
-function handleClose() {
+function resetSelection() {
   featureCollection.clear()
   projectStore.setSelectedPoi(null)
   minimized.value = false
