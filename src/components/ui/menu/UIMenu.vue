@@ -1,7 +1,7 @@
 <template>
   <Menu as="div" class="relative inline-block">
     <!-- Trigger -->
-    <MenuButton ref="reference" @click.prevent>
+    <MenuButton ref="reference" tabindex="-1" @click.prevent>
       <slot name="trigger">
         <!-- Fallback trigger -->
         <UIButtonIcon icon="more" :aria-label="t('common.options')" />
