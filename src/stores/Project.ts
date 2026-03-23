@@ -50,8 +50,15 @@ export const useProjectStore = defineStore('project', () => {
       pois.value = state.pois
 
       // Check if selected POI still exists in the updated list
-      if (selectedPoi.value && !state.pois.find((p) => p.id === selectedPoi.value?.id)) {
-        selectedPoi.value = null
+      if (selectedPoi.value) {
+        const updatedPoi = state.pois.find((p) => p.id === selectedPoi.value?.id)
+        if (updatedPoi) {
+          // Re-select the updated POI to trigger watchers and update UI
+          setSelectedPoi(updatedPoi)
+        } else {
+          // Clear selection if the POI no longer exists
+          selectedPoi.value = null
+        }
       }
     }
   }
