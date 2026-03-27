@@ -5,7 +5,7 @@
       <!-- Global Search -->
       <div v-if="config.searchable" class="w-full max-w-full sm:max-w-sm">
         <FormKit
-          id="table-filter-input"
+          :id="filterId"
           v-model="globalFilter"
           type="text"
           name="search"
@@ -229,7 +229,7 @@ import {
   type PaginationState,
   type SortingState,
 } from '@tanstack/vue-table'
-import { computed, ref } from 'vue'
+import { computed, ref, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UITooltip from '../ui/UITooltip.vue'
 import type TableConfig from './types'
@@ -245,6 +245,8 @@ const props = defineProps<{
 const { t } = useI18n()
 const { convertToCSV } = useCSV()
 const { downloadCSV } = useDownload()
+
+const filterId = `table-filter-${useId()}`
 
 /** Current sorting state for the table */
 const sorting = ref<SortingState>(
@@ -367,7 +369,7 @@ function getAlignClass(columnId: string) {
 function clearFilter() {
   globalFilter.value = ''
 
-  const input = document.getElementById('table-filter-input') as HTMLInputElement
+  const input = document.getElementById(filterId) as HTMLInputElement
   if (input) {
     input.focus()
     input.select()
