@@ -1,9 +1,9 @@
 <template>
-  <div
-    class="rounded-border border-outline bg-surface-container-lowest relative overflow-hidden border p-2.5 shadow-sm sm:p-4"
+  <section
+    class="relative overflow-hidden rounded-border border border-outline bg-surface-container-lowest p-2.5 shadow-sm sm:p-4"
   >
     <!-- Panel Actions -->
-    <div v-if="actions && actions.length > 0" class="absolute right-2.5 top-2.5">
+    <div v-if="actions && actions.length > 0" class="absolute top-2.5 right-2.5">
       <UIMenu v-if="actions.length > 1" :items="actions" position="bottom-end" />
       <UITooltip v-else-if="actions[0]" :message="actions[0].label" position="top">
         <UIButtonIcon
@@ -16,11 +16,11 @@
 
     <!-- Panel Header -->
     <div v-if="title || icon">
-      <div class="text-on-surface-variant mb-1 flex items-center gap-x-1 text-base font-bold">
+      <div class="mb-1 flex items-center gap-x-1 text-base font-bold text-on-surface-variant">
         <UIIcon v-if="icon" :icon="icon" class="text-lg" />
         <h2 v-if="title">{{ title }}</h2>
       </div>
-      <hr class="border-outline-variant mb-4 mt-1 border" />
+      <hr class="mt-1 mb-4 border border-outline-variant" />
     </div>
 
     <!-- Panel Body -->
@@ -29,7 +29,7 @@
         <!-- Panel content goes here... -->
       </slot>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

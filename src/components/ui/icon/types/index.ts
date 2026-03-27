@@ -15,6 +15,7 @@ import MaterialSymbolsDeleteOutlineRounded from '~icons/material-symbols/delete-
 import MaterialSymbolsDownload from '~icons/material-symbols/download'
 import MaterialSymbolsEditRounded from '~icons/material-symbols/edit-rounded'
 import MaterialSymbolsErrorOutlineRounded from '~icons/material-symbols/error-outline-rounded'
+import MaterialSymbolsFolder from '~icons/material-symbols/folder'
 import MaterialSymbolsFolderOpenOutlineRounded from '~icons/material-symbols/folder-open-outline-rounded'
 import MaterialSymbolsHome from '~icons/material-symbols/home'
 import MaterialSymbolsLocationOnRounded from '~icons/material-symbols/location-on-rounded'
@@ -22,7 +23,7 @@ import MaterialSymbolsLoginRounded from '~icons/material-symbols/login-rounded'
 import MaterialSymbolsLogoutRounded from '~icons/material-symbols/logout-rounded'
 import MaterialSymbolsMapOutlineRounded from '~icons/material-symbols/map-outline-rounded'
 import MaterialSymbolsMoreVert from '~icons/material-symbols/more-vert'
-import MaterialSymbolsPerson from '~icons/material-symbols/person'
+import MaterialSymbolsPersonRounded from '~icons/material-symbols/person-rounded'
 import MaterialSymbolsRefreshRounded from '~icons/material-symbols/refresh-rounded'
 import MaterialSymbolsSaveOutlineRounded from '~icons/material-symbols/save-outline-rounded'
 import MaterialSymbolsSearchRounded from '~icons/material-symbols/search-rounded'
@@ -71,6 +72,7 @@ export const icons = {
   open: MaterialSymbolsFolderOpenOutlineRounded,
   poi: MaterialSymbolsLocationOnRounded,
   previous: MaterialSymbolsChevronLeft,
+  project: MaterialSymbolsFolder,
   refresh: MaterialSymbolsRefreshRounded,
   report: MdiFilePdfOutline,
   save: MaterialSymbolsSaveOutlineRounded,
@@ -80,7 +82,7 @@ export const icons = {
   signOut: MaterialSymbolsLogoutRounded,
   show: MaterialSymbolsVisibilityOutlineRounded,
   up: MaterialSymbolsArrowDropUpRounded,
-  user: MaterialSymbolsPerson,
+  user: MaterialSymbolsPersonRounded,
 } satisfies Record<string, FunctionalComponent>
 
 /**

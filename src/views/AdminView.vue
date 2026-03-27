@@ -3,40 +3,43 @@
 
   <!-- TODO: Decide whether to split user and project management into separate views or keep them together. -->
 
-  <UISection :title="t('user.label', 2)">
-    <UISkeletonLoader :loading="loading" height="10rem">
-      <AdminProfileTable
-        v-if="profiles"
-        :profiles="profiles"
-        @add="upsertUser"
-        @update="upsertUser"
-        @delete="deleteUser"
-      />
-    </UISkeletonLoader>
-  </UISection>
+  <div class="grid grid-cols-1 gap-4">
+    <UIPanel :title="t('user.label', 2)" icon="user" :actions="userActions">
+      <UISkeletonLoader :loading="loading" height="10rem">
+        <AdminProfileTable
+          v-if="profiles"
+          :profiles="profiles"
+          @add="upsertUser"
+          @update="upsertUser"
+          @delete="deleteUser"
+        />
+      </UISkeletonLoader>
+    </UIPanel>
 
-  <UISection :title="t('project.label', 2)">
-    <UISkeletonLoader :loading="loading" height="10rem">
-      <AdminProjectTable
-        v-if="projects && profiles"
-        :projects="projects"
-        :profiles="profiles"
-        @add="upsertProject"
-        @update="upsertProject"
-        @duplicate="duplicateProject"
-        @delete="deleteProject"
-      />
-    </UISkeletonLoader>
-  </UISection>
+    <UIPanel :title="t('project.label', 2)" icon="project" :actions="projectActions">
+      <UISkeletonLoader :loading="loading" height="10rem">
+        <AdminProjectTable
+          v-if="projects && profiles"
+          :projects="projects"
+          :profiles="profiles"
+          @add="upsertProject"
+          @update="upsertProject"
+          @duplicate="duplicateProject"
+          @delete="deleteProject"
+        />
+      </UISkeletonLoader>
+    </UIPanel>
+  </div>
 </template>
 
 <script setup lang="ts">
 import AdminProfileTable from '@/components/admin/AdminProfileTable.vue'
 import AdminProjectTable from '@/components/admin/AdminProjectTable.vue'
 import type { ProfileWithPassword } from '@/components/admin/types'
+import type { MenuListItem } from '@/components/ui/menu/types'
 import UISkeletonLoader from '@/components/ui/skeleton/UISkeletonLoader.vue'
 import UIPageHeader from '@/components/ui/UIPageHeader.vue'
-import UISection from '@/components/ui/UISection.vue'
+import UIPanel from '@/components/ui/UIPanel.vue'
 import useDB from '@/composables/db'
 import { useNotification } from '@/composables/notification'
 import type { Profile, Project } from '@/db/types'
@@ -55,6 +58,22 @@ const profiles = ref<Profile[]>()
 const projects = ref<Project[]>()
 
 const loading = ref<boolean>(false)
+
+const userActions: MenuListItem[] = [
+  {
+    label: t('action.refresh'),
+    icon: 'refresh',
+    action: loadProfiles,
+  },
+]
+
+const projectActions: MenuListItem[] = [
+  {
+    label: t('action.refresh'),
+    icon: 'refresh',
+    action: loadProjects,
+  },
+]
 
 onMounted(async () => {
   loading.value = true
