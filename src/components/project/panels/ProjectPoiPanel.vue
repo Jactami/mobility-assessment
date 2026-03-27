@@ -58,7 +58,7 @@ const { confirmDialog } = useNotification()
 
 const actions: MenuListItem[] = [
   {
-    label: t('project.refresh'),
+    label: t('action.refreshItem', { item: t('project.poi', 2) }),
     icon: 'refresh',
     action: async () => {
       // Inform user that existing data will be overwritten and user made data will be lost

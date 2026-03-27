@@ -56,6 +56,8 @@
     "editItem": "{item} bearbeiten",
     "open": "Öffnen",
     "openItem": "{item} öffnen",
+    "refresh": "Aktualisieren",
+    "refreshItem": "{item} aktualisieren",
     "save": "Speichern",
     "saveItem": "{item} speichern",
     "update": "Aktualisieren",
@@ -158,7 +160,6 @@
     "owner": "Besitzer",
     "poi": "Objekt | Objekte",
     "radius": "Radius",
-    "refresh": "Standortdaten aktualisieren",
     "report": {
       "generating": "Bericht wird erstellt...",
       "label": "Projektbericht"
