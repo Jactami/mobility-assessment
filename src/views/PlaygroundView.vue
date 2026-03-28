@@ -111,11 +111,18 @@
       throughout the application to display small pieces of information.
     </p>
     <div class="mt-10 flex items-center justify-center gap-6">
-      <UIBadge severity="primary" label="Primary" />
-      <UIBadge severity="neutral" label="Neutral" />
-      <UIBadge severity="success" label="Success" />
-      <UIBadge severity="warning" label="Warning" />
-      <UIBadge severity="danger" label="Danger" />
+      <UIBadge severity="primary" variant="solid" label="Primary Solid" />
+      <UIBadge severity="neutral" variant="solid" label="Neutral Solid" />
+      <UIBadge severity="success" variant="solid" label="Success Solid" />
+      <UIBadge severity="warning" variant="solid" label="Warning Solid" />
+      <UIBadge severity="danger" variant="solid" label="Danger Solid" />
+    </div>
+    <div class="mt-10 flex items-center justify-center gap-6">
+      <UIBadge severity="primary" variant="soft" label="Primary Soft" />
+      <UIBadge severity="neutral" variant="soft" label="Neutral Soft" />
+      <UIBadge severity="success" variant="soft" label="Success Soft" />
+      <UIBadge severity="warning" variant="soft" label="Warning Soft" />
+      <UIBadge severity="danger" variant="soft" label="Danger Soft" />
     </div>
   </UISection>
 
