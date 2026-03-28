@@ -3,7 +3,7 @@
 
   <!-- TODO: Decide whether to split user and project management into separate views or keep them together. -->
 
-  <div class="grid grid-cols-1 gap-4">
+  <div class="max-w-8xl mx-auto grid w-full grid-cols-1 gap-4">
     <UIPanel :title="t('user.label', 2)" icon="user" :actions="userActions">
       <UISkeletonLoader :loading="loading" height="10rem">
         <AdminProfileTable
