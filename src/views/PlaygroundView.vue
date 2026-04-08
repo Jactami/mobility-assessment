@@ -148,7 +148,7 @@
   </UISection>
 
   <UISection title="FormKit Integration">
-    <FormKit type="form" @submit="(data) => logger.log('formkit data', data)">
+    <FormKit type="form" @submit="(data: any) => logger.log('formkit data', data)">
       <FormKit
         type="text"
         name="name"

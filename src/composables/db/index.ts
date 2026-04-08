@@ -61,6 +61,7 @@ async function handleDBCall<T>(
   // Return a fake PostgrestError response
   return {
     data: null,
+    success: false,
     error: new PostgrestError({ message: 'Unknown error.', details: '', hint: '', code: '500' }),
     count: null,
     status: 500,
