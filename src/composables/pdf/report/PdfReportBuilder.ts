@@ -452,7 +452,7 @@ export class PdfReportBuilder extends PdfBuilder {
         y: this._config.padding.top + 42,
         font: 'bold',
       })
-      .createText(i18n.global.d(new Date()), {
+      .createText(i18n.global.d(new Date(), 'short'), {
         x: this._config.padding.left + 17,
         y: this._config.padding.top + 42,
       })
