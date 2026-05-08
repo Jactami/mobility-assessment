@@ -75,13 +75,9 @@ export function usePoiService() {
   async function fetchOverpassElements(lat: number, lon: number, radius: number) {
     // Fetch location details from Overpass API
     try {
-      const response = await axios.get<OverpassResponse>(
+      const response = await axios.post<OverpassResponse>(
         'https://overpass-api.de/api/interpreter',
-        {
-          params: {
-            data: OverpassQueryFactory.createQuery(lat, lon, radius),
-          },
-        },
+        'data=' + OverpassQueryFactory.createQuery(lat, lon, radius),
       )
 
       return response.data.elements
