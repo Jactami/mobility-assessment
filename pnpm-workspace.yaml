@@ -1,3 +1,9 @@
+allowBuilds:
+  core-js: true
+  esbuild: true
+  sharp: true
+  supabase: true
+  vue-demi: true
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - core-js
