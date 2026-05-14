@@ -33,8 +33,7 @@
                 tabindex="-1"
                 :icon="passwordVisible ? 'hide' : 'show'"
                 :aria-label="passwordVisible ? t('auth.password.hide') : t('auth.password.show')"
-                @mousedown="passwordVisible = true"
-                @mouseup="passwordVisible = false"
+                @click="passwordVisible = !passwordVisible"
               />
             </div>
           </div>
