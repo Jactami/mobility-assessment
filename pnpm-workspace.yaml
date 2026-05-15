@@ -4,10 +4,4 @@ allowBuilds:
   sharp: true
   supabase: true
   vue-demi: true
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - core-js
-  - esbuild
-  - sharp
-  - supabase
-  - vue-demi
+  '@tailwindcss/oxide': true
