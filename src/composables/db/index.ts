@@ -210,6 +210,8 @@ export default function useDB() {
           first_name: user.firstName,
           last_name: user.lastName,
           email: user.email,
+          expires_at: user.expiresAt?.toISOString(),
+          is_disabled: user.isDisabled,
           password: user.password,
         })
       }
