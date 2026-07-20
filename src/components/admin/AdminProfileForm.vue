@@ -97,7 +97,10 @@ function createModel(profile?: Profile) {
 }
 
 function handleSubmit(formData: ProfileWithPassword) {
+  // Emit submit event with form data
   emit('submit', formData)
+  // Reset model
+  model.value = createModel()
 }
 
 // Set model to user profile on change
