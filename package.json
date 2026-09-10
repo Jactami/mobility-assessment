@@ -22,7 +22,7 @@
     "ors:stop": "docker-compose -f ./ors/docker-compose.yml down"
   },
   "dependencies": {
-    "@floating-ui/vue": "^1.1.11",
+    "@floating-ui/vue": "^2.0.1",
     "@fontsource/open-sans": "^5.3.0",
     "@formkit/addons": "^2.1.2",
     "@formkit/core": "^2.1.2",
