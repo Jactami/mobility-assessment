@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url'
 import { configDefaults, defineConfig, mergeConfig } from 'vitest/config'
-import viteConfig from './vite.config'
+// @ts-expect-error: Add file extension to suppress vite warning
+import viteConfig from './vite.config.ts'
 
 export default defineConfig((configEnv) =>
   mergeConfig(
