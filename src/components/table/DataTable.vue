@@ -116,7 +116,7 @@
                 >
                   <!-- Table Cell -->
                   <td
-                    v-for="cell in row.getVisibleCells()"
+                    v-for="cell in row.getAllCells()"
                     v-mark="config.searchable ? globalFilter : undefined"
                     :key="cell.id"
                     class="px-3 py-2.5 align-middle"
@@ -186,13 +186,13 @@
           <span class="hidden sm:inline-block">
             {{
               t('table.page', {
-                current: table.getState().pagination.pageIndex + 1,
+                current: currentPage,
                 total: table.getPageCount(),
               })
             }}&nbsp;
           </span>
           <span class="inline-block sm:hidden">
-            {{ table.getState().pagination.pageIndex + 1 }} / {{ table.getPageCount() }}
+            {{ currentPage }} / {{ table.getPageCount() }}
           </span>
         </div>
         <UIButtonIcon
@@ -219,13 +219,19 @@ import UIIcon from '@/components/ui/icon/UIIcon.vue'
 import { useCSV } from '@/composables/csv'
 import { useDownload } from '@/composables/download'
 import {
+  columnFilteringFeature,
+  columnSizingFeature,
   createColumnHelper,
+  createFilteredRowModel,
+  createPaginatedRowModel,
+  createSortedRowModel,
   FlexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useVueTable,
+  globalFilteringFeature,
+  rowPaginationFeature,
+  rowSortingFeature,
+  sortFn_alphanumeric,
+  tableFeatures,
+  useTable,
   type PaginationState,
   type SortingState,
 } from '@tanstack/vue-table'
@@ -264,19 +270,36 @@ const pagination = ref<PaginationState | undefined>(
 /** Global filter string for search input */
 const globalFilter = ref('')
 
-const columnHelper = createColumnHelper<T>()
+/** Currently active page number */
+const currentPage = computed(() => (pagination.value?.pageIndex ?? 0) + 1)
+
+/** Table features */
+const features = tableFeatures({
+  columnFilteringFeature,
+  globalFilteringFeature,
+  filteredRowModel: createFilteredRowModel(),
+  rowSortingFeature,
+  sortedRowModel: createSortedRowModel(),
+  sortFns: { alphanumeric: sortFn_alphanumeric },
+  rowPaginationFeature,
+  paginatedRowModel: createPaginatedRowModel(),
+  columnSizingFeature,
+})
+
+const columnHelper = createColumnHelper<typeof features, T>()
 
 /** Transforms the column config into tanstack table column definitions */
 const columns = computed(() => {
   return props.config.columns.map((col) => {
-    return columnHelper.accessor((row: T) => row[col.key], {
+    return columnHelper.accessor((row: T): unknown => row[col.key], {
       id: col.key,
       header: col.label,
       cell: (props) =>
         col.formatter ? col.formatter(props.getValue(), props.cell.row.original) : props.getValue(),
       enableSorting: !!col.sort,
-      sortingFn: col.formatter
+      sortFn: col.formatter
         ? (a, b) => {
+            // Get the raw values from the rows
             const rawA = a.getValue(col.key)
             const rawB = b.getValue(col.key)
 
@@ -286,7 +309,8 @@ const columns = computed(() => {
             // Sort nullish values last (empty strings, null, undefined)
             if ((aVal == null || aVal === '') && (bVal == null || bVal === '')) return 0
 
-            const isDesc = sorting.value?.find((s) => s.id === col.key)?.desc
+            // Get the sort direction from the current sorting state
+            const isDesc = sorting.value.find((s) => s.id === col.key)?.desc
             if (aVal == null || aVal === '') return isDesc ? -1 : 1
             if (bVal == null || bVal === '') return isDesc ? 1 : -1
 
@@ -307,7 +331,8 @@ const columns = computed(() => {
 })
 
 /** Initializes the TanStack table instance with reactive state */
-const table = useVueTable({
+const table = useTable({
+  features,
   get data() {
     return props.data
   },
@@ -334,10 +359,6 @@ const table = useVueTable({
     if (!pagination.value) return
     pagination.value = typeof updater === 'function' ? updater(pagination.value) : updater
   },
-  getCoreRowModel: getCoreRowModel(),
-  getSortedRowModel: getSortedRowModel(),
-  getFilteredRowModel: getFilteredRowModel(),
-  getPaginationRowModel: pagination.value ? getPaginationRowModel() : undefined,
   getColumnCanGlobalFilter: () => !!props.config.searchable,
   globalFilterFn: (row, columnId, filterValue) => {
     const raw = row.getValue(columnId)
