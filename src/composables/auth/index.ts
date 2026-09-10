@@ -20,14 +20,14 @@ export function useAuthService() {
     initialized = true
     // Set up an event listener for authentication state changes
     supabase.auth.onAuthStateChange(async (_, session) => {
-      if (session) {
+      authStore.setSession(session)
+
+      if (session?.user) {
         // user is signed in
         loadProfile(session.user.id)
-        authStore.setSession(session)
       } else {
         // user is signed out
         authStore.setProfile(null)
-        authStore.setSession(null)
       }
     })
   }
@@ -77,7 +77,12 @@ export function useAuthService() {
    */
   async function loadProfile(userId: string) {
     const response = await supabase.from('profiles').select().eq('id', userId).single()
-    authStore.setProfile(response.data)
+
+    // Ensure that the same user is signed in
+    if (authStore.user?.id === userId) {
+      authStore.setProfile(response.data)
+    }
+
     return response
   }
 
